@@ -24,6 +24,7 @@ public abstract class CodeReader {
 
     /**
      * Set the file path.
+     *
      * @param newPath The new file destination.
      */
     public void setFilePath(String newPath) {
@@ -32,6 +33,7 @@ public abstract class CodeReader {
 
     /**
      * Return the file path for this reader.
+     *
      * @return File path for this reader.
      */
     public String getFilePath() {

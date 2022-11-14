@@ -11,6 +11,7 @@ public interface ReadCodeBehavior {
 
     /**
      * Read in backup codes from a source.
+     *
      * @return A list of backup codes.
      */
     List<String> readCodes();

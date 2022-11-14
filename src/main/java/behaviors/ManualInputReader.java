@@ -13,6 +13,7 @@ public class ManualInputReader implements ReadCodeBehavior {
 
     /**
      * Read backup codes through keyboard input.
+     *
      * @return List of backup codes.
      */
     @Override
