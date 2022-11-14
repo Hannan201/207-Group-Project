@@ -17,19 +17,11 @@ public class CodeGenerator {
         return result.toString();
     }
 
-    public static String makeCodeWithDigits(int length, String delimiter) {
-        String code = makeSegment(NUMERIC, length);
-        code += delimiter;
-        code += makeSegment(NUMERIC, length);
-
-        return code;
+    public static String generateCodeNumbers(int length, String delimiter) {
+        return makeSegment(NUMERIC, length) + delimiter + makeSegment(NUMERIC, length);
     }
 
-    public static String makeCodeWithAlphaNumeric(int length, String delimiter) {
-        String code = makeSegment(ALPHANUMERIC, length);
-        code += delimiter;
-        code += makeSegment(ALPHANUMERIC, length);
-
-        return code;
+    public static String generateCodeAlphaNumeric(int length, String delimiter) {
+        return makeSegment(ALPHANUMERIC, length) + delimiter + makeSegment(ALPHANUMERIC, length);
     }
 }
