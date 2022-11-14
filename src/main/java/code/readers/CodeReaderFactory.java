@@ -3,7 +3,7 @@ package code.readers;
 public class CodeReaderFactory {
 
     public static CodeReader makeCodeReader(String readerType) {
-        //Clean input
+        //Clean input.
         readerType = readerType.strip();
 
         // Give correct reader based on the type.
