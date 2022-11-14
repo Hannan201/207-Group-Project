@@ -35,7 +35,7 @@ public class User {
     /**
      * Clear all the backup codes for this user.
      */
-    public void deleteAccounts() {
+    public void clearAllAccounts() {
         for (Account account : this.accounts) {
             account.clearUserCodes();
         }

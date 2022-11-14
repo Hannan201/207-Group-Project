@@ -26,6 +26,6 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        // Entry point
+        // Entry point.
     }
 }
