@@ -34,9 +34,7 @@ public class GitHubReaderTests {
                                   "3851e-467e1"};
 
         String[] codesAsArray = codes.toArray(new String[0]);
-        for (int i = 0; i < expectedCodes.length; i++) {
-            assertEquals(codesAsArray[i], expectedCodes[i]);
-        }
+        assertArrayEquals(codesAsArray, expectedCodes);
     }
 
 }
