@@ -2,6 +2,7 @@ package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -20,7 +21,8 @@ public class GoogleReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
-        throw new UnsupportedOperationException();
+        File file = new File(fileName);
+        return null;
     }
 
     /**
