@@ -2,6 +2,8 @@ package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +22,10 @@ public class GitHubReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
-        throw new UnsupportedOperationException();
+        ArrayList<String> backupCodes = new ArrayList<>();
+        File file = new File(fileName);
+
+        return backupCodes;
     }
 
     /**
