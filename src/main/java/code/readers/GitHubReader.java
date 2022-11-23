@@ -2,7 +2,9 @@ package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,22 @@ public class GitHubReader extends CodeReader implements ReadCodeBehavior {
     public List<String> extractCodes(String fileName) {
         ArrayList<String> backupCodes = new ArrayList<>();
         File file = new File(fileName);
+
+        try {
+            FileReader readFile = new FileReader(file);
+            BufferedReader in = new BufferedReader(readFile);
+            String line;
+
+            while ((line = in.readLine()) != null) {
+                backupCodes.add(line.strip());
+            }
+
+            in.close();
+            readFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return backupCodes;
     }
