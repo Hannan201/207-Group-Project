@@ -31,8 +31,8 @@ public class CodeReaderFactory {
             return new GoogleReader();
         } else if (readerType.equalsIgnoreCase("discord")) {
             return new DiscordReader();
-        } else if (readerType.equalsIgnoreCase("reddit")) {
-            return new RedditReader();
+        } else if (readerType.equalsIgnoreCase("shopify")) {
+            return new ShopifyReader();
         }
 
         // Not a valid type.
