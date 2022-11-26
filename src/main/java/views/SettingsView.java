@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.control.ToggleButton;
+
 /**
  * This class is responsible for displaying a view
  * to change the settings for this application. Such
@@ -38,7 +40,7 @@ public class SettingsView extends View {
      */
     @Override
     protected void initUI() {
-
+        ToggleButton TB1 = new ToggleButton();
     }
 
     /**
