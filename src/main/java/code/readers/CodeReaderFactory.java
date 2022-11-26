@@ -10,7 +10,7 @@ public class CodeReaderFactory {
     /**
      * Return a CodeReader for a specific structure of a
      * text file based on the social media platform. So
-     * far, this supports Google, GitHub, Discord and Reddit.
+     * far, this supports Google, GitHub, Discord and Shopify.
      * If the readerType is not supported, method returns null.
      *
      * @param readerType The social media platform to specify
@@ -31,8 +31,8 @@ public class CodeReaderFactory {
             return new GoogleReader();
         } else if (readerType.equalsIgnoreCase("discord")) {
             return new DiscordReader();
-        } else if (readerType.equalsIgnoreCase("reddit")) {
-            return new RedditReader();
+        } else if (readerType.equalsIgnoreCase("shopify")) {
+            return new ShopifyReader();
         }
 
         // Not a valid type.

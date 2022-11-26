@@ -6,14 +6,14 @@ import java.util.List;
 
 /**
  * This class is responsible for reading backup codes
- * in the structure provided by Reddit.
+ * in the structure provided by Shopify.
  */
 
-public class RedditReader extends CodeReader implements ReadCodeBehavior {
+public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
 
     /**
      * Extract the backup codes from a text file in the
-     * structure given by Reddit.
+     * structure given by Shopify.
      *
      * @param fileName Location to the text file.
      * @return The list of backup codes in the file.
@@ -25,7 +25,7 @@ public class RedditReader extends CodeReader implements ReadCodeBehavior {
 
     /**
      * Read the backup codes from a text file in the
-     * structure provided by Reddit.
+     * structure provided by Shopify.
      *
      * @return The list of backup codes.
      */
