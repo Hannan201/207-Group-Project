@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a view
  * to add a new social media account.
@@ -8,7 +10,7 @@ package views;
 public class AddAccountView extends View {
 
     // An instance for this add-new-account view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new add-new-account view.
@@ -22,8 +24,7 @@ public class AddAccountView extends View {
      *
      * @return Instance of this add-new-account view.
      */
-    @Override
-    public View getInstance() {
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new AddAccountView();
         }
@@ -62,5 +63,19 @@ public class AddAccountView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    /**
+     * Return the parent root node of this
+     * add-new-account view, which contains
+     * all the element to be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }
