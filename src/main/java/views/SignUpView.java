@@ -16,7 +16,7 @@ public class SignUpView extends View {
      * Create a new sign-up view.
      */
     private SignUpView() {
-
+        initUI();
     }
 
     /**

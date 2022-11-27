@@ -16,7 +16,7 @@ public class SignInView extends View {
      * Create a new sign in view.
      */
     private SignInView() {
-
+        initUI();
     }
 
     /**

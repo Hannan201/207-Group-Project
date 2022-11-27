@@ -16,7 +16,7 @@ public class HomePageView extends View {
      * Create a new home page view.
      */
     private HomePageView() {
-
+        initUI();
     }
 
     /**

@@ -17,7 +17,7 @@ public class AccountView extends View {
      * Create a new account-viewer view.
      */
     private AccountView() {
-
+        initUI();
     }
 
     /**

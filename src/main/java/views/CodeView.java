@@ -17,7 +17,7 @@ public class CodeView extends View {
      * Create a new code-viewer view.
      */
     private CodeView() {
-
+        initUI();
     }
 
     /**
