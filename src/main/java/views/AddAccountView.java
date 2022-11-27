@@ -16,7 +16,7 @@ public class AddAccountView extends View {
      * Create a new add-new-account view.
      */
     private AddAccountView() {
-
+        initUI();
     }
 
     /**

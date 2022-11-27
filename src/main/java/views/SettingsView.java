@@ -17,7 +17,7 @@ public class SettingsView extends View {
      * Create a new settings view.
      */
     private SettingsView() {
-
+        initUI();
     }
 
     /**
