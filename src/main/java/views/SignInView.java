@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a view
  * to sign in.
@@ -8,7 +10,7 @@ package views;
 public class SignInView extends View {
 
     // An instance for this sign-in view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new sign in view.
@@ -22,8 +24,7 @@ public class SignInView extends View {
      *
      * @return Instance of this sign-in view.
      */
-    @Override
-    public View getInstance() {
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SignInView();
         }
@@ -62,5 +63,19 @@ public class SignInView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    /**
+     * Return the parent root node of this sign-in
+     * view, which contains all the element to
+     * be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }

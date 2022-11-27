@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a view
  * to change the settings for this application. Such
@@ -9,7 +11,7 @@ package views;
 public class SettingsView extends View {
 
     // An instance for this settings view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new settings view.
@@ -23,8 +25,7 @@ public class SettingsView extends View {
      *
      * @return Instance of this settings view.
      */
-    @Override
-    public View getInstance() {
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SettingsView();
         }
@@ -63,5 +64,19 @@ public class SettingsView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    /**
+     * Return the parent root node of this settings
+     * view, which contains all the element to
+     * be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }
