@@ -16,7 +16,7 @@ public class AddAccountView extends View {
      * Create a new add-new-account view.
      */
     private AddAccountView() {
-
+        initUI();
     }
 
     /**
@@ -24,7 +24,6 @@ public class AddAccountView extends View {
      *
      * @return Instance of this add-new-account view.
      */
-
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new AddAccountView();
@@ -66,6 +65,15 @@ public class AddAccountView extends View {
 
     }
 
+    /**
+     * Return the parent root node of this
+     * add-new-account view, which contains
+     * all the element to be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
     @Override
     public Parent getRoot() {
         throw new UnsupportedOperationException();

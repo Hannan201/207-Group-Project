@@ -17,7 +17,7 @@ public class CodeView extends View {
      * Create a new code-viewer view.
      */
     private CodeView() {
-
+        initUI();
     }
 
     /**
@@ -25,7 +25,6 @@ public class CodeView extends View {
      *
      * @return Instance of this code-viewer view.
      */
-
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new CodeView();
@@ -67,6 +66,15 @@ public class CodeView extends View {
 
     }
 
+    /**
+     * Return the parent root node of this
+     * code-viewer view, which contains all
+     * the element to be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
     @Override
     public Parent getRoot() {
         throw new UnsupportedOperationException();

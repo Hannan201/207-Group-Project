@@ -16,7 +16,7 @@ public class SignInView extends View {
      * Create a new sign in view.
      */
     private SignInView() {
-
+        initUI();
     }
 
     /**
@@ -24,7 +24,6 @@ public class SignInView extends View {
      *
      * @return Instance of this sign-in view.
      */
-
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SignInView();
@@ -66,6 +65,15 @@ public class SignInView extends View {
 
     }
 
+    /**
+     * Return the parent root node of this sign-in
+     * view, which contains all the element to
+     * be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
     @Override
     public Parent getRoot() {
         throw new UnsupportedOperationException();

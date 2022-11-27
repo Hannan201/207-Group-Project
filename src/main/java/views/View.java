@@ -9,8 +9,6 @@ import javafx.scene.Parent;
 
 public abstract class View {
 
-
-
     /**
      * Initialise the UI elements for this view.
      */
@@ -31,6 +29,13 @@ public abstract class View {
      */
     public abstract void switchToHighContrastMode();
 
-
+    /**
+     * Return the parent root node of this view, which
+     * contains all the element to be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
     public abstract Parent getRoot();
 }

@@ -17,7 +17,7 @@ public class AccountView extends View {
      * Create a new account-viewer view.
      */
     private AccountView() {
-
+        initUI();
     }
 
     /**
@@ -25,7 +25,6 @@ public class AccountView extends View {
      *
      * @return Instance of this account-viewer view.
      */
-
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new AccountView();
@@ -67,6 +66,15 @@ public class AccountView extends View {
 
     }
 
+    /**
+     * Return the parent root node of this
+     * account-viewer view, which contains all
+     * the element to be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
     @Override
     public Parent getRoot() {
         throw new UnsupportedOperationException();

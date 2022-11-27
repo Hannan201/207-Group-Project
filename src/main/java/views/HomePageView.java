@@ -16,7 +16,7 @@ public class HomePageView extends View {
      * Create a new home page view.
      */
     private HomePageView() {
-
+        initUI();
     }
 
     /**
@@ -24,7 +24,6 @@ public class HomePageView extends View {
      *
      * @return Instance of this home page view.
      */
-
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new HomePageView();
@@ -66,6 +65,15 @@ public class HomePageView extends View {
 
     }
 
+    /**
+     * Return the parent root node of this home
+     * page view, which contains all the element
+     * to be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
     @Override
     public Parent getRoot() {
         throw new UnsupportedOperationException();

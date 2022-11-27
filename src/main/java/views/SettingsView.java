@@ -1,10 +1,6 @@
 package views;
 
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 /**
  * This class is responsible for displaying a view
@@ -16,13 +12,12 @@ public class SettingsView extends View {
 
     // An instance for this settings view.
     private static View firstInstance = null;
-    private StackPane layout;
 
     /**
      * Create a new settings view.
      */
     private SettingsView() {
-
+        initUI();
     }
 
     /**
@@ -44,7 +39,7 @@ public class SettingsView extends View {
      */
     @Override
     protected void initUI() {
-        ToggleButton TB1 = new ToggleButton();
+
     }
 
     /**
@@ -71,6 +66,16 @@ public class SettingsView extends View {
 
     }
 
+    /**
+     * Return the parent root node of this settings
+     * view, which contains all the element to
+     * be displayed.
+     *
+     * @return Root node of this view. Which is
+     * the layout where all the components are
+     * placed in.
+     */
+    @Override
     public Parent getRoot() {
         throw new UnsupportedOperationException();
     }
