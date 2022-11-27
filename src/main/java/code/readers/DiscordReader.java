@@ -31,7 +31,8 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
             read.nextLine(); // skips the blank line
             while (read.hasNextLine()) {
                 String code = read.nextLine();
-                codes.add(code.substring(2, 6) + code.substring(7));
+                code = code.substring(2, 6) + code.substring(7);
+                codes.add(code.strip());
             }
         }
         catch (Exception e) {
