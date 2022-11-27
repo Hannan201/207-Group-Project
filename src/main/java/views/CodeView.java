@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a view
  * which shows all the backup codes for a specific
@@ -9,7 +11,7 @@ package views;
 public class CodeView extends View {
 
     // An instance for this code-viewer view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new code-viewer view.
@@ -23,8 +25,8 @@ public class CodeView extends View {
      *
      * @return Instance of this code-viewer view.
      */
-    @Override
-    public View getInstance() {
+
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new CodeView();
         }
@@ -63,5 +65,10 @@ public class CodeView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }

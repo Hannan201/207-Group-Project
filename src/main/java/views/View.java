@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a specific
  * view in this application
@@ -7,12 +9,7 @@ package views;
 
 public abstract class View {
 
-    /**
-     * Return the instance of this View.
-     *
-     * @return Instance of this view.
-     */
-    public abstract View getInstance();
+
 
     /**
      * Initialise the UI elements for this view.
@@ -33,4 +30,7 @@ public abstract class View {
      * Switch this view to high contrast mode.
      */
     public abstract void switchToHighContrastMode();
+
+
+    public abstract Parent getRoot();
 }

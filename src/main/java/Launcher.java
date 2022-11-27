@@ -1,5 +1,10 @@
 import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import jdk.internal.icu.text.UCharacterIterator;
+import views.SettingsView;
+import views.View;
 
 /**
  * This class is responsible for launching the backup

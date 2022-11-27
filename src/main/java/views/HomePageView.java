@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a home
  * page view for this application.
@@ -8,7 +10,7 @@ package views;
 public class HomePageView extends View {
 
     // An instance for this home page view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new home page view.
@@ -22,8 +24,8 @@ public class HomePageView extends View {
      *
      * @return Instance of this home page view.
      */
-    @Override
-    public View getInstance() {
+
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new HomePageView();
         }
@@ -62,5 +64,10 @@ public class HomePageView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }

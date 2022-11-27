@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a view
  * to show all the social media accounts for a specific
@@ -9,7 +11,7 @@ package views;
 public class AccountView extends View {
 
     // An instance for this account-viewer view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new account-viewer view.
@@ -23,8 +25,8 @@ public class AccountView extends View {
      *
      * @return Instance of this account-viewer view.
      */
-    @Override
-    public View getInstance() {
+
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new AccountView();
         }
@@ -63,5 +65,10 @@ public class AccountView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }

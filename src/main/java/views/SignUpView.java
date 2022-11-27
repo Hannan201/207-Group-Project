@@ -1,5 +1,7 @@
 package views;
 
+import javafx.scene.Parent;
+
 /**
  * This class is responsible for displaying a view
  * to sign up.
@@ -8,7 +10,7 @@ package views;
 public class SignUpView extends View {
 
     // An instance for this sign-up view.
-    private View firstInstance = null;
+    private static View firstInstance = null;
 
     /**
      * Create a new sign-up view.
@@ -22,8 +24,8 @@ public class SignUpView extends View {
      *
      * @return Instance of this sign-up view.
      */
-    @Override
-    public View getInstance() {
+
+    public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SignUpView();
         }
@@ -62,5 +64,10 @@ public class SignUpView extends View {
     @Override
     public void switchToHighContrastMode() {
 
+    }
+
+    @Override
+    public Parent getRoot() {
+        throw new UnsupportedOperationException();
     }
 }
