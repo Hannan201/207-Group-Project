@@ -2,7 +2,10 @@ package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * This class is responsible for reading backup codes
@@ -20,7 +23,21 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
-        throw new UnsupportedOperationException();
+
+        List<String> codes = new ArrayList<>();
+        try {
+            Scanner read = new Scanner(new File(fileName));
+            read.nextLine(); // skips the message in the .txt file
+            read.nextLine(); // skips the blank line
+            while (read.hasNextLine()) {
+                String code = read.nextLine();
+                codes.add(code.substring(2, 6) + code.substring(7));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return codes;
     }
 
     /**
