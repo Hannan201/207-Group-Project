@@ -41,7 +41,7 @@ public class SettingsView extends View {
     private SettingsView() {
         initUI();
         this.views = new ArrayList<>(List.of(SignInView.getInstance(), SignUpView.getInstance(), AccountView.getInstance(),
-                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance()));
+                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance(), SettingsView.getInstance()));
         this.lightModeCommand = new SwitchToLightMode(views);
         this.darkModeCommand = new SwitchToDarkMode(views);
         this.highContrastModeCommand = new SwitchToHighContrastMode(views);
