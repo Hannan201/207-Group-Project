@@ -43,7 +43,7 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
 
             }
         } catch (IOException e) {
-            System.out.println("Error reading file. Check ShopifyReader.extractCodes method for debug");
+            e.printStackTrace();
         }
         return codes;
     }
