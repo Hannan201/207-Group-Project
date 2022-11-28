@@ -1,8 +1,12 @@
 package code.readers;
 
+
 import behaviors.interfaces.ReadCodeBehavior;
 
-import java.util.List;
+import code.readers.*;
+
+import java.util.*;
+import java.io.*;
 
 /**
  * This class is responsible for reading backup codes
@@ -20,7 +24,28 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
-        throw new UnsupportedOperationException();
+        List<String> codes = new ArrayList<>();
+        try {
+            File file = new File(fileName);
+            Scanner shopifyReader = new Scanner(file);
+
+            // Skip past the first 8 lines of the txt file. This should make the next line to be read a line with a code
+            for (int i = 0; i < 8; i++) {
+                shopifyReader.nextLine();
+            }
+
+            // Read each code in the file and add it to the list
+            while (shopifyReader.hasNextLine()) {
+                String currCode = shopifyReader.nextLine().strip();
+                if (!currCode.equals("")){
+                    codes.add(currCode);
+                }
+
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file. Check ShopifyReader.extractCodes method for debug");
+        }
+        return codes;
     }
 
     /**
