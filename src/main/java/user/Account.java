@@ -27,6 +27,19 @@ public class Account {
     private ReadCodeBehavior readCodeBehavior;
 
     /**
+     * Creat a new Social Media Account with
+     * a name and of a specific social media
+     * tyoe.
+     *
+     * @param name Name of social media account.
+     * @param type Type of social media.
+     */
+    public Account(String name, String type) {
+        this.name = name;
+        this.socialMediaType = type;
+    }
+
+    /**
      * Change the behavior for how the codes will
      * be entered for this social media account.
      *
