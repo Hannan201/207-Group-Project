@@ -2,7 +2,6 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import jdk.internal.icu.text.UCharacterIterator;
 import views.SettingsView;
 import views.View;
 
@@ -31,6 +30,6 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        // entry point
+        // Entry point.
     }
 }
