@@ -29,7 +29,7 @@ public class Account {
     /**
      * Creat a new Social Media Account with
      * a name and of a specific social media
-     * tyoe.
+     * type.
      *
      * @param name Name of social media account.
      * @param type Type of social media.
