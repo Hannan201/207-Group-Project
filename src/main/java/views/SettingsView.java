@@ -29,7 +29,7 @@ public class SettingsView extends View {
     // An instance for this settings view.
     private static View firstInstance = null;
     private BorderPane layout;
-    private List<View> views;
+    private static List<View> views;
     private final ThemeSwitcher switcher;
     private final Command lightModeCommand;
     private final Command darkModeCommand;
@@ -40,8 +40,8 @@ public class SettingsView extends View {
      */
     private SettingsView() {
         initUI();
-        this.views = new ArrayList<>(List.of(SignInView.getInstance(), SignUpView.getInstance(), AccountView.getInstance(),
-                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance(), SettingsView.getInstance()));
+        views = new ArrayList<>(List.of(SignInView.getInstance(), SignUpView.getInstance(), AccountView.getInstance(),
+                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance()));
         this.lightModeCommand = new SwitchToLightMode(views);
         this.darkModeCommand = new SwitchToDarkMode(views);
         this.highContrastModeCommand = new SwitchToHighContrastMode(views);
@@ -59,6 +59,7 @@ public class SettingsView extends View {
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SettingsView();
+            views.add(firstInstance);
         }
 
         return firstInstance;
