@@ -149,7 +149,7 @@ public abstract class View {
      * @param element The name of the file.
      */
     private void setIndex(int index, String element) {
-        URL url = this.getClass().getClassLoader().getResource("view/" + element);
+        URL url = this.getClass().getClassLoader().getResource("css/" + element);
         this.cssFilesPaths[index] = url == null ? "" : url.toExternalForm();
     }
 }
