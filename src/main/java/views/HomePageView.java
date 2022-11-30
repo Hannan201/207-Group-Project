@@ -1,5 +1,11 @@
 package views;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+import java.io.IOException;
+
 /**
  * This class is responsible for displaying a home
  * page view for this application.
@@ -39,5 +45,14 @@ public class HomePageView extends View {
         this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
                                           "",  //Path to CSS file for dark mode
                                           ""}; //Path to CSS file for high contrast mode
+        this.cssFilesPaths[0] = this.getClass().getResource("/css/HomePageView.css").toExternalForm();
+        this.currentThemePath = this.cssFilesPaths[0];
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(this.getClass().getClassLoader().getResource("view/HomePageView.fxml"));
+            this.setRoot(root);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
