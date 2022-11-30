@@ -1,6 +1,6 @@
 package views;
 
-import javafx.scene.Parent;
+import views.interfaces.Reversible;
 
 /**
  * This class is responsible for displaying a view
@@ -8,10 +8,14 @@ import javafx.scene.Parent;
  * user of this application.
  */
 
-public class AccountView extends View {
+public class AccountView extends View implements Reversible {
 
     // An instance for this account-viewer view.
     private static View firstInstance = null;
+
+    // The previous view for this account-viewer
+    // view.
+    private View previousView;
 
     /**
      * Create a new account-viewer view.
@@ -39,44 +43,34 @@ public class AccountView extends View {
      */
     @Override
     protected void initUI() {
-
+        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
+                                          "",  //Path to CSS file for dark mode
+                                          ""}; //Path to CSS file for high contrast mode
     }
 
     /**
-     * Switch this account-viewer view to light mode.
-     */
-    @Override
-    public void switchToLightMode() {
-
-    }
-
-    /**
-     * Switch this account-viewer view to dark mode.
-     */
-    @Override
-    public void switchToDarkMode() {
-
-    }
-
-    /**
-     * Switch this account-viewer view to high contrast mode.
-     */
-    @Override
-    public void switchToHighContrastMode() {
-
-    }
-
-    /**
-     * Return the parent root node of this
-     * account-viewer view, which contains all
-     * the element to be displayed.
+     * Get the previous view which was being
+     * displayed before this account-viewer
+     * view.
      *
-     * @return Root node of this view. Which is
-     * the layout where all the components are
-     * placed in.
+     * @return The previous view for this
+     * account-viewer view.
      */
     @Override
-    public Parent getRoot() {
-        throw new UnsupportedOperationException();
+    public View getPreviousView() {
+        return this.previousView;
+    }
+
+    /**
+     * Set the previous view for this
+     * account-viewer view to display.
+     *
+     * @param newPreviousView The new previous
+     *                        view for this
+     *                        application.
+     */
+    @Override
+    public void setPreviousView(View newPreviousView) {
+        this.previousView = newPreviousView;
     }
 }
