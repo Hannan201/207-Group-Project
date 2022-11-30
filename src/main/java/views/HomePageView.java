@@ -36,8 +36,8 @@ public class HomePageView extends View {
      */
     @Override
     protected void initUI() {
-        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
-                                          "",  //Path to CSS file for dark mode
-                                          ""}; //Path to CSS file for high contrast mode
+        this.cssFilesPaths[0] = ""; //Path to CSS file for light mode.
+        this.cssFilesPaths[1] = ""; //Path to CSS file for dark mode.
+        this.cssFilesPaths[2] = ""; //Path to CSS file for high contrast mode.
     }
 }

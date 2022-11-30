@@ -43,9 +43,13 @@ public class CodeView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
-                                          "",  //Path to CSS file for dark mode
-                                          ""}; //Path to CSS file for high contrast mode
+        this.names = new String[]{"Name of CSS file for light mode.",
+                                  "Name of CSS file for dark mode.",
+                                  "Name of CSS file for high contrast mode."};
+
+        this.loadStylesheets();
+
+        this.loadRoot("Name of FXML file here");
     }
 
     /**
