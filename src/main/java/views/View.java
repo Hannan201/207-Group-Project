@@ -3,8 +3,6 @@ package views;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import java.util.Map;
-
 /**
  * This class is responsible for displaying a specific
  * view in this application
