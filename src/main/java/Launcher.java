@@ -31,7 +31,5 @@ public class Launcher extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Entry point.
-        stage.setScene(new Scene(SettingsView.getInstance().getRoot()));
-        stage.show();
     }
 }
