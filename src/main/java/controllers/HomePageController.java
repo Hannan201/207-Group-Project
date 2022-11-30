@@ -9,9 +9,6 @@ public class HomePageController {
     public Button signIn;
     public Button signUp;
 
-    @FXML
-//    private <PopUp> popup
-
     public void handleSignIn(ActionEvent e) {
 
         // open pop up
