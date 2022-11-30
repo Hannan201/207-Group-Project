@@ -36,8 +36,12 @@ public class SignUpView extends View {
      */
     @Override
     protected void initUI() {
-        this.cssFilesPaths[0] = ""; //Path to CSS file for light mode.
-        this.cssFilesPaths[1] = ""; //Path to CSS file for dark mode.
-        this.cssFilesPaths[2] = ""; //Path to CSS file for high contrast mode.
+        this.names = new String[]{"Name of CSS file for light mode.",
+                                  "Name of CSS file for dark mode.",
+                                  "Name of CSS file for high contrast mode."};
+
+        this.loadStylesheets();
+
+        this.loadRoot("Name of FXML file here");
     }
 }

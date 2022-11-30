@@ -48,6 +48,7 @@ public class AccountView extends View implements Reversible {
                                   "Name of CSS file for high contrast mode."};
 
         this.loadStylesheets();
+
         this.loadRoot("Name of FXML file here");
     }
 
