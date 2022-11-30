@@ -145,7 +145,7 @@ public abstract class View {
      *
      * @param index The index at which to
      *              store the path inside
-     *              the names array.
+     *              the array.
      * @param element The name of the file.
      */
     private void setIndex(int index, String element) {
