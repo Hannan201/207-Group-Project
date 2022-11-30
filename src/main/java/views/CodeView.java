@@ -1,6 +1,6 @@
 package views;
 
-import javafx.scene.Parent;
+import views.interfaces.Reversible;
 
 /**
  * This class is responsible for displaying a view
@@ -8,10 +8,14 @@ import javafx.scene.Parent;
  * social media account.
  */
 
-public class CodeView extends View {
+public class CodeView extends View implements Reversible {
 
     // An instance for this code-viewer view.
     private static View firstInstance = null;
+
+    // The previous view for this code-viewer
+    // view.
+    private View previousView;
 
     /**
      * Create a new code-viewer view.
@@ -39,44 +43,34 @@ public class CodeView extends View {
      */
     @Override
     protected void initUI() {
-
+        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
+                                          "",  //Path to CSS file for dark mode
+                                          ""}; //Path to CSS file for high contrast mode
     }
 
     /**
-     * Switch this code-viewer view to light mode.
-     */
-    @Override
-    public void switchToLightMode() {
-
-    }
-
-    /**
-     * Switch this code-viewer view to dark mode.
-     */
-    @Override
-    public void switchToDarkMode() {
-
-    }
-
-    /**
-     * Switch this code-viewer view to high contrast mode.
-     */
-    @Override
-    public void switchToHighContrastMode() {
-
-    }
-
-    /**
-     * Return the parent root node of this
-     * code-viewer view, which contains all
-     * the element to be displayed.
+     * Get the previous view which was being
+     * displayed before this code-viewer
+     * view.
      *
-     * @return Root node of this view. Which is
-     * the layout where all the components are
-     * placed in.
+     * @return The previous view for this
+     * code-viewer view.
      */
     @Override
-    public Parent getRoot() {
-        throw new UnsupportedOperationException();
+    public View getPreviousView() {
+        return this.previousView;
+    }
+
+    /**
+     * Set the previous view for this
+     * code-viewer to display.
+     *
+     * @param newPreviousView The new previous
+     *                        view for this
+     *                        application.
+     */
+    @Override
+    public void setPreviousView(View newPreviousView) {
+        this.previousView = newPreviousView;
     }
 }

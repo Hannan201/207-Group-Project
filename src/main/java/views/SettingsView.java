@@ -14,6 +14,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import views.interfaces.Reversible;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,14 @@ import java.util.List;
  * as the font and theme.
  */
 
-public class SettingsView extends View {
+public class SettingsView extends View implements Reversible {
 
     // An instance for this settings view.
     private static View firstInstance = null;
+
+    // The previous view for this settings view.
+    private View previousView;
+
     private BorderPane layout;
     private static List<View> views;
     private final ThemeSwitcher switcher;
@@ -142,6 +147,7 @@ public class SettingsView extends View {
         hb2.setAlignment(Pos.CENTER);
         borderPane.setBottom(hb2);
         this.layout = borderPane;
+        this.setRoot(layout);
 
         // functionality of deleting codes and export data
 
@@ -181,16 +187,27 @@ public class SettingsView extends View {
     }
 
     /**
-     * Return the parent root node of this settings
-     * view, which contains all the element to
-     * be displayed.
+     * Get the previous view which was being
+     * displayed before this settings-view.
      *
-     * @return Root node of this view. Which is
-     * the layout where all the components are
-     * placed in.
+     * @return The previous view for this
+     * settings view.
      */
     @Override
-    public Parent getRoot() {
-        return this.layout;
+    public View getPreviousView() {
+        return this.previousView;
+    }
+
+    /**
+     * Set the previous view for this
+     * settings-view to display.
+     *
+     * @param newPreviousView The new previous
+     *                        view for this
+     *                        application.
+     */
+    @Override
+    public void setPreviousView(View newPreviousView) {
+        this.previousView = newPreviousView;
     }
 }
