@@ -24,7 +24,7 @@ public abstract class View {
     // external form) which contains
     // the stylesheet for the current
     // theme of this application.
-    private String currentThemePath;
+    protected String currentThemePath;
 
     // Stores the paths to the CSS files
     // (in external form) in the following order:
@@ -61,6 +61,14 @@ public abstract class View {
         return scene;
     }
 
+    /**
+     * Get the path to the CSS file (in
+     * external form) which is being used
+     * to style the current view.
+     *
+     * @return Path to the CSS file (in
+     * external form) that is currently in use.
+     */
     public String getCurrentThemePath() {
         return this.currentThemePath;
     }
