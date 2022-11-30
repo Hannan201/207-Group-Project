@@ -1,7 +1,5 @@
 package views;
 
-import javafx.scene.Parent;
-
 /**
  * This class is responsible for displaying a view
  * to sign in.
@@ -38,44 +36,8 @@ public class SignInView extends View {
      */
     @Override
     protected void initUI() {
-
-    }
-
-    /**
-     * Switch this sign-in view to light mode.
-     */
-    @Override
-    public void switchToLightMode() {
-
-    }
-
-    /**
-     * Switch this sign-in view to dark mode.
-     */
-    @Override
-    public void switchToDarkMode() {
-
-    }
-
-    /**
-     * Switch this sign-in view to high contrast mode.
-     */
-    @Override
-    public void switchToHighContrastMode() {
-
-    }
-
-    /**
-     * Return the parent root node of this sign-in
-     * view, which contains all the element to
-     * be displayed.
-     *
-     * @return Root node of this view. Which is
-     * the layout where all the components are
-     * placed in.
-     */
-    @Override
-    public Parent getRoot() {
-        throw new UnsupportedOperationException();
+        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
+                                          "",  //Path to CSS file for dark mode
+                                          ""}; //Path to CSS file for high contrast mode
     }
 }

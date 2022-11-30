@@ -1,6 +1,5 @@
 package views;
 
-import javafx.scene.Parent;
 import views.interfaces.Reversible;
 
 /**
@@ -44,45 +43,9 @@ public class CodeView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-
-    }
-
-    /**
-     * Switch this code-viewer view to light mode.
-     */
-    @Override
-    public void switchToLightMode() {
-
-    }
-
-    /**
-     * Switch this code-viewer view to dark mode.
-     */
-    @Override
-    public void switchToDarkMode() {
-
-    }
-
-    /**
-     * Switch this code-viewer view to high contrast mode.
-     */
-    @Override
-    public void switchToHighContrastMode() {
-
-    }
-
-    /**
-     * Return the parent root node of this
-     * code-viewer view, which contains all
-     * the element to be displayed.
-     *
-     * @return Root node of this view. Which is
-     * the layout where all the components are
-     * placed in.
-     */
-    @Override
-    public Parent getRoot() {
-        throw new UnsupportedOperationException();
+        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
+                                          "",  //Path to CSS file for dark mode
+                                          ""}; //Path to CSS file for high contrast mode
     }
 
     /**

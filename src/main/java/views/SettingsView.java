@@ -147,6 +147,7 @@ public class SettingsView extends View implements Reversible {
         hb2.setAlignment(Pos.CENTER);
         borderPane.setBottom(hb2);
         this.layout = borderPane;
+        this.setRoot(layout);
 
         // functionality of deleting codes and export data
 
@@ -183,20 +184,6 @@ public class SettingsView extends View implements Reversible {
     @Override
     public void switchToHighContrastMode() {
 
-    }
-
-    /**
-     * Return the parent root node of this settings
-     * view, which contains all the element to
-     * be displayed.
-     *
-     * @return Root node of this view. Which is
-     * the layout where all the components are
-     * placed in.
-     */
-    @Override
-    public Parent getRoot() {
-        return this.layout;
     }
 
     /**
