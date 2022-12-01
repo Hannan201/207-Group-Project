@@ -110,7 +110,7 @@ public abstract class View {
      */
     protected void loadRoot(String fileName) {
         try {
-            this.root = FXMLLoader.load(this.getClass().getResource("view/" + fileName));
+            this.root = FXMLLoader.load(this.getClass().getClassLoader().getResource("view/" + fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
