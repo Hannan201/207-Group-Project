@@ -42,17 +42,6 @@ public class HomePageView extends View {
      */
     @Override
     protected void initUI() {
-        this.cssFilesPaths = new String[]{"",  //Path to CSS file for light mode
-                                          "",  //Path to CSS file for dark mode
-                                          ""}; //Path to CSS file for high contrast mode
-        this.cssFilesPaths[0] = this.getClass().getResource("/css/HomePageView.css").toExternalForm();
-        this.currentThemePath = this.cssFilesPaths[0];
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(this.getClass().getClassLoader().getResource("view/HomePageView.fxml"));
-            this.setRoot(root);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }
