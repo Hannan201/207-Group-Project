@@ -1,11 +1,5 @@
 package views;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-
-import java.io.IOException;
-
 /**
  * This class is responsible for displaying a home
  * page view for this application.
@@ -42,6 +36,12 @@ public class HomePageView extends View {
      */
     @Override
     protected void initUI() {
+        this.names = new String[]{"Name of CSS file for light mode.",
+                                  "Name of CSS file for dark mode.",
+                                  "Name of CSS file for high contrast mode."};
 
+        this.loadStylesheets();
+
+        this.loadRoot("Name of FXML file here");
     }
 }
