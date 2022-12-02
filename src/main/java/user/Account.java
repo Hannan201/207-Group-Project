@@ -2,6 +2,7 @@ package user;
 
 import behaviors.interfaces.ReadCodeBehavior;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class Account {
     public Account(String name, String type) {
         this.name = name;
         this.socialMediaType = type;
+        this.userCodes = new ArrayList<>();
     }
 
     /**
@@ -55,6 +57,14 @@ public class Account {
      */
     public void addCodes() {
         this.userCodes.addAll(readCodeBehavior.readCodes());
+    }
+
+    /**
+     * [FOR TESTING ONLY]
+     * Add codes to this social media account.
+     */
+    public void addCodes(String code) {
+        this.userCodes.add(code);
     }
 
     /**
