@@ -33,6 +33,16 @@ public class User {
     }
 
     /**
+     * Add a new social media account for this user.
+     *
+     * @param newAccount The new social media account
+     *                   to be added.
+     */
+    public void addNewAccount(Account newAccount) {
+        this.accounts.add(newAccount);
+    }
+
+    /**
      * Clear all the backup codes for this user.
      */
     public void clearAllAccounts() {

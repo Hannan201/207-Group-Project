@@ -60,6 +60,14 @@ public class Account {
     }
 
     /**
+     * [FOR TESTING ONLY]
+     * Add codes to this social media account.
+     */
+    public void addCodes(String code) {
+        this.userCodes.add(code);
+    }
+
+    /**
      * Return name of this social media account.
      *
      * @return The name of this social media account.
