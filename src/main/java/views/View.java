@@ -1,7 +1,10 @@
 package views;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * This class is responsible for displaying a specific
@@ -9,11 +12,6 @@ import javafx.scene.Scene;
  */
 
 public abstract class View {
-
-    // A reference to store the Scene
-    // object being used to display
-    // this view.
-    private static Scene scene;
 
     // Parent root of this view, which is
     // the layout where all the components
@@ -31,35 +29,19 @@ public abstract class View {
     // Index 0: Path to the CSS file for light mode.
     // Index 1: Path to the CSS file for dark mode.
     // Index 2: Path to the CSS file for high contrast mode.
-    protected String[] cssFilesPaths;
+    protected String[] cssFilesPaths = new String[3];
+
+    // Stores the names of the CSS files in the
+    // Following order:
+    // Index 0: Name of the CSS file for light mode.
+    // Index 1: Name of the CSS file for dark mode.
+    // Index 2: Name of the CSS file for high contrast mode.
+    protected String[] names;
 
     /**
      * Initialise the UI elements for this view.
      */
     protected abstract void initUI();
-
-    /**
-     * Set the scene object being used
-     * to display this view.
-     *
-     * @param newScene The scene object
-     *                 being used to
-     *                 display this view.
-     */
-    public static void setScene(Scene newScene) {
-        scene = newScene;
-    }
-
-    /**
-     * Get the scene being used to display
-     * this view.
-     *
-     * @return The scene being used to display
-     * this view.
-     */
-    public Scene getScene() {
-        return scene;
-    }
 
     /**
      * Get the path to the CSS file (in
@@ -118,5 +100,56 @@ public abstract class View {
      */
     protected void setRoot(Parent newRoot) {
         this.root = newRoot;
+    }
+
+    /**
+     * Load the FXML file for this view and
+     * store it.
+     *
+     * @param fileName The name of the FXML file.
+     */
+    protected void loadRoot(String fileName) {
+        try {
+            this.root = FXMLLoader.load(this.getClass().getClassLoader().getResource("view/" + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load the stylesheets (CSS files) for this
+     * view.
+     */
+    protected void loadStylesheets() {
+        for (int i = 0; i < this.cssFilesPaths.length; i++) {
+            this.setIndex(i, this.names[i]);
+        }
+
+        // Set the default theme to light mode.
+        this.currentThemePath = this.cssFilesPaths[0];
+    }
+
+    /**
+     * Store the path of a file (in
+     * external form) in the resources/view
+     * folder in an array to store file paths
+     * at a specific index. if the file exists
+     * inside the resources/view folder,
+     * the path will be stored, otherwise
+     * an empty string. The resources folder
+     * is where the resources for this
+     * application are stored. This
+     * function also assumes there's
+     * already a view folder made
+     * inside the resource folder.
+     *
+     * @param index The index at which to
+     *              store the path inside
+     *              the array.
+     * @param element The name of the file.
+     */
+    private void setIndex(int index, String element) {
+        URL url = this.getClass().getClassLoader().getResource("css/" + element);
+        this.cssFilesPaths[index] = url == null ? "" : url.toExternalForm();
     }
 }
