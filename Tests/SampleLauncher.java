@@ -4,14 +4,18 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.junit.jupiter.api.parallel.Resources;
 import user.Account;
+import views.AccountView;
 import views.HomePageView;
 import views.SettingsView;
 import views.View;
+import views.utilities.AccountCell;
 
 /**
  * This class is responsible for launching the backup
@@ -52,14 +56,8 @@ public class SampleLauncher extends Application {
 //        stage.setScene(scene);
 //        stage.show();
 
-        ObservableList<Account> data = FXCollections.observableArrayList();
-        data.addAll(new Account("mike", "Github"), new Account("hannan", "Discord"), new Account("Fares", "Shopify"));
-
-        final ListView<Account> listView = new ListView<Account>(data);
-
-        StackPane root = new StackPane();
-        root.getChildren().add(listView);
-        stage.setScene(new Scene(root, 200, 250));
+        Parent root = AccountView.getInstance().getRoot();
+        stage.setScene(new Scene(root, 540, 620));
         stage.show();
     }
 }

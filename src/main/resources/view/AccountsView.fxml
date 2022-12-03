@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AccountViewController">
    <center>
       <HBox prefHeight="620.0" prefWidth="375.0" BorderPane.alignment="CENTER">
          <children>
@@ -18,7 +18,7 @@
                <children>
                   <TextField prefHeight="32.0" prefWidth="383.0" />
                   <Region prefHeight="9.0" prefWidth="383.0" />
-                  <ListView prefHeight="417.0" prefWidth="383.0" />
+                  <ListView fx:id = "accounts" prefHeight="417.0" prefWidth="383.0" />
                </children>
             </VBox>
             <VBox prefHeight="603.0" prefWidth="134.0" spacing="100.0">
