@@ -1,9 +1,12 @@
 package user;
 
 import behaviors.interfaces.ReadCodeBehavior;
+import javafx.scene.image.ImageView;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is responsible for storing data
@@ -26,6 +29,26 @@ public class Account {
     // The behavior to determine how the user
     // would like ot enter their codes.
     private ReadCodeBehavior readCodeBehavior;
+
+    private static Map<String, ImageView> icons;
+
+    static {
+        String discord = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();
+        ImageView discord_image = new ImageView(discord);
+        icons.put("github", discord_image);
+
+        String github = Account.class.getClassLoader().getResource("images/icons8-github-100.png").toExternalForm();
+        ImageView github_image = new ImageView(github);
+        icons.put("github", github_image);
+
+        String google = Account.class.getClassLoader().getResource("images/icons8-google-100.png").toExternalForm();
+        ImageView google_image = new ImageView(google);
+        icons.put("github", google_image);
+
+        String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
+        ImageView shopify_image = new ImageView(shopify);
+        icons.put("github", shopify_image);
+    }
 
     /**
      * Creat a new Social Media Account with
@@ -102,4 +125,6 @@ public class Account {
     public void clearUserCodes() {
         this.userCodes.clear();
     }
+
+    public static Map<String, ImageView> getIcons() {return icons;}
 }
