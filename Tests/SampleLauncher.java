@@ -1,9 +1,14 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.parallel.Resources;
+import user.Account;
 import views.HomePageView;
 import views.SettingsView;
 import views.View;
@@ -42,9 +47,19 @@ public class SampleLauncher extends Application {
 //        stage.setScene(scene);
 //        stage.show();
 
-        Scene scene = new Scene(HomePageView.getInstance().getRoot());
-        scene.getStylesheets().add(HomePageView.getInstance().getCurrentThemePath());
-        stage.setScene(scene);
+//        Scene scene = new Scene(HomePageView.getInstance().getRoot());
+//        scene.getStylesheets().add(HomePageView.getInstance().getCurrentThemePath());
+//        stage.setScene(scene);
+//        stage.show();
+
+        ObservableList<Account> data = FXCollections.observableArrayList();
+        data.addAll(new Account("mike", "Github"), new Account("hannan", "Discord"), new Account("Fares", "Shopify"));
+
+        final ListView<Account> listView = new ListView<Account>(data);
+
+        StackPane root = new StackPane();
+        root.getChildren().add(listView);
+        stage.setScene(new Scene(root, 200, 250));
         stage.show();
     }
 }
