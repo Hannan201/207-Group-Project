@@ -43,6 +43,16 @@ public class User {
     }
 
     /**
+     * Return the social media accounts for this
+     * user.
+     *
+     * @return List of social media accounts.
+     */
+    public List<Account> getAccounts() {
+        return this.accounts;
+    }
+
+    /**
      * Clear all the backup codes for this user.
      */
     public void clearAllAccounts() {

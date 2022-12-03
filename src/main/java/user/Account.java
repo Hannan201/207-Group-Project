@@ -86,6 +86,16 @@ public class Account {
     }
 
     /**
+     * Return the backup codes for this
+     * social media account.
+     *
+     * @return List of backup codes.
+     */
+    public List<String> getUserCodes() {
+        return this.userCodes;
+    }
+
+    /**
      * Remove all the backup codes for this social
      * media account.
      */
