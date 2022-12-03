@@ -1,13 +1,40 @@
+/*
+Class used to generate temporary data.
+ */
+
+import user.Account;
+import user.User;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * This class is made with helper functions to generate
- * back up codes.
- */
+public class TempData {
 
-public class CodeGenerator {
+    public static User user;
+
+    static {
+        // Make three accounts
+        Account a1 = new Account("Test", "Discord");
+        for (int i = 0; i < 16; i++) {
+            a1.addCodes(generateCodeAlphaNumeric(4, "-"));
+        }
+
+        Account a2 = new Account("Test2", "GitHub");
+        for (int i = 0; i < 16; i++) {
+            a2.addCodes(generateCodeAlphaNumeric(5, "-"));
+        }
+
+        Account a3 = new Account("Test3", "Google");
+        for (int i = 0; i < 16; i++) {
+            a3.addCodes(generateCodeNumbers(4, " "));
+        }
+
+        user = new User("Test", "1234");
+        user.addNewAccount(a1);
+        user.addNewAccount(a2);
+        user.addNewAccount(a3);
+    }
 
     // String to choose from numbers and lowercase letters.
     private static final String ALPHANUMERIC = "123456789abcdefghijklmnopqrstuvwxyz";
