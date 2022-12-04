@@ -36,12 +36,12 @@ public class HomePageView extends View {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"Name of CSS file for light mode.",
-                                  "Name of CSS file for dark mode.",
-                                  "Name of CSS file for high contrast mode."};
+        this.names = new String[]{"HomePageView.css",
+                "Name of CSS file for dark mode.",
+                "Name of CSS file for high contrast mode."};
 
         this.loadStylesheets();
 
-        this.loadRoot("Name of FXML file here");
+        this.loadRoot("HomePageView.fxml");
     }
 }

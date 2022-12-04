@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.parallel.Resources;
+import views.HomePageView;
 import views.SettingsView;
 import views.View;
 
@@ -33,6 +34,16 @@ public class SampleLauncher extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+//        Parent root = FXMLLoader.load(getClass().getResource("view/HomePageView.fxml"));
+//        Scene scene = new Scene(root);
+//        stage.setTitle("Backup Code Generator");
+//        String css = this.getClass().getResource("css/HomePageView.css").toExternalForm();
+//        scene.getStylesheets().add(css);
+//        stage.setScene(scene);
+//        stage.show();
+
+        Scene scene = new Scene(HomePageView.getInstance().getRoot());
+        scene.getStylesheets().add(HomePageView.getInstance().getCurrentThemePath());
         Parent root = FXMLLoader.load(getClass().getResource("view/HomePageView.fxml"));
         Scene scene = new Scene(root);
         stage.setTitle("Backup Code Generator");
