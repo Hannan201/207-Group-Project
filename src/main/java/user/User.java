@@ -43,6 +43,15 @@ public class User {
     }
 
     /**
+     * Get the username for this user.
+     *
+     * @return Username for this user.
+     */
+    public String getUsername() {
+        return this.username;
+    }
+
+    /**
      * Return the social media accounts for this
      * user.
      *
