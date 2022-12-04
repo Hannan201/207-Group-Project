@@ -3,7 +3,6 @@ package user;
 import behaviors.interfaces.ReadCodeBehavior;
 import javafx.scene.image.ImageView;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
