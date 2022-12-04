@@ -58,6 +58,14 @@ public class SampleLauncher extends Application {
 
         Parent root = AccountView.getInstance().getRoot();
         stage.setScene(new Scene(root, 540, 620));
+        Scene scene = new Scene(HomePageView.getInstance().getRoot());
+        scene.getStylesheets().add(HomePageView.getInstance().getCurrentThemePath());
+        Parent root = FXMLLoader.load(getClass().getResource("view/HomePageView.fxml"));
+        Scene scene = new Scene(root);
+        stage.setTitle("Backup Code Generator");
+        String css = this.getClass().getResource("css/HomePageView.css").toExternalForm();
+        scene.getStylesheets().add(css);
+        stage.setScene(scene);
         stage.show();
     }
 }
