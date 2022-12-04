@@ -1,5 +1,7 @@
 package views;
 
+import controllers.AccountViewController;
+import javafx.fxml.FXMLLoader;
 import views.interfaces.Reversible;
 
 /**
@@ -12,6 +14,8 @@ public class AccountView extends View implements Reversible {
 
     // An instance for this account-viewer view.
     private static View firstInstance = null;
+
+    private AccountViewController controller = null;
 
     // The previous view for this account-viewer
     // view.
@@ -43,13 +47,23 @@ public class AccountView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/AccountsView.fxml"));
+            this.setRoot(loader.load());
+            this.controller = loader.getController();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.names = new String[]{"AccountsView.css",
                                   "Name of CSS file for dark mode.",
                                   "Name of CSS file for high contrast mode."};
 
         this.loadStylesheets();
 
-        this.loadRoot("AccountsView.fxml");
+//        this.loadRoot("AccountsView.fxml");
     }
 
     /**
@@ -76,5 +90,9 @@ public class AccountView extends View implements Reversible {
     @Override
     public void setPreviousView(View newPreviousView) {
         this.previousView = newPreviousView;
+    }
+
+    public AccountViewController getAccountViewController() {
+        return this.controller;
     }
 }

@@ -18,14 +18,15 @@
                <children>
                   <TextField prefHeight="32.0" prefWidth="383.0" />
                   <Region prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id = "accounts" prefHeight="417.0" prefWidth="383.0" />
+                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0" />
                </children>
             </VBox>
-            <VBox prefHeight="603.0" prefWidth="134.0" spacing="100.0">
+            <VBox alignment="CENTER" prefHeight="603.0" prefWidth="134.0" spacing="20.0">
                <children>
-                  <Button mnemonicParsing="false" text="Button" />
-                  <Button mnemonicParsing="false" text="Button" />
-                  <Button mnemonicParsing="false" text="Button" />
+                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="76.0" prefWidth="106.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="91.0" prefWidth="97.0" text="Add &#10;Account" textAlignment="CENTER" />
+                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="81.0" prefWidth="95.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="72.0" prefWidth="95.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets />
@@ -41,12 +42,18 @@
       </HBox>
    </center>
    <top>
-      <Label alignment="TOP_CENTER" prefHeight="30.0" prefWidth="43.0" text="TOP" BorderPane.alignment="CENTER" />
+      <Label fx:id="title" alignment="TOP_CENTER" prefHeight="11.0" prefWidth="179.0" text="Accounts" BorderPane.alignment="BASELINE_CENTER" />
    </top>
    <padding>
       <Insets left="5.0" right="5.0" top="40.0" />
    </padding>
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="618.0" scaleY="0.5" translateY="30.0" BorderPane.alignment="CENTER" />
+      <HBox alignment="CENTER" prefHeight="79.0" prefWidth="530.0" spacing="135.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" />
+            <Button fx:id="logout" mnemonicParsing="false" />
+            <Button fx:id="settings" mnemonicParsing="false" />
+         </children>
+      </HBox>
    </bottom>
 </BorderPane>

@@ -1,16 +1,20 @@
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.image.ImageView?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Label?>
-<fx:root type="javafx.scene.control.ListCell" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.control.ListCell?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root type="javafx.scene.control.ListCell" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <graphic>
         <HBox fx:id="cell">
             <children>
-                <ImageView fx:id="logo" />
-                <VBox fx:id="textbox">
+                <ImageView fx:id="logo" HBox.hgrow="NEVER" />
+                <VBox fx:id="textbox" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                     <children>
                         <Label fx:id="platformName" />
-                        <Label fx:id="username"/>
+                        <Label fx:id="username" />
                     </children>
                 </VBox>
             </children>
