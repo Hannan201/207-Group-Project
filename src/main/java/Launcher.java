@@ -1,5 +1,8 @@
 import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import views.HomePageView;
 
 /**
  * This class is responsible for launching the backup
@@ -26,6 +29,10 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        // Entry point.
+        Parent root = HomePageView.getInstance().getRoot();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(HomePageView.getInstance().getCurrentThemePath());
+        stage.setScene(scene);
+        stage.show();
     }
 }

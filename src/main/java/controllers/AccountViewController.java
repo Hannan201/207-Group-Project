@@ -2,14 +2,16 @@ package controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import user.Account;
-import views.AddAccountView;
-import views.SignUpView;
+import user.Database;
+import user.User;
+import views.*;
 import views.utilities.AccountCellFactory;
 
 import java.net.URL;
@@ -40,10 +42,20 @@ public class AccountViewController implements Initializable {
     @FXML
     public Button settings;
 
+    // Will be needed for the final product.
+//    private User user;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());
         ObservableList<Account> data = FXCollections.observableArrayList();
+
+        // These two lines don't work for now.
+        // But when the loading data feature
+        // is added, it will.
+//        User user = Database.getUser();
+//        data.addAll(user.getAccounts());
+
         data.addAll(new Account("mike", "GitGithubGithubGithubGithubissdsadkjdsGithubhub"), new Account("hannan", "Discord"), new Account("Fares", "Shopify"));
         accounts.getItems().addAll(data);
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -53,6 +65,32 @@ public class AccountViewController implements Initializable {
     public void handleSelectAccount() {
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         accounts.getSelectionModel().selectAll();
+    }
+
+    private void switchSceneTo(View view) {
+        Scene scene = AccountView.getInstance().getRoot().getScene();
+        scene.getStylesheets().clear();
+
+        // Just in case if CSS files aren't being used
+        // to change the theme.
+        if (view.getCurrentThemePath() != null) {
+            scene.getStylesheets().add(view.getCurrentThemePath());
+        }
+
+        scene.setRoot(view.getRoot());
+    }
+
+    public void handleLogout(ActionEvent e) {
+        // This saveUserData method doesn't do
+        // anything for now, but it will once
+        // the final product is ready.
+
+        Database.saveUserData();
+        switchSceneTo(HomePageView.getInstance());
+    }
+
+    public void handleSettings(ActionEvent e) {
+        switchSceneTo(SettingsView.getInstance());
     }
 
     public void handleAddAccount() {
@@ -78,6 +116,9 @@ public class AccountViewController implements Initializable {
 
     public void addAccount(Account account) {
         accounts.getItems().add(account);
+
+        // Will be needed for the final product.
+//        user.addNewAccount(account);
     }
 
     public void handlePinAccount() {

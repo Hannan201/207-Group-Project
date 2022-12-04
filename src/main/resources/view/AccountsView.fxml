@@ -51,8 +51,8 @@
       <HBox alignment="CENTER" prefHeight="79.0" prefWidth="530.0" spacing="135.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" />
-            <Button fx:id="logout" mnemonicParsing="false" />
-            <Button fx:id="settings" mnemonicParsing="false" />
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout"/>
+            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings"/>
          </children>
       </HBox>
    </bottom>

@@ -45,7 +45,7 @@ public class SettingsView extends View implements Reversible {
      */
     private SettingsView() {
         initUI();
-        views = new ArrayList<>(List.of(SignInView.getInstance(), SignUpView.getInstance(), AccountView.getInstance(),
+        views = new ArrayList<>(List.of(SignUpView.getInstance(), AccountView.getInstance(),
                 AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance()));
         this.lightModeCommand = new SwitchToLightMode(views);
         this.darkModeCommand = new SwitchToDarkMode(views);
@@ -121,6 +121,8 @@ public class SettingsView extends View implements Reversible {
         hb.setMaxWidth(Double.MAX_VALUE);
         // create BoarderPane
         BorderPane borderPane = new BorderPane();
+        borderPane.setPrefHeight(620);
+        borderPane.setPrefWidth(540);
         borderPane.setCenter(hb);
 
         // create label

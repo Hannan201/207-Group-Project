@@ -154,7 +154,7 @@ public class Database {
      * @param password Password for the new user.
      * @return
      */
-    public static User registerUser(String username, String password) {
+    public static void registerUser(String username, String password) {
         if (accountSourceSet && userSourceSet && !loggedIn) {
             userConfigurations[0] = username;
             String salt = generateSalt();
@@ -164,9 +164,16 @@ public class Database {
             userConfigurations[4] = Long.toString(accountsFilePointer);
             setLoginStatus("true");
             user = new User(username);
-            return user;
         }
-        return null;
+    }
+
+    /**
+     * Get the current logged-in user object.
+     *
+     * @return Current logged in user.
+     */
+    public static User getUser() {
+        return user;
     }
 
     /**
@@ -227,7 +234,16 @@ public class Database {
         saveUserData();
     }
 
+    /**
+     * Save the username, password, current theme,
+     * social media accounts, and backup codes
+     * for the current logged-in user.
+     */
     public static void saveUserData() {
+        if (!(loggedIn && userSourceSet && accountSourceSet)) {
+            return;
+        }
+
         if (!usernames.contains(user.getUsername())) {
             File file;
             FileWriter out;

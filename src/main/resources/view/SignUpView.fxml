@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
    <children>
       <HBox alignment="BOTTOM_CENTER" prefHeight="95.0" prefWidth="384.0">
          <children>
@@ -46,7 +46,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="Sign Up" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="Sign Up" onAction="#handleSignUp"/>
          </children>
       </HBox>
    </children>
