@@ -163,7 +163,7 @@ public class Database {
             userConfigurations[3] = "light";
             userConfigurations[4] = Long.toString(accountsFilePointer);
             setLoginStatus("true");
-            user = new User(username, password);
+            user = new User(username);
             return user;
         }
         return null;

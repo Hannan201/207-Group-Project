@@ -13,9 +13,6 @@ public class User {
     // The user's username.
     private String username;
 
-    // The user's password.
-    private String password;
-
     // List of social media accounts for this user.
     private List<Account> accounts;
 
@@ -24,11 +21,9 @@ public class User {
      * username and password passed in as a parameter.
      *
      * @param newUsername Username of this user.
-     * @param newPassword Password for this user.
      */
-    public User(String newUsername, String newPassword) {
+    public User(String newUsername) {
         this.username = newUsername;
-        this.password = newPassword;
         accounts = new ArrayList<>();
     }
 
