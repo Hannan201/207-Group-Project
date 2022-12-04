@@ -49,7 +49,7 @@ public class CodeView extends View implements Reversible {
 
         this.loadStylesheets();
 
-        this.loadRoot("Name of FXML file here");
+        this.loadRoot("src/main/resources/view/CodeViewFXML/CodeView.fxml");
     }
 
     /**
