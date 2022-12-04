@@ -4,6 +4,8 @@ import behaviors.interfaces.ReadCodeBehavior;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,24 +31,25 @@ public class Account {
     // would like ot enter their codes.
     private ReadCodeBehavior readCodeBehavior;
 
-    private static Map<String, ImageView> icons;
+    private static Map<String, String> icons;
 
     static {
+
+        // I tried that but something weird happened lol let me try again
+
+        icons = new HashMap<>();
+
         String discord = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();
-        ImageView discord_image = new ImageView(discord);
-        icons.put("github", discord_image);
+        icons.put("discord", discord);
 
         String github = Account.class.getClassLoader().getResource("images/icons8-github-100.png").toExternalForm();
-        ImageView github_image = new ImageView(github);
-        icons.put("github", github_image);
+        icons.put("github", github);
 
         String google = Account.class.getClassLoader().getResource("images/icons8-google-100.png").toExternalForm();
-        ImageView google_image = new ImageView(google);
-        icons.put("github", google_image);
+        icons.put("google", google);
 
         String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
-        ImageView shopify_image = new ImageView(shopify);
-        icons.put("github", shopify_image);
+        icons.put("shopify", shopify);
     }
 
     /**
@@ -125,5 +128,5 @@ public class Account {
         this.userCodes.clear();
     }
 
-    public static Map<String, ImageView> getIcons() {return icons;}
+    public static Map<String, String> getIcons() {return icons;}
 }

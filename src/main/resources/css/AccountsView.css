@@ -1,0 +1,19 @@
+#title {
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 20;
+}
+
+#logout{
+    -fx-graphic: url('/images/logout_lightmode.png');
+    -fx-background-color: transparent;
+}
+
+#settings{
+    -fx-graphic: url('/images/settings_lightmode.png');
+    -fx-background-color: transparent;
+}
+
+#back{
+    -fx-graphic: url('/images/back_lightmode.png');
+    -fx-background-color: transparent;
+}
