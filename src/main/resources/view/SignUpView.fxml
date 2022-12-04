@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="BOTTOM_CENTER" prefHeight="95.0" prefWidth="384.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="45.0" prefWidth="106.0" text="Welcome!" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="84.0" prefWidth="384.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Username/Email" />
+            <TextField prefHeight="25.0" prefWidth="157.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="29.0" prefWidth="384.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Verify Username" />
+            <TextField prefHeight="25.0" prefWidth="157.0" />
+         </children>
+      </HBox>
+      <HBox alignment="BOTTOM_CENTER" prefHeight="86.0" prefWidth="384.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Password" />
+            <PasswordField />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="81.0" prefWidth="384.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Verify Password" />
+            <PasswordField />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="Sign Up" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
