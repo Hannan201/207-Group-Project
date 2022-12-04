@@ -173,7 +173,10 @@ public class Database {
      * @return Current logged in user.
      */
     public static User getUser() {
-        return user;
+        if (loggedIn) {
+            return user;
+        }
+        return null;
     }
 
     /**

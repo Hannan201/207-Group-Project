@@ -39,7 +39,8 @@ public class SavingDataTests {
     void testSaveUserData() throws FileNotFoundException {
         Database.setUserSource(pathToUserFile);
         Database.setAccountsSource(pathToAccountsFile);
-        User newUser = Database.registerUser("Joe", "1234");
+        Database.registerUser("Joe", "1234");
+        User newUser = Database.getUser();
         assertNotNull(newUser);
         Account a1 = new Account("Joe", "GitHub");
         a1.addCodes("1234");
@@ -77,7 +78,8 @@ public class SavingDataTests {
     void testSaveUserLogins() {
         Database.setUserSource("Tests/userData.txt");
         Database.setAccountsSource("Tests/accountData.txt");
-        User user = Database.registerUser("Hannan", "12345");
+        Database.registerUser("Hannan", "12345");
+        User user = Database.getUser();
         Account account = new Account("Joe", "1234");
         account.addCodes("1234");
         account.addCodes("1234");
