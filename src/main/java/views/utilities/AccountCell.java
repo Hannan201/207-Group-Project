@@ -8,6 +8,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import user.Account;
 
 import java.io.IOException;
@@ -25,6 +27,9 @@ public class AccountCell extends ListCell<Account> {
 
     @FXML
     private HBox cell;
+
+    @FXML
+    private VBox textbox;
 
     public AccountCell() {
         loadFXML();
@@ -52,18 +57,35 @@ public class AccountCell extends ListCell<Account> {
         }
         else {
 
-            if (Account.getIcons().containsKey(item.getSocialMediaType())) {
-                Image image = new Image("images/icons8-discord-100.png");
+            if (Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
+                String path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
+                Image image = new Image(path);
                 logo.setImage(image);
-                logo.setFitHeight(5);
-                logo.setFitWidth(5);
+                logo.setFitWidth(50);
+                logo.setFitHeight(50);
+                cell.getChildren();
+                HBox.setHgrow(cell, Priority.NEVER);
+            } else if (! Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
+                String path = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();;
+                Image image = new Image(path);
+                logo.setImage(image);
+                logo.setFitWidth(50);
+                logo.setFitHeight(50);
+                cell.getChildren();
+                HBox.setHgrow(cell, Priority.NEVER);
             }
+            setWrapText(true);
+
             platformName.setText(item.getSocialMediaType());
+            platformName.setMaxWidth(200); // removes the horizontal scroll bar issue, should be added to username too
             username.setText(item.getName());
+            HBox.setHgrow(textbox, Priority.ALWAYS);
+            cell.setSpacing(10);
+
             setText(null);
             setGraphic(cell);
 
-//            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         }
     }
 }
