@@ -1,0 +1,28 @@
+#title {
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 20;
+}
+
+#logout{
+    -fx-background-image: url('/images/logout_lightmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#settings{
+    -fx-background-image: url('/images/settings_lightmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back{
+    -fx-background-image: url('/images/back_lightmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
