@@ -66,7 +66,7 @@ public class AccountCell extends ListCell<Account> {
                 cell.getChildren();
                 HBox.setHgrow(cell, Priority.NEVER);
             } else if (! Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
-                String path = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();;
+                String path = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();;
                 Image image = new Image(path);
                 logo.setImage(image);
                 logo.setFitWidth(50);
