@@ -179,5 +179,13 @@ public class SignUpController implements Initializable {
 
         scene.setRoot(AccountView.getInstance().getRoot());
         scene.getStylesheets().add(AccountView.getInstance().getCurrentThemePath());
+
+        // Clear the attributes such that when the signs out
+        // they do not have access to the credentials
+
+        initialUsername.clear();
+        initialPassword.clear();
+        verifiedUsername.clear();
+        verifiedPassword.clear();
     }
 }
