@@ -48,11 +48,11 @@
       <Insets left="5.0" right="5.0" top="40.0" />
    </padding>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="79.0" prefWidth="530.0" spacing="135.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0" spacing="170.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" />
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout"/>
-            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings"/>
+            <Button fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
+            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0" />
          </children>
       </HBox>
    </bottom>

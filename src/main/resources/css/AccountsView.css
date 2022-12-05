@@ -4,16 +4,25 @@
 }
 
 #logout{
-    -fx-graphic: url('/images/logout_lightmode.png');
+    -fx-background-image: url('/images/logout_lightmode.png');
+    -fx-background-size: 35px;
     -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 #settings{
-    -fx-graphic: url('/images/settings_lightmode.png');
+    -fx-background-image: url('/images/settings_lightmode.png');
+    -fx-background-size: 35px;
     -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 #back{
-    -fx-graphic: url('/images/back_lightmode.png');
+    -fx-background-image: url('/images/back_lightmode.png');
+    -fx-background-size: 35px;
     -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
