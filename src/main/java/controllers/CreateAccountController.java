@@ -49,7 +49,6 @@ import net.synedra.validatorfx.Validator;
 public class CreateAccountController implements Initializable{
 
     private Validator validator = new Validator();
-    private StringBinding problemsText;
 
     public Button createAccount;
     @FXML
