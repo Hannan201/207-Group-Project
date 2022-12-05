@@ -1,2 +1,3 @@
 false.
 username,password,salt,theme,pos
+Hannan,p7AeeVcYzNmUOsbfJHit9Q==,AQeb2terKk/tIqbkwSGZZg==,Light        ,0

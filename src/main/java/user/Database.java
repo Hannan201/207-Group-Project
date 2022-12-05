@@ -58,6 +58,9 @@ public class Database {
     // social media account.
     private static long accountsFilePointer;
 
+    private static long oldPosition;
+    private static long newPosition;
+
     /**
      * Sets the source to the CSV file where
      * the usernames and passwords are stored.
@@ -83,25 +86,31 @@ public class Database {
      */
     private static void initializeFilePointers() {
         try {
+            filePointer = 0;
             File file = new File(userSource);
             FileReader in = new FileReader(file);
             BufferedReader readFile = new BufferedReader(in);
             String line;
 
-            // To go through the first two header lines.
-            for (int i = 0; i < 2; i++) {
-                line = readFile.readLine();
-                filePointer += line.getBytes().length;
+            line = readFile.readLine();
+
+            if (line.strip().equals("true .")) {
+                loggedIn = true;
             }
+
+            filePointer += line.getBytes(StandardCharsets.UTF_8).length + 1;
+
+            line = readFile.readLine();
+            filePointer += line.getBytes(StandardCharsets.UTF_8).length + 1;
 
             // For each row in the CSV file.
             while ((line = readFile.readLine()) != null) {
-                String username = line.split(",")[0];
+                String username = line.split(",")[0].toLowerCase();
                 usernames.add(username);
 
                 // Using the bytes to move the file pointer.
-                userRelatedData.put(username, filePointer + username.getBytes().length + 1);
-                filePointer += line.getBytes().length;
+                userRelatedData.put(username, filePointer + username.getBytes(StandardCharsets.UTF_8).length + 1);
+                filePointer += line.getBytes(StandardCharsets.UTF_8).length + 1;
             }
 
         } catch (Exception e) {
@@ -116,6 +125,7 @@ public class Database {
     private static void initializeFilePointerForAccounts() {
         // Position in the file for if a new account is added.
         RandomAccessFile raf = null;
+        accountsFilePointer = 0;
         try {
             raf = new RandomAccessFile(accountsSource, "r");
             accountsFilePointer = raf.length();
@@ -152,7 +162,6 @@ public class Database {
      *
      * @param username Username for the new user.
      * @param password Password for the new user.
-     * @return
      */
     public static void registerUser(String username, String password) {
         if (accountSourceSet && userSourceSet && !loggedIn) {
@@ -160,11 +169,58 @@ public class Database {
             String salt = generateSalt();
             userConfigurations[2] = salt;
             userConfigurations[1] = hashPassword(password, salt.getBytes());
-            userConfigurations[3] = "light";
+            userConfigurations[3] = String.format("%-13s", "Light");
             userConfigurations[4] = Long.toString(accountsFilePointer);
             setLoginStatus("true");
+            loggedIn = true;
             user = new User(username);
+            System.out.println("Before: " + salt);
+            System.out.println("Before: " + hashPassword(password, salt.getBytes()));
         }
+    }
+
+    /**
+     * Check whether a user is logged-in to this application.
+     *
+     * @return True if logged in, false otherwise.
+     */
+    public static boolean getLoginStatus() {
+        return loggedIn;
+    }
+
+    /**
+     * Check if a username is already taken.
+     *
+     * @param username The username to check for.
+     * @return True if username is taken, false otherwise.s
+     */
+    public static boolean checkUsername(String username) {
+        return usernames.contains(username.toLowerCase());
+    }
+
+    public static boolean authenticateUser(String username, String password) {
+        RandomAccessFile raf = null;
+
+        try {
+            raf = new RandomAccessFile(userSource, "r");
+            raf.seek(userRelatedData.get(username.toLowerCase()));
+            String utf8 = raf.readLine();
+            String[] row = utf8.split(",");
+            String result = hashPassword(password, row[1].getBytes());
+            return row[0].equals(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (raf != null) {
+                    raf.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -276,6 +332,9 @@ public class Database {
                 writeFile.write("\n" + String.join(",", userConfigurations));
                 writeFile.close();
                 out.close();
+
+                initializeFilePointers();
+                initializeFilePointerForAccounts();
             } catch (Exception e) {
                 e.printStackTrace();
             }
