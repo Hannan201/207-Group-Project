@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 import org.controlsfx.control.HyperlinkLabel;
+import user.Database;
 import views.*;
 
 import java.awt.*;
@@ -59,47 +60,74 @@ public class SettingsViewController implements Initializable {
         this.switcher.switchTheme();
     }
 
+    private void switchSceneTo(View view) {
+        Scene scene = SettingsView.getInstance().getRoot().getScene();
+        scene.getStylesheets().clear();
+
+        // Just in case if CSS files aren't being used
+        // to change the theme.
+        if (view.getCurrentThemePath() != null) {
+            scene.getStylesheets().add(view.getCurrentThemePath());
+        }
+
+        scene.setRoot(view.getRoot());
+    }
+
+    /**
+     * Allows a user to logout and redirects them to the home page.
+     *
+     */
+    public void handleLogout(ActionEvent e) {
+        // This saveUserData method doesn't do
+        // anything for now, but it will once
+        // the final product is ready.
+
+        Database.saveUserData();
+        switchSceneTo(HomePageView.getInstance());
+    }
+
+
     public void handleLinkClick(ActionEvent e) throws IOException, URISyntaxException {
 
         Hyperlink link = (Hyperlink) e.getSource();
         final String str = link == null ? "" : link.getText();
-        switch(str) {
-            case "Icons8":
+        switch (str) {
+            case "Icons8" -> {
                 String url = "https://icons8.com";
                 Desktop.getDesktop().browse(new URL(url).toURI());
-                break;
-            case "app":
+            }
+            case "app" -> {
                 String app = "https://icons8.com/icon/4SBCvFZBi2Rc/app";
                 Desktop.getDesktop().browse(new URL(app).toURI());
-                break;
-            case "Google":
+            }
+            case "Google" -> {
                 String google = "https://icons8.com/icon/60984/google";
                 Desktop.getDesktop().browse(new URL(google).toURI());
-                break;
-            case "Discord":
+            }
+            case "Discord" -> {
                 String discord = "https://icons8.com/icon/30888/discord";
                 Desktop.getDesktop().browse(new URL(discord).toURI());
-                break;
-            case "Shopify":
+            }
+            case "Shopify" -> {
                 String shopify = "https://icons8.com/icon/SZ0VDlOvY5zB/shopify";
                 Desktop.getDesktop().browse(new URL(shopify).toURI());
-                break;
-            case "Github":
+            }
+            case "Github" -> {
                 String github = "https://icons8.com/icon/62856/github";
                 Desktop.getDesktop().browse(new URL(github).toURI());
-                break;
-            case "Settings":
+            }
+            case "Settings" -> {
                 String settings = "https://icons8.com/icon/H6C79JoP90DH/settings";
                 Desktop.getDesktop().browse(new URL(settings).toURI());
-                break;
-            case "Back Arrow":
+            }
+            case "Back Arrow" -> {
                 String log_out = "https://icons8.com/icon/26194/back-arrow";
                 Desktop.getDesktop().browse(new URL(log_out).toURI());
-                break;
-            case "Log Out":
+            }
+            case "Log Out" -> {
                 String back_arrow = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
                 Desktop.getDesktop().browse(new URL(back_arrow).toURI());
-                break;
+            }
         }
     }
 }
