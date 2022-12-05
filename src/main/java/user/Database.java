@@ -174,8 +174,6 @@ public class Database {
             setLoginStatus("true");
             loggedIn = true;
             user = new User(username);
-            System.out.println("Before: " + salt);
-            System.out.println("Before: " + hashPassword(password, salt.getBytes()));
         }
     }
 
@@ -207,7 +205,12 @@ public class Database {
             String utf8 = raf.readLine();
             String[] row = utf8.split(",");
             String result = hashPassword(password, row[1].getBytes());
-            return row[0].equals(result);
+            loggedIn = row[0].equals(result);
+
+            if (loggedIn) {
+                oldPosition = Long.parseLong(row[3]);
+                loadUserData(oldPosition);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -220,7 +223,7 @@ public class Database {
             }
         }
 
-        return false;
+        return loggedIn;
     }
 
     /**
@@ -340,6 +343,44 @@ public class Database {
             }
         }
     }
+
+    private static void loadUserData(long offset) {
+        RandomAccessFile raf = null;
+        FileReader in;
+        BufferedReader readFile;
+        try {
+            raf = new RandomAccessFile(accountsSource, "r");
+            raf.seek(offset);
+            in = new FileReader(raf.getFD());
+            readFile = new BufferedReader(in);
+            user = new User(readFile.readLine());
+
+            long numOfAccounts = Long.parseLong(readFile.readLine());
+
+            for (int i = 0; i < numOfAccounts; i++) {
+                String name = readFile.readLine();
+                String platform = readFile.readLine();
+                Account account = new Account(name, platform);
+                long numOfCodes = Long.parseLong(readFile.readLine());
+                for (int j = 0; j < numOfCodes; j++) {
+                    account.addCodes(readFile.readLine());
+                }
+                user.addNewAccount(account);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (raf != null) {
+                    raf.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * Set the status of a user on if they're either logged in

@@ -85,7 +85,6 @@ public class Account {
     }
 
     /**
-     * [FOR TESTING ONLY]
      * Add codes to this social media account.
      */
     public void addCodes(String code) {
