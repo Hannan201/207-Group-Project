@@ -91,6 +91,7 @@ public class AccountCell extends ListCell<Account> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
                     Scene scene = AccountView.getInstance().getRoot().getScene();
                     scene.getStylesheets().clear();
+                    scene.getStylesheets().add(CodeView.getInstance().getCurrentThemePath());
                     scene.setRoot(CodeView.getInstance().getRoot());
                 }
             });
