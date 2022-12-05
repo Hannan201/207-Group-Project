@@ -5,24 +5,30 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="567.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SettingsViewController">
    <children>
-      <Label alignment="TOP_CENTER" layoutY="14.0" prefHeight="75.0" prefWidth="554.0" text="Setting" textAlignment="CENTER">
+      <Label alignment="TOP_CENTER" layoutX="179.0" layoutY="25.0" prefHeight="75.0" prefWidth="181.0" text="Setting" textAlignment="CENTER">
          <font>
             <Font size="52.0" />
          </font>
       </Label>
-      <ToggleButton fx:id="highContrastModeButton" layoutX="63.0" layoutY="119.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="149.0" text="HighContrastMode">
+      <ToggleButton fx:id="highContrastModeButton" layoutX="63.0" layoutY="119.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="141.0" text="High Contrast Mode">
          <toggleGroup>
             <ToggleGroup fx:id="Buttons" />
          </toggleGroup>
       </ToggleButton>
-      <ToggleButton fx:id="darkModeButton" layoutX="209.0" layoutY="119.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="149.0" text="DarkMode" toggleGroup="$Buttons" />
-      <ToggleButton fx:id="lightModeButton" layoutX="358.0" layoutY="119.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="141.0" text="LightMode" toggleGroup="$Buttons" />
-      <Button layoutX="42.0" layoutY="231.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Delete Account" />
-      <Button layoutX="404.0" layoutY="231.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Export Data" />
-      <Button layoutX="207.0" layoutY="584.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" text="Go back" />
+      <ToggleButton fx:id="darkModeButton" layoutX="204.0" layoutY="119.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="149.0" text="Dark Mode" toggleGroup="$Buttons" />
+      <ToggleButton fx:id="lightModeButton" layoutX="353.0" layoutY="119.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="141.0" text="Light" toggleGroup="$Buttons" />
+      <Button layoutX="63.0" layoutY="231.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Delete Account" />
+      <Button layoutX="379.0" layoutY="231.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Export Data" />
+      <HBox alignment="CENTER" layoutX="5.0" layoutY="533.0" prefHeight="79.0" prefWidth="530.0" spacing="135.0">
+         <children>
+            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" />
+            <Button fx:id="logout" mnemonicParsing="false" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
