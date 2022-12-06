@@ -77,7 +77,7 @@ public class CreateAccountController implements Initializable{
         createAccount = new Button("Create Account");
         createAccount.setContentDisplay(ContentDisplay.CENTER);
         createAccount.setPrefHeight(32);
-        createAccount.setPrefWidth(135);
+        createAccount.setPrefWidth(155);
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,
