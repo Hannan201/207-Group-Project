@@ -5,6 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
+import controllers.SettingsViewController;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -64,7 +65,7 @@ public class SettingsView extends View implements Reversible {
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SettingsView();
-            views.add(firstInstance);
+            SettingsViewController.addView(firstInstance);
         }
 
         return firstInstance;
@@ -78,7 +79,7 @@ public class SettingsView extends View implements Reversible {
     protected void initUI() {
         this.names = new String[]{"SettingsView.css",
                 "Name of CSS file for dark mode.",
-                "Name of CSS file for high contrast mode."};
+                "HighContrastSettingsView.css"};
 
         this.loadStylesheets();
 
