@@ -1,5 +1,13 @@
 #back{
-    -fx-background-image: url('/images/back_lightmode.png');
+    -fx-background-image: url('/images/hc-back.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back:hover{
+    -fx-background-image: url('/images/hc-back-onselect.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -7,7 +15,15 @@
 }
 
 #logout{
-    -fx-background-image: url('/images/logout_lightmode.png');
+    -fx-background-image: url('/images/hc-logout.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#logout:hover{
+    -fx-background-image: url('/images/hc-logout-onselect.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -20,50 +36,60 @@
 
 
 #highContrastModeButton{
-    -fx-border-color: #f37f0e;
+    -fx-border-color: #ff7600;
     -fx-border-width: 3px;
-    -fx-background-color: #08daff;
+    -fx-background-color: #00ffff;
     -fx-font-size: 11;
     -fx-font-weight: bold;
 }
 
 #darkModeButton{
-    -fx-border-color: #f37f0e;
+    -fx-border-color: #ff7600;
     -fx-border-width: 3px;
-    -fx-background-color: #08daff;
+    -fx-background-color: #00ffff;
     -fx-font-size: 11;
     -fx-font-weight: bold;
 }
 
 #lightModeButton{
-    -fx-border-color: #f37f0e;
+    -fx-border-color: #ff7600;
     -fx-border-width: 3px;
-    -fx-background-color: #08daff;
+    -fx-background-color: #00ffff;
     -fx-font-size: 11;
     -fx-font-weight: bold;
 }
 
 #deleteAccount{
-    -fx-border-color: #f37f0e;
+    -fx-border-color: #ff7600;
     -fx-border-width: 3px;
-    -fx-background-color: #08daff;
+    -fx-background-color: #00ffff;
     -fx-font-size: 11;
     -fx-font-weight: bold;
 }
 
 
 #exportData{
-    -fx-border-color: #f37f0e;
+    -fx-border-color: #ff7600;
     -fx-border-width: 3px;
-    -fx-background-color: #08daff;
+    -fx-background-color: #00ffff;
     -fx-font-size: 11;
     -fx-font-weight: bold;
 }
 
-#label{
-    -fx-text-fill:#ffffff;
+.hyperlink{
+    -fx-text-fill: #00ffff;
+    -fx-font-family: "Montserrat";
 }
 
-#copyright{
-    -fx-background-color:#08daff;
+.hyperlink:hover{
+    -fx-text-fill: #ff7600;
+}
+
+.label{
+    -fx-text-fill: white;
+    -fx-font-family: "Montserrat";
+}
+
+#label{
+    -fx-font-family: "Montserrat SemiBold";
 }
