@@ -21,12 +21,12 @@
                   <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="603.0" prefWidth="134.0" spacing="20.0">
+            <VBox alignment="CENTER" prefHeight="603.0" prefWidth="134.0" spacing="18.0">
                <children>
-                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="76.0" prefWidth="106.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
-                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="91.0" prefWidth="97.0" text="Add &#10;Account" textAlignment="CENTER" />
-                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="81.0" prefWidth="95.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
-                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="72.0" prefWidth="95.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="90.0" prefWidth="90.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="90.0" prefWidth="90.0" text="Add &#10;Account" textAlignment="CENTER" />
+                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="90.0" prefWidth="90.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="90.0" prefWidth="90.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets />
