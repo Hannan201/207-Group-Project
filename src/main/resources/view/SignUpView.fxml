@@ -12,7 +12,7 @@
    <children>
       <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="380.0">
          <children>
-            <Label alignment="CENTER" prefHeight="45.0" prefWidth="106.0" text="Welcome!" textAlignment="CENTER" wrapText="true">
+            <Label alignment="CENTER" prefHeight="45.0" prefWidth="157.0" text="Welcome!" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font size="24.0" />
                </font>
@@ -22,25 +22,25 @@
       <HBox alignment="CENTER" prefHeight="47.0" prefWidth="380.0">
          <children>
             <Label prefHeight="17.0" prefWidth="145.0" text="Username/Email" />
-            <TextField fx:id="initialUsername" prefHeight="25.0" prefWidth="157.0" />
+            <TextField fx:id="initialUsername" prefHeight="25.0" prefWidth="149.0" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="384.0">
          <children>
             <Label prefHeight="17.0" prefWidth="145.0" text="Verify Username" />
-            <TextField fx:id="verifiedUsername" prefHeight="25.0" prefWidth="157.0" />
+            <TextField fx:id="verifiedUsername" prefHeight="25.0" prefWidth="149.0" />
          </children>
       </HBox>
       <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="380.0">
          <children>
             <Label prefHeight="17.0" prefWidth="145.0" text="Password" />
-            <PasswordField fx:id="initialPassword" />
+            <PasswordField fx:id="initialPassword" prefHeight="25.0" prefWidth="149.0" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="39.0" prefWidth="380.0">
          <children>
             <Label prefHeight="17.0" prefWidth="145.0" text="Verify Password" />
-            <PasswordField fx:id="verifiedPassword" />
+            <PasswordField fx:id="verifiedPassword" prefHeight="25.0" prefWidth="149.0" />
          </children>
       </HBox>
       <Region prefHeight="19.0" prefWidth="380.0" />
