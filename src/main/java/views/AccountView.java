@@ -57,9 +57,9 @@ public class AccountView extends View implements Reversible {
             e.printStackTrace();
         }
 
-        this.names = new String[]{"AccountsViewHighContrast.css",
+        this.names = new String[]{"AccountsView.css",
                                   "Name of CSS file for dark mode.",
-                                  "Name of CSS file for high contrast mode."};
+                                  "AccountsViewHighContrast.css"};
 
         this.loadStylesheets();
 
