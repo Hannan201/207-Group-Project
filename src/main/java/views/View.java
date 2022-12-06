@@ -2,9 +2,11 @@ package views;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import user.Account;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * This class is responsible for displaying a specific
@@ -60,6 +62,20 @@ public abstract class View {
      */
     public void switchToLightMode() {
         this.currentThemePath = this.cssFilesPaths[0];
+
+        Map<String, String> icons = Account.getIcons();
+
+        String discord = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();
+        icons.put("discord", discord);
+
+        String github = Account.class.getClassLoader().getResource("images/icons8-github-100.png").toExternalForm();
+        icons.put("github", github);
+
+        String google = Account.class.getClassLoader().getResource("images/icons8-google-100.png").toExternalForm();
+        icons.put("google", google);
+
+        String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
+        icons.put("shopify", shopify);
     }
 
     /**
@@ -74,6 +90,20 @@ public abstract class View {
      */
     public void switchToHighContrastMode() {
         this.currentThemePath = this.cssFilesPaths[2];
+
+        Map<String, String> icons = Account.getIcons();
+
+        String discord = Account.class.getClassLoader().getResource("images/hc-discord.png").toExternalForm();
+        icons.put("discord", discord);
+
+        String github = Account.class.getClassLoader().getResource("images/hc-github.png").toExternalForm();
+        icons.put("github", github);
+
+        String google = Account.class.getClassLoader().getResource("images/hc-google.png").toExternalForm();
+        icons.put("google", google);
+
+        String shopify = Account.class.getClassLoader().getResource("images/hc-shopify.png").toExternalForm();
+        icons.put("shopify", shopify);
     }
 
     /**
