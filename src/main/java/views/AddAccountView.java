@@ -36,9 +36,9 @@ public class AddAccountView extends View {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"CreateAccountViewHighContrast.css",
+        this.names = new String[]{"CreateAccountView.css",
                                   "Name of CSS file for dark mode.",
-                                  "Name of CSS file for high contrast mode."};
+                                  "CreateAccountViewHighContrast.css"};
 
         this.loadStylesheets();
 
