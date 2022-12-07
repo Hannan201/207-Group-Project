@@ -49,6 +49,9 @@ public class CodeViewController implements Initializable {
     private Label title;
 
     @FXML
+    private Label usernameTitle;
+
+    @FXML
     private TextField addCodeInput;
 
     private Account account;
@@ -164,7 +167,8 @@ public class CodeViewController implements Initializable {
         User user = Database.getUser();
         if (user != null) {
             this.account = user.getAccountByName(name);
-            title.setText(account.getSocialMediaType() + "\n" + name);
+            title.setText(account.getSocialMediaType() + "\n");
+            usernameTitle.setText(name);
 
             // Only allow user to click the import codes button
             // if their account is supported.

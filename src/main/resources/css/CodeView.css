@@ -1,11 +1,15 @@
 
-#Title {
+#title {
     -fx-font-family: "Montserrat SemiBold";
     -fx-font-size: 20;
 }
+#usernameTitle{
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 15;
+}
 
 #codesTitle{
-    -fx-font-size: 20;
+    -fx-font-size: 15;
     -fx-font-family: "Montserrat";
     -fx-text-fill: Black;
     -fx-font-weight: 600;
@@ -57,6 +61,14 @@
 }
 .button:hover{
     -fx-text-fill: #235480;
+}
+
+.text-field:hover{
+    -fx-border-color: #235480;
+}
+
+.list-view:hover {
+    -fx-border-color: #235480;
 }
 
 #logout{

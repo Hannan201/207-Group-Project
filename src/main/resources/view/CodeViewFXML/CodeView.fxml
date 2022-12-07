@@ -60,10 +60,14 @@
       <Insets />
    </opaqueInsets>
    <top>
-      <VBox prefHeight="71.0" prefWidth="530.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="57.0" prefWidth="530.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="71.0" prefWidth="526.0" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="526.0" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="usernameTitle" alignment="CENTER" prefHeight="10.0" prefWidth="526.0" text="Label" />
          </children>
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
       </VBox>
    </top>
    <bottom>
