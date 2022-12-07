@@ -2,10 +2,15 @@ package controllers.CodeViewControllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
+import user.Database;
+import views.*;
 import views.utilities.CodeViewUtilities.CodeCell;
 import views.utilities.CodeViewUtilities.CodeCellFactory;
 
@@ -67,6 +72,7 @@ public class CodeViewController implements Initializable {
         });
     }
 
+
     public void addCodeOnEnter() {
         addCodeInput.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -75,4 +81,44 @@ public class CodeViewController implements Initializable {
             }
         });
     }
+
+    private void switchSceneTo(View view) {
+        Scene scene = CodeView.getInstance().getRoot().getScene();
+        scene.getStylesheets().clear();
+
+        // Just in case if CSS files aren't being used
+        // to change the theme.
+        if (view.getCurrentThemePath() != null) {
+            scene.getStylesheets().add(view.getCurrentThemePath());
+        }
+
+        scene.setRoot(view.getRoot());
+    }
+
+    /**
+     * Allows a user to logout and redirects them to the home page.
+     *
+     */
+    public void handleLogout(ActionEvent e) {
+        // This saveUserData method doesn't do
+        // anything for now, but it will once
+        // the final product is ready.
+
+        Database.saveUserData();
+        switchSceneTo(HomePageView.getInstance());
+    }
+
+    /**
+     * Switches the scene to the SettingsView once the settings button is clicked.
+     *
+     */
+    public void handleSettings(ActionEvent e) {
+        switchSceneTo(SettingsView.getInstance());
+    }
+
+    /**
+     * Shows the AddAccountView scene to allow the user to add an account
+     * once the add button is clicked.
+     *
+     */
 }

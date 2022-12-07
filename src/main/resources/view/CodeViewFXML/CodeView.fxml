@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CodeViewControllers.CodeViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CodeViewControllers.CodeViewController">
    <center>
       <HBox prefHeight="455.0" prefWidth="530.0" BorderPane.alignment="CENTER">
          <children>
@@ -14,16 +18,14 @@
                <children>
                   <TextField prefHeight="32.0" prefWidth="383.0" />
                   <Region prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id="TestListView" prefHeight="417.0" prefWidth="383.0" />
+                  <ListView fx:id="TestListView" prefHeight="417.0" prefWidth="362.0" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="450.0" prefWidth="150.0" spacing="10.0">
                <children>
-                  <Button fx:id="importCodes" mnemonicParsing="false" prefHeight="60.0" prefWidth="80.0" text="Import Codes"
-                          textAlignment="CENTER" wrapText="true" onAction="#importCodeOnAction"/>
+                  <Button fx:id="importCodes" mnemonicParsing="false" onAction="#importCodeOnAction" prefHeight="60.0" prefWidth="80.0" text="Import Codes" textAlignment="CENTER" wrapText="true" />
                   <Region prefHeight="30.0" prefWidth="114.0" />
-                  <Button fx:id="deleteAll" alignment="CENTER" mnemonicParsing="false" prefHeight="60.0" prefWidth="80.0"
-                          text="Delete All Codes" textAlignment="CENTER" wrapText="true" onAction="#deleteAllOnAction" />
+                  <Button fx:id="deleteAll" alignment="CENTER" mnemonicParsing="false" onAction="#deleteAllOnAction" prefHeight="60.0" prefWidth="80.0" text="Delete All Codes" textAlignment="CENTER" wrapText="true" />
                   <Region prefHeight="176.0" prefWidth="117.0" />
                </children>
                <HBox.margin>
@@ -58,18 +60,25 @@
       </VBox>
    </top>
    <bottom>
-      <VBox prefHeight="75.0" prefWidth="530.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="129.0" prefWidth="530.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="9.0" prefWidth="530.0">
                <children>
-                  <Region prefHeight="25.0" prefWidth="40.0" />
-                  <TextField fx:id="addCodeInput" prefHeight="25.0" prefWidth="243.0" onKeyPressed="#addCodeOnEnter"/>
-                  <Region prefHeight="25.0" prefWidth="11.0" />
-                  <Button fx:id="addCode" alignment="CENTER" mnemonicParsing="false" prefHeight="60.0" prefWidth="80.0" text="Add Code" wrapText="true" onAction="#addCodeOnAction"/>
+                  <Region prefHeight="46.0" prefWidth="30.0" />
+                  <TextField fx:id="addCodeInput" onKeyPressed="#addCodeOnEnter" prefHeight="25.0" prefWidth="244.0" />
+                  <Region prefHeight="46.0" prefWidth="21.0" />
+                  <Button fx:id="addCode" alignment="CENTER" mnemonicParsing="false" onAction="#addCodeOnAction" prefHeight="25.0" prefWidth="96.0" text="Add Code" wrapText="true" />
                   <Region prefHeight="25.0" prefWidth="128.0" />
                </children>
             </HBox>
-            <Region prefHeight="138.0" prefWidth="530.0" />
+            <Region prefHeight="23.0" prefWidth="528.0" />
+            <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0" spacing="170.0">
+               <children>
+                  <Button fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
+                  <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
+                  <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </bottom>

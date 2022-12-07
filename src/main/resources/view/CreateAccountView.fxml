@@ -7,15 +7,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ToggleGroup?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateAccountController">
+
+<VBox fx:id="box" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateAccountController">
    <children>
       <HBox alignment="TOP_CENTER" prefHeight="58.0" prefWidth="380.0" spacing="10.0">
          <children>
-            <ToggleButton fx:id="github" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
-            <ToggleButton fx:id="google" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
-            <ToggleButton fx:id="shopify" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
-            <ToggleButton fx:id="discord" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
+            <fx:define>
+               <ToggleGroup fx:id="group" />
+            </fx:define>
+            <ToggleButton fx:id="github" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleGithub"/>
+            <ToggleButton fx:id="google" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleGoogle"/>
+            <ToggleButton fx:id="shopify" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleShopify"/>
+            <ToggleButton fx:id="discord" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleDiscord"/>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="40.0" prefWidth="380.0">
@@ -31,6 +36,5 @@
          </children>
       </HBox>
       <Region prefHeight="21.0" prefWidth="380.0" />
-      <Button fx:id="createAccount" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleCreateAccount" prefHeight="32.0" prefWidth="135.0" text="Create Account&#10;" />
    </children>
 </VBox>

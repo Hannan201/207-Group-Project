@@ -12,6 +12,7 @@ import user.Account;
 import user.Database;
 import user.User;
 import views.*;
+import views.utilities.AccountCell;
 import views.utilities.AccountCellFactory;
 
 import java.net.URL;
@@ -80,6 +81,10 @@ public class AccountViewController implements Initializable {
         scene.setRoot(view.getRoot());
     }
 
+    /**
+     * Allows a user to logout and redirects them to the home page.
+     *
+     */
     public void handleLogout(ActionEvent e) {
         // This saveUserData method doesn't do
         // anything for now, but it will once
@@ -89,13 +94,20 @@ public class AccountViewController implements Initializable {
         switchSceneTo(HomePageView.getInstance());
     }
 
+    /**
+     * Switches the scene to the SettingsView once the settings button is clicked.
+     *
+     */
     public void handleSettings(ActionEvent e) {
         switchSceneTo(SettingsView.getInstance());
     }
 
+    /**
+     * Shows the AddAccountView scene to allow the user to add an account
+     * once the add button is clicked.
+     *
+     */
     public void handleAddAccount() {
-
-
         Stage stage = new Stage();
 
         if (AddAccountView.getInstance().getRoot().getScene() == null) {
@@ -106,25 +118,47 @@ public class AccountViewController implements Initializable {
             stage.setScene(AddAccountView.getInstance().getRoot().getScene());
         }
         stage.show();
-
-        // this requries the pop up
-
-//        ObservableList<Account> data = FXCollections.observableArrayList();
-//        data.add()
-//        accounts.getItems().add(new Account())
     }
 
+    /**
+     * Adds the account to the accounts ListView.
+     *
+     * @param account
+     */
     public void addAccount(Account account) {
         accounts.getItems().add(account);
-
-        // Will be needed for the final product.
-//        user.addNewAccount(account);
     }
 
+    /**
+     * Checks if there exists a duplicate account in the
+     * accounts ListView.
+     *
+     * @param compte
+     * @return if there exists a duplicate account in the list
+     */
+    public boolean existsDuplicate(Account compte) {
+
+        for (Account account: accounts.getItems()) {
+            if (compte.equals(account)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * Pins an account to the accounts ListView.
+     *
+     */
     public void handlePinAccount() {
 
     }
 
+    /**
+     * Deletes an account from the accounts listView.
+     *
+     */
     public void handleDeleteAccount() {
 
         // stole this from StackOverflow, need to give appropriate credits

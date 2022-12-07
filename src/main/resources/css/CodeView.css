@@ -3,11 +3,6 @@
     -fx-font-size: 20;
 }
 
-#platformName {
-    -fx-font-size: 15;
-    -fx-font-family: "Montserrat";
-}
-
 #logout{
     -fx-background-image: url('/images/logout_lightmode.png');
     -fx-background-size: 35px;
@@ -30,16 +25,4 @@
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-}
-
-.button{
-    -fx-font-family: "Montserrat";
-    -fx-background-color: #eaeaea;
-    -fx-text-fill: black;
-}
-
-.button:hover{
-    -fx-font-family: "Montserrat";
-    -fx-background-color: #eaeaea;
-    -fx-text-fill: #007CE4;
 }
