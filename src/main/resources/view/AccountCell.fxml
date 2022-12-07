@@ -11,7 +11,7 @@
         <HBox fx:id="cell">
             <children>
                 <ImageView fx:id="logo" HBox.hgrow="NEVER" />
-                <VBox fx:id="textbox" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <VBox fx:id="textBox" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                     <children>
                         <Label fx:id="platformName" />
                         <Label fx:id="username" />

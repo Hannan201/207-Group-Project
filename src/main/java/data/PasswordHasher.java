@@ -24,11 +24,11 @@ public class PasswordHasher {
     private static final int KEY_LENGTH = 128;
 
     // Object to generate a new salt.
-    private SecureRandom saltGenerator;
+    private final SecureRandom saltGenerator;
 
     // Object to get the object which gives the object to apply
     // the algorithm.
-    private SecretKeyFactory algorithmGenerator;
+    private final SecretKeyFactory algorithmGenerator;
 
     public PasswordHasher() {
         this.saltGenerator = new SecureRandom();

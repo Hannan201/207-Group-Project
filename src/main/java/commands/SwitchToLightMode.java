@@ -12,7 +12,7 @@ import java.util.List;
 public class SwitchToLightMode implements Command {
 
     // List to store all the different views in the application.
-    private List<View> views;
+    private final List<View> views;
 
     /**
      * Make a command to switch the theme of all the views

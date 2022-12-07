@@ -38,14 +38,11 @@ public class Launcher extends Application {
      *
      * @param stage Primary stage for this application for
      *              which the scene can be set.
-     * @throws Exception In case something goes wrong.
      */
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
 
-        stage.setOnCloseRequest(windowEvent -> {
-            Database.saveUserData();
-        });
+        stage.setOnCloseRequest(windowEvent -> Database.saveUserData());
 
         boolean status = Database.getLoginStatus();
         String preferredTheme = "";

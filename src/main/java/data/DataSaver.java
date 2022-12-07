@@ -11,10 +11,10 @@ application.
 public class DataSaver {
 
     // The file to save the data.
-    private String source;
+    private final String source;
 
     // The object to save.
-    private Object object;
+    private final Object object;
 
     public DataSaver(String source, Object o) {
         this.source = source;

@@ -70,21 +70,37 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[0];
 
         Map<String, String> icons = Account.getIcons();
+        URL url;
 
-        String discord = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();
-        icons.put("discord", discord);
+        url = Account.class.getClassLoader().getResource("images/icons8-discord-100.png");
+        if (url != null) {
+            String discord = url.toExternalForm();
+            icons.put("discord", discord);
+        }
 
-        String github = Account.class.getClassLoader().getResource("images/icons8-github-100.png").toExternalForm();
-        icons.put("github", github);
+        url = Account.class.getClassLoader().getResource("images/icons8-github-100.png");
+        if (url != null) {
+            String github = url.toExternalForm();
+            icons.put("github", github);
+        }
 
-        String google = Account.class.getClassLoader().getResource("images/icons8-google-100.png").toExternalForm();
-        icons.put("google", google);
+        url = Account.class.getClassLoader().getResource("images/icons8-google-100.png");
+        if (url != null) {
+            String google = url.toExternalForm();
+            icons.put("google", google);
+        }
 
-        String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
-        icons.put("shopify", shopify);
+        url = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png");
+        if (url != null) {
+            String shopify = url.toExternalForm();
+            icons.put("shopify", shopify);
+        }
 
-        String defaultIcon = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();
-        icons.put("default", defaultIcon);
+        url  = Account.class.getClassLoader().getResource("images/icons8-app-100.png");
+        if (url != null) {
+            String defaultIcon = url.toExternalForm();
+            icons.put("default", defaultIcon);
+        }
     }
 
     /**
@@ -101,21 +117,37 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[2];
 
         Map<String, String> icons = Account.getIcons();
+        URL url;
 
-        String discord = Account.class.getClassLoader().getResource("images/hc-discord.png").toExternalForm();
-        icons.put("discord", discord);
+        url = Account.class.getClassLoader().getResource("images/hc-discord.png");
+        if (url != null) {
+            String discord = url.toExternalForm();
+            icons.put("discord", discord);
+        }
 
-        String github = Account.class.getClassLoader().getResource("images/hc-github.png").toExternalForm();
-        icons.put("github", github);
+        url = Account.class.getClassLoader().getResource("images/hc-github.png");
+        if (url != null) {
+            String github = url.toExternalForm();
+            icons.put("github", github);
+        }
 
-        String google = Account.class.getClassLoader().getResource("images/hc-google.png").toExternalForm();
-        icons.put("google", google);
+        url = Account.class.getClassLoader().getResource("images/hc-google.png");
+        if (url != null) {
+            String google = url.toExternalForm();
+            icons.put("google", google);
+        }
 
-        String shopify = Account.class.getClassLoader().getResource("images/hc-shopify.png").toExternalForm();
-        icons.put("shopify", shopify);
+        url = Account.class.getClassLoader().getResource("images/hc-shopify.png");
+        if (url != null) {
+            String shopify = url.toExternalForm();
+            icons.put("shopify", shopify);
+        }
 
-        String defaultIcon = Account.class.getClassLoader().getResource("images/hc-app.png").toExternalForm();
-        icons.put("default", defaultIcon);
+        url = Account.class.getClassLoader().getResource("images/hc-app.png");
+        if (url != null) {
+            String defaultIcon = url.toExternalForm();
+            icons.put("default", defaultIcon);
+        }
     }
 
     /**
@@ -152,7 +184,10 @@ public abstract class View {
      */
     protected void loadRoot(String fileName) {
         try {
-            this.root = FXMLLoader.load(this.getClass().getClassLoader().getResource("view/" + fileName));
+            URL url = this.getClass().getClassLoader().getResource("view/" + fileName);
+            if (url != null) {
+                this.root = FXMLLoader.load(url);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

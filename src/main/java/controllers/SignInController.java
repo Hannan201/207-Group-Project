@@ -27,13 +27,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * A conroller for the Sign-in UI
+ * A controller for the Sign-in UI
  */
 public class SignInController implements Initializable {
 
     private final Validator validator = new Validator();
     @FXML
     private HBox box;
+
     /**
      * Background of the scene
      */
@@ -52,7 +53,7 @@ public class SignInController implements Initializable {
     private Label Username;
 
     /**
-     * Textfield for the user to type their username
+     * TextField for the user to type their username
      */
     @FXML
     private TextField unameInput;
@@ -64,7 +65,7 @@ public class SignInController implements Initializable {
     private Label Password;
 
     /**
-     * Textfield for the user to type their password
+     * TextField for the user to type their password
      */
     @FXML
     private TextField passInput;

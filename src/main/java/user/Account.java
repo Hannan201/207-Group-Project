@@ -1,8 +1,8 @@
 package user;
 
 import behaviors.interfaces.ReadCodeBehavior;
-import javafx.scene.image.Image;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.Map;
 public class Account implements java.io.Serializable {
 
     // Social media type for this account.
-    private String socialMediaType;
+    private final String socialMediaType;
 
     // Name for this account (email/username/handle
     // or some sort of identifier).
-    private String name;
+    private final String name;
 
     // List to store all the backup codes for this
     // specific account.
@@ -30,7 +30,7 @@ public class Account implements java.io.Serializable {
     // would like ot enter their codes.
     private transient ReadCodeBehavior readCodeBehavior;
 
-    private static Map<String, String> icons;
+    private static final Map<String, String> icons;
 
     static {
 
@@ -38,20 +38,37 @@ public class Account implements java.io.Serializable {
 
         icons = new HashMap<>();
 
-        String discord = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();
-        icons.put("discord", discord);
+        URL url;
 
-        String github = Account.class.getClassLoader().getResource("images/icons8-github-100.png").toExternalForm();
-        icons.put("github", github);
+        url = Account.class.getClassLoader().getResource("images/icons8-discord-100.png");
+        if (url != null) {
+            String discord = url.toExternalForm();
+            icons.put("discord", discord);
+        }
 
-        String google = Account.class.getClassLoader().getResource("images/icons8-google-100.png").toExternalForm();
-        icons.put("google", google);
+        url = Account.class.getClassLoader().getResource("images/icons8-github-100.png");
+        if (url != null) {
+            String github = url.toExternalForm();
+            icons.put("github", github);
+        }
 
-        String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
-        icons.put("shopify", shopify);
+        url = Account.class.getClassLoader().getResource("images/icons8-google-100.png");
+        if (url != null) {
+            String google = url.toExternalForm();
+            icons.put("google", google);
+        }
 
-        String defaultIcon = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();
-        icons.put("default", defaultIcon);
+        url = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png");
+        if (url != null) {
+            String shopify = url.toExternalForm();
+            icons.put("shopify", shopify);
+        }
+
+        url  = Account.class.getClassLoader().getResource("images/icons8-app-100.png");
+        if (url != null) {
+            String defaultIcon = url.toExternalForm();
+            icons.put("default", defaultIcon);
+        }
     }
 
     /**

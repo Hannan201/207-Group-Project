@@ -11,10 +11,10 @@ import java.util.List;
 public class User implements java.io.Serializable {
 
     // The user's username.
-    private String username;
+    private final String username;
 
     // List of social media accounts for this user.
-    private List<Account> accounts;
+    private final List<Account> accounts;
 
     // Current theme for this user.
     private String currentTheme;

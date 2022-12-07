@@ -116,10 +116,9 @@ public class SignUpController implements Initializable {
                         c.error("Please verify your password!");
                     }
                 })
-                .dependsOn("verifiedPasword", verifiedPassword.textProperty())
+                .dependsOn("verifiedPassword", verifiedPassword.textProperty())
                 .decorates(verifiedPassword)
-                .immediate()
-        ;
+                .immediate();
 
         // checks if both passwords inputted match each other
 
@@ -133,8 +132,7 @@ public class SignUpController implements Initializable {
                 .dependsOn("verifiedPassword", verifiedPassword.textProperty())
                 .decorates(initialPassword)
                 .decorates(verifiedPassword)
-                .immediate()
-        ;
+                .immediate();
 
         // checks if the Account is already registered
 
@@ -148,17 +146,16 @@ public class SignUpController implements Initializable {
                 .dependsOn("verifiedUsername", verifiedUsername.textProperty())
                 .decorates(initialPassword)
                 .decorates(verifiedUsername)
-                .immediate()
-        ;
+                .immediate();
     }
 
-
     /**
-     * A handle method tied to the signUp button in the initialize method
-     * which is responsible for transitioning from the Sign Up view
+     * A handle method tied to the Sign-Up button in the initialize method
+     * which is responsible for transitioning from the Sign-Up view
      * to the Accounts view.
      *
-     * @param e
+     * @param e ActionEven that triggered this
+     *          handle method.
      */
     public void handleSignUp(ActionEvent e) {
         // Switching theme (sample code), should be included in the Controller class event handlers

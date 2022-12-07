@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -56,7 +55,7 @@ public class AccountViewController implements Initializable {
      * A handle method for the logout button which saves the user data and changes the current view
      * to the HomePageView.
      */
-    public void handleLogout(ActionEvent e) {
+    public void handleLogout() {
         Database.logUserOut();
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
     }
@@ -64,14 +63,14 @@ public class AccountViewController implements Initializable {
     /**
      * A handle method for the settings button which changes the current view to the SettingsView.
      */
-    public void handleSettings(ActionEvent e) {
+    public void handleSettings() {
         ((Reversible) SettingsView.getInstance()).setPreviousView(AccountView.getInstance());
         View.switchSceneTo(AccountView.getInstance(), SettingsView.getInstance());
     }
 
     /**
      * A handle method for the add button.
-     *
+     * -
      * Generates a new AddAccount pop up where the user can
      * create an account and have it reflected in the AccountView.
      */
@@ -105,12 +104,12 @@ public class AccountViewController implements Initializable {
      * Checks if there exists a duplicate account in the
      * accounts ListView.
      *
-     * @param compte The Account to search for.
+     * @param compare The Account to search for.
      * @return if there exists a duplicate account in the list
      */
-    public boolean existsDuplicate(Account compte) {
+    public boolean existsDuplicate(Account compare) {
         for (Account account : accounts.getItems()) {
-            if (compte.equals(account)) {
+            if (compare.equals(account)) {
                 return true;
             }
         }

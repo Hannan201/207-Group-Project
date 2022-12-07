@@ -33,7 +33,7 @@ public class AccountCell extends ListCell<Account> {
     private HBox cell;
 
     @FXML
-    private VBox textbox;
+    private VBox textBox;
 
     public AccountCell() {
         loadFXML();
@@ -71,7 +71,7 @@ public class AccountCell extends ListCell<Account> {
         }
         else {
 
-            // checks if the account's platform is either Google, Discord, Shopify, or Github
+            // checks if the account's platform is either Google, Discord, Shopify, or GitHub
             // and if so, adds a custom icon to the account
 
             String path;
@@ -80,7 +80,7 @@ public class AccountCell extends ListCell<Account> {
                 Image image = new Image(path);
                 logo.setImage(image);
 
-            // adds a default logo for the account if the it is not Discord, Google,
+            // Adds a default logo for the account if it is not Discord, Google,
             // GitHub, or Shopify
 
             } else {
@@ -99,7 +99,7 @@ public class AccountCell extends ListCell<Account> {
             platformName.setMaxWidth(200); // limits the amount of space that a username can take in the AccountCell
             username.setText(item.getName());
             platformName.setMaxWidth(200); // limits the amount of space that a platform can take in the AccountCell
-            HBox.setHgrow(textbox, Priority.ALWAYS);
+            HBox.setHgrow(textBox, Priority.ALWAYS);
             cell.setSpacing(10);
 
             // If the AccountCell is double-clicked, then this handle method will transition

@@ -1,6 +1,5 @@
 package views;
 
-import controllers.SettingsViewController;
 import controllers.SignInController;
 
 /**

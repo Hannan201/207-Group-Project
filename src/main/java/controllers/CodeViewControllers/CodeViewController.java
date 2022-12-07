@@ -4,7 +4,6 @@ import behaviors.ManualInputReader;
 import behaviors.interfaces.ReadCodeBehavior;
 import code.readers.CodeReader;
 import code.readers.CodeReaderFactory;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -38,7 +37,7 @@ public class CodeViewController implements Initializable {
     @FXML
     private Label codesTitle;
     @FXML
-    private Button importCodes; //To be implemented in upcoming sprint
+    private Button importCodes;
 
     @FXML
     private Button deleteAll;
@@ -52,9 +51,6 @@ public class CodeViewController implements Initializable {
     private Account account;
 
     private static List<String> SUPPORTED_PLATFORMS;
-
-    // TODO uncomment this line once the account can be referenced
-    // private Account currAccount = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -112,6 +108,7 @@ public class CodeViewController implements Initializable {
     public void deleteAllOnAction() {
         deleteAll.setOnAction(e -> {
             codeListView.getItems().clear();
+            account.clearUserCodes();
         });
     }
 
@@ -175,9 +172,20 @@ public class CodeViewController implements Initializable {
     }
 
     /**
+     * Return the Account that's currently
+     * being used to display the codes.
+     *
+     * @return Account object which is currently
+     * is in use.
+     */
+    public Account getAccount() {
+        return this.account;
+    }
+
+    /**
      * Allows a user to logout and redirects them to the home page.
      */
-    public void handleLogout(ActionEvent e) {
+    public void handleLogout() {
         Database.logUserOut();
         View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
     }
@@ -185,7 +193,7 @@ public class CodeViewController implements Initializable {
     /**
      * Switches the scene to the SettingsView once the settings button is clicked.
      */
-    public void handleSettings(ActionEvent e) {
+    public void handleSettings() {
         ((Reversible) SettingsView.getInstance()).setPreviousView(CodeView.getInstance());
         View.switchSceneTo(CodeView.getInstance(), SettingsView.getInstance());
     }
@@ -193,7 +201,7 @@ public class CodeViewController implements Initializable {
     /**
      * Switches the scene to the Account-Viewer view once the back button is clicked.
      */
-    public void handleGoBack(ActionEvent e) {
+    public void handleGoBack() {
         View.switchSceneTo(CodeView.getInstance(), AccountView.getInstance());
     }
 }

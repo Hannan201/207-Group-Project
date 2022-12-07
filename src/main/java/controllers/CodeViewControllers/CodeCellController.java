@@ -6,6 +6,8 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import user.Account;
+import views.CodeView;
 import views.utilities.CodeViewUtilities.CodeCell;
 import views.utilities.CodeViewUtilities.CodeCellFactory;
 
@@ -37,7 +39,7 @@ public class CodeCellController {
     private boolean selected;
 
     /**
-     * Stores the data of the current code, the code factory, and its corresponding listview;
+     * Stores the data of the current code, the code factory, and its corresponding listview.
      *
      * @param cell The current CodeCell
      * @param container The CodeCellFactory for this CodeCell
@@ -49,7 +51,7 @@ public class CodeCellController {
         currentListView = parent;
         selected = false;
 
-        //Making the text of the code and text work in tandem with one another.
+        // Making the text of the code and text work in tandem with one another.
         code.setText(cell.getCode());
         userInput.setText(cell.getCode());
 
@@ -67,13 +69,13 @@ public class CodeCellController {
     public void layoutOnEnter() {
         backgroundLayout.setOnMouseClicked(e -> {
             if (selected) {
-                // in the case where the
+                // in the case where the cell isn't clicked
                 edit.setDisable(false);
                 delete.setDisable(false);
                 copy.setDisable(false);
 
                 selected = false;
-            } else{
+            } else {
                 edit.setDisable(true);
                 delete.setDisable(true);
                 copy.setDisable(true);
@@ -85,32 +87,34 @@ public class CodeCellController {
     /**
      * Handle when the edit button is clicked.
      */
-    public void editOnAction(){
+    public void editOnAction() {
         edit.setOnAction(e -> {
 
-            //Disable interactivity with other buttons to prevent overlapping actions
+            // Disable interactivity with other buttons to prevent overlapping actions
             delete.setDisable(true);
             copy.setDisable(true);
 
             userInput.setText(code.getText());
 
-            // swap the visibility of the label and the textfield so that the user can edit the code name.
+            // swap the visibility of the label and the TextField so that the user can edit the code name.
             userInput.setVisible(true);
             code.setVisible(false);
-
-
         });
     }
 
     /**
-     * Handles when the enter button is clicked whlie the textfield is selected
+     * Handles when the enter button is clicked while the TextField is selected
      * This method will submit edit changes.
      */
     public void TextFieldOnAction() {
-
         // handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
         userInput.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) {
+            // Don't let the user enter an empty code.
+            if (e.getCode() == KeyCode.ENTER && !userInput.getText().equals("")) {
+                Account account = ((CodeView)CodeView.getInstance()).getCodeViewController().getAccount();
+                int index = account.getUserCodes().indexOf(code.getText());
+                account.getUserCodes().set(index, userInput.getText());
+
                 code.setText((userInput.getText()));
                 currentCell.setCode(userInput.getText());
 
@@ -126,7 +130,7 @@ public class CodeCellController {
     /**
      * Handles when the copy button is pressed
      */
-    public void copyOnAction(){
+    public void copyOnAction() {
 
         copy.setOnAction(e -> {
 
@@ -143,10 +147,11 @@ public class CodeCellController {
      * Handles when the delete button is pressed
      */
     public void deleteOnAction() {
-
         // handle the event when delete button is clicked
         delete.setOnAction(e -> {
             currentListView.getItems().remove(currentCell);
+            Account account = ((CodeView)CodeView.getInstance()).getCodeViewController().getAccount();
+            account.getUserCodes().remove(code.getText());
         });
     }
 
@@ -157,5 +162,4 @@ public class CodeCellController {
     public void setCode(String codeInput) {
         this.code.setText(codeInput);
     }
-
 }

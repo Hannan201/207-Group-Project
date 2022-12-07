@@ -18,17 +18,9 @@ public class Database {
     // Store current user to load or save data.
     private static User user;
 
-    // Source for the usernames, passwords, and
-    // any configurations.
-    private static String configurationsSource;
-
     // To only allow one source to be set
     // for the user configurations
     private static boolean configurationsSourceSet;
-
-    // Source for the user objects in this
-    // application.
-    private static String usersSource;
 
     // To only allow one source to be
     // set for the user objects in this
@@ -62,7 +54,6 @@ public class Database {
     @SuppressWarnings("unchecked")
     public static void setConfigurationsSource(String filePath) {
         if (!configurationsSourceSet) {
-            configurationsSource = filePath;
             DataLoader loadConfigurations = new DataLoader(filePath);
             passwordHasher = new PasswordHasher();
             configurationsSourceSet = true;
@@ -94,7 +85,6 @@ public class Database {
     @SuppressWarnings("unchecked")
     public static void setUsersSource(String filePath) {
         if (!usersSourceSet) {
-            usersSource = filePath;
             usersSourceSet = true;
             DataLoader loadUsers = new DataLoader(filePath);
 

@@ -1,7 +1,7 @@
 package commands;
 
 /**
- * This interface is responsible for executing a specifc
+ * This interface is responsible for executing a specific
  * command.
  */
 public interface Command {

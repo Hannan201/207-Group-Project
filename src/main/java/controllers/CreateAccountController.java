@@ -1,7 +1,6 @@
 package controllers;
 
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class CreateAccountController implements Initializable{
 
-    private Validator validator = new Validator();
+    private final Validator validator = new Validator();
 
     public Button createAccount;
     @FXML
@@ -66,7 +65,7 @@ public class CreateAccountController implements Initializable{
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox
 
-        // Renders a button unclickable and adds a hover message over the button
+        // Renders a button un-clickable and adds a hover message over the button
         // if there exists an Account with the same username and platform
 
         validator.createCheck()
@@ -84,7 +83,7 @@ public class CreateAccountController implements Initializable{
                 .immediate()
         ;
 
-        // Renders a button unclickable and adds a hover message over the button
+        // Renders a button un-clickable and adds a hover message over the button
         // if the text in the username TextField is empty
 
         validator.createCheck()
@@ -98,7 +97,7 @@ public class CreateAccountController implements Initializable{
                 .immediate()
         ;
 
-        // Renders a button unclickable and adds a hover message over the button
+        // Renders a button un-clickable and adds a hover message over the button
         // if the text in the platform TextField is empty
 
         validator.createCheck()
@@ -115,11 +114,9 @@ public class CreateAccountController implements Initializable{
 
     /**
      * A handle method which sets the text of the platform textField
-     * if the github toggle button is pressed.
-     *
-     * @param e
+     * if the GitHub toggle button is pressed.
      */
-    public void handleGithub(ActionEvent e) {
+    public void handleGithub() {
         if (platform.isEditable()) {
             platform.setText("Github");
             platform.setEditable(false);
@@ -132,11 +129,9 @@ public class CreateAccountController implements Initializable{
 
     /**
      * A handle method which sets the text of the platform textField
-     * if the google toggle button is pressed.
-     *
-     * @param e
+     * if the Google toggle button is pressed.
      */
-    public void handleGoogle(ActionEvent e) {
+    public void handleGoogle() {
         if (platform.isEditable()) {
             platform.setText("Google");
             platform.setEditable(false);
@@ -150,10 +145,8 @@ public class CreateAccountController implements Initializable{
     /**
      * A handle method which sets the text of the platform textField
      * if the shopify toggle button is pressed.
-     *
-     * @param e
      */
-    public void handleShopify(ActionEvent e) {
+    public void handleShopify() {
         if (platform.isEditable()) {
             platform.setText("Shopify");
             platform.setEditable(false);
@@ -166,11 +159,9 @@ public class CreateAccountController implements Initializable{
 
     /**
      * A handle method which sets the text of the platform textField
-     * if the discord toggle button is pressed.
-     *
-     * @param e
+     * if the Discord toggle button is pressed.
      */
-    public void handleDiscord(ActionEvent e) {
+    public void handleDiscord() {
         if (platform.isEditable()) {
             platform.setText("Discord");
             platform.setEditable(false);
@@ -181,14 +172,4 @@ public class CreateAccountController implements Initializable{
         }
 
     }
-//    public void handleCreateAccount(ActionEvent e) {
-//
-////        createAccountWrapper
-//
-//
-//
-//
-//        // need to use tooltip to ensure that everything is the same...
-//    }
-
 }

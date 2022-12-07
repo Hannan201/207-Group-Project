@@ -1,9 +1,6 @@
 package code.readers;
 
-
 import behaviors.interfaces.ReadCodeBehavior;
-
-import code.readers.*;
 
 import java.util.*;
 import java.io.*;

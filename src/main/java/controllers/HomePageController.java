@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import views.SignInView;
 import views.SignUpView;
@@ -12,24 +11,18 @@ public class HomePageController {
     public Button signUp;
 
     /**
-     *
-     * A handle method for the signIn button that opens a pop up to allow the
-     * user to sign in.
-     *
-     * @param e
+     * A handle method for the Sign-In button that opens a pop-up to allow the
+     * user to sign-in.
      */
-    public void handleSignIn(ActionEvent e) {
+    public void handleSignIn() {
         View.loadNewWindow(SignInView.getInstance());
     }
 
     /**
-     *
-     * A handle method for the signUp button that opens a pop-up to allow the
+     * A handle method for the Sign-Up button that opens a pop-up to allow the
      * user to sign in.
-     *
-     * @param e
      */
-    public void handleSignUp(ActionEvent e) {
+    public void handleSignUp() {
         View.loadNewWindow(SignUpView.getInstance());
     }
 }

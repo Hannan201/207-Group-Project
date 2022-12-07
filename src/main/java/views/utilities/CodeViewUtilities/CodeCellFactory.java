@@ -10,8 +10,6 @@ import java.io.IOException;
 
 public class CodeCellFactory extends ListCell<CodeCell> {
 
-    private FXMLLoader loader;
-
     private Parent graphic;
 
     ListView<CodeCell> CodeListView;
@@ -20,8 +18,8 @@ public class CodeCellFactory extends ListCell<CodeCell> {
 
     public CodeCellFactory(ListView<CodeCell> parentListView) throws IOException {
 
-        // Each cell only laods the FXML file once to speed up runtime
-        loader = new FXMLLoader(getClass().getClassLoader().getResource("view/CodeViewFXML/CodeCell.fxml"));
+        // Each cell only loads the FXML file once to speed up runtime
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/CodeViewFXML/CodeCell.fxml"));
 
         CodeListView = parentListView;
 

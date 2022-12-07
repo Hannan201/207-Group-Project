@@ -1,16 +1,7 @@
 package views;
 
-import commands.Command;
-import commands.SwitchToDarkMode;
-import commands.SwitchToHighContrastMode;
-import commands.SwitchToLightMode;
-import commands.managers.ThemeSwitcher;
 import controllers.SettingsViewController;
-import javafx.scene.layout.BorderPane;
 import views.interfaces.Reversible;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is responsible for displaying a view
@@ -26,27 +17,11 @@ public class SettingsView extends View implements Reversible {
     // The previous view for this settings view.
     private View previousView;
 
-    private BorderPane layout;
-    private static List<View> views;
-    private final ThemeSwitcher switcher;
-    private final Command lightModeCommand;
-    private final Command darkModeCommand;
-    private final Command highContrastModeCommand;
-
     /**
      * Create a new settings view.
      */
     private SettingsView() {
         initUI();
-        views = new ArrayList<>(List.of(SignUpView.getInstance(), AccountView.getInstance(),
-                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance()));
-        this.lightModeCommand = new SwitchToLightMode(views);
-        this.darkModeCommand = new SwitchToDarkMode(views);
-        this.highContrastModeCommand = new SwitchToHighContrastMode(views);
-        this.switcher = new ThemeSwitcher(lightModeCommand);
-
-        // switch to light mode as default
-        this.switcher.switchTheme();
     }
 
     /**

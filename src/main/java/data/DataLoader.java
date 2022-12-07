@@ -11,7 +11,7 @@ in this application.
 public class DataLoader {
 
     // Source to load data from.
-    private String source;
+    private final String source;
 
     public DataLoader(String source) {
         this.source = source;

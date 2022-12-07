@@ -59,43 +59,42 @@ public class SettingsViewController implements Initializable {
     }
 
     /**
-     * Switch all the UI's theme to HighContrastMode
+     * Switch all the view's theme to HighContrastMode
      *
      */
     @FXML
-    private void switchToHighContrastMode(ActionEvent e) {
+    private void switchToHighContrastMode() {
         Database.setCurrentTheme("High Contrast");
         switcher = new ThemeSwitcher(highContrastModeCommand);
-        this.switcher.switchTheme();
-        SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
-        SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
-
-        User user = Database.getUser();
-        if (user != null ) {
-            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
-        }
+        updateTheme(lightModeCommand);
     }
 
     /**
-     * Switch all the UI's theme to Dark Mode.
-     *
+     * Switch all the view's theme to Dark Mode.
      */
     @FXML
-    private void switchToDarkMode(ActionEvent e) {
-        switcher = new ThemeSwitcher(darkModeCommand);
-        this.switcher.switchTheme();
-        SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
-        SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
+    private void switchToDarkMode() {
+        this.switcher.setCommand(darkModeCommand);
     }
 
     /**
-     * Switch all the UI's theme to Light Mode.
+     * Switch all the view's theme to Light Mode.
      *
      */
     @FXML
-    private void switchToLightMode(ActionEvent e) {
+    private void switchToLightMode() {
         Database.setCurrentTheme("Light");
-        switcher = new ThemeSwitcher(lightModeCommand);
+        updateTheme(lightModeCommand);
+    }
+
+    /**
+     * Update the theme.
+     *
+     * @param command The command to update
+     *                to the correct theme.
+     */
+    private void updateTheme(Command command) {
+        this.switcher.setCommand(command);
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
@@ -119,17 +118,15 @@ public class SettingsViewController implements Initializable {
      * Allows a user to logout and redirects them to the home page.
      *
      */
-    public void handleLogout(ActionEvent e) {
+    public void handleLogout() {
         Database.logUserOut();
         View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
     }
 
     /**
      * Allow user to exit the Settings view.
-     *
-     * @param e Action Even which was detected.
      */
-    public void handleGoBack(ActionEvent e) {
+    public void handleGoBack() {
         View.switchSceneTo(SettingsView.getInstance(), ((Reversible) SettingsView.getInstance()).getPreviousView());
     }
 
@@ -181,10 +178,8 @@ public class SettingsViewController implements Initializable {
     /**
      * Delete all accounts for this user.
      *
-     * @param e ActionEvent that triggered this
-     *          handle method.
      */
-    public void handleDeleteAccounts(ActionEvent e) {
+    public void handleDeleteAccounts() {
         User user = Database.getUser();
         if (user != null) {
             user.clearAllAccounts();
