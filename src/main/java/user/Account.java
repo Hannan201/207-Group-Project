@@ -1,6 +1,7 @@
 package user;
 
 import behaviors.interfaces.ReadCodeBehavior;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,9 @@ public class Account implements java.io.Serializable {
 
         String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
         icons.put("shopify", shopify);
+
+        String defaultIcon = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();
+        icons.put("default", defaultIcon);
     }
 
     /**

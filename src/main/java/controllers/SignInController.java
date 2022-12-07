@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
@@ -98,39 +99,25 @@ public class SignInController implements Initializable {
 
         // Handles the event where the enter key is pressed while the
         // unameInput TextField is selected
-        unameInput.setOnKeyPressed(e -> {
-            if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
-                transferData();
-                View.closeWindow(e);
-                View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-                clearFields();
-            }
-        });
+        unameInput.setOnKeyPressed(this::signInFromEnterKey);
 
 
-    // Handles the event where the enter key is pressed while the
-    // passInput TextField is selected
-    passInput.setOnKeyPressed(e -> {
-        if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
-            transferData();
-            View.closeWindow(e);
-            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-            clearFields();
-        }
-    });
-    box.getChildren().add(createAccountWrapper);
+        // Handles the event where the enter key is pressed while the
+        // passInput TextField is selected
+        passInput.setOnKeyPressed(this::signInFromEnterKey);
+        box.getChildren().add(createAccountWrapper);
 
-    validator.createCheck()
-            .withMethod(c -> {
-                if (!Database.authenticateUser(unameInput.getText(), passInput.getText())){
-                    c.error("Wrong username or password, please try again.");
-                }
-            })
-            .dependsOn("uNameInput", unameInput.textProperty())
-            .dependsOn("passInput", passInput.textProperty())
-            .decorates(unameInput)
-            .decorates(passInput)
-            .immediate();
+        validator.createCheck()
+                .withMethod(c -> {
+                    if (!Database.authenticateUser(unameInput.getText(), passInput.getText())){
+                        c.error("Wrong username or password, please try again.");
+                    }
+                })
+                .dependsOn("uNameInput", unameInput.textProperty())
+                .dependsOn("passInput", passInput.textProperty())
+                .decorates(unameInput)
+                .decorates(passInput)
+                .immediate();
 
     }
 
@@ -142,8 +129,26 @@ public class SignInController implements Initializable {
     private void signInOnAction(ActionEvent actionEvent) {
         transferData();
         View.closeWindow(actionEvent);
+        loadTheme();
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
         clearFields();
+    }
+
+    /**
+     * Sign in the user depending on if
+     * they hit the enter key instead of the
+     * sign button.
+     *
+     * @param e The key the user clicked.
+     */
+    private void signInFromEnterKey(KeyEvent e) {
+        if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
+            transferData();
+            View.closeWindow(e);
+            loadTheme();
+            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+            clearFields();
+        }
     }
 
     /**
@@ -166,6 +171,10 @@ public class SignInController implements Initializable {
         }
     }
 
+    /**
+     * Load theme for the user that just signed
+     * in.
+     */
     private void loadTheme() {
         User user = Database.getUser();
         if (user != null && !user.getCurrentTheme().equals("Light")) {

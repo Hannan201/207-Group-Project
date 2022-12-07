@@ -82,6 +82,9 @@ public abstract class View {
 
         String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
         icons.put("shopify", shopify);
+
+        String defaultIcon = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();
+        icons.put("default", defaultIcon);
     }
 
     /**
@@ -110,6 +113,9 @@ public abstract class View {
 
         String shopify = Account.class.getClassLoader().getResource("images/hc-shopify.png").toExternalForm();
         icons.put("shopify", shopify);
+
+        String defaultIcon = Account.class.getClassLoader().getResource("images/hc-app.png").toExternalForm();
+        icons.put("default", defaultIcon);
     }
 
     /**

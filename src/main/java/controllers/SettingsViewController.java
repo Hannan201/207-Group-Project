@@ -69,6 +69,11 @@ public class SettingsViewController implements Initializable {
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
+
+        User user = Database.getUser();
+        if (user != null ) {
+            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
+        }
     }
 
     /**
@@ -94,6 +99,11 @@ public class SettingsViewController implements Initializable {
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
+
+        User user = Database.getUser();
+        if (user != null ) {
+            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
+        }
     }
 
     /**

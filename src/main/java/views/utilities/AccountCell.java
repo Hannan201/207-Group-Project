@@ -84,7 +84,7 @@ public class AccountCell extends ListCell<Account> {
             // GitHub, or Shopify
 
             } else {
-                path = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();
+                path = Account.getIcons().get("default");
                 Image image = new Image(path);
                 logo.setImage(image);
             }

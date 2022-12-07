@@ -6,7 +6,6 @@ import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
 import controllers.SettingsViewController;
-import controllers.SignInController;
 import javafx.scene.layout.BorderPane;
 import views.interfaces.Reversible;
 
@@ -59,7 +58,6 @@ public class SettingsView extends View implements Reversible {
         if (firstInstance == null) {
             firstInstance = new SettingsView();
             SettingsViewController.addView(firstInstance);
-            SignInController.addView(firstInstance);
         }
 
         return firstInstance;
