@@ -66,7 +66,7 @@ public class SettingsViewController implements Initializable {
     private void switchToHighContrastMode() {
         Database.setCurrentTheme("High Contrast");
         switcher = new ThemeSwitcher(highContrastModeCommand);
-        updateTheme(lightModeCommand);
+        updateTheme(highContrastModeCommand);
     }
 
     /**
