@@ -28,55 +28,17 @@ public class HomePageController {
      * @param e
      */
     public void handleSignIn(ActionEvent e) {
-
-        // Once the sign-in view is complete
-        // you can just do this
-//        loadNewWindow(SignInView.getInstance());
-
-        loadNewWindow(SignInView.getInstance());
-        System.out.println("Signed up.");
+        View.loadNewWindow(SignInView.getInstance());
     }
 
     /**
      *
-     * A handle method for the signUp button that opens a pop up to allow the
+     * A handle method for the signUp button that opens a pop-up to allow the
      * user to sign in.
      *
      * @param e
      */
     public void handleSignUp(ActionEvent e) {
-
-//        Stage stage = new Stage();
-//        // no need to clear, because the stylesheets will always be empty
-//        if (SignUpView.getInstance().getRoot().getScene() == null) {
-//            Scene scene = new Scene(SignUpView.getInstance().getRoot());
-//            scene.getStylesheets().add(SignUpView.getInstance().getCurrentThemePath());
-//            stage.setScene(scene);
-//        }
-//        else {
-//            stage.setScene(SignUpView.getInstance().getRoot().getScene());
-//        }
-//        stage.show();
-
-        loadNewWindow(SignUpView.getInstance());
-        System.out.println("Signed up.");
+        View.loadNewWindow(SignUpView.getInstance());
     }
-
-    /**
-     * Loads a new pop up window for the user to interact with.
-     * @param view
-     */
-    private void loadNewWindow(View view) {
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        if (view.getRoot().getScene() == null) {
-            Scene scene = new Scene(view.getRoot());
-            scene.getStylesheets().add(view.getCurrentThemePath());
-            stage.setScene(scene);
-        } else {
-            stage.setScene(view.getRoot().getScene());
-        }
-        stage.show();
-    }
-
 }

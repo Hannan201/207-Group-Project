@@ -168,28 +168,22 @@ public class CodeViewController implements Initializable {
 
     /**
      * Allows a user to logout and redirects them to the home page.
-     *
      */
     public void handleLogout(ActionEvent e) {
-        // This saveUserData method doesn't do
-        // anything for now, but it will once
-        // the final product is ready.
-
-        Database.saveUserData();
-        switchSceneTo(HomePageView.getInstance());
+        View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
     }
 
     /**
      * Switches the scene to the SettingsView once the settings button is clicked.
-     *
      */
     public void handleSettings(ActionEvent e) {
-        switchSceneTo(SettingsView.getInstance());
+        View.switchSceneTo(CodeView.getInstance(), SettingsView.getInstance());
     }
 
     /**
-     * Shows the AddAccountView scene to allow the user to add an account
-     * once the add button is clicked.p
-     *
+     * Switches the scene to the Account-Viewer view once the back button is clicked.
      */
+    public void handleGoBack(ActionEvent e) {
+        View.switchSceneTo(CodeView.getInstance(), AccountView.getInstance());
+    }
 }

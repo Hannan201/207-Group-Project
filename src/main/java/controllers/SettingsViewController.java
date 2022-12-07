@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SettingsViewController implements Initializable {
-
     private static List<View> views;
-
     private ThemeSwitcher switcher;
 
     private Command lightModeCommand;
@@ -48,7 +46,8 @@ public class SettingsViewController implements Initializable {
         copyright.setText(COPYRIGHT);
 
         views = new ArrayList<>(List.of(SignUpView.getInstance(), AccountView.getInstance(),
-                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance()));
+                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance(),
+                SignInView.getInstance()));
         lightModeCommand = new SwitchToLightMode(views);
         darkModeCommand = new SwitchToDarkMode(views);
         highContrastModeCommand = new SwitchToHighContrastMode(views);
@@ -98,30 +97,21 @@ public class SettingsViewController implements Initializable {
         views.add(view);
     }
 
-    private void switchSceneTo(View view) {
-        Scene scene = SettingsView.getInstance().getRoot().getScene();
-        scene.getStylesheets().clear();
-
-        // Just in case if CSS files aren't being used
-        // to change the theme.
-        if (view.getCurrentThemePath() != null) {
-            scene.getStylesheets().add(view.getCurrentThemePath());
-        }
-
-        scene.setRoot(view.getRoot());
-    }
-
     /**
      * Allows a user to logout and redirects them to the home page.
      *
      */
     public void handleLogout(ActionEvent e) {
-        // This saveUserData method doesn't do
-        // anything for now, but it will once
-        // the final product is ready.
+        View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
+    }
 
-        Database.saveUserData();
-        switchSceneTo(HomePageView.getInstance());
+    /**
+     * Allow user to exit the Settings view.
+     *
+     * @param e Action Even which was detected.
+     */
+    public void handleGoBack(ActionEvent e) {
+        View.switchSceneTo(SettingsView.getInstance(), AccountView.getInstance());
     }
 
 

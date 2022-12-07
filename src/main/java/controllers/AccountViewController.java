@@ -71,39 +71,18 @@ public class AccountViewController implements Initializable {
     }
 
     /**
-     * Responsible for switching views.
-     */
-    private void switchSceneTo(View view) {
-        Scene scene = AccountView.getInstance().getRoot().getScene();
-        scene.getStylesheets().clear();
-
-        // Just in case if CSS files aren't being used
-        // to change the theme.
-        if (view.getCurrentThemePath() != null) {
-            scene.getStylesheets().add(view.getCurrentThemePath());
-        }
-
-        scene.setRoot(view.getRoot());
-    }
-
-    /**
      * A handle method for the logout button which saves the user data and changes the current view
      * to the HomePageView.
      */
     public void handleLogout(ActionEvent e) {
-        // This saveUserData method doesn't do
-        // anything for now, but it will once
-        // the final product is ready.
-
-        Database.saveUserData();
-        switchSceneTo(HomePageView.getInstance());
+        View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
     }
 
     /**
      * A handle method for the settings button which changes the current view to the SettingsView.
      */
     public void handleSettings(ActionEvent e) {
-        switchSceneTo(SettingsView.getInstance());
+        View.switchSceneTo(AccountView.getInstance(), SettingsView.getInstance());
     }
 
     /**
@@ -113,17 +92,7 @@ public class AccountViewController implements Initializable {
      * create an account and have it reflected in the AccountView.
      */
     public void handleAddAccount() {
-
-        Stage stage = new Stage();
-
-        if (AddAccountView.getInstance().getRoot().getScene() == null) {
-            Scene scene = new Scene(AddAccountView.getInstance().getRoot());
-            scene.getStylesheets().add(AddAccountView.getInstance().getCurrentThemePath());
-            stage.setScene(scene);
-        } else {
-            stage.setScene(AddAccountView.getInstance().getRoot().getScene());
-        }
-        stage.show();
+        View.loadNewWindow(AddAccountView.getInstance());
 
         // this requries the pop up
 
@@ -143,11 +112,10 @@ public class AccountViewController implements Initializable {
      * Checks if there exists a duplicate account in the
      * accounts ListView.
      *
-     * @param compte
+     * @param compte The Account to search for.
      * @return if there exists a duplicate account in the list
      */
     public boolean existsDuplicate(Account compte) {
-
         for (Account account : accounts.getItems()) {
             if (compte.equals(account)) {
                 return true;

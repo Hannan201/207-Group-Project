@@ -2,6 +2,9 @@ package views;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import user.Account;
 
 import java.io.IOException;
@@ -181,5 +184,49 @@ public abstract class View {
     private void setIndex(int index, String element) {
         URL url = this.getClass().getClassLoader().getResource("css/" + element);
         this.cssFilesPaths[index] = url == null ? "" : url.toExternalForm();
+    }
+
+    /**
+     * A utility method to switch
+     * the scene for one view to another
+     * view.
+     *
+     * @param source The source view, which the
+     *               scene is currently set to.
+     * @param destination The new view, for
+     *                    which the scene should
+     *                    be set to.
+     */
+    public static void switchSceneTo(View source, View destination) {
+        Scene scene = source.getRoot().getScene();
+        scene.getStylesheets().clear();
+
+        scene.setRoot(destination.getRoot());
+        scene.getStylesheets().add(destination.getCurrentThemePath());
+    }
+
+
+    /**
+     * A utility method to make a new window
+     * appear to display contents for a specific
+     * view.
+     *
+     * @param view view containing the contents
+     *             which are to be displayed.
+     */
+    public static void loadNewWindow(View view) {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        if (view.getRoot().getScene() == null) {
+            Scene scene = new Scene(view.getRoot());
+            scene.getStylesheets().add(view.getCurrentThemePath());
+            stage.setScene(scene);
+        } else {
+            Scene scene = view.getRoot().getScene();
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(view.getCurrentThemePath());
+            stage.setScene(view.getRoot().getScene());
+        }
+        stage.show();
     }
 }

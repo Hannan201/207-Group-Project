@@ -84,7 +84,7 @@
             <Region prefHeight="23.0" prefWidth="528.0" />
             <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0" spacing="170.0">
                <children>
-                  <Button fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
+                  <Button fx:id="back" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="35.0" prefWidth="35.0" />
                   <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
                   <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0" />
                </children>

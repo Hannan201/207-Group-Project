@@ -27,7 +27,7 @@
       <Button fx:id="exportData" layoutX="372.0" layoutY="201.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Export Data" />
       <HBox alignment="CENTER" layoutX="5.0" layoutY="533.0" prefHeight="79.0" prefWidth="530.0" spacing="135.0">
          <children>
-            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
+            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" onAction="#handleGoBack"/>
             <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0" />
          </children>
       </HBox>

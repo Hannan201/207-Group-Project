@@ -16,6 +16,7 @@ import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import views.AccountView;
 import views.HomePageView;
+import views.View;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -175,12 +176,7 @@ public class SignUpController implements Initializable {
         Stage stage = (Stage) node.getScene().getWindow();
         stage.close();
 
-        // Change homepage view to account view.
-        Scene scene = HomePageView.getInstance().getRoot().getScene();
-        scene.getStylesheets().clear();
-
-        scene.setRoot(AccountView.getInstance().getRoot());
-        scene.getStylesheets().add(AccountView.getInstance().getCurrentThemePath());
+        View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
 
         // Clear the attributes such that when the signs out
         // they do not have access to the credentials

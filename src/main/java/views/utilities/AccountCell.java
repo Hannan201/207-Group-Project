@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import user.Account;
 import views.AccountView;
 import views.CodeView;
+import views.View;
 
 import java.io.IOException;
 
@@ -74,27 +75,25 @@ public class AccountCell extends ListCell<Account> {
             // checks if the account's platform is either Google, Discord, Shopify, or Github
             // and if so, adds a custom icon to the account
 
+            String path;
             if (Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
-                String path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
+                path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
                 Image image = new Image(path);
                 logo.setImage(image);
-                logo.setFitWidth(50);
-                logo.setFitHeight(50);
-                cell.getChildren();
-                HBox.setHgrow(cell, Priority.NEVER);
 
             // adds a default logo for the account if the it is not Discord, Google,
-            // Github, or Shopify
+            // GitHub, or Shopify
 
-            } else if (! Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
-                String path = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();;
+            } else {
+                path = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();
                 Image image = new Image(path);
                 logo.setImage(image);
-                logo.setFitWidth(50);
-                logo.setFitHeight(50);
-                cell.getChildren();
-                HBox.setHgrow(cell, Priority.NEVER);
             }
+
+            logo.setFitWidth(50);
+            logo.setFitHeight(50);
+            cell.getChildren();
+            HBox.setHgrow(cell, Priority.NEVER);
             setWrapText(true); // wraps the text in the ListCell to avoid long text
 
             platformName.setText(item.getSocialMediaType());
@@ -104,15 +103,12 @@ public class AccountCell extends ListCell<Account> {
             HBox.setHgrow(textbox, Priority.ALWAYS);
             cell.setSpacing(10);
 
-            // If the AccountCell is double clicked, then this handle method will transition
+            // If the AccountCell is double-clicked, then this handle method will transition
             // the view from the AccountsView to the CodeView
 
             setOnMouseClicked(mouseClickedEvent -> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
-                    Scene scene = AccountView.getInstance().getRoot().getScene();
-                    scene.getStylesheets().clear();
-                    scene.getStylesheets().add(CodeView.getInstance().getCurrentThemePath());
-                    scene.setRoot(CodeView.getInstance().getRoot());
+                    View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
                 }
             });
 

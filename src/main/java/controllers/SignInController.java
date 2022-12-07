@@ -120,17 +120,17 @@ public class SignInController implements Initializable {
     });
     box.getChildren().add(createAccountWrapper);
 
-        validator.createCheck()
-                .withMethod(c -> {
-                    if (Database.authenticateUser(unameInput.getText(), passInput.getText())){
-                        c.error("Wrong username or password, please try again.");
-                    }
-                })
-                .dependsOn("uNameInput", unameInput.textProperty())
-                .dependsOn("passInput", passInput.textProperty())
-                .decorates(unameInput)
-                .decorates(passInput)
-                .immediate();
+//        validator.createCheck()
+//                .withMethod(c -> {
+//                    if (Database.authenticateUser(unameInput.getText(), passInput.getText())){
+//                        c.error("Wrong username or password, please try again.");
+//                    }
+//                })
+//                .dependsOn("uNameInput", unameInput.textProperty())
+//                .dependsOn("passInput", passInput.textProperty())
+//                .decorates(unameInput)
+//                .decorates(passInput)
+//                .immediate();
 
     }
 
