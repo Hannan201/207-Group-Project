@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import user.Account;
 import user.Database;
@@ -62,11 +63,17 @@ public class AccountViewController implements Initializable {
 
     }
 
+    /**
+     * Selects all accounts in the accounts ListView.
+     */
     public void handleSelectAccount() {
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         accounts.getSelectionModel().selectAll();
     }
 
+    /**
+     * Responsible for switching views.
+     */
     private void switchSceneTo(View view) {
         Scene scene = AccountView.getInstance().getRoot().getScene();
         scene.getStylesheets().clear();
@@ -80,6 +87,10 @@ public class AccountViewController implements Initializable {
         scene.setRoot(view.getRoot());
     }
 
+    /**
+     * A handle method for the logout button which saves the user data and changes the current view
+     * to the HomePageView.
+     */
     public void handleLogout(ActionEvent e) {
         // This saveUserData method doesn't do
         // anything for now, but it will once
@@ -89,15 +100,23 @@ public class AccountViewController implements Initializable {
         switchSceneTo(HomePageView.getInstance());
     }
 
+    /**
+     * A handle method for the settings button which changes the current view to the SettingsView.
+     */
     public void handleSettings(ActionEvent e) {
         switchSceneTo(SettingsView.getInstance());
     }
 
+    /**
+     * A handle method for the add button.
+     *
+     * Generates a new AddAccount pop up where the user can
+     * create an account and have it reflected in the AccountView.
+     */
     public void handleAddAccount() {
 
-
         Stage stage = new Stage();
-
+        stage.initModality(Modality.APPLICATION_MODAL);
         if (AddAccountView.getInstance().getRoot().getScene() == null) {
             Scene scene = new Scene(AddAccountView.getInstance().getRoot());
             scene.getStylesheets().add(AddAccountView.getInstance().getCurrentThemePath());
@@ -114,6 +133,9 @@ public class AccountViewController implements Initializable {
 //        accounts.getItems().add(new Account())
     }
 
+    /**
+     * Adds an account to the accounts ListView.
+     */
     public void addAccount(Account account) {
         accounts.getItems().add(account);
 
@@ -121,13 +143,20 @@ public class AccountViewController implements Initializable {
 //        user.addNewAccount(account);
     }
 
+    /**
+     * A handle method for the <pin accounts> button.
+     */
     public void handlePinAccount() {
 
     }
 
+    /**
+     * A handle method for the <delete accounts> button which deletes all selected accounts in the accounts ListView.
+     *
+     */
     public void handleDeleteAccount() {
 
-        // stole this from StackOverflow, need to give appropriate credits
+        // Credit to https://stackoverflow.com/questions/24206854/javafx-clearing-the-listview for the code below.
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);
