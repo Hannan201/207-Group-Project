@@ -2,20 +2,17 @@ package controllers.CodeViewControllers;
 
 import code.readers.CodeReader;
 import code.readers.CodeReaderFactory;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
 import data.Database;
+import user.User;
 import views.*;
+import views.interfaces.Reversible;
 import views.utilities.CodeViewUtilities.CodeCell;
 import views.utilities.CodeViewUtilities.CodeCellFactory;
 
@@ -23,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-
 
 
 public class CodeViewController implements Initializable {
@@ -34,7 +30,7 @@ public class CodeViewController implements Initializable {
     @FXML
     private Label placeholderText;
     @FXML
-    private ListView<CodeCell> CodeListView;
+    private ListView<CodeCell> codeListView;
 
     @FXML
     private Label codesTitle;
@@ -55,9 +51,9 @@ public class CodeViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        CodeListView.setCellFactory(test -> {
+        codeListView.setCellFactory(test -> {
             try {
-                return new CodeCellFactory(CodeListView);
+                return new CodeCellFactory(codeListView);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -103,7 +99,7 @@ public class CodeViewController implements Initializable {
                 // 6) Take the List<Strings> that is returned and turn them into CodeCell Objects, which can
                 //    be added into the list view.
                 for (String code : importedCodes) {
-                    CodeListView.getItems().add(new CodeCell(code));
+                    codeListView.getItems().add(new CodeCell(code));
                 }
             }
         });
@@ -115,7 +111,7 @@ public class CodeViewController implements Initializable {
      */
     public void deleteAllOnAction() {
         deleteAll.setOnAction(e -> {
-            CodeListView.getItems().clear();
+            codeListView.getItems().clear();
         });
     }
 
@@ -126,50 +122,50 @@ public class CodeViewController implements Initializable {
     public void addCodeOnAction() {
         addCode.setOnAction(event -> {
             String newItem = addCodeInput.getText();
-            CodeListView.getItems().add(new CodeCell(newItem));
+            codeListView.getItems().add(new CodeCell(newItem));
             addCodeInput.setText("");
         });
     }
 
     /**
-     * Hanldes the event where the "Add Code" button is clicked.
+     * Handles the event where the "Add Code" button is clicked.
      * This method allows the user to add a specified code using the enter button.
      */
     public void addCodeOnEnter() {
         addCodeInput.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                String newItem = addCodeInput.getText();
-                CodeListView.getItems().add(new CodeCell(newItem));
+            // Don't want to add empty codes.
+            String newItem = addCodeInput.getText();
+            if (event.getCode() == KeyCode.ENTER && !newItem.equals("")) {
+                codeListView.getItems().add(new CodeCell(newItem));
                 addCodeInput.setText("");
             }
         });
     }
 
     /**
-     * Set the currAccount attribute to the specified account.
+     * Clear the list of codes being displayed in this view
+     * and only show the codes for a specific social media
+     * account.
      *
+     * @param name Name of the social media account to show
+     *             the codes for.
      */
-    // public void setAccount(Account account) {
-    //     currAccount = account;
-    // }
-
-    private void switchSceneTo(View view) {
-        Scene scene = CodeView.getInstance().getRoot().getScene();
-        scene.getStylesheets().clear();
-
-        // Just in case if CSS files aren't being used
-        // to change the theme.
-        if (view.getCurrentThemePath() != null) {
-            scene.getStylesheets().add(view.getCurrentThemePath());
+    public void addCodes(String name) {
+        codeListView.getItems().clear();
+        User user = Database.getUser();
+        if (user != null) {
+            List<String> codes = user.getAccountByName(name).getUserCodes();
+            for (String s : codes) {
+                codeListView.getItems().add(new CodeCell(s));
+            }
         }
-
-        scene.setRoot(view.getRoot());
     }
 
     /**
      * Allows a user to logout and redirects them to the home page.
      */
     public void handleLogout(ActionEvent e) {
+        Database.logUserOut();
         View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
     }
 
@@ -177,6 +173,7 @@ public class CodeViewController implements Initializable {
      * Switches the scene to the SettingsView once the settings button is clicked.
      */
     public void handleSettings(ActionEvent e) {
+        ((Reversible) SettingsView.getInstance()).setPreviousView(CodeView.getInstance());
         View.switchSceneTo(CodeView.getInstance(), SettingsView.getInstance());
     }
 

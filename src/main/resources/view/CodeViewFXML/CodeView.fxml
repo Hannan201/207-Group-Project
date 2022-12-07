@@ -23,7 +23,7 @@
                      </children>
                   </HBox>
                   <Region prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id="CodeListView" prefHeight="388.0" prefWidth="394.0">
+                  <ListView fx:id="codeListView" prefHeight="388.0" prefWidth="394.0">
                      <placeholder>
                         <Label fx:id="placeholderText" text="Please Add a Code" />
                      </placeholder>

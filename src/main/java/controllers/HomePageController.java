@@ -1,18 +1,9 @@
 package controllers;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import views.SignInView;
 import views.SignUpView;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import views.View;
 
 public class HomePageController {

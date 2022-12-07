@@ -8,11 +8,11 @@ import commands.managers.ThemeSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import org.controlsfx.control.HyperlinkLabel;
 import data.Database;
 import views.*;
+import views.interfaces.Reversible;
 
 import java.awt.*;
 import java.io.IOException;
@@ -63,6 +63,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToHighContrastMode(ActionEvent e) {
+        Database.setCurrentTheme("High Contrast");
         switcher = new ThemeSwitcher(highContrastModeCommand);
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
@@ -87,12 +88,18 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToLightMode(ActionEvent e) {
+        Database.setCurrentTheme("Light");
         switcher = new ThemeSwitcher(lightModeCommand);
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
     }
 
+    /**
+     * Add a view into the list of views.
+     *
+     * @param view The new view to be added.
+     */
     public static void addView(View view) {
         views.add(view);
     }
@@ -102,6 +109,7 @@ public class SettingsViewController implements Initializable {
      *
      */
     public void handleLogout(ActionEvent e) {
+        Database.logUserOut();
         View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
     }
 
@@ -111,7 +119,7 @@ public class SettingsViewController implements Initializable {
      * @param e Action Even which was detected.
      */
     public void handleGoBack(ActionEvent e) {
-        View.switchSceneTo(SettingsView.getInstance(), AccountView.getInstance());
+        View.switchSceneTo(SettingsView.getInstance(), ((Reversible) SettingsView.getInstance()).getPreviousView());
     }
 
 

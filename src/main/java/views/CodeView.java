@@ -1,6 +1,5 @@
 package views;
 
-import controllers.AccountViewController;
 import controllers.CodeViewControllers.CodeViewController;
 import javafx.fxml.FXMLLoader;
 import views.interfaces.Reversible;
@@ -48,12 +47,10 @@ public class CodeView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-
         try {
             FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/CodeViewFXML/CodeView.fxml"));
             this.setRoot(loader.load());
             this.controller = loader.getController();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,8 +60,6 @@ public class CodeView extends View implements Reversible {
                                   "CodeViewHC.css"};
 
         this.loadStylesheets();
-
-//        this.loadRoot("CodeViewFXML/CodeView.fxml");
     }
 
     /**

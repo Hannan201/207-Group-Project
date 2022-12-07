@@ -1,17 +1,13 @@
 package controllers;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import user.Account;
 import data.Database;
 import views.*;
+import views.interfaces.Reversible;
 import views.utilities.AccountCellFactory;
 
 import java.net.URL;
@@ -42,24 +38,10 @@ public class AccountViewController implements Initializable {
     @FXML
     public Button settings;
 
-    // Will be needed for the final product.
-//    private User user;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());
-        ObservableList<Account> data = FXCollections.observableArrayList();
-
-        // These two lines don't work for now.
-        // But when the loading data feature
-        // is added, it will.
-//        User user = Database.getUser();
-//        data.addAll(user.getAccounts());
-
-        data.addAll(new Account("mike", "GitGithubGithubGithubGithubissdsadkjdsGithubhub"), new Account("hannan", "Discord"), new Account("Fares", "Shopify"));
-        accounts.getItems().addAll(data);
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
     }
 
     /**
@@ -75,6 +57,7 @@ public class AccountViewController implements Initializable {
      * to the HomePageView.
      */
     public void handleLogout(ActionEvent e) {
+        Database.logUserOut();
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
     }
 
@@ -82,6 +65,7 @@ public class AccountViewController implements Initializable {
      * A handle method for the settings button which changes the current view to the SettingsView.
      */
     public void handleSettings(ActionEvent e) {
+        ((Reversible) SettingsView.getInstance()).setPreviousView(AccountView.getInstance());
         View.switchSceneTo(AccountView.getInstance(), SettingsView.getInstance());
     }
 
@@ -93,19 +77,25 @@ public class AccountViewController implements Initializable {
      */
     public void handleAddAccount() {
         View.loadNewWindow(AddAccountView.getInstance());
-
-        // this requries the pop up
-
-//        ObservableList<Account> data = FXCollections.observableArrayList();
-//        data.add()
-//        accounts.getItems().add(new Account())
     }
 
     /**
      * Adds an account to the accounts ListView.
+     *
+     * @param account The Account which is to be added.
      */
     public void addAccount(Account account) {
         accounts.getItems().add(account);
+    }
+
+    /**
+     * Add multiple accounts to the ListView.
+     *
+     * @param userAccounts List containing the accounts.
+     */
+    public void addAccounts(List<Account> userAccounts) {
+        accounts.getItems().clear();
+        accounts.getItems().addAll(userAccounts);
     }
 
     /**

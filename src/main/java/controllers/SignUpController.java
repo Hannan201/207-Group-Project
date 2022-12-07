@@ -1,17 +1,15 @@
 package controllers;
 
+import data.Database;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import views.AccountView;
@@ -23,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class SignUpController implements Initializable {
 
-    private Validator validator = new Validator();
+    private final Validator validator = new Validator();
     @FXML
     public Button signUp;
 
@@ -139,20 +137,19 @@ public class SignUpController implements Initializable {
         ;
 
         // checks if the Account is already registered
-        // UNCOMMENT WHEN DATABASE IS IMPLEMENTED
 
-//        validator.createCheck()
-//                .withMethod(c -> {
-//                    if (Database.checkUsername(initialUsername.getText())){
-//                        c.error("This account is already registered.");
-//                    }
-//                })
-//                .dependsOn("initialUsername", initialUsername.textProperty())
-//                .dependsOn("verifiedUsername", verifiedUsername.textProperty())
-//                .decorates(initialPassword)
-//                .decorates(verifiedUsername)
-//                .immediate()
-//        ;
+        validator.createCheck()
+                .withMethod(c -> {
+                    if (Database.checkUsername(initialUsername.getText())){
+                        c.error("This account is already registered.");
+                    }
+                })
+                .dependsOn("initialUsername", initialUsername.textProperty())
+                .dependsOn("verifiedUsername", verifiedUsername.textProperty())
+                .decorates(initialPassword)
+                .decorates(verifiedUsername)
+                .immediate()
+        ;
     }
 
 
@@ -164,22 +161,19 @@ public class SignUpController implements Initializable {
      * @param e
      */
     public void handleSignUp(ActionEvent e) {
-
-
         // Switching theme (sample code), should be included in the Controller class event handlers
         // This does not work for popups because those need a new stage to be created
 
         // open pop up
 
-        // Close current window.
-        Node node = (Node) e.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        stage.close();
+        View.closeWindow(e);
 
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
 
         // Clear the attributes such that when the signs out
         // they do not have access to the credentials
+
+        Database.registerUser(initialUsername.getText(), initialPassword.getText());
 
         initialUsername.clear();
         initialPassword.clear();

@@ -62,8 +62,6 @@ public class AccountView extends View implements Reversible {
                                   "AccountsViewHighContrast.css"};
 
         this.loadStylesheets();
-
-//        this.loadRoot("AccountsView.fxml");
     }
 
     /**

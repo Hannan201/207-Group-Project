@@ -1,6 +1,5 @@
 package views.utilities.CodeViewUtilities;
 
-
 public class CodeCell {
 
     /**

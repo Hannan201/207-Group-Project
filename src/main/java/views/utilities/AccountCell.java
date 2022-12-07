@@ -2,14 +2,12 @@ package views.utilities;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -58,7 +56,8 @@ public class AccountCell extends ListCell<Account> {
      * within the listView.
      *
      * @param item the account that is being passed in.
-     * @param empty
+     * @param empty Whether it should add to the list view
+     *              or not.
      */
     @Override
     protected void updateItem(Account item, boolean empty) {
@@ -66,7 +65,7 @@ public class AccountCell extends ListCell<Account> {
 
         // deals with the case of the account being null or the boolean being empty
 
-        if(empty || item == null) {
+        if (empty || item == null) {
             setText(null);
             setContentDisplay(ContentDisplay.TEXT_ONLY);
         }
@@ -109,6 +108,7 @@ public class AccountCell extends ListCell<Account> {
             setOnMouseClicked(mouseClickedEvent -> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
                     View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
+                    ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes(username.getText());
                 }
             });
 

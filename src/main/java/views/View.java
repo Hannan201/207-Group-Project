@@ -1,12 +1,15 @@
 package views;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import user.Account;
 
+import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -228,5 +231,29 @@ public abstract class View {
             stage.setScene(view.getRoot().getScene());
         }
         stage.show();
+    }
+
+    /**
+     * A utility method to close a window based
+     * the ActionEvent that occurs.
+     *
+     * @param e The ActionEvent that occurred.
+     */
+    public static void closeWindow(ActionEvent e) {
+        Node node = (Node) e.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.close();
+    }
+
+    /**
+     * A utility method to close a window based
+     * the KeyEvent that occurs.
+     *
+     * @param e The KeyEvent that occurred.
+     */
+    public static void closeWindow(KeyEvent e) {
+        Node node = (Node) e.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.close();
     }
 }
