@@ -60,6 +60,46 @@ public class SettingsViewController implements Initializable {
         this.switcher.switchTheme();
     }
 
+    /**
+     * Switch all the UI's theme to HighContrastMode
+     *
+     */
+    @FXML
+    private void switchToHighContrastMode(ActionEvent e) {
+        switcher = new ThemeSwitcher(highContrastModeCommand);
+        this.switcher.switchTheme();
+        SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
+        SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
+    }
+
+    /**
+     * Switch all the UI's theme to Dark Mode.
+     *
+     */
+    @FXML
+    private void switchToDarkMode(ActionEvent e) {
+        switcher = new ThemeSwitcher(darkModeCommand);
+        this.switcher.switchTheme();
+        SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
+        SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
+    }
+
+    /**
+     * Switch all the UI's theme to Light Mode.
+     *
+     */
+    @FXML
+    private void switchToLightMode(ActionEvent e) {
+        switcher = new ThemeSwitcher(lightModeCommand);
+        this.switcher.switchTheme();
+        SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
+        SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
+    }
+
+    public static void addView(View view) {
+        views.add(view);
+    }
+
     private void switchSceneTo(View view) {
         Scene scene = SettingsView.getInstance().getRoot().getScene();
         scene.getStylesheets().clear();

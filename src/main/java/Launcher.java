@@ -3,6 +3,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import views.HomePageView;
+import views.SettingsView;
 
 /**
  * This class is responsible for launching the backup

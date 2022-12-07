@@ -13,3 +13,11 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+
+#label{
+    -fx-font-family: "Montserrat SemiBold";
+}
+
+.root{
+    -fx-font-family: "Montserrat";
+}
