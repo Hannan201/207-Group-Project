@@ -30,7 +30,7 @@ public class TempData {
             a3.addCodes(generateCodeNumbers(4, " "));
         }
 
-        user = new User("Test", "1234");
+        user = new User("Test");
         user.addNewAccount(a1);
         user.addNewAccount(a2);
         user.addNewAccount(a3);

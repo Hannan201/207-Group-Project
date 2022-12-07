@@ -3,9 +3,8 @@ package user;
 import behaviors.interfaces.ReadCodeBehavior;
 import javafx.scene.image.ImageView;
 
+import java.util.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is responsible for storing data
@@ -29,28 +28,29 @@ public class Account {
     // would like ot enter their codes.
     private ReadCodeBehavior readCodeBehavior;
 
-    private static Map<String, ImageView> icons;
+    private static Map<String, String> icons;
 
     static {
+
+        // I tried that but something weird happened lol let me try again
+
+        icons = new HashMap<>();
+
         String discord = Account.class.getClassLoader().getResource("images/icons8-discord-100.png").toExternalForm();
-        ImageView discord_image = new ImageView(discord);
-        icons.put("github", discord_image);
+        icons.put("discord", discord);
 
         String github = Account.class.getClassLoader().getResource("images/icons8-github-100.png").toExternalForm();
-        ImageView github_image = new ImageView(github);
-        icons.put("github", github_image);
+        icons.put("github", github);
 
         String google = Account.class.getClassLoader().getResource("images/icons8-google-100.png").toExternalForm();
-        ImageView google_image = new ImageView(google);
-        icons.put("github", google_image);
+        icons.put("google", google);
 
         String shopify = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png").toExternalForm();
-        ImageView shopify_image = new ImageView(shopify);
-        icons.put("github", shopify_image);
+        icons.put("shopify", shopify);
     }
 
     /**
-     * Creat a new Social Media Account with
+     * Create a new Social Media Account with
      * a name and of a specific social media
      * type.
      *
@@ -61,6 +61,31 @@ public class Account {
         this.name = name;
         this.socialMediaType = type;
         this.userCodes = new ArrayList<>();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSocialMediaType(), getName());
+    }
+
+    /**
+     * Overrides the equals method which compares
+     * accounts based on their name and socialMediaType to see if they are equal.
+     *
+     * @return if two accounts are the same.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Account)) {
+            return false;
+        }
+        Account comparison = (Account) o;
+
+        return this.name.equalsIgnoreCase(comparison.getName()) &&
+                this.socialMediaType.equalsIgnoreCase(comparison.getSocialMediaType());
     }
 
     /**
@@ -125,5 +150,5 @@ public class Account {
         this.userCodes.clear();
     }
 
-    public static Map<String, ImageView> getIcons() {return icons;}
+    public static Map<String, String> getIcons() {return icons;}
 }

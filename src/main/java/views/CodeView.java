@@ -1,5 +1,8 @@
 package views;
 
+import controllers.AccountViewController;
+import controllers.CodeViewControllers.CodeViewController;
+import javafx.fxml.FXMLLoader;
 import views.interfaces.Reversible;
 
 /**
@@ -12,6 +15,8 @@ public class CodeView extends View implements Reversible {
 
     // An instance for this code-viewer view.
     private static View firstInstance = null;
+
+    private CodeViewController controller = null;
 
     // The previous view for this code-viewer
     // view.
@@ -43,13 +48,23 @@ public class CodeView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"Name of CSS file for light mode.",
+
+        try {
+            FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/CodeViewFXML/CodeView.fxml"));
+            this.setRoot(loader.load());
+            this.controller = loader.getController();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.names = new String[]{"CodeView.css",
                                   "Name of CSS file for dark mode.",
                                   "Name of CSS file for high contrast mode."};
 
         this.loadStylesheets();
 
-        this.loadRoot("Name of FXML file here");
+//        this.loadRoot("CodeViewFXML/CodeView.fxml");
     }
 
     /**
@@ -77,4 +92,9 @@ public class CodeView extends View implements Reversible {
     public void setPreviousView(View newPreviousView) {
         this.previousView = newPreviousView;
     }
+
+    public CodeViewController getCodeViewController() {
+        return this.controller;
+    }
+
 }
