@@ -38,7 +38,7 @@ public class SignInView extends View {
     protected void initUI() {
         this.names = new String[]{"SignIn.css",
                                   "Name of CSS file for dark mode.",
-                                  "Name of CSS file for high contrast mode."};
+                                  "SignInHC.css"};
 
         this.loadStylesheets();
 
