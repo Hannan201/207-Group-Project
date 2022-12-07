@@ -92,6 +92,12 @@ public class AccountView extends View implements Reversible {
         this.previousView = newPreviousView;
     }
 
+    /**
+     *
+     * Returns the controller for the AccountView class.
+     *
+     * @return controller for the AccountView class.
+     */
     public AccountViewController getAccountViewController() {
         return this.controller;
     }
