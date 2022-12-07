@@ -2,6 +2,8 @@ package controllers.CodeViewControllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import views.utilities.CodeViewUtilities.CodeCell;
@@ -34,6 +36,13 @@ public class CodeCellController {
 
     private boolean selected;
 
+    /**
+     * Stores the data of the current code, the code factory, and its corresponding listview;
+     *
+     * @param cell The current CodeCell
+     * @param container The CodeCellFactory for this CodeCell
+     * @param parent The ListView that contains this CodeCell
+     */
     public void setCodeCell(CodeCell cell, CodeCellFactory container, ListView<CodeCell> parent) {
         currentCell = cell;
         currentContainer = container;
@@ -51,9 +60,14 @@ public class CodeCellController {
         userInput.setVisible(false);
     }
 
+    /**
+     * Handles the selection of a particular cell so that the user gains access
+     * to the copy, edit and delete buttons.
+     */
     public void layoutOnEnter() {
         backgroundLayout.setOnMouseClicked(e -> {
             if (selected) {
+                // in the case where the
                 edit.setDisable(false);
                 delete.setDisable(false);
                 copy.setDisable(false);
@@ -68,10 +82,13 @@ public class CodeCellController {
         });
     }
 
+    /**
+     * Handle when the edit button is clicked.
+     */
     public void editOnAction(){
-
-        // Handle when the edit button is clicked.
         edit.setOnAction(e -> {
+
+            //Disable interactivity with other buttons to prevent overlapping actions
             delete.setDisable(true);
             copy.setDisable(true);
 
@@ -85,6 +102,10 @@ public class CodeCellController {
         });
     }
 
+    /**
+     * Handles when the enter button is clicked whlie the textfield is selected
+     * This method will submit edit changes.
+     */
     public void TextFieldOnAction() {
 
         // handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
@@ -97,24 +118,30 @@ public class CodeCellController {
                 code.setVisible(true);
             }
         });
+        // After the edit operation is finished, the delete and copy buttons can be interacted with.
         delete.setDisable(false);
         copy.setDisable(false);
     }
 
-
+    /**
+     * Handles when the copy button is pressed
+     */
     public void copyOnAction(){
 
-        // Handle when the edit button is clicked.
         copy.setOnAction(e -> {
 
-            // Add the new cell right below the selected one so the user can immediately see the copy they made
-            CodeCell item = new CodeCell(currentCell.getCode());
-            int index = currentListView.getItems().indexOf(currentCell);
+            //Get the system clipboard so the code be copied accordingly
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
 
-            currentListView.getItems().add(index + 1, item);
+            content.putString(currentCell.getCode());
+            clipboard.setContent(content);
         });
     }
 
+    /**
+     * Handles when the delete button is pressed
+     */
     public void deleteOnAction() {
 
         // handle the event when delete button is clicked
@@ -123,12 +150,12 @@ public class CodeCellController {
         });
     }
 
+    /**
+     * Setter for the code attribute.
+     * @param codeInput the code to be set.
+     */
     public void setCode(String codeInput) {
         this.code.setText(codeInput);
-    }
-
-    public void setCode(Label code) {
-        this.code = code;
     }
 
 }
