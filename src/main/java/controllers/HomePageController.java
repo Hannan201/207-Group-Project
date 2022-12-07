@@ -8,12 +8,13 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import views.SignUpView;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 public class HomePageController {
 
     public Button signIn;
     public Button signUp;
-
     public void handleSignIn(ActionEvent e) {
 
         // open pop up
