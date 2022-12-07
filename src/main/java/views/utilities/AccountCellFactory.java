@@ -9,6 +9,11 @@ import views.utilities.AccountCell;
 public class AccountCellFactory implements Callback<ListView<Account>, ListCell<Account>> {
 
     @Override
+    /**
+     * Returns a new AccountCell when the user creates an account.
+     *
+     * @return a new AccountCell.
+     */
     public ListCell<Account> call(ListView<Account> param) {
         return new AccountCell();
     }
