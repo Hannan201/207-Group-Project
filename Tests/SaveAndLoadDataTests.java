@@ -236,4 +236,22 @@ public class SaveAndLoadDataTests {
         assertEquals(Database.getCurrentTheme(), "High Contrast");
         Database.logUserOut();
     }
+
+    @Test
+    void testClearUserData() {
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
+        Database.authenticateUser("Hannan", "12345");
+        User user = Database.getUser();
+        assertNotNull(user);
+        assertTrue(user.getAccounts().size() > 0);
+        Database.clearUserData();
+        Database.logUserOut();
+
+        Database.authenticateUser("Hannan", "12345");
+        user = Database.getUser();
+        assertNotNull(user);
+        assertEquals(user.getAccounts().size(), 0);
+        Database.logUserOut();
+    }
 }

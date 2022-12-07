@@ -406,4 +406,12 @@ public class Database {
         }
         return null;
     }
+
+    /**
+     * Clear data for the currently logged-in user.
+     */
+    public static void clearUserData() {
+        user.clearAllAccounts();
+        serializeObject(usersSource, users);
+    }
 }

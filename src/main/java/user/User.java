@@ -72,5 +72,6 @@ public class User implements java.io.Serializable {
         for (Account account : this.accounts) {
             account.clearUserCodes();
         }
+        accounts.clear();
     }
 }
