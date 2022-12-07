@@ -19,6 +19,14 @@ public class HomePageController {
 
     public Button signIn;
     public Button signUp;
+
+    /**
+     *
+     * A handle method for the signIn button that opens a pop up to allow the
+     * user to sign in.
+     *
+     * @param e
+     */
     public void handleSignIn(ActionEvent e) {
 
         // Once the sign-in view is complete
@@ -29,6 +37,13 @@ public class HomePageController {
         System.out.println("Signed up.");
     }
 
+    /**
+     *
+     * A handle method for the signUp button that opens a pop up to allow the
+     * user to sign in.
+     *
+     * @param e
+     */
     public void handleSignUp(ActionEvent e) {
 
 //        Stage stage = new Stage();
@@ -47,6 +62,10 @@ public class HomePageController {
         System.out.println("Signed up.");
     }
 
+    /**
+     * Loads a new pop up window for the user to interact with.
+     * @param view
+     */
     private void loadNewWindow(View view) {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
