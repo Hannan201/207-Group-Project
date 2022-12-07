@@ -144,7 +144,7 @@ public class SignUpController implements Initializable {
                 })
                 .dependsOn("initialUsername", initialUsername.textProperty())
                 .dependsOn("verifiedUsername", verifiedUsername.textProperty())
-                .decorates(initialPassword)
+                .decorates(initialUsername)
                 .decorates(verifiedUsername)
                 .immediate();
     }
