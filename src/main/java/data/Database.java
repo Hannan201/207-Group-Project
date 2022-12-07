@@ -217,9 +217,11 @@ public class Database {
      * @return True if the user was logged-in, false otherwise.
      */
     public static boolean authenticateUser(String username, String password) {
-        if (loggedIn) {
+        if (username.isEmpty() || password.isEmpty()) {
             return false;
-        } else if (!checkUsername(username)) {
+        }
+
+        if (!checkUsername(username)) {
             loggedIn = false;
             return false;
         }
