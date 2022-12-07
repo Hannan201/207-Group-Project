@@ -27,15 +27,14 @@ public class Account implements java.io.Serializable {
     private final List<String> userCodes;
 
     // The behavior to determine how the user
-    // would like ot enter their codes.
+    // would like to enter their codes.
     private transient ReadCodeBehavior readCodeBehavior;
 
+    // To load icons for each type of social
+    // media account in this application.
     private static final Map<String, String> icons;
 
     static {
-
-        // I tried that but something weird happened lol let me try again
-
         icons = new HashMap<>();
 
         URL url;
@@ -146,6 +145,47 @@ public class Account implements java.io.Serializable {
         this.userCodes.clear();
     }
 
-    public static Map<String, String> getIcons() {return icons;}
+    /**
+     * Get the icons for this application which
+     * are used when showing the accounts.
+     *
+     * @return A Map where the key is the
+     * name of the platform (in lowercase)
+     * and the value is the path to the file.
+     */
+    public static Map<String, String> getIcons() {
+        return icons;
+    }
 
+    /**
+     * Check if this account is equal to
+     * another account. Two accounts are equal
+     * if they have the same name and social
+     * media platform.
+     *
+     * @param o The Account to compare with.
+     * @return True if equal, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Account account = (Account) o;
+
+        if (!socialMediaType.equals(account.socialMediaType)) return false;
+        return name.equals(account.name);
+    }
+
+    /**
+     * Produce hash-code for this object.
+     *
+     * @return The HashCode.
+     */
+    @Override
+    public int hashCode() {
+        int result = socialMediaType.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
 }

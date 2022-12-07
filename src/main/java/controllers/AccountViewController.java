@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import user.Account;
 import data.Database;
+import user.User;
 import views.*;
 import views.interfaces.Reversible;
 import views.utilities.AccountCellFactory;
@@ -133,5 +134,9 @@ public class AccountViewController implements Initializable {
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);
+        User user = Database.getUser();
+        if (user != null) {
+            user.clearAllAccounts();
+        }
     }
 }
