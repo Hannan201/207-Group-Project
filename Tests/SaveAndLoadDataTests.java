@@ -219,4 +219,21 @@ public class SaveAndLoadDataTests {
         Database.logUserOut();
     }
 
+    @Test
+    void loadCorrectTheme() {
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
+        Database.authenticateUser("Hannan", "12345");
+        User user = Database.getUser();
+        assertNotNull(user);
+        assertEquals(Database.getCurrentTheme(), "Light");
+        Database.setCurrentTheme("High Contrast");
+        Database.logUserOut();
+
+        Database.authenticateUser("Hannan", "12345");
+        user = Database.getUser();
+        assertNotNull(user);
+        assertEquals(Database.getCurrentTheme(), "High Contrast");
+        Database.logUserOut();
+    }
 }
