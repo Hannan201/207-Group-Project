@@ -16,9 +16,13 @@
          <children>
             <VBox prefHeight="450.0" prefWidth="399.0">
                <children>
-                  <TextField prefHeight="32.0" prefWidth="383.0" />
+                  <TextField prefHeight="32.0" prefWidth="383.0" promptText="Search for your username..." focusTraversable="false"/>
                   <Region prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0" />
+                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0">
+                     <placeholder>
+                        <Label fx:id="default" text="Please add an account!" />
+                     </placeholder>
+                  </ListView>
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="603.0" prefWidth="134.0" spacing="18.0">
