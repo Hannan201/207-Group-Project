@@ -62,9 +62,7 @@
    <top>
       <VBox prefHeight="71.0" prefWidth="530.0" BorderPane.alignment="CENTER">
          <children>
-            <Region prefHeight="18.0" prefWidth="530.0" />
-            <Label fx:id="Title" alignment="CENTER" contentDisplay="CENTER" prefHeight="41.0" prefWidth="526.0" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" />
-            <Region prefHeight="10.0" prefWidth="530.0" />
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="71.0" prefWidth="526.0" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" />
          </children>
       </VBox>
    </top>

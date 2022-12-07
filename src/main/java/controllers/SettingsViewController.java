@@ -65,7 +65,6 @@ public class SettingsViewController implements Initializable {
     @FXML
     private void switchToHighContrastMode() {
         Database.setCurrentTheme("High Contrast");
-        switcher = new ThemeSwitcher(highContrastModeCommand);
         updateTheme(highContrastModeCommand);
     }
 
@@ -132,7 +131,6 @@ public class SettingsViewController implements Initializable {
 
 
     public void handleLinkClick(ActionEvent e) throws IOException, URISyntaxException {
-
         Hyperlink link = (Hyperlink) e.getSource();
         final String str = link == null ? "" : link.getText();
         switch (str) {
@@ -177,12 +175,11 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Delete all accounts for this user.
-     *
      */
     public void handleDeleteAccounts() {
         User user = Database.getUser();
         if (user != null) {
-            user.clearAllAccounts();
+            Database.clearUserData();
             ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
         }
     }
