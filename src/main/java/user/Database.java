@@ -173,7 +173,7 @@ public class Database {
      *
      * @param status The new status.
      */
-    public static void setLoginStatus(String status) {
+    private static void setLoginStatus(String status) {
         userConfigurations.get("").set(0, status);
         if (status.equals("true")) {
             userConfigurations.get("").set(1, user.getUsername().toLowerCase());
