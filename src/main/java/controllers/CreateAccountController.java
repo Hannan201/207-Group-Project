@@ -61,6 +61,8 @@ public class CreateAccountController implements Initializable{
             ((AccountView)AccountView.getInstance()).getAccountViewController().addAccount(account);
             Stage stage = (Stage) AddAccountView.getInstance().getRoot().getScene().getWindow();
             stage.close();
+            username.clear();
+            platform.clear();
         });
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox
