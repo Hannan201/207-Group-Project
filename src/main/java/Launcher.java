@@ -52,7 +52,6 @@ public class Launcher extends Application {
             Parent root = AccountView.getInstance().getRoot();
             User user = Database.getUser();
             if (user != null) {
-                ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
                 preferredTheme = user.getCurrentTheme();
             }
             Scene scene = new Scene(root);
@@ -71,6 +70,9 @@ public class Launcher extends Application {
             }
 
             scene.getStylesheets().add(AccountView.getInstance().getCurrentThemePath());
+            if (user != null) {
+                ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
+            }
             stage.setScene(scene);
         } else {
             Parent root = HomePageView.getInstance().getRoot();
