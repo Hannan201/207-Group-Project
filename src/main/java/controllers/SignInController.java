@@ -1,5 +1,8 @@
 package controllers;
 
+import commands.Command;
+import commands.SwitchToHighContrastMode;
+import commands.managers.ThemeSwitcher;
 import data.Database;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -15,11 +18,11 @@ import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import user.User;
-import views.AccountView;
-import views.HomePageView;
-import views.View;
+import views.*;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -71,8 +74,16 @@ public class SignInController implements Initializable {
     @FXML
     private Button signInButton;
 
+    // To store all the views.
+    private static List<View> views;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        views = new ArrayList<>(List.of(HomePageView.getInstance(), SignUpView.getInstance(),
+                    AccountView.getInstance(), AddAccountView.getInstance(),
+                    CodeView.getInstance()));
+
+
         signInButton = new Button("Sign In");
         signInButton.setPrefHeight(25);
         signInButton.setPrefWidth(100);
@@ -153,5 +164,25 @@ public class SignInController implements Initializable {
         if (user != null) {
             ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
         }
+    }
+
+    private void loadTheme() {
+        User user = Database.getUser();
+        if (user != null && !user.getCurrentTheme().equals("Light")) {
+            if (user.getCurrentTheme().equals("High Contrast")) {
+                Command command = new SwitchToHighContrastMode(views);
+                ThemeSwitcher switcher = new ThemeSwitcher(command);
+                switcher.switchTheme();
+            }
+        }
+    }
+
+    /**
+     * Add a view into the list of views.
+     *
+     * @param view The new view to be added.
+     */
+    public static void addView(View view) {
+        views.add(view);
     }
 }

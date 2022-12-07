@@ -1,5 +1,7 @@
 package views;
 
+import controllers.SignInController;
+
 /**
  * This class is responsible for displaying a view
  * to sign in.
@@ -25,6 +27,7 @@ public class SignInView extends View {
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SignInView();
+            SignInController.addView(firstInstance);
         }
 
         return firstInstance;
