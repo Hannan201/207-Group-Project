@@ -1,2 +1,0 @@
-false.
-username,password,salt,theme,pos

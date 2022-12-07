@@ -3,7 +3,6 @@ package user;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -20,131 +19,119 @@ public class Database {
     // To check if a user's already logged in.
     private static boolean loggedIn;
 
-    // To prevent duplicate usernames.
-    private static Set<String> usernames;
-
     // Store current user to load or save data.
     private static User user;
 
     // Source for the usernames, passwords, and
     // any configurations.
-    private static String userSource;
+    private static String configurationsSource;
 
     // To only allow one source to be set
-    // for usernames and passwords.
-    private static boolean userSourceSet;
+    // for the user configurations
+    private static boolean configurationsSourceSet;
 
-    // Source for the social media accounts
-    // and backup codes for that account.
-    private static String accountsSource;
+    // Source for the user objects in this
+    // application.
+    private static String usersSource;
 
     // To only allow one source to be
-    // set for the backup codes and
-    // accounts.
-    private static boolean accountSourceSet;
+    // set for the user objects in this
+    // application.
+    private static boolean usersSourceSet;
 
-    // This stores the position of each username
-    // in the CSV file. To make it easier to load
-    // in the other configurations.
-    private static Map<String, Long> userRelatedData;
+    // This stores a user's username, hashed version of their
+    // password, the salt for the hash and their current
+    // theme.
+    private static Map<String, List<String>> userConfigurations;
 
-    // To form each row in the CSV file.
-    private static String[] userConfigurations = new String[5];
+    // This stores the corresponding User object for every
+    // username in this application.
+    private static Map<String, User> users;
 
-    // To store the location in the file for a specific username.
-    private static long filePointer;
-
-    // To store the location in the file for a specific
-    // social media account.
-    private static long accountsFilePointer;
+    // Stores the current theme for logged in user.
+    private static String currentTheme;
 
     /**
-     * Sets the source to the CSV file where
-     * the usernames and passwords are stored.
+     * Sets the source to the serialized file for
+     * where the user configurations can be found.
      *
      * @param filePath Path to the file.
      */
-    public static void setUserSource(String filePath) {
-        if (!userSourceSet) {
-            usernames = new HashSet<>();
-            filePointer = 0;
-            userSource = filePath;
-            userSourceSet = true;
-            userRelatedData = new HashMap<>();
-            initializeFilePointers();
-        }
-    }
+    public static void setConfigurationsSource(String filePath) {
+        if (!configurationsSourceSet) {
+            configurationsSource = filePath;
+            configurationsSourceSet = true;
 
-    /**
-     * Fill the hashmap so that each username is associated
-     * to the starting position in the CSV file for where
-     * the extra configurations are stored, this is to
-     * prevent loading unnecessary data.
-     */
-    private static void initializeFilePointers() {
-        try {
-            File file = new File(userSource);
-            FileReader in = new FileReader(file);
-            BufferedReader readFile = new BufferedReader(in);
-            String line;
+            boolean result = makeSource(filePath);
+            if (!result) {
+                userConfigurations = loadConfigurations();
 
-            // To go through the first two header lines.
-            for (int i = 0; i < 2; i++) {
-                line = readFile.readLine();
-                filePointer += line.getBytes().length;
-            }
-
-            // For each row in the CSV file.
-            while ((line = readFile.readLine()) != null) {
-                String username = line.split(",")[0];
-                usernames.add(username);
-
-                // Using the bytes to move the file pointer.
-                userRelatedData.put(username, filePointer + username.getBytes().length + 1);
-                filePointer += line.getBytes().length;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Adjust the file pointer to the correct position
-     * for when a new user is added for this application.
-     */
-    private static void initializeFilePointerForAccounts() {
-        // Position in the file for if a new account is added.
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(accountsSource, "r");
-            accountsFilePointer = raf.length();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (raf != null) {
-                    raf.close();
+                if (userConfigurations != null && userConfigurations.get("").get(0).equals("true")) {
+                    loggedIn = true;
+                } else {
+                    loggedIn = false;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            } else {
+                userConfigurations = new HashMap<>();
+                List<String> currentlyLoggedIn = new ArrayList<>(2);
+                currentlyLoggedIn.add("None");
+                currentlyLoggedIn.add("");
+                userConfigurations.put("", currentlyLoggedIn);
             }
         }
     }
 
     /**
-     * Set the source to the file where
-     * the social media accounts and
-     * backup codes can be found.
+     * Sets the source to the serialized file for
+     * where the user objects can be found.
      *
      * @param filePath Path to the file.
      */
-    public static void setAccountsSource(String filePath) {
-        if (!accountSourceSet) {
-            accountsSource = filePath;
-            accountSourceSet = true;
-            initializeFilePointerForAccounts();
+    public static void setUsersSource(String filePath) {
+        if (!usersSourceSet) {
+            usersSource = filePath;
+            usersSourceSet = true;
+
+            boolean result = makeSource(filePath);
+
+            if (!result) {
+                users = loadUsers();
+
+                if (loggedIn) {
+                    String previousUser = userConfigurations.get("").get(1);
+                    user = users.get(previousUser);
+                    currentTheme = userConfigurations.get(previousUser.toLowerCase()).get(2);
+                }
+
+            } else {
+                users = new HashMap<>();
+            }
         }
+    }
+
+    /**
+     * Check to see if a specific file is made. If the file is
+     * not made, a new file will be created.
+     *
+     * @param source Path to the file.
+     * @return Return false if the file already exists, true
+     * otherwise.
+     */
+    private static boolean makeSource(String source) {
+        File file = new File(source);
+        if (!file.exists()) {
+            try {
+                if (!file.createNewFile()) {
+                    throw new RuntimeException("File does not exist and cannot be made.");
+                }
+                return true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -152,19 +139,109 @@ public class Database {
      *
      * @param username Username for the new user.
      * @param password Password for the new user.
-     * @return
      */
     public static void registerUser(String username, String password) {
-        if (accountSourceSet && userSourceSet && !loggedIn) {
-            userConfigurations[0] = username;
+        if (usersSourceSet && configurationsSourceSet && !loggedIn) {
+            List<String> configurations = new ArrayList<>(3);
             String salt = generateSalt();
-            userConfigurations[2] = salt;
-            userConfigurations[1] = hashPassword(password, salt.getBytes());
-            userConfigurations[3] = "light";
-            userConfigurations[4] = Long.toString(accountsFilePointer);
-            setLoginStatus("true");
+            String hashed = hashPassword(password, salt.getBytes());
+            currentTheme = "Light";
+            configurations.add(hashed);
+            configurations.add(salt);
+            configurations.add(currentTheme);
+            loggedIn = true;
             user = new User(username);
+            setLoginStatus("true");
+            userConfigurations.put(username.toLowerCase(), configurations);
+            users.put(username.toLowerCase(), user);
         }
+    }
+
+    /**
+     * Check whether a user is logged-in to this application.
+     *
+     * @return True if logged in, false otherwise.
+     */
+    public static boolean getLoginStatus() {
+        return loggedIn;
+    }
+
+    /**
+     * Set the login status for this current user. To remember
+     * whether if this user logged out before closing the
+     * application.
+     *
+     * @param status The new status.
+     */
+    private static void setLoginStatus(String status) {
+        userConfigurations.get("").set(0, status);
+        if (status.equals("true")) {
+            userConfigurations.get("").set(1, user.getUsername().toLowerCase());
+        } else if (status.equals("false") || status.equals("none")) {
+            userConfigurations.get("").set(1, "");
+        }
+    }
+
+    /**
+     * Get the preferred theme for the currently logged-in user.
+     *
+     * @return The theme for this user.
+     */
+    public static String getCurrentTheme() {
+        return currentTheme;
+    }
+
+    /**
+     * Set the preferred theme for the currently logged-in
+     * user.
+     *
+     * @param newTheme The new theme to set for the user
+     *                 currently logged-in.
+     */
+    public static void setCurrentTheme(String newTheme) {
+        currentTheme = newTheme;
+        userConfigurations.get(user.getUsername().toLowerCase()).set(2, newTheme);
+    }
+
+
+    /**
+     * Check if a username is already taken.
+     *
+     * @param username The username to check for.
+     * @return True if username is taken, false otherwise.s
+     */
+    public static boolean checkUsername(String username) {
+        return users.containsKey(username.toLowerCase());
+    }
+
+    /**
+     * Authenticate an existing user into this application
+     * to ensure their username exists and their password is
+     * correct.
+     *
+     * @param username The username for the user trying to log-in.
+     * @param password The password for the user trying to log-in.
+     * @return True if the user was logged-in, false otherwise.
+     */
+    public static boolean authenticateUser(String username, String password) {
+        if (!checkUsername(username.toLowerCase())) {
+            loggedIn = false;
+            return false;
+        }
+
+        List<String> configurations = userConfigurations.get(username.toLowerCase());
+        String salt = configurations.get(1);
+        String result = hashPassword(password, salt.getBytes());
+        loggedIn = configurations.get(0).equals(result);
+        if (loggedIn) {
+            user = users.get(username.toLowerCase());
+            setLoginStatus("true");
+            currentTheme = configurations.get(2);
+        } else {
+            user = null;
+        }
+
+        return loggedIn;
     }
 
     /**
@@ -219,91 +296,122 @@ public class Database {
     }
 
     /**
-     * Update the current theme for the user.
-     *
-     * @param newTheme The new theme to update to.
-     */
-    public static void updateTheme(String newTheme) {
-        if (accountSourceSet && userSourceSet && loggedIn) {
-            userConfigurations[3] = newTheme;
-        }
-    }
-
-    /**
-     * Logout the user from this application.
+     * Log user out of this application.
      */
     public static void logUserOut() {
+        loggedIn = false;
+        user = null;
         setLoginStatus("false");
         saveUserData();
     }
 
     /**
-     * Save the username, password, current theme,
-     * social media accounts, and backup codes
-     * for the current logged-in user.
+     * Save user data for the currently logged-in user.
      */
     public static void saveUserData() {
-        if (!(loggedIn && userSourceSet && accountSourceSet)) {
-            return;
-        }
+        serializeObject(configurationsSource, userConfigurations);
+        serializeObject(usersSource, users);
+    }
 
-        if (!usernames.contains(user.getUsername())) {
-            File file;
-            FileWriter out;
-            BufferedWriter writeFile;
+    /**
+     * Serialize a given object to a file.
+     *
+     * @param source Path to file.
+     * @param o Object to be serialized.
+     */
+    private static void serializeObject(String source, Object o) {
+        FileOutputStream out = null;
+        ObjectOutputStream writeObject = null;
+        try {
+            out = new FileOutputStream(source);
+            writeObject = new ObjectOutputStream(out);
+            writeObject.writeObject(o);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try {
-                file = new File(accountsSource);
-                out = new FileWriter(file, true);
-                writeFile = new BufferedWriter(out);
-                writeFile.write(user.getUsername() + "\n");
-                writeFile.write(user.getAccounts().size() + "\n");
-                for (Account account : user.getAccounts()) {
-                    writeFile.write(account.getName() + "\n");
-                    writeFile.write(account.getSocialMediaType() + "\n");
-                    writeFile.write(account.getUserCodes().size() + "\n");
-                    for (String code : account.getUserCodes()) {
-                        writeFile.write(code + "\n");
-                    }
+                if (writeObject != null) {
+                    writeObject.close();
                 }
-
-                writeFile.close();
-                out.close();
-
-                file = new File(userSource);
-                out = new FileWriter(file, true);
-                writeFile = new BufferedWriter(out);
-
-                writeFile.write("\n" + String.join(",", userConfigurations));
-                writeFile.close();
-                out.close();
-            } catch (Exception e) {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     * Set the status of a user on if they're either logged in
-     * or logged out.
+     * Load configurations for all the users who have an
+     * account for this application.
      *
-     * @param status The new status, either logged in or logged out.
+     * @return A Map containing a key as the username and a list
+     * to store the configurations for a given user.
      */
-    private static void setLoginStatus(String status) {
-        RandomAccessFile raf = null;
+    @SuppressWarnings("unchecked")
+    private static Map<String, List<String>> loadConfigurations() {
+        FileInputStream in = null;
+        ObjectInputStream readObject = null;
         try {
-          raf = new RandomAccessFile(userSource, "rw");
-          String formatted = String.format("%-5s", status);
-          raf.write(formatted.getBytes(StandardCharsets.UTF_8));
+            in = new FileInputStream(configurationsSource);
+            readObject = new ObjectInputStream(in);
+            return (Map<String, List<String>>) readObject.readObject();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (raf != null) {
-                try {
-                    raf.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            try {
+                if (readObject != null) {
+                    readObject.close();
                 }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+        return null;
+    }
+
+    /**
+     * Load all the user objects for all the users that
+     * have an account for this application.
+     *
+     * @return A Map where the username is the key and
+     * the value is the corresponding User object for a given
+     * user.
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, User> loadUsers() {
+        FileInputStream in = null;
+        ObjectInputStream readObject = null;
+        try {
+            in = new FileInputStream(usersSource);
+            readObject = new ObjectInputStream(in);
+            return (Map<String, User>) readObject.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (readObject != null) {
+                    readObject.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Clear data for the currently logged-in user.
+     */
+    public static void clearUserData() {
+        user.clearAllAccounts();
+        serializeObject(usersSource, users);
     }
 }
