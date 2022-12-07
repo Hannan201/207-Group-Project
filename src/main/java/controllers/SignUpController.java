@@ -142,14 +142,14 @@ public class SignUpController implements Initializable {
 
 //        validator.createCheck()
 //                .withMethod(c -> {
-//                    if (Database.checkUsername(initialUsername)){
+//                    if (Database.checkUsername(initialUsername.getText())){
 //                        c.error("This account is already registered.");
 //                    }
 //                })
-//                .dependsOn("initialUsername", initialPassword.textProperty())
-//                .dependsOn("verifiedPassword", verifiedPassword.textProperty())
+//                .dependsOn("initialUsername", initialUsername.textProperty())
+//                .dependsOn("verifiedUsername", verifiedUsername.textProperty())
 //                .decorates(initialPassword)
-//                .decorates(verifiedPassword)
+//                .decorates(verifiedUsername)
 //                .immediate()
 //        ;
     }
