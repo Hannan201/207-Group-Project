@@ -52,15 +52,27 @@ public class AccountCell extends ListCell<Account> {
         }
     }
 
+    /**
+     * Creates an AccountCell which represents an account visually
+     * within the listView.
+     *
+     * @param item the account that is being passed in.
+     * @param empty
+     */
     @Override
     protected void updateItem(Account item, boolean empty) {
         super.updateItem(item, empty);
+
+        // deals with the case of the account being null or the boolean being empty
 
         if(empty || item == null) {
             setText(null);
             setContentDisplay(ContentDisplay.TEXT_ONLY);
         }
         else {
+
+            // checks if the account's platform is either Google, Discord, Shopify, or Github
+            // and if so, adds a custom icon to the account
 
             if (Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
                 String path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
@@ -70,6 +82,10 @@ public class AccountCell extends ListCell<Account> {
                 logo.setFitHeight(50);
                 cell.getChildren();
                 HBox.setHgrow(cell, Priority.NEVER);
+
+            // adds a default logo for the account if the it is not Discord, Google,
+            // Github, or Shopify
+
             } else if (! Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
                 String path = Account.class.getClassLoader().getResource("images/icons8-app-100.png").toExternalForm();;
                 Image image = new Image(path);
@@ -79,13 +95,17 @@ public class AccountCell extends ListCell<Account> {
                 cell.getChildren();
                 HBox.setHgrow(cell, Priority.NEVER);
             }
-            setWrapText(true);
+            setWrapText(true); // wraps the text in the ListCell to avoid long text
 
             platformName.setText(item.getSocialMediaType());
-            platformName.setMaxWidth(200); // removes the horizontal scroll bar issue, should be added to username too
+            platformName.setMaxWidth(200); // limits the amount of space that a username can take in the AccountCell
             username.setText(item.getName());
+            platformName.setMaxWidth(200); // limits the amount of space that a platform can take in the AccountCell
             HBox.setHgrow(textbox, Priority.ALWAYS);
             cell.setSpacing(10);
+
+            // If the AccountCell is double clicked, then this handle method will transition
+            // the view from the AccountsView to the CodeView
 
             setOnMouseClicked(mouseClickedEvent -> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
@@ -99,7 +119,7 @@ public class AccountCell extends ListCell<Account> {
             setText(null);
             setGraphic(cell);
 
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            setContentDisplay(ContentDisplay.GRAPHIC_ONLY); // displays the AccountCell accordingly
         }
     }
 }

@@ -113,6 +113,12 @@ public class CreateAccountController implements Initializable{
         ;
     }
 
+    /**
+     * A handle method which sets the text of the platform textField
+     * if the github toggle button is pressed.
+     *
+     * @param e
+     */
     public void handleGithub(ActionEvent e) {
         if (platform.isEditable()) {
             platform.setText("Github");
@@ -124,6 +130,12 @@ public class CreateAccountController implements Initializable{
         }
     }
 
+    /**
+     * A handle method which sets the text of the platform textField
+     * if the google toggle button is pressed.
+     *
+     * @param e
+     */
     public void handleGoogle(ActionEvent e) {
         if (platform.isEditable()) {
             platform.setText("Google");
@@ -135,6 +147,12 @@ public class CreateAccountController implements Initializable{
         }
     }
 
+    /**
+     * A handle method which sets the text of the platform textField
+     * if the shopify toggle button is pressed.
+     *
+     * @param e
+     */
     public void handleShopify(ActionEvent e) {
         if (platform.isEditable()) {
             platform.setText("Shopify");
@@ -146,6 +164,12 @@ public class CreateAccountController implements Initializable{
         }
     }
 
+    /**
+     * A handle method which sets the text of the platform textField
+     * if the discord toggle button is pressed.
+     *
+     * @param e
+     */
     public void handleDiscord(ActionEvent e) {
         if (platform.isEditable()) {
             platform.setText("Discord");
