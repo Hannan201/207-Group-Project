@@ -199,4 +199,24 @@ public class SaveAndLoadDataTests {
         Database.logUserOut();
     }
 
+    @Test
+    void saveUserDataWhenNotLoggedOut() {
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
+        Database.authenticateUser("Hannan", "12345");
+        User user = Database.getUser();
+        assertNotNull(user);
+        Database.saveUserData();
+    }
+
+    @Test
+    void loadUserDataWhenNotLoggedOut() {
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
+        assertTrue(Database.getLoginStatus());
+        User user = Database.getUser();
+        assertNotNull(user);
+        Database.logUserOut();
+    }
+
 }

@@ -1,12 +1,9 @@
 package user;
 
 import behaviors.interfaces.ReadCodeBehavior;
-import javafx.scene.image.ImageView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

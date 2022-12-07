@@ -185,6 +185,7 @@ public class Database {
         loggedIn = configurations.get(0).equals(result);
         if (loggedIn) {
             user = users.get(username.toLowerCase());
+            setLoginStatus("true");
         } else {
             user = null;
         }
