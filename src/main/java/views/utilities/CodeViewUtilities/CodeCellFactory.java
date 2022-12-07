@@ -16,7 +16,7 @@ public class CodeCellFactory extends ListCell<CodeCell> {
 
     private Parent graphic;
 
-    ListView<CodeCell> TestListView;
+    ListView<CodeCell> CodeListView;
 
     private final CodeCellController cellController;
 
@@ -25,7 +25,7 @@ public class CodeCellFactory extends ListCell<CodeCell> {
         // Each cell only laods the FXML file once to speed up runtime
         loader = new FXMLLoader(getClass().getClassLoader().getResource("view/CodeViewFXML/CodeCell.fxml"));
 
-        TestListView = parentListView;
+        CodeListView = parentListView;
 
         try {
             graphic = loader.load();
@@ -46,7 +46,7 @@ public class CodeCellFactory extends ListCell<CodeCell> {
         } else{
 
             // pull data from the cell and apply it to the UI
-            cellController.setCodeCell(codecell, this, TestListView);
+            cellController.setCodeCell(codecell, this, CodeListView);
             setGraphic(graphic);
         }
     }
