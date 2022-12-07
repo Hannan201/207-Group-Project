@@ -1,0 +1,33 @@
+#box{
+    -fx-background-color: black;
+}
+
+.label{
+    -fx-text-fill: white;
+    -fx-font-family: "Montserrat";
+}
+
+.button{
+    -fx-font-size: 15;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #ff7600;
+    -fx-border-color: #ff7600;
+    -fx-background-color: transparent;
+}
+
+.button:hover {
+    -fx-text-fill: #00ffff;
+    -fx-border-color: #00ffff;
+    -fx-background-color: transparent;
+}
+
+.text-field{
+    -fx-background-color: transparent;
+    -fx-border-color: #ff7600;
+    -fx-text-fill: white;
+
+}
+
+.text-field:focused{
+    -fx-border-color: #00ffff;
+}

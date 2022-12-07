@@ -12,15 +12,11 @@ import javafx.scene.control.TextField;
 
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import net.synedra.validatorfx.Check;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
-import user.Account;
-import user.Database;
 import views.AccountView;
 import views.HomePageView;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 

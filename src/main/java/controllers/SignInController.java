@@ -1,15 +1,26 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import views.AccountView;
+import views.HomePageView;
 
 /**
  * A conroller for the Sign-in UI
  */
 public class SignInController {
+    /**
+     * Background of the scene
+     */
+    @FXML
+    VBox background;
     /**
      * Title of the scene
      */
@@ -52,7 +63,9 @@ public class SignInController {
      * textfields
      */
     public void signIn() {
-        // TODO this should trigger the sign in functionality
+        signInButton.setOnAction(event -> {
+            //TODO this should trigger the sign in functionality
+        });
     }
 
 

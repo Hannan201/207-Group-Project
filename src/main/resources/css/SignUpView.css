@@ -1,0 +1,14 @@
+.text-field{
+    -fx-background-color: #d9d9d9;
+}
+
+.label{
+    -fx-font-family: "Montserrat";
+}
+
+.button{
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+

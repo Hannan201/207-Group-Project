@@ -1,18 +1,16 @@
 package controllers;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import net.synedra.validatorfx.TooltipWrapper;
-import net.synedra.validatorfx.ValidationMessage;
 import net.synedra.validatorfx.Validator;
 import user.Account;
 import views.AccountView;
@@ -20,31 +18,6 @@ import views.AddAccountView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-import javafx.application.Application;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import net.synedra.validatorfx.Check;
-import net.synedra.validatorfx.Decoration;
-import net.synedra.validatorfx.DefaultDecoration;
-import net.synedra.validatorfx.TooltipWrapper;
-import net.synedra.validatorfx.ValidationMessage;
-import net.synedra.validatorfx.Validator;
 
 public class CreateAccountController implements Initializable{
 
@@ -77,7 +50,7 @@ public class CreateAccountController implements Initializable{
         createAccount = new Button("Create Account");
         createAccount.setContentDisplay(ContentDisplay.CENTER);
         createAccount.setPrefHeight(32);
-        createAccount.setPrefWidth(135);
+        createAccount.setPrefWidth(155);
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,

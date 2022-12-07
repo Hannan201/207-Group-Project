@@ -1,0 +1,127 @@
+#box {
+    -fx-background-color: black;
+}
+
+#title {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 25;
+    -fx-text-fill: white;
+}
+
+.list-view {
+    -fx-background-color: #2c2c2c;
+    -fx-font-family: "Montserrat";
+}
+
+#platformName {
+    -fx-font-size: 15;
+}
+
+#default {
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+}
+
+.list-cell:selected .text{
+    -fx-fill: white;
+}
+
+.list-cell:hover .text{
+    -fx-fill: white;
+}
+
+.list-cell:even{
+    -fx-background-color: #ff7100;
+}
+
+.list-cell:odd{
+    -fx-background-color: #00ffff;
+}
+
+.list-cell:selected{
+    -fx-background-color: blue;
+
+}
+
+.list-cell:hover{
+    -fx-background-color: blue;
+}
+
+.button{
+    -fx-font-size: 13;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #ff7600;
+    -fx-border-color: #ff7600;
+    -fx-background-color: transparent;
+}
+
+.button:hover {
+    -fx-text-fill: #00ffff;
+    -fx-border-color: #00ffff;
+    -fx-background-color: transparent;
+}
+
+.text-field{
+    -fx-background-color: transparent;
+    -fx-border-color: #ff7600;
+    -fx-text-fill: white;
+}
+
+.text-field:focused{
+    -fx-border-color: #00ffff;
+}
+
+#logout{
+    -fx-background-image: url('/images/hc-logout.png');
+    -fx-border-color: transparent;
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#logout:hover{
+    -fx-background-image: url('/images/hc-logout-onselect.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#settings{
+    -fx-background-image: url('/images/hc-settings.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#settings:hover{
+    -fx-background-image: url('/images/hc-settings-onselect.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back{
+    -fx-background-image: url('/images/hc-back.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back:hover{
+    -fx-background-image: url('/images/hc-back-onselect.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+

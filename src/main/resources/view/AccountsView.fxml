@@ -10,23 +10,27 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AccountViewController">
+<BorderPane fx:id="box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AccountViewController">
    <center>
       <HBox prefHeight="620.0" prefWidth="375.0" BorderPane.alignment="CENTER">
          <children>
             <VBox prefHeight="450.0" prefWidth="399.0">
                <children>
-                  <TextField prefHeight="32.0" prefWidth="383.0" />
+                  <TextField prefHeight="32.0" prefWidth="383.0" promptText="Search for your username..." focusTraversable="false"/>
                   <Region prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0" />
+                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0">
+                     <placeholder>
+                        <Label fx:id="default" text="Please add an account!" />
+                     </placeholder>
+                  </ListView>
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="603.0" prefWidth="134.0" spacing="20.0">
+            <VBox alignment="CENTER" prefHeight="603.0" prefWidth="134.0" spacing="18.0">
                <children>
-                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="76.0" prefWidth="106.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
-                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="91.0" prefWidth="97.0" text="Add &#10;Account" textAlignment="CENTER" />
-                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="81.0" prefWidth="95.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
-                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="72.0" prefWidth="95.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="90.0" prefWidth="90.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="90.0" prefWidth="90.0" text="Add &#10;Account" textAlignment="CENTER" />
+                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="90.0" prefWidth="90.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="90.0" prefWidth="90.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets />
@@ -42,7 +46,7 @@
       </HBox>
    </center>
    <top>
-      <Label fx:id="title" alignment="TOP_CENTER" prefHeight="11.0" prefWidth="179.0" text="Accounts" BorderPane.alignment="BASELINE_CENTER" />
+      <Label fx:id="title" alignment="BOTTOM_CENTER" prefHeight="25.0" prefWidth="179.0" text="Accounts" BorderPane.alignment="BASELINE_CENTER" />
    </top>
    <padding>
       <Insets left="5.0" right="5.0" top="40.0" />
