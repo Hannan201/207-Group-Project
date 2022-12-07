@@ -8,12 +8,10 @@ import commands.managers.ThemeSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
-import javafx.stage.Stage;
 import org.controlsfx.control.HyperlinkLabel;
-import user.Database;
+import data.Database;
 import views.*;
 
 import java.awt.*;

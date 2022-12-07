@@ -1,12 +1,8 @@
-package user;
+package data;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+import user.User;
+
 import java.io.*;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.*;
 
 /**
@@ -48,8 +44,14 @@ public class Database {
     // username in this application.
     private static Map<String, User> users;
 
-    // Stores the current theme for logged in user.
-    private static String currentTheme;
+    // To save user data.
+    private static DataSaver saveUsers;
+
+    // To save user configurations.
+    private static DataSaver saveConfigurations;
+
+    // To hash passwords which the user enters.
+    private static PasswordHasher passwordHasher;
 
     /**
      * Sets the source to the serialized file for
@@ -57,20 +59,19 @@ public class Database {
      *
      * @param filePath Path to the file.
      */
+    @SuppressWarnings("unchecked")
     public static void setConfigurationsSource(String filePath) {
         if (!configurationsSourceSet) {
             configurationsSource = filePath;
+            DataLoader loadConfigurations = new DataLoader(filePath);
+            passwordHasher = new PasswordHasher();
             configurationsSourceSet = true;
 
             boolean result = makeSource(filePath);
             if (!result) {
-                userConfigurations = loadConfigurations();
+                userConfigurations = (Map<String, List<String>>) loadConfigurations.load();
 
-                if (userConfigurations != null && userConfigurations.get("").get(0).equals("true")) {
-                    loggedIn = true;
-                } else {
-                    loggedIn = false;
-                }
+                loggedIn = userConfigurations != null && userConfigurations.get("").get(0).equals("true");
 
             } else {
                 userConfigurations = new HashMap<>();
@@ -79,6 +80,8 @@ public class Database {
                 currentlyLoggedIn.add("");
                 userConfigurations.put("", currentlyLoggedIn);
             }
+
+            saveConfigurations = new DataSaver(filePath, userConfigurations);
         }
     }
 
@@ -88,25 +91,28 @@ public class Database {
      *
      * @param filePath Path to the file.
      */
+    @SuppressWarnings("unchecked")
     public static void setUsersSource(String filePath) {
         if (!usersSourceSet) {
             usersSource = filePath;
             usersSourceSet = true;
+            DataLoader loadUsers = new DataLoader(filePath);
 
             boolean result = makeSource(filePath);
 
             if (!result) {
-                users = loadUsers();
+                users = (Map<String, User>) loadUsers.load();
 
                 if (loggedIn) {
                     String previousUser = userConfigurations.get("").get(1);
                     user = users.get(previousUser);
-                    currentTheme = userConfigurations.get(previousUser.toLowerCase()).get(2);
                 }
 
             } else {
                 users = new HashMap<>();
             }
+
+            saveUsers = new DataSaver(filePath, users);
         }
     }
 
@@ -142,13 +148,11 @@ public class Database {
      */
     public static void registerUser(String username, String password) {
         if (usersSourceSet && configurationsSourceSet && !loggedIn) {
-            List<String> configurations = new ArrayList<>(3);
-            String salt = generateSalt();
-            String hashed = hashPassword(password, salt.getBytes());
-            currentTheme = "Light";
+            List<String> configurations = new ArrayList<>(2);
+            String salt = passwordHasher.generateSalt();
+            String hashed = passwordHasher.hashPassword(password, salt.getBytes());
             configurations.add(hashed);
             configurations.add(salt);
-            configurations.add(currentTheme);
             loggedIn = true;
             user = new User(username);
             setLoginStatus("true");
@@ -185,10 +189,10 @@ public class Database {
     /**
      * Get the preferred theme for the currently logged-in user.
      *
-     * @return The theme for this user.
+     * @return The theme for the user currently logged-in.
      */
     public static String getCurrentTheme() {
-        return currentTheme;
+        return user.getCurrentTheme();
     }
 
     /**
@@ -199,8 +203,7 @@ public class Database {
      *                 currently logged-in.
      */
     public static void setCurrentTheme(String newTheme) {
-        currentTheme = newTheme;
-        userConfigurations.get(user.getUsername().toLowerCase()).set(2, newTheme);
+        user.setCurrentTheme(newTheme);
     }
 
 
@@ -231,12 +234,10 @@ public class Database {
 
         List<String> configurations = userConfigurations.get(username.toLowerCase());
         String salt = configurations.get(1);
-        String result = hashPassword(password, salt.getBytes());
-        loggedIn = configurations.get(0).equals(result);
+        loggedIn = passwordHasher.verifyPassword(configurations.get(0), password, salt);
         if (loggedIn) {
             user = users.get(username.toLowerCase());
             setLoginStatus("true");
-            currentTheme = configurations.get(2);
         } else {
             user = null;
         }
@@ -256,44 +257,9 @@ public class Database {
         return null;
     }
 
-    /**
-     * Generate a salt which can be used for hashing algorithms.
-     *
-     * @return String version of the salt in Base 64
-     */
-    private static String generateSalt() {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
-    }
 
-    /**
-     * Hash a given password so that its secure if the file
-     * is compromised. For extra security purposes.
-     *
-     * @param s The password
-     * @param salt The salt being used to hash the password
-     * @return String version of the hashed password in Base 64
-     */
-    private static String hashPassword(String s, byte[] salt) {
-        KeySpec spec = new PBEKeySpec(s.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory;
-        try {
-            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
 
-        byte[] hash;
-        try {
-            hash = factory.generateSecret(spec).getEncoded();
-        } catch (InvalidKeySpecException e) {
-            return null;
-        }
 
-        return Base64.getEncoder().encodeToString(hash);
-    }
 
     /**
      * Log user out of this application.
@@ -309,102 +275,8 @@ public class Database {
      * Save user data for the currently logged-in user.
      */
     public static void saveUserData() {
-        serializeObject(configurationsSource, userConfigurations);
-        serializeObject(usersSource, users);
-    }
-
-    /**
-     * Serialize a given object to a file.
-     *
-     * @param source Path to file.
-     * @param o Object to be serialized.
-     */
-    private static void serializeObject(String source, Object o) {
-        FileOutputStream out = null;
-        ObjectOutputStream writeObject = null;
-        try {
-            out = new FileOutputStream(source);
-            writeObject = new ObjectOutputStream(out);
-            writeObject.writeObject(o);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (writeObject != null) {
-                    writeObject.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Load configurations for all the users who have an
-     * account for this application.
-     *
-     * @return A Map containing a key as the username and a list
-     * to store the configurations for a given user.
-     */
-    @SuppressWarnings("unchecked")
-    private static Map<String, List<String>> loadConfigurations() {
-        FileInputStream in = null;
-        ObjectInputStream readObject = null;
-        try {
-            in = new FileInputStream(configurationsSource);
-            readObject = new ObjectInputStream(in);
-            return (Map<String, List<String>>) readObject.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (readObject != null) {
-                    readObject.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Load all the user objects for all the users that
-     * have an account for this application.
-     *
-     * @return A Map where the username is the key and
-     * the value is the corresponding User object for a given
-     * user.
-     */
-    @SuppressWarnings("unchecked")
-    private static Map<String, User> loadUsers() {
-        FileInputStream in = null;
-        ObjectInputStream readObject = null;
-        try {
-            in = new FileInputStream(usersSource);
-            readObject = new ObjectInputStream(in);
-            return (Map<String, User>) readObject.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (readObject != null) {
-                    readObject.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+        saveUsers.save();
+        saveConfigurations.save();
     }
 
     /**
@@ -412,6 +284,6 @@ public class Database {
      */
     public static void clearUserData() {
         user.clearAllAccounts();
-        serializeObject(usersSource, users);
+        saveUsers.save();
     }
 }

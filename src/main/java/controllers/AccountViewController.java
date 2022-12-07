@@ -9,10 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import user.Account;
-import user.Database;
-import user.User;
+import data.Database;
 import views.*;
-import views.utilities.AccountCell;
 import views.utilities.AccountCellFactory;
 
 import java.net.URL;

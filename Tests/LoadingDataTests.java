@@ -1,15 +1,8 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import user.Account;
-import user.Database;
+import data.Database;
 import user.User;
 
-import javax.xml.crypto.Data;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
