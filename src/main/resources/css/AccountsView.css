@@ -9,11 +9,6 @@
     -fx-font-family: "Montserrat";
 }
 
-.list-view {
-    -fx-background-color: #ffffff;
-    -fx-font-family: "Montserrat";
-}
-
 #platformName {
     -fx-font-size: 15;
 }
@@ -59,6 +54,29 @@
     -fx-background-position: center;
 }
 
-.list-view {
-    -fx-selection-bar: #235480;
+.list-view{
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Montserrat";
 }
+
+.list-cell:hover .text{
+    -fx-fill: white;
+}
+
+.list-cell:selected .text{
+    -fx-fill: white;
+}
+
+.list-cell:hover{
+    -fx-background-color: #235480;
+}
+
+.list-cell:selected{
+    -fx-background-color: #235480;
+}
+
+
+
+
+
+
