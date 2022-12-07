@@ -1,5 +1,7 @@
 package controllers.CodeViewControllers;
 
+import behaviors.ManualInputReader;
+import behaviors.interfaces.ReadCodeBehavior;
 import code.readers.CodeReader;
 import code.readers.CodeReaderFactory;
 import javafx.event.ActionEvent;
@@ -10,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
 import data.Database;
+import user.Account;
 import user.User;
 import views.*;
 import views.interfaces.Reversible;
@@ -46,11 +49,16 @@ public class CodeViewController implements Initializable {
     @FXML
     private TextField addCodeInput;
 
+    private Account account;
+
+    private static List<String> SUPPORTED_PLATFORMS;
+
     // TODO uncomment this line once the account can be referenced
     // private Account currAccount = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        SUPPORTED_PLATFORMS = new ArrayList<>(List.of("shopify", "discord", "google", "github"));
         codeListView.setCellFactory(test -> {
             try {
                 return new CodeCellFactory(codeListView);
@@ -68,18 +76,7 @@ public class CodeViewController implements Initializable {
      */
     public void importCodeOnAction() {
         importCodes.setOnAction(event -> {
-            // TODO uncomment this lone once the account can be referenced.
-            // if (curAccount == null ) {;}
-            // else {}
-
-            // 1) retrieve the corresponding account type
-            // TODO for testing purposes, assume the SocialMediaType is Shopify
-
-            String AccountType = "shopify";
-
-            // TODO uncomment this line once the account can be referenced:
-            //  String AccountType = currAccount.getSocialMediaType();
-
+            String AccountType = account.getSocialMediaType().toLowerCase();
             // 2) select a reader based on the corresponding account type
             CodeReader reader = CodeReaderFactory.makeCodeReader(AccountType);
 
@@ -88,18 +85,21 @@ public class CodeViewController implements Initializable {
             File pathway = chooser.showOpenDialog(CodeView.getInstance().getRoot().getScene().getWindow());
 
             // 4) get the path to the specified file
-            //TODO for testing purposes, assume the path refers to a Shopify codes file.
             if (!(pathway == null)) {
-                String filepath = pathway.getPath();
+                if (reader != null) {
+                    String filepath = pathway.getPath();
 
-                // 5) Read the file using the corresponding reader
+                    // 5) Read the file using the corresponding reader
+                    reader.setFilePath(filepath);
+                    account.setReadCodeBehavior((ReadCodeBehavior) reader);
+                    account.addCodes();
+                    List<String> importedCodes = reader.extractCodes(filepath);
 
-                List<String> importedCodes = reader.extractCodes(filepath);
-
-                // 6) Take the List<Strings> that is returned and turn them into CodeCell Objects, which can
-                //    be added into the list view.
-                for (String code : importedCodes) {
-                    codeListView.getItems().add(new CodeCell(code));
+                    // 6) Take the List<Strings> that is returned and turn them into CodeCell Objects, which can
+                    //    be added into the list view.
+                    for (String code : importedCodes) {
+                        codeListView.getItems().add(new CodeCell(code));
+                    }
                 }
             }
         });
@@ -121,9 +121,14 @@ public class CodeViewController implements Initializable {
      */
     public void addCodeOnAction() {
         addCode.setOnAction(event -> {
+            // Don't want to add empty account.
             String newItem = addCodeInput.getText();
-            codeListView.getItems().add(new CodeCell(newItem));
-            addCodeInput.setText("");
+            if (!newItem.equals("")) {
+                account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
+                account.addCodes();
+                codeListView.getItems().add(new CodeCell(newItem));
+                addCodeInput.setText("");
+            }
         });
     }
 
@@ -136,6 +141,8 @@ public class CodeViewController implements Initializable {
             // Don't want to add empty codes.
             String newItem = addCodeInput.getText();
             if (event.getCode() == KeyCode.ENTER && !newItem.equals("")) {
+                account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
+                account.addCodes();
                 codeListView.getItems().add(new CodeCell(newItem));
                 addCodeInput.setText("");
             }
@@ -154,7 +161,13 @@ public class CodeViewController implements Initializable {
         codeListView.getItems().clear();
         User user = Database.getUser();
         if (user != null) {
-            List<String> codes = user.getAccountByName(name).getUserCodes();
+            this.account = user.getAccountByName(name);
+
+            // Only allow user to click the import codes button
+            // if their account is supported.
+            importCodes.setDisable(!SUPPORTED_PLATFORMS.contains(account.getSocialMediaType().toLowerCase()));
+
+            List<String> codes = account.getUserCodes();
             for (String s : codes) {
                 codeListView.getItems().add(new CodeCell(s));
             }

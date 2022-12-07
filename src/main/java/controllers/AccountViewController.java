@@ -86,6 +86,9 @@ public class AccountViewController implements Initializable {
      */
     public void addAccount(Account account) {
         accounts.getItems().add(account);
+        if (Database.getUser() != null) {
+            Database.getUser().addNewAccount(account);
+        }
     }
 
     /**

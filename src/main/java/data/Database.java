@@ -227,7 +227,9 @@ public class Database {
      * @return True if the user was logged-in, false otherwise.
      */
     public static boolean authenticateUser(String username, String password) {
-        if (!checkUsername(username.toLowerCase())) {
+        if (loggedIn) {
+            return false;
+        } else if (!checkUsername(username)) {
             loggedIn = false;
             return false;
         }

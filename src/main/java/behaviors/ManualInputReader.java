@@ -2,7 +2,7 @@ package behaviors;
 
 import behaviors.interfaces.ReadCodeBehavior;
 
-import java.awt.*;
+import javafx.scene.control.TextField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class ManualInputReader implements ReadCodeBehavior {
 
     // To store what the user types in.
-    private TextField code;
+    private final TextField code;
 
     /**
      * Make a new manual input reader which is linked via the

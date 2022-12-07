@@ -59,6 +59,10 @@ public class PasswordHasher {
      * @return String version of the hashed password in Base 64
      */
     public String hashPassword(String s, byte[] salt) {
+        if (salt.length < 16) {
+            return "";
+        }
+
         // Object to make the key needed for the hashing algorithm.
         KeySpec key = new PBEKeySpec(s.toCharArray(), salt, NUMBER_OF_ITERATIONS, KEY_LENGTH);
 

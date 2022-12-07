@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import org.controlsfx.control.HyperlinkLabel;
 import data.Database;
+import user.User;
 import views.*;
 import views.interfaces.Reversible;
 
@@ -164,6 +165,20 @@ public class SettingsViewController implements Initializable {
                 String back_arrow = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
                 Desktop.getDesktop().browse(new URL(back_arrow).toURI());
             }
+        }
+    }
+
+    /**
+     * Delete all accounts for this user.
+     *
+     * @param e ActionEvent that triggered this
+     *          handle method.
+     */
+    public void handleDeleteAccounts(ActionEvent e) {
+        User user = Database.getUser();
+        if (user != null) {
+            user.clearAllAccounts();
+            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
         }
     }
 }

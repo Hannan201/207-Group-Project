@@ -27,75 +27,74 @@ import java.util.ResourceBundle;
  */
 public class SignInController implements Initializable {
 
-    private Validator validator = new Validator();
+    private final Validator validator = new Validator();
     @FXML
-    HBox box;
+    private HBox box;
     /**
      * Background of the scene
      */
     @FXML
-    VBox background;
+    private VBox background;
     /**
      * Title of the scene
      */
     @FXML
-    Label Title;
+    private Label Title;
 
     /**
      * Username label
      */
     @FXML
-    Label Username;
+    private Label Username;
 
     /**
      * Textfield for the user to type their username
      */
     @FXML
-    TextField unameInput;
+    private TextField unameInput;
 
     /**
      * Password label
      */
     @FXML
-    Label Password;
+    private Label Password;
 
     /**
      * Textfield for the user to type their password
      */
     @FXML
-    TextField passInput;
+    private TextField passInput;
 
     /**
      * Sign in button that triggers the sign in event
      */
     @FXML
-    Button signInButton;
+    private Button signInButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        signInButton = new Button("Sign In");
+        signInButton.setPrefHeight(25);
+        signInButton.setPrefWidth(100);
+        signInButton.setAlignment(Pos.CENTER);
 
-    signInButton = new Button("Sign In");
-    signInButton.setPrefHeight(25);
-    signInButton.setPrefWidth(100);
-    signInButton.setAlignment(Pos.CENTER);
-
-    TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
-            signInButton,
-            validator.containsErrorsProperty(),
-            Bindings.concat("Cannot sign in:\n", validator.createStringBinding()));
-    signInButton.setOnAction(this::signInOnAction);
+        TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
+                signInButton,
+                validator.containsErrorsProperty(),
+                Bindings.concat("Cannot sign in:\n", validator.createStringBinding()));
+        signInButton.setOnAction(this::signInOnAction);
 
 
-    // Handles the event where the enter key is pressed while the
-    // unameInput TextField is selected
-    unameInput.setOnKeyPressed(e -> {
-        if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
-            transferData();
-            View.closeWindow(e);
-            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-            clearFields();
-        }
-    });
+        // Handles the event where the enter key is pressed while the
+        // unameInput TextField is selected
+        unameInput.setOnKeyPressed(e -> {
+            if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
+                transferData();
+                View.closeWindow(e);
+                View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+                clearFields();
+            }
+        });
 
 
     // Handles the event where the enter key is pressed while the

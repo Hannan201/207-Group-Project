@@ -23,7 +23,7 @@
       </ToggleButton>
       <ToggleButton fx:id="darkModeButton" layoutX="197.0" layoutY="89.0" mnemonicParsing="false" onAction="#switchToLightMode" prefHeight="66.0" prefWidth="149.0" text="Dark Mode" toggleGroup="$Buttons" />
       <ToggleButton fx:id="lightModeButton" layoutX="346.0" layoutY="89.0" mnemonicParsing="false" onAction="#switchToLightMode" prefHeight="66.0" prefWidth="141.0" text="Light" toggleGroup="$Buttons" />
-      <Button fx:id="deleteAccount" layoutX="56.0" layoutY="201.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Delete Account" />
+      <Button fx:id="deleteAccount" layoutX="56.0" layoutY="201.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Delete Account" onAction="#handleDeleteAccounts"/>
       <Button fx:id="exportData" layoutX="372.0" layoutY="201.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Export Data" />
       <HBox alignment="CENTER" layoutX="5.0" layoutY="533.0" prefHeight="79.0" prefWidth="530.0" spacing="135.0">
          <children>

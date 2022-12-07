@@ -23,11 +23,11 @@ public class Account implements java.io.Serializable {
 
     // List to store all the backup codes for this
     // specific account.
-    private List<String> userCodes;
+    private final List<String> userCodes;
 
     // The behavior to determine how the user
     // would like ot enter their codes.
-    private ReadCodeBehavior readCodeBehavior;
+    private transient ReadCodeBehavior readCodeBehavior;
 
     private static Map<String, String> icons;
 
