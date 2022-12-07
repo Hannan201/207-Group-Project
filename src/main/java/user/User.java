@@ -88,6 +88,20 @@ public class User implements java.io.Serializable {
     }
 
     /**
+     * Remove an account with a specific name.
+     *
+     * @param name Name of the account.
+     */
+    public void removeAccountByName(String name) {
+        for (Account account : this.accounts) {
+            if (account.getName().equals(name)) {
+                accounts.remove(account);
+                return;
+            }
+        }
+    }
+
+    /**
      * Clear all the backup codes for this user.
      */
     public void clearAllAccounts() {

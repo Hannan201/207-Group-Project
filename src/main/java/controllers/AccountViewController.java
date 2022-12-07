@@ -136,7 +136,9 @@ public class AccountViewController implements Initializable {
         accounts.getItems().removeAll(selectedItemsCopy);
         User user = Database.getUser();
         if (user != null) {
-            user.clearAllAccounts();
+            for (Account account : selectedItemsCopy) {
+                user.removeAccountByName(account.getName());
+            }
         }
     }
 }
