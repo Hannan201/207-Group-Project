@@ -15,73 +15,25 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LoadingDataTests {
-    static String pathToUserFile = "Tests/userData.txt";
-    static String pathToAccountsFile = "Tests/accountData.txt";
+    String pathToUserFile = "Tests/users.ser";
 
-    static String header = "none .\n" + "username,password,salt,theme,pos";
+    String pathToConfigFile = "Tests/configurations.ser";
 
-    private static void restoreFiles() throws FileNotFoundException {
-        PrintWriter w = new PrintWriter(pathToAccountsFile);
-        w.write("");
-        w.close();
-
-        w = new PrintWriter(pathToUserFile);
-        w.close();
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(pathToUserFile));
-            writer.write(header);
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        restoreFiles();
-        //System.out.println("\n".getBytes(StandardCharsets.UTF_8).length);
-        RandomAccessFile raf = null;
-        File file;
-        FileReader in;
-        BufferedReader readFile;
-        String line;
-        try {
-            file = new File(pathToAccountsFile);
-            raf = new RandomAccessFile(pathToUserFile, "r");
-            raf.seek(7);
-            in = new FileReader(raf.getFD());
-            readFile = new BufferedReader(in);
-
-            while ((line = readFile.readLine()) != null) {
-                System.out.println(line);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (raf != null) {
-                    raf.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     @Test
     void userLoginLoaded() {
-        Database.setUserSource(pathToUserFile);
-        Database.setAccountsSource(pathToAccountsFile);
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
         assertTrue(Database.checkUsername("haNNan"));
         assertTrue(Database.authenticateUser("Hannan", "12345"));
         assertTrue(Database.getLoginStatus());
+        Database.logUserOut();
     }
 
     @Test
     void userAccountLoaded() {
-        Database.setUserSource(pathToUserFile);
-        Database.setAccountsSource(pathToAccountsFile);
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
         Database.authenticateUser("Hannan", "12345");
         User user = Database.getUser();
         assertNotNull(user);

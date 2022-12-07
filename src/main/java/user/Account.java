@@ -3,6 +3,7 @@ package user;
 import behaviors.interfaces.ReadCodeBehavior;
 import javafx.scene.image.ImageView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Map;
  * related to a specific social media account.
  */
 
-public class Account {
+public class Account implements java.io.Serializable {
 
     // Social media type for this account.
     private String socialMediaType;
@@ -128,4 +129,5 @@ public class Account {
     }
 
     public static Map<String, String> getIcons() {return icons;}
+
 }

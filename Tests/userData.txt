@@ -1,5 +1,0 @@
-false.
-username,password,salt,theme,pos
-Hannan,LcKb/GHlp/5rDH+BH+Kp8A==,aIoGARMoc2RMR3Otsq4c3Q==,Light        ,0
-Test,Nek9Ex+E2Lj0LWCRT0oVUQ==,OoXihD8uOS97caFPDZH4Fw==,Light        ,35
-Test,TRuF1N+fl/QnLVlmEJai2w==,YrbKEa5/riJDjTV71uVGuQ==,Light        ,599

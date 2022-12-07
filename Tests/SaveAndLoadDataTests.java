@@ -16,51 +16,71 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SaveAndLoadDataTests {
 
-    static String pathToUserFile = "Tests/userData.txt";
-    static String pathToAccountsFile = "Tests/accountData.txt";
+    String pathToUserFile = "Tests/users.ser";
 
-    static String header = "none .\n" + "username,password,salt,theme,pos";
-
-    private static void restoreFiles() throws FileNotFoundException {
-        PrintWriter w = new PrintWriter(pathToAccountsFile);
-        w.write("");
-        w.close();
-
-        w = new PrintWriter(pathToUserFile);
-        w.close();
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(pathToUserFile));
-            writer.write(header);
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    String pathToConfigFile = "Tests/configurations.ser";
 
     @Test
     void saveDataWithExistingUser() {
-        Database.setUserSource(pathToUserFile);
-        Database.setAccountsSource(pathToAccountsFile);
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
         Database.registerUser("Test", "hellobro");
         User user = Database.getUser();
         assertNotNull(user);
 
         Account a1 = new Account("One", "Discord");
-        for (int i = 0; i < 16; i++) {
-            a1.addCodes(TempData.generateCodeAlphaNumeric(4, "-"));
-        }
+        a1.addCodes("yuyk-775x");
+        a1.addCodes("5n6v-xgbo");
+        a1.addCodes("aqtl-zszl");
+        a1.addCodes("pf6m-lbsi");
+        a1.addCodes("8mhm-kawb");
+        a1.addCodes("9u15-hd56");
+        a1.addCodes("5nqz-84l3");
+        a1.addCodes("7bfa-icwn");
+        a1.addCodes("jzug-ys5l");
+        a1.addCodes("amvu-nius");
+        a1.addCodes("s1ow-8ssl");
+        a1.addCodes("mgv2-vqsj");
+        a1.addCodes("koeo-hzeg");
+        a1.addCodes("e7dh-gqlt");
+        a1.addCodes("mk3o-7njl");
+        a1.addCodes("osyv-2vjq");
 
         Account a2 = new Account("Two", "GitHub");
-        for (int i = 0; i < 16; i++) {
-            a2.addCodes(TempData.generateCodeAlphaNumeric(5, "-"));
-        }
+        a2.addCodes("8a4rv-hi4qt");
+        a2.addCodes("cv13u-1e4xp");
+        a2.addCodes("zq44v-rderj");
+        a2.addCodes("gg7xd-amtjq");
+        a2.addCodes("jgz5t-h79hw");
+        a2.addCodes("3bhws-wufnj");
+        a2.addCodes("ik3uo-ctgaj");
+        a2.addCodes("o8vnj-29b2j");
+        a2.addCodes("mfovl-oym5b");
+        a2.addCodes("isfxx-6v29n");
+        a2.addCodes("scxxr-rjdg6");
+        a2.addCodes("62mec-8kjw5");
+        a2.addCodes("ddu4v-2xruj");
+        a2.addCodes("8ceb8-h1bek");
+        a2.addCodes("wjtrm-nkpwb");
+        a2.addCodes("2k3uw-imada");
 
         Account a3 = new Account("Three", "Google");
-        for (int i = 0; i < 16; i++) {
-            a3.addCodes(TempData.generateCodeNumbers(4, " "));
-        }
+        a3.addCodes("7294 8105");
+        a3.addCodes("4328 0505");
+        a3.addCodes("8829 8563");
+        a3.addCodes("5349 1328");
+        a3.addCodes("5804 5408");
+        a3.addCodes("3772 5051");
+        a3.addCodes("0084 5571");
+        a3.addCodes("9576 0658");
+        a3.addCodes("4231 7248");
+        a3.addCodes("8203 6638");
+        a3.addCodes("9286 1762");
+        a3.addCodes("6762 0652");
+        a3.addCodes("0886 4325");
+        a3.addCodes("0857 3901");
+        a3.addCodes("0609 7737");
+        a3.addCodes("1578 1639");
 
         user.addNewAccount(a1);
         user.addNewAccount(a2);
@@ -70,8 +90,8 @@ public class SaveAndLoadDataTests {
 
     @Test
     void loadDataWithExistingUser() {
-        Database.setUserSource(pathToUserFile);
-        Database.setAccountsSource(pathToAccountsFile);
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
         Database.authenticateUser("Test", "hellobro");
         User user = Database.getUser();
         assertNotNull(user);
@@ -152,6 +172,31 @@ public class SaveAndLoadDataTests {
 
         actualCodes = account.getUserCodes().toArray(new String[0]);
         assertArrayEquals(actualCodes, codes);
+        Database.logUserOut();
+    }
+
+    @Test
+    void saveDataWhenUserMakesChanges() {
+        Database.setConfigurationsSource(pathToConfigFile);
+        Database.setUsersSource(pathToUserFile);
+        Database.authenticateUser("Hannan", "12345");
+        User user = Database.getUser();
+        assertNotNull(user);
+        Account account = user.getAccountByName("Joe");
+        int before = account.getUserCodes().size();
+
+        for (int i = 0; i < 5; i++) {
+            account.addCodes("EEEEEEEEEEE");
+        }
+
+        Database.logUserOut();
+
+        Database.authenticateUser("Hannan", "12345");
+        user = Database.getUser();
+        assertNotNull(user);
+        account = user.getAccountByName("Joe");
+        assertEquals(account.getUserCodes().size(), before + 5);
+        Database.logUserOut();
     }
 
 }

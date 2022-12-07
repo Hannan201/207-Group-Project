@@ -8,7 +8,7 @@ import java.util.List;
  * related to a user of this application.
  */
 
-public class User {
+public class User implements java.io.Serializable {
 
     // The user's username.
     private String username;
@@ -54,6 +54,15 @@ public class User {
      */
     public List<Account> getAccounts() {
         return this.accounts;
+    }
+
+    public Account getAccountByName(String name) {
+        for (Account account : this.accounts) {
+            if (account.getName().equals(name)) {
+                return account;
+            }
+        }
+        return null;
     }
 
     /**
