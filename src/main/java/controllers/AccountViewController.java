@@ -13,6 +13,7 @@ import user.Account;
 import user.Database;
 import user.User;
 import views.*;
+import views.utilities.AccountCell;
 import views.utilities.AccountCellFactory;
 
 import java.net.URL;
@@ -116,7 +117,7 @@ public class AccountViewController implements Initializable {
     public void handleAddAccount() {
 
         Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
+
         if (AddAccountView.getInstance().getRoot().getScene() == null) {
             Scene scene = new Scene(AddAccountView.getInstance().getRoot());
             scene.getStylesheets().add(AddAccountView.getInstance().getCurrentThemePath());
@@ -138,9 +139,23 @@ public class AccountViewController implements Initializable {
      */
     public void addAccount(Account account) {
         accounts.getItems().add(account);
+    }
 
-        // Will be needed for the final product.
-//        user.addNewAccount(account);
+    /**
+     * Checks if there exists a duplicate account in the
+     * accounts ListView.
+     *
+     * @param compte
+     * @return if there exists a duplicate account in the list
+     */
+    public boolean existsDuplicate(Account compte) {
+
+        for (Account account : accounts.getItems()) {
+            if (compte.equals(account)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -156,7 +171,7 @@ public class AccountViewController implements Initializable {
      */
     public void handleDeleteAccount() {
 
-        // Credit to https://stackoverflow.com/questions/24206854/javafx-clearing-the-listview for the code below.
+        // stole this from StackOverflow, need to give appropriate credits
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);

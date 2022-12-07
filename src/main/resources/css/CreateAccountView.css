@@ -1,8 +1,3 @@
-#title {
-    -fx-font-family: "Montserrat";
-    -fx-font-size: 20;
-}
-
 #github{
     -fx-background-image: url('/images/icons8-github-100.png');
     -fx-background-size: 50px;

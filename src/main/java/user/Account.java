@@ -3,11 +3,8 @@ package user;
 import behaviors.interfaces.ReadCodeBehavior;
 import javafx.scene.image.ImageView;
 
+import java.util.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is responsible for storing data
@@ -53,7 +50,7 @@ public class Account {
     }
 
     /**
-     * Creat a new Social Media Account with
+     * Create a new Social Media Account with
      * a name and of a specific social media
      * type.
      *
@@ -64,6 +61,31 @@ public class Account {
         this.name = name;
         this.socialMediaType = type;
         this.userCodes = new ArrayList<>();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSocialMediaType(), getName());
+    }
+
+    /**
+     * Overrides the equals method which compares
+     * accounts based on their name and socialMediaType to see if they are equal.
+     *
+     * @return if two accounts are the same.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Account)) {
+            return false;
+        }
+        Account comparison = (Account) o;
+
+        return this.name.equalsIgnoreCase(comparison.getName()) &&
+                this.socialMediaType.equalsIgnoreCase(comparison.getSocialMediaType());
     }
 
     /**

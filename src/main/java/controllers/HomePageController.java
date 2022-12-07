@@ -25,8 +25,8 @@ public class HomePageController {
         // you can just do this
 //        loadNewWindow(SignInView.getInstance());
 
-        // open pop up
-        System.out.println("Signed in.");
+        loadNewWindow(SignInView.getInstance());
+        System.out.println("Signed up.");
     }
 
     public void handleSignUp(ActionEvent e) {

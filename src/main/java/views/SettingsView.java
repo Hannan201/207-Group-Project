@@ -76,116 +76,13 @@ public class SettingsView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-        // make ToggleGroup and ToggleButton
-        ToggleButton tb1 = new ToggleButton("HighContrast");
-        ToggleButton tb2 = new ToggleButton("Light");
-        ToggleButton tb3 = new ToggleButton("Dark");
-        ToggleGroup group = new ToggleGroup();
-        tb1.setToggleGroup(group);
-        tb2.setToggleGroup(group);
-        tb2.setSelected(true);
-        tb3.setToggleGroup(group);
+        this.names = new String[]{"SettingsView.css",
+                "Name of CSS file for dark mode.",
+                "Name of CSS file for high contrast mode."};
 
+        this.loadStylesheets();
 
-        // bit implmentation of changing theme
-
-        tb1.setOnAction(e -> {
-            this.switcher.setCommand(this.highContrastModeCommand);
-            this.switcher.switchTheme();
-        });
-
-        tb2.setOnAction(e -> {
-            this.switcher.setCommand(this.lightModeCommand);
-            this.switcher.switchTheme();
-        });
-
-        tb3. setOnAction(e -> {
-            this.switcher.setCommand(this.darkModeCommand);
-            this.switcher.switchTheme();
-        });
-
-
-        // change Button size
-        tb1.setMaxWidth(Double.MAX_VALUE);
-        tb2.setMaxWidth(Double.MAX_VALUE);
-        tb3.setMaxWidth(Double.MAX_VALUE);
-
-        tb1.setMaxHeight(20);
-        tb2.setMaxHeight(20);
-        tb3.setMaxHeight(20);
-
-        // create HBox
-        HBox hb = new HBox();
-        hb.getChildren().addAll(tb1, tb2, tb3);
-        hb.setAlignment(Pos.CENTER);
-        hb.setMaxWidth(Double.MAX_VALUE);
-        // create BoarderPane
-        BorderPane borderPane = new BorderPane();
-        borderPane.setPrefHeight(620);
-        borderPane.setPrefWidth(540);
-        borderPane.setCenter(hb);
-
-        // create label
-        Label heading = new Label("Setting");
-        heading.setMaxHeight(Double.MAX_VALUE);
-        heading.setMaxWidth(Double.MAX_VALUE);
-        heading.setAlignment(Pos.TOP_CENTER);
-        borderPane.setTop(heading);
-
-
-        // create second HBox
-        HBox hb2 = new HBox();
-        Button deleteAllDataButton = new Button("Delete All Data");
-        Button exportDataButton = new Button("Export Data");
-        hb2.getChildren().addAll(deleteAllDataButton, exportDataButton);
-
-        // set hb2 to be maximum size
-        hb2.setMaxWidth(Double.MAX_VALUE);
-        hb2.setMaxWidth(Double.MAX_VALUE);
-
-        // set one button to left. one button to right.
-        deleteAllDataButton.setAlignment(Pos.CENTER_LEFT);
-        exportDataButton.setAlignment(Pos.CENTER_RIGHT);
-        hb2.setAlignment(Pos.CENTER);
-        borderPane.setBottom(hb2);
-        this.layout = borderPane;
-        this.setRoot(layout);
-
-        // functionality of deleting codes and export data
-
-        deleteAllDataButton.setOnAction(e -> {
-            throw new UnsupportedOperationException();
-        });
-
-        exportDataButton.setOnAction(e -> {
-            throw new UnsupportedOperationException();
-        });
-
-
-    }
-
-    /**
-     * Switch this settings view to light mode.
-     */
-    @Override
-    public void switchToLightMode() {
-
-    }
-
-    /**
-     * Switch this settings view to dark mode.
-     */
-    @Override
-    public void switchToDarkMode() {
-
-    }
-
-    /**
-     * Switch this settings view to high contrast mode.
-     */
-    @Override
-    public void switchToHighContrastMode() {
-
+        this.loadRoot("SettingsView.fxml");
     }
 
     /**
