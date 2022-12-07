@@ -13,8 +13,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import user.Database;
-=======
 import javafx.scene.input.KeyCode;
 import data.Database;
 import views.*;
