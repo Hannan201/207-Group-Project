@@ -171,7 +171,7 @@ public class AccountViewController implements Initializable {
      */
     public void handleDeleteAccount() {
 
-        // stole this from StackOverflow, need to give appropriate credits
+        // Credit to https://stackoverflow.com/questions/24206854/javafx-clearing-the-listview for the code below.
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);
