@@ -257,10 +257,6 @@ public class Database {
         return null;
     }
 
-
-
-
-
     /**
      * Log user out of this application.
      */
