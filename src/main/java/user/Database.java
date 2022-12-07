@@ -49,6 +49,9 @@ public class Database {
     // username in this application.
     private static Map<String, User> users;
 
+    // Stores the current theme for logged in user.
+    private static String currentTheme;
+
     /**
      * Sets the source to the serialized file for
      * where the user configurations can be found.
@@ -66,6 +69,8 @@ public class Database {
 
                 if (userConfigurations != null && userConfigurations.get("").get(0).equals("true")) {
                     loggedIn = true;
+                } else {
+                    loggedIn = false;
                 }
 
             } else {
@@ -97,6 +102,7 @@ public class Database {
                 if (loggedIn) {
                     String previousUser = userConfigurations.get("").get(1);
                     user = users.get(previousUser);
+                    currentTheme = userConfigurations.get(previousUser.toLowerCase()).get(2);
                 }
 
             } else {
@@ -105,6 +111,14 @@ public class Database {
         }
     }
 
+    /**
+     * Check to see if a specific file is made. If the file is
+     * not made, a new file will be created.
+     *
+     * @param source Path to the file.
+     * @return Return false if the file already exists, true
+     * otherwise.
+     */
     private static boolean makeSource(String source) {
         File file = new File(source);
         if (!file.exists()) {
@@ -132,10 +146,10 @@ public class Database {
             List<String> configurations = new ArrayList<>(3);
             String salt = generateSalt();
             String hashed = hashPassword(password, salt.getBytes());
-            String theme = "Light";
+            currentTheme = "Light";
             configurations.add(hashed);
             configurations.add(salt);
-            configurations.add(theme);
+            configurations.add(currentTheme);
             loggedIn = true;
             user = new User(username);
             setLoginStatus("true");
@@ -153,13 +167,41 @@ public class Database {
         return loggedIn;
     }
 
+    /**
+     * Set the login status for this current user. To remember
+     * whether if this user logged out before closing the
+     * application.
+     *
+     * @param status The new status.
+     */
     public static void setLoginStatus(String status) {
         userConfigurations.get("").set(0, status);
         if (status.equals("true")) {
             userConfigurations.get("").set(1, user.getUsername().toLowerCase());
-        } else if (status.equals("false")) {
+        } else if (status.equals("false") || status.equals("none")) {
             userConfigurations.get("").set(1, "");
         }
+    }
+
+    /**
+     * Get the preferred theme for the currently logged-in user.
+     *
+     * @return The theme for this user.
+     */
+    public static String getCurrentTheme() {
+        return currentTheme;
+    }
+
+    /**
+     * Set the preferred theme for the currently logged-in
+     * user.
+     *
+     * @param newTheme The new theme to set for the user
+     *                 currently logged-in.
+     */
+    public static void setCurrentTheme(String newTheme) {
+        currentTheme = newTheme;
+        userConfigurations.get(user.getUsername().toLowerCase()).set(2, newTheme);
     }
 
 
@@ -173,6 +215,15 @@ public class Database {
         return users.containsKey(username.toLowerCase());
     }
 
+    /**
+     * Authenticate an existing user into this application
+     * to ensure their username exists and their password is
+     * correct.
+     *
+     * @param username The username for the user trying to log-in.
+     * @param password The password for the user trying to log-in.
+     * @return True if the user was logged-in, false otherwise.
+     */
     public static boolean authenticateUser(String username, String password) {
         if (!checkUsername(username.toLowerCase())) {
             loggedIn = false;
@@ -186,6 +237,7 @@ public class Database {
         if (loggedIn) {
             user = users.get(username.toLowerCase());
             setLoginStatus("true");
+            currentTheme = configurations.get(2);
         } else {
             user = null;
         }
@@ -244,6 +296,9 @@ public class Database {
         return Base64.getEncoder().encodeToString(hash);
     }
 
+    /**
+     * Log user out of this application.
+     */
     public static void logUserOut() {
         loggedIn = false;
         user = null;
@@ -251,11 +306,20 @@ public class Database {
         saveUserData();
     }
 
+    /**
+     * Save user data for the currently logged-in user.
+     */
     public static void saveUserData() {
         serializeObject(configurationsSource, userConfigurations);
         serializeObject(usersSource, users);
     }
 
+    /**
+     * Serialize a given object to a file.
+     *
+     * @param source Path to file.
+     * @param o Object to be serialized.
+     */
     private static void serializeObject(String source, Object o) {
         FileOutputStream out = null;
         ObjectOutputStream writeObject = null;
@@ -279,6 +343,13 @@ public class Database {
         }
     }
 
+    /**
+     * Load configurations for all the users who have an
+     * account for this application.
+     *
+     * @return A Map containing a key as the username and a list
+     * to store the configurations for a given user.
+     */
     @SuppressWarnings("unchecked")
     private static Map<String, List<String>> loadConfigurations() {
         FileInputStream in = null;
@@ -304,6 +375,14 @@ public class Database {
         return null;
     }
 
+    /**
+     * Load all the user objects for all the users that
+     * have an account for this application.
+     *
+     * @return A Map where the username is the key and
+     * the value is the corresponding User object for a given
+     * user.
+     */
     @SuppressWarnings("unchecked")
     private static Map<String, User> loadUsers() {
         FileInputStream in = null;
