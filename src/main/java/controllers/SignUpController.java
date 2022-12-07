@@ -159,7 +159,13 @@ public class SignUpController implements Initializable {
     }
 
 
-
+    /**
+     * A handle method tied to the signUp button in the initialize method
+     * which is responsible for transitioning from the Sign Up view
+     * to the Accounts view.
+     *
+     * @param e
+     */
     public void handleSignUp(ActionEvent e) {
 
 
