@@ -16,6 +16,9 @@ public class User implements java.io.Serializable {
     // List of social media accounts for this user.
     private List<Account> accounts;
 
+    // Current theme for this user.
+    private String currentTheme;
+
     /**
      * Create a new user for this application with the
      * username and password passed in as a parameter.
@@ -25,6 +28,25 @@ public class User implements java.io.Serializable {
     public User(String newUsername) {
         this.username = newUsername;
         accounts = new ArrayList<>();
+        currentTheme = "Light";
+    }
+
+    /**
+     * Get the preferred theme for this user.
+     *
+     * @return The preferred theme of this user.
+     */
+    public String getCurrentTheme() {
+        return this.currentTheme;
+    }
+
+    /**
+     * Update the preferred theme for this user.
+     *
+     * @param newTheme The new theme to set for this user.
+     */
+    public void setCurrentTheme(String newTheme) {
+        this.currentTheme = newTheme;
     }
 
     /**
