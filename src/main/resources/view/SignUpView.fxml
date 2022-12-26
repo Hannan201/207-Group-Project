@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="box" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
+   <children>
+      <HBox alignment="BOTTOM_CENTER" prefHeight="70.0" prefWidth="380.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="45.0" prefWidth="157.0" text="Welcome!" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="380.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Username/Email" />
+            <TextField fx:id="initialUsername" prefHeight="25.0" prefWidth="149.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="29.0" prefWidth="384.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Verify Username" />
+            <TextField fx:id="verifiedUsername" prefHeight="25.0" prefWidth="149.0" />
+         </children>
+      </HBox>
+      <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="380.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Password" />
+            <PasswordField fx:id="initialPassword" prefHeight="25.0" prefWidth="149.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="39.0" prefWidth="380.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Verify Password" />
+            <PasswordField fx:id="verifiedPassword" prefHeight="25.0" prefWidth="149.0" />
+         </children>
+      </HBox>
+      <Region prefHeight="19.0" prefWidth="380.0" />
+   </children>
+</VBox>

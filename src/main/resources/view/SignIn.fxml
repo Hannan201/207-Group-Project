@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="background" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0"
+      xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignInController">
+    <children>
+        <Region prefHeight="34.0" prefWidth="300.0" />
+        <HBox alignment="TOP_CENTER" prefHeight="37.0" prefWidth="300.0">
+            <children>
+                <Region prefHeight="100.0" prefWidth="100.0" />
+                <Label fx:id="Title" alignment="CENTER" prefHeight="31.0" prefWidth="295.0" text="Welcome Back!" textAlignment="CENTER" />
+                <Region prefHeight="100.0" prefWidth="100.0" />
+            </children>
+        </HBox>
+        <Region prefHeight="23.0" prefWidth="300.0" />
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="300.0">
+            <children>
+                <Region prefHeight="36.0" prefWidth="23.0" />
+                <Label fx:id="Username" alignment="CENTER" prefHeight="17.0" prefWidth="105.0" text="Username" />
+                <TextField fx:id="unameInput" alignment="CENTER" prefHeight="25.0" prefWidth="140.0" />
+                <Region prefHeight="36.0" prefWidth="35.0" />
+            </children>
+        </HBox>
+        <Region prefHeight="10.0" prefWidth="300.0" />
+        <HBox alignment="CENTER" prefHeight="47.0" prefWidth="300.0">
+            <children>
+                <Region prefHeight="39.0" prefWidth="23.0" />
+                <Label fx:id="Password" alignment="CENTER" prefHeight="17.0" prefWidth="105.0" text="Password" />
+                <TextField fx:id="passInput" alignment="CENTER" prefHeight="25.0" prefWidth="140.0" />
+                <Region prefHeight="39.0" prefWidth="35.0" />
+            </children>
+        </HBox>
+        <Region prefHeight="29.0" prefWidth="300.0" />
+        <HBox fx:id="box" alignment="CENTER" prefHeight="30.0" prefWidth="300.0">
+        </HBox>
+        <Region prefHeight="43.0" prefWidth="300.0" />
+    </children>
+</VBox>

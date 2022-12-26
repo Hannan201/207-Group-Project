@@ -1,0 +1,32 @@
+.root{
+    -fx-background-color: #eeeeee;
+}
+
+.text-field{
+    -fx-background-color: #d9d9d9;
+}
+
+.label{
+    -fx-text-fill: #232323;
+    -fx-font-family: "Montserrat";
+}
+.button{
+    -fx-background-color: #d7d7d7;
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+    -fx-font-family: "Montserrat";
+    -fx-font-weight: bold;
+}
+
+.button:hover{
+    -fx-background-color: linear-gradient(#d4e1f9, #7ea6e9);
+
+}
+
+#Title{
+    -fx-font-weight: 200;
+    -fx-font-size: 20;
+    -fx-font-family: "Montserrat SemiBold";
+
+}
