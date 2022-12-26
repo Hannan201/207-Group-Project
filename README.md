@@ -6,7 +6,9 @@ Java JDK version 18.0.2 or greater.
 
 # Dependencies
 JavaFX version 19 or greater: [link](https://openjfx.io/)
+
 ControlsFX version 11.1.2 or greater: [link](https://controlsfx.github.io/)
+
 ValidatorFX version 0.4.0 or greater: [link](https://github.com/effad/ValidatorFX)
 
 # Details
