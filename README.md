@@ -34,7 +34,7 @@ high contrast mode, for each
 view in ths application, the
 light view will be shown.
 
-Note: This application is offline, so if a user makes an account on one computer, and try to sign in with the same username and password on another computer, it won't transfer the data. Transferring of data will be added in the distant future.
+Note: This application is offline, so if a user makes an account on one computer, and tries to sign in with the same username and password on another computer, it won't transfer the data. Transferring of data will be added in the distant future.
 
 When the application is launched for the first time, this is what should appear:
 
