@@ -59,7 +59,7 @@ public class Launcher extends Application {
             // Switch to the respective theme.
             if (!preferredTheme.equals("Light")) {
                 List<View> views = new ArrayList<>(List.of(HomePageView.getInstance(), SignInView.getInstance(),
-                                                SignInView.getInstance(), AccountView.getInstance(), AddAccountView.getInstance(),
+                                                SignUpView.getInstance(), AccountView.getInstance(), AddAccountView.getInstance(),
                                                 CodeView.getInstance(), SettingsView.getInstance()));
 
                 if (preferredTheme.equals("High Contrast")) {
