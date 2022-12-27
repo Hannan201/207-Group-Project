@@ -1,5 +1,5 @@
 # Backup Code Generator
-A JavaFX application to display the backup codes that a user has for each social media platform they use and encrypt these codes to enhance the user’s security. The application allows for importing `.txt` files if their social media account is one of the following: Discord, Google, Shopify or GitHub. This application also saves user data as well as support accessibility features.
+A JavaFX application to display the backup codes that a user has for each social media platform they use. The application allows for importing `.txt` files if their social media account is one of the following: Discord, Google, Shopify or GitHub. This application also saves user data as well as support accessibility features.
 
 # Prerequisites
 Java JDK version 18.0.2 or greater.
