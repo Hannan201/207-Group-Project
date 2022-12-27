@@ -34,7 +34,7 @@ high contrast mode, for each
 view in ths application, the
 light view will be shown.
 
-Note: This application is offline, so if a user makes an account on one computer, and tries to sign in with the same username and password on another computer, it won't transfer the data. Transferring of data will be added in the distant future. Additionally, the username and password made in this tutorial won't be accessible to the users following this tutorial as two different computers don't have access to the same database containing the usernames, passwords, social media accounts, backup codes, and theme configurations.
+Note: This application is offline, so if a user makes an account on one computer, and tries to sign in with the same username and password on another computer, it won't transfer the data. Transferring of data will be added in the distant future. Additionally, the username and password made in this tutorial won't be accessible to the users following this tutorial as two different computers don't have access to the same database containing the usernames, passwords, social media accounts, backup codes, and theme configurations. Functionality of two computers accessing the same database will be added in the distant future.
 
 When the application is launched for the first time, this is what should appear:
 
