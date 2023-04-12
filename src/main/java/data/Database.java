@@ -65,6 +65,8 @@ public class Database {
                 loggedIn = userConfigurations != null && userConfigurations.get("").get(0).equals("true");
 
             } else {
+                loggedIn = false;
+                user = null;
                 userConfigurations = new HashMap<>();
                 List<String> currentlyLoggedIn = new ArrayList<>(2);
                 currentlyLoggedIn.add("None");
@@ -168,11 +170,13 @@ public class Database {
      * @param status The new status.
      */
     private static void setLoginStatus(String status) {
-        userConfigurations.get("").set(0, status);
-        if (status.equals("true")) {
-            userConfigurations.get("").set(1, user.getUsername().toLowerCase());
-        } else if (status.equals("false") || status.equals("none")) {
-            userConfigurations.get("").set(1, "");
+        if (usersSourceSet && configurationsSourceSet && loggedIn) {
+            userConfigurations.get("").set(0, status);
+            if (status.equals("true")) {
+                userConfigurations.get("").set(1, user.getUsername().toLowerCase());
+            } else if (status.equals("false") || status.equals("none")) {
+                userConfigurations.get("").set(1, "");
+            }
         }
     }
 
@@ -182,6 +186,10 @@ public class Database {
      * @return The theme for the user currently logged-in.
      */
     public static String getCurrentTheme() {
+        if (user == null) {
+            return null;
+        }
+
         return user.getCurrentTheme();
     }
 
@@ -193,7 +201,10 @@ public class Database {
      *                 currently logged-in.
      */
     public static void setCurrentTheme(String newTheme) {
-        user.setCurrentTheme(newTheme);
+        if (user != null) {
+            user.setCurrentTheme(newTheme);
+        }
+
     }
 
 
@@ -204,7 +215,11 @@ public class Database {
      * @return True if username is taken, false otherwise.s
      */
     public static boolean checkUsername(String username) {
-        return users.containsKey(username.toLowerCase());
+        if (usersSourceSet && configurationsSourceSet) {
+            return users.containsKey(username.toLowerCase());
+        }
+
+        return false;
     }
 
     /**
@@ -218,6 +233,7 @@ public class Database {
      */
     public static boolean authenticateUser(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
+            loggedIn = false;
             return false;
         }
 
@@ -248,6 +264,7 @@ public class Database {
         if (loggedIn) {
             return user;
         }
+
         return null;
     }
 
@@ -255,25 +272,31 @@ public class Database {
      * Log user out of this application.
      */
     public static void logUserOut() {
-        loggedIn = false;
-        user = null;
-        setLoginStatus("false");
-        saveUserData();
+        if (usersSourceSet && configurationsSourceSet && loggedIn) {
+            loggedIn = false;
+            user = null;
+            setLoginStatus("false");
+            saveUserData();
+        }
     }
 
     /**
      * Save user data for the currently logged-in user.
      */
     public static void saveUserData() {
-        saveUsers.save();
-        saveConfigurations.save();
+        if (usersSourceSet && configurationsSourceSet && loggedIn) {
+            saveUsers.save();
+            saveConfigurations.save();
+        }
     }
 
     /**
      * Clear data for the currently logged-in user.
      */
     public static void clearUserData() {
-        user.clearAllAccounts();
-        saveUsers.save();
+        if (usersSourceSet && configurationsSourceSet && loggedIn) {
+            user.clearAllAccounts();
+            saveUsers.save();
+        }
     }
 }

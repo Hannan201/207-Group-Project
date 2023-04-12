@@ -5,6 +5,8 @@ import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
@@ -79,12 +82,32 @@ public class SignInController implements Initializable {
     // To store all the views.
     private static List<View> views;
 
+    @FXML
+    private Region aboveTitle;
+
+    @FXML
+    private Region belowButton;
+
+    @FXML
+    private final DoubleProperty delta = new SimpleDoubleProperty();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         views = new ArrayList<>(List.of(HomePageView.getInstance(), SignUpView.getInstance(),
                     AccountView.getInstance(), AddAccountView.getInstance(),
                     CodeView.getInstance()));
 
+        aboveTitle.prefHeightProperty().bind(
+                background.heightProperty()
+                        .multiply(27.0 / 250.0)
+        );
+
+        belowButton.prefHeightProperty().bind(
+                aboveTitle.prefHeightProperty()
+                        .multiply(37.0 / 27.0)
+        );
+
+        boolean[] isBelow = {false};
 
         signInButton = new Button("Sign In");
         signInButton.setPrefHeight(25);
@@ -120,6 +143,30 @@ public class SignInController implements Initializable {
                 .decorates(passInput)
                 .immediate();
 
+        background.widthProperty().addListener((observableValue, number, t1) -> {
+            if (t1.doubleValue() < Title.getWidth()) {
+                delta.set(Title.getWidth() - t1.doubleValue());
+                if (!isBelow[0]) {
+                    Title.setMaxHeight(Title.getPrefHeight() * 2);
+                    aboveTitle.prefHeightProperty().bind(aboveTitle.heightProperty().subtract(delta));
+                    belowButton.prefHeightProperty().bind(belowButton.heightProperty().subtract(delta));
+                    isBelow[0] = true;
+                }
+            } else {
+                if (isBelow[0]) {
+                    Title.setMaxHeight(Title.getPrefHeight());
+                    aboveTitle.prefHeightProperty().bind(
+                            background.heightProperty()
+                                    .multiply(27.0 / 250.0)
+                    );
+                    belowButton.prefHeightProperty().bind(
+                            aboveTitle.prefHeightProperty()
+                                    .multiply(37.0 / 27.0)
+                    );
+                    isBelow[0] = false;
+                }
+            }
+        });
     }
 
     /**
