@@ -41,7 +41,6 @@ public class SignUpController implements Initializable {
     public TextField verifiedUsername;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         signUp = new Button("Sign Up");
         signUp.setPrefHeight(25);
         signUp.setPrefWidth(130);
