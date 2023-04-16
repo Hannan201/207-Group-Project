@@ -21,7 +21,7 @@
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="27.7358491" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <VBox fx:id="left" prefHeight="450.0" prefWidth="399.0" GridPane.halignment="CENTER">
