@@ -1,12 +1,15 @@
 package controllers;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import net.synedra.validatorfx.TooltipWrapper;
@@ -23,6 +26,10 @@ public class CreateAccountController implements Initializable{
     private final Validator validator = new Validator();
 
     public Button createAccount;
+
+    @FXML
+    private HBox icons;
+
     @FXML
     public ToggleButton github;
 
@@ -43,6 +50,8 @@ public class CreateAccountController implements Initializable{
 
     @FXML
     public VBox box;
+
+    private final DoubleProperty spacing = new SimpleDoubleProperty(10);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -112,6 +121,16 @@ public class CreateAccountController implements Initializable{
                 .decorates(platform)
                 .immediate()
         ;
+
+        icons.spacingProperty().bind(spacing);
+
+        box.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
+            if (newWidth.doubleValue() < 285) {
+                spacing.set(Math.max(0, (10 - (285 - newWidth.doubleValue()))));
+            } else {
+                spacing.set(10);
+            }
+        }));
     }
 
     /**

@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ToggleGroup?>
 
-
-<VBox fx:id="box" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateAccountController">
+<VBox fx:id="box" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="233.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateAccountController">
    <children>
-      <HBox alignment="TOP_CENTER" prefHeight="58.0" prefWidth="380.0" spacing="10.0">
+      <HBox fx:id="icons" alignment="TOP_CENTER" prefHeight="58.0" prefWidth="380.0" spacing="10.0">
          <children>
             <fx:define>
                <ToggleGroup fx:id="group" />
             </fx:define>
-            <ToggleButton fx:id="github" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleGithub"/>
-            <ToggleButton fx:id="google" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleGoogle"/>
-            <ToggleButton fx:id="shopify" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleShopify"/>
-            <ToggleButton fx:id="discord" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" onAction="#handleDiscord"/>
+            <ToggleButton fx:id="github" mnemonicParsing="false" onAction="#handleGithub" prefHeight="50.0" prefWidth="50.0">
+               <toggleGroup>
+                  <ToggleGroup fx:id="group" />
+               </toggleGroup></ToggleButton>
+            <ToggleButton fx:id="google" mnemonicParsing="false" onAction="#handleGoogle" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" />
+            <ToggleButton fx:id="shopify" mnemonicParsing="false" onAction="#handleShopify" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" />
+            <ToggleButton fx:id="discord" mnemonicParsing="false" onAction="#handleDiscord" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="40.0" prefWidth="380.0">
