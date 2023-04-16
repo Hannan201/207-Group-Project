@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import user.Account;
 import data.Database;
 import user.User;
@@ -25,6 +26,9 @@ public class AccountViewController implements Initializable {
 
     @FXML
     private BorderPane box;
+
+    @FXML
+    private VBox left;
 
     @FXML
     private TextField search;
@@ -64,6 +68,8 @@ public class AccountViewController implements Initializable {
 
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(40, 5, 0 ,5));
 
+    private final ObjectProperty<Insets> leftBoxPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());
@@ -78,7 +84,20 @@ public class AccountViewController implements Initializable {
                 bottomListView.heightProperty()
         );
 
+        search.prefWidthProperty().bind(
+                accounts.widthProperty()
+        );
+
         box.paddingProperty().bind(padding);
+        left.paddingProperty().bind(leftBoxPadding);
+
+        box.widthProperty().addListener((observableValue, number, t1) -> {
+            if (t1.doubleValue() < 480) {
+                leftBoxPadding.set(new Insets(0, 0, 0, Math.max(0, 30 - (480 - t1.doubleValue()))));
+            } else {
+                leftBoxPadding.set(new Insets(0, 0, 0, 30));
+            }
+        });
 
         box.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
             if (newHeight.doubleValue() < 594) {
