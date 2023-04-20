@@ -1,0 +1,19 @@
+#main{
+    -fx-background-color: #1f2123;
+}
+
+.label{
+    -fx-text-fill: #e8e6e3;
+}
+
+.button{
+    -fx-font-size: 15;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #e8e6e3;
+    -fx-background-color: transparent;
+}
+
+.button:hover {
+    -fx-text-fill: #8b8888;
+    -fx-background-color: transparent;
+}
