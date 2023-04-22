@@ -1,0 +1,95 @@
+#box {
+    -fx-background-color: #1f2123;
+}
+
+#title {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 20;
+    -fx-text-fill: #dad8d6;
+}
+
+.list-cell #platformName .text {
+    -fx-font-size: 15;
+    -fx-fill: #e3d5bf;
+    -fx-font-family: "Montserrat";
+}
+
+.list-cell #username .text {
+    -fx-font-size: 15;
+    -fx-fill: #e3d5bf;
+    -fx-font-family: "Montserrat";
+}
+
+#default {
+    -fx-text-fill: #e8e6e3;
+    -fx-font-size: 25px;
+}
+
+.button {
+    -fx-font-family: "Montserrat";
+    -fx-background-color: #313337;
+    -fx-text-fill: #adadad;
+}
+
+.button:hover {
+    -fx-text-fill: #235480;
+    -fx-font-family: "Montserrat";
+    -fx-background-color: #313337;
+}
+
+#logout {
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url('/images/logout_darkmode.png');
+    -fx-border-color: transparent;
+}
+
+#settings {
+    -fx-background-image: url('/images/settings_darkmode.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back {
+    -fx-background-image: url('/images/back_darkmode.png');
+    -fx-background-size: 35px;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.list-view {
+    -fx-background-color: #181a1b;
+    -fx-font-family: "Montserrat";
+}
+
+.text-field {
+    -fx-background-color: #2d3133;
+    -fx-text-fill: white;
+}
+
+.list-cell:even, .list-cell:odd {
+    -fx-background-color: #181a1b;
+}
+
+.list-cell:hover{
+    -fx-background-color: #235480;
+}
+
+.list-cell:selected{
+    -fx-background-color: #235480;
+}
+
+.list-cell:hover #username .text, .list-cell:hover #platformName .text {
+    -fx-fill: white;
+}
+
+.list-cell:selected #username .text, .list-cell:selected #platformName .text {
+    -fx-fill: white;
+}
