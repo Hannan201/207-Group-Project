@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
 import data.Database;
 import user.User;
@@ -32,6 +33,10 @@ public class SettingsViewController implements Initializable {
     private Command darkModeCommand;
 
     private Command highContrastModeCommand;
+
+    @FXML
+    private VBox mainLayout;
+
     @FXML
     private HyperlinkLabel copyright;
 
@@ -43,6 +48,14 @@ public class SettingsViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        mainLayout.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
+            if (newWidth.doubleValue() < 363) {
+                double delta = (363 - newWidth.doubleValue()) / 1.4;
+                copyright.setMinHeight(68 + delta);
+            } else {
+                copyright.setMinHeight(68);
+            }
+        }));
 
         copyright.setText(COPYRIGHT);
 
