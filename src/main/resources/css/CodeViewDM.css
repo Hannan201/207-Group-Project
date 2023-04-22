@@ -1,0 +1,132 @@
+#background {
+    -fx-background-color: #1f2123;
+}
+
+#title {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 20;
+    -fx-text-fill: #dcdad7;
+}
+
+#usernameTitle {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 15;
+    -fx-text-fill: #cac8c6;
+}
+
+#codesTitle {
+    -fx-font-size: 15;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #cccac8;
+    -fx-font-weight: 600;
+}
+
+#placeholderText {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 18;
+    -fx-text-fill: #e8e6e3;
+}
+
+#codeListView {
+    -fx-background-color: #181a1b;
+}
+
+.text-field {
+    -fx-background-color: #2d3133;
+    -fx-text-fill: white;
+}
+
+.list-cell #code {
+    -fx-text-fill: white;
+}
+
+.list-cell:even, .list-cell:odd {
+    -fx-background-color: #181a1b;
+}
+
+.list-cell:selected {
+    -fx-background-color: #0080ff;
+}
+
+.list-cell:hover {
+    -fx-background-color: #0080ff;
+}
+
+.list-cell .button {
+    -fx-font-size: 12;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #adadad;
+    -fx-font-weight: bold;
+    -fx-border-color: Transparent;
+    -fx-background-color: #313337;
+    -fx-border-radius: 4;
+}
+
+.list-cell #copy:hover {
+    -fx-background-color: #067c06;
+    -fx-text-fill: #dbd1c3;
+}
+
+.list-cell #delete:hover {
+    -fx-background-color: #be0b0b;
+    -fx-text-fill: #dbd1c3;
+}
+
+.list-cell #edit:hover {
+    -fx-background-color: #a29a0e;
+    -fx-text-fill: #dbd1c3;
+}
+
+#addCode:hover {
+    -fx-background-color: #0e7ba2;
+    -fx-text-fill: #c8c8cb;
+}
+
+.button {
+    -fx-font-size: 14;
+    -fx-font-weight: 500;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #adadad;
+    -fx-border-color: Transparent;
+    -fx-background-color: #313337;
+}
+
+.button:hover {
+    -fx-text-fill: #235480;
+}
+
+.text-field:hover{
+    -fx-border-color: #235480;
+}
+
+.list-view:hover {
+    -fx-border-color: #235480;
+}
+
+.list-view:selected {
+    -fx-border-color: #235480;
+}
+
+#logout {
+    -fx-background-image: url('/images/logout_darkmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#settings {
+    -fx-background-image: url('/images/settings_darkmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back {
+    -fx-background-image: url('/images/back_darkmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
