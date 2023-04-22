@@ -9,7 +9,6 @@ import javafx.scene.layout.*;
 import user.Account;
 import views.CodeView;
 import views.utilities.CodeViewUtilities.CodeCell;
-import views.utilities.CodeViewUtilities.CodeCellFactory;
 
 
 public class CodeCellController {
@@ -33,7 +32,6 @@ public class CodeCellController {
 
     private CodeCell currentCell;
 
-    private CodeCellFactory currentContainer;
     private ListView<CodeCell> currentListView;
 
     private boolean selected;
@@ -42,12 +40,10 @@ public class CodeCellController {
      * Stores the data of the current code, the code factory, and its corresponding listview.
      *
      * @param cell The current CodeCell
-     * @param container The CodeCellFactory for this CodeCell
      * @param parent The ListView that contains this CodeCell
      */
-    public void setCodeCell(CodeCell cell, CodeCellFactory container, ListView<CodeCell> parent) {
+    public void setCodeCell(CodeCell cell, ListView<CodeCell> parent) {
         currentCell = cell;
-        currentContainer = container;
         currentListView = parent;
         selected = false;
 

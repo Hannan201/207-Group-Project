@@ -45,8 +45,8 @@ public class SettingsView extends View implements Reversible {
     @Override
     protected void initUI() {
         this.names = new String[]{"SettingsView.css",
-                "Name of CSS file for dark mode.",
-                "HighContrastSettingsView.css"};
+                                  "SettingsViewDM.css",
+                                  "SettingsViewHC.css"};
 
         this.loadStylesheets();
 

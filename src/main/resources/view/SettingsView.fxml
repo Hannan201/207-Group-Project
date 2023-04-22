@@ -27,7 +27,7 @@
                   <ToggleGroup fx:id="Buttons" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="darkModeButton" minHeight="31.0" mnemonicParsing="false" onAction="#switchToLightMode" prefHeight="66.0" prefWidth="149.0" text="Dark Mode" toggleGroup="$Buttons" />
+            <ToggleButton fx:id="darkModeButton" minHeight="31.0" mnemonicParsing="false" onAction="#switchToDarkMode" prefHeight="66.0" prefWidth="149.0" text="Dark Mode" toggleGroup="$Buttons" />
             <ToggleButton fx:id="lightModeButton" minHeight="31.0" mnemonicParsing="false" onAction="#switchToLightMode" prefHeight="66.0" prefWidth="141.0" text="Light" toggleGroup="$Buttons" />
          </children>
       </HBox>

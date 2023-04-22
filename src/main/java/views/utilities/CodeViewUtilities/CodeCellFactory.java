@@ -42,7 +42,7 @@ public class CodeCellFactory extends ListCell<CodeCell> {
         } else{
 
             // pull data from the cell and apply it to the UI
-            cellController.setCodeCell(codecell, this, CodeListView);
+            cellController.setCodeCell(codecell, CodeListView);
             setGraphic(graphic);
         }
     }

@@ -56,7 +56,7 @@ public class CodeView extends View implements Reversible {
         }
 
         this.names = new String[]{"CodeView.css",
-                                  "Name of CSS file for dark mode.",
+                                  "CodeViewDM.css",
                                   "CodeViewHC.css"};
 
         this.loadStylesheets();

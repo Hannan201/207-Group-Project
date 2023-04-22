@@ -86,7 +86,8 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToDarkMode() {
-        this.switcher.setCommand(darkModeCommand);
+        Database.setCurrentTheme("Dark");
+        updateTheme(darkModeCommand);
     }
 
     /**

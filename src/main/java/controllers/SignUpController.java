@@ -41,6 +41,21 @@ public class SignUpController implements Initializable {
     public TextField verifiedUsername;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        newWindow.setOnCloseRequest((windowEvent -> {
+                            initialUsername.clear();
+                            initialPassword.clear();
+                            verifiedUsername.clear();
+                            verifiedPassword.clear();
+                        }));
+                    }
+                }));
+            }
+        }));
+
         signUp = new Button("Sign Up");
         signUp.setPrefHeight(25);
         signUp.setPrefWidth(130);

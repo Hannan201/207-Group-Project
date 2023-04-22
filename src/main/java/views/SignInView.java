@@ -40,9 +40,9 @@ public class SignInView extends View {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"SignIn.css",
-                                  "Name of CSS file for dark mode.",
-                                  "SignInHC.css"};
+        this.names = new String[]{"SignInView.css",
+                                  "SignInViewDM.css",
+                                  "SignInViewHC.css"};
 
         this.loadStylesheets();
 

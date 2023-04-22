@@ -1,9 +1,9 @@
 import commands.Command;
+import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import user.User;
@@ -19,7 +19,11 @@ import java.util.List;
 
 public class Launcher extends Application {
 
+    // File for storing the user's accounts and codes.
     private static final String PATH_TO_USERS_FILE = "src/main/java/data/users.ser";
+
+    // File for storing the user's usernames, passwords, and theme
+    // preference.
     private static final String PATH_TO_CONFIG_FILE = "src/main/java/data/config.ser";
 
     /**
@@ -41,47 +45,61 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-
         stage.setOnCloseRequest(windowEvent -> Database.saveUserData());
 
-        boolean status = Database.getLoginStatus();
-        String preferredTheme = "";
+        View view = loadView();
+        Scene scene = new Scene(view.getRoot());
+        adjustTheme();
+        scene.getStylesheets().add(view.getCurrentThemePath());
+        stage.setScene(scene);
+        stage.show();
+    }
 
-        // User left application without logging out.
-        if (status) {
-            Parent root = AccountView.getInstance().getRoot();
-            User user = Database.getUser();
-            if (user != null) {
-                preferredTheme = user.getCurrentTheme();
-            }
-            Scene scene = new Scene(root);
-
-            // Switch to the respective theme.
-            if (!preferredTheme.equals("Light")) {
-                List<View> views = new ArrayList<>(List.of(HomePageView.getInstance(), SignInView.getInstance(),
-                                                SignUpView.getInstance(), AccountView.getInstance(), AddAccountView.getInstance(),
-                                                CodeView.getInstance(), SettingsView.getInstance()));
-
-                if (preferredTheme.equals("High Contrast")) {
-                    Command command = new SwitchToHighContrastMode(views);
-                    ThemeSwitcher switcher = new ThemeSwitcher(command);
-                    switcher.switchTheme();
-                }
-            }
-
-            scene.getStylesheets().add(AccountView.getInstance().getCurrentThemePath());
-            if (user != null) {
-                ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
-            }
-            stage.setScene(scene);
-        } else {
-            Parent root = HomePageView.getInstance().getRoot();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(HomePageView.getInstance().getCurrentThemePath());
-            stage.setScene(scene);
+    /**
+     * Return the correct view based on if the user left the application
+     * logged in or logged out.
+     *
+     * @return Correct view to load.
+     */
+    private static View loadView() {
+        if (Database.getLoginStatus()) {
+            return AccountView.getInstance();
         }
 
+        return HomePageView.getInstance();
+    }
 
-        stage.show();
+    /**
+     * Adjust the theme of the application based on the user's setting
+     * before they quit the application without logging out.
+     */
+    private static void adjustTheme() {
+        if (Database.getLoginStatus()) {
+            User user = Database.getUser();
+            if (user != null) {
+                String preferredTheme = user.getCurrentTheme();
+
+                // Switch to the respective theme.
+                if (!preferredTheme.equals("Light")) {
+                    List<View> views = new ArrayList<>(List.of(HomePageView.getInstance(), SignInView.getInstance(),
+                            SignUpView.getInstance(), AccountView.getInstance(), AddAccountView.getInstance(),
+                            CodeView.getInstance(), SettingsView.getInstance()));
+
+                    Command command;
+
+                    if (preferredTheme.equals("High Contrast")) {
+                        command = new SwitchToHighContrastMode(views);
+                        ThemeSwitcher switcher = new ThemeSwitcher(command);
+                        switcher.switchTheme();
+                    } else if (preferredTheme.equals("Dark")) {
+                        command = new SwitchToDarkMode(views);
+                        ThemeSwitcher switcher = new ThemeSwitcher(command);
+                        switcher.switchTheme();
+                    }
+                }
+
+                ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
+            }
+        }
     }
 }

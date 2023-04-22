@@ -45,8 +45,6 @@ public class CodeViewController implements Initializable {
     private Region aboveListView;
 
     @FXML
-    private Label placeholderText;
-    @FXML
     private ListView<CodeCell> codeListView;
 
     @FXML
@@ -81,7 +79,7 @@ public class CodeViewController implements Initializable {
 
     private Account account;
 
-    private static List<String> SUPPORTED_PLATFORMS;
+    private static final List<String> SUPPORTED_PLATFORMS  = new ArrayList<>(List.of("shopify", "discord", "google", "github"));
 
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
     private final ObjectProperty<Insets> rightSidePadding = new SimpleObjectProperty<>(new Insets(0, 12, 0, 10));
@@ -156,7 +154,6 @@ public class CodeViewController implements Initializable {
             }
         }));
 
-        SUPPORTED_PLATFORMS = new ArrayList<>(List.of("shopify", "discord", "google", "github"));
         codeListView.setCellFactory(test -> {
             try {
                 return new CodeCellFactory(codeListView);

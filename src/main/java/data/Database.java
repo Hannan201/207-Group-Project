@@ -204,7 +204,6 @@ public class Database {
         if (user != null) {
             user.setCurrentTheme(newTheme);
         }
-
     }
 
 
@@ -233,12 +232,10 @@ public class Database {
      */
     public static boolean authenticateUser(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
-            loggedIn = false;
             return false;
         }
 
         if (!checkUsername(username)) {
-            loggedIn = false;
             return false;
         }
 
@@ -284,7 +281,7 @@ public class Database {
      * Save user data for the currently logged-in user.
      */
     public static void saveUserData() {
-        if (usersSourceSet && configurationsSourceSet && loggedIn) {
+        if (usersSourceSet && configurationsSourceSet) {
             saveUsers.save();
             saveConfigurations.save();
         }

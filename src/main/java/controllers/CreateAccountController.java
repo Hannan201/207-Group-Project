@@ -55,6 +55,19 @@ public class CreateAccountController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        newWindow.setOnCloseRequest((windowEvent -> {
+                            platform.clear();
+                            username.clear();
+                        }));
+                    }
+                }));
+            }
+        }));
+
         createAccount = new Button("Create Account");
         createAccount.setContentDisplay(ContentDisplay.CENTER);
         createAccount.setPrefHeight(32);
@@ -134,18 +147,30 @@ public class CreateAccountController implements Initializable{
     }
 
     /**
-     * A handle method which sets the text of the platform textField
-     * if the GitHub toggle button is pressed.
+     * Toggle the platform text field to make it un-editable
+     * if it's editable and attach text to it, and editable
+     * if it's un-editable which will clear the text.
+     *
+     * @param text Message to display if the text field is
+     *             un-editable.
      */
-    public void handleGithub() {
+    public void toggle(String text) {
         if (platform.isEditable()) {
-            platform.setText("Github");
+            platform.setText(text);
             platform.setEditable(false);
         }
         else {
             platform.setText("");
             platform.setEditable(true);
         }
+    }
+
+    /**
+     * A handle method which sets the text of the platform textField
+     * if the GitHub toggle button is pressed.
+     */
+    public void handleGithub() {
+        toggle("Github");
     }
 
     /**
@@ -153,14 +178,7 @@ public class CreateAccountController implements Initializable{
      * if the Google toggle button is pressed.
      */
     public void handleGoogle() {
-        if (platform.isEditable()) {
-            platform.setText("Google");
-            platform.setEditable(false);
-        }
-        else {
-            platform.setText("");
-            platform.setEditable(true);
-        }
+        toggle("Google");
     }
 
     /**
@@ -168,14 +186,7 @@ public class CreateAccountController implements Initializable{
      * if the shopify toggle button is pressed.
      */
     public void handleShopify() {
-        if (platform.isEditable()) {
-            platform.setText("Shopify");
-            platform.setEditable(false);
-        }
-        else {
-            platform.setText("");
-            platform.setEditable(true);
-        }
+        toggle("Shopify");
     }
 
     /**
@@ -183,14 +194,6 @@ public class CreateAccountController implements Initializable{
      * if the Discord toggle button is pressed.
      */
     public void handleDiscord() {
-        if (platform.isEditable()) {
-            platform.setText("Discord");
-            platform.setEditable(false);
-        }
-        else {
-            platform.setText("");
-            platform.setEditable(true);
-        }
-
+        toggle("Discord");
     }
 }

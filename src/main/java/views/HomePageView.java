@@ -37,8 +37,8 @@ public class HomePageView extends View {
     @Override
     protected void initUI() {
         this.names = new String[]{"HomePageView.css",
-                "Name of CSS file for dark mode.",
-                "HomePageViewHighContrast.css"};
+                                  "HomePageViewDM.css",
+                                  "HomePageViewHC.css"};
 
         this.loadStylesheets();
 

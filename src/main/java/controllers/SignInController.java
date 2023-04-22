@@ -1,6 +1,7 @@
 package controllers;
 
 import commands.Command;
+import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
@@ -35,6 +36,7 @@ import java.util.ResourceBundle;
 public class SignInController implements Initializable {
 
     private final Validator validator = new Validator();
+
     @FXML
     private HBox box;
 
@@ -50,22 +52,10 @@ public class SignInController implements Initializable {
     private Label Title;
 
     /**
-     * Username label
-     */
-    @FXML
-    private Label Username;
-
-    /**
      * TextField for the user to type their username
      */
     @FXML
     private TextField unameInput;
-
-    /**
-     * Password label
-     */
-    @FXML
-    private Label Password;
 
     /**
      * TextField for the user to type their password
@@ -93,6 +83,16 @@ public class SignInController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        aboveTitle.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        newWindow.setOnCloseRequest((windowEvent -> clearFields()));
+                    }
+                }));
+            }
+        }));
+
         views = new ArrayList<>(List.of(HomePageView.getInstance(), SignUpView.getInstance(),
                     AccountView.getInstance(), AddAccountView.getInstance(),
                     CodeView.getInstance()));
@@ -228,6 +228,10 @@ public class SignInController implements Initializable {
         if (user != null && !user.getCurrentTheme().equals("Light")) {
             if (user.getCurrentTheme().equals("High Contrast")) {
                 Command command = new SwitchToHighContrastMode(views);
+                ThemeSwitcher switcher = new ThemeSwitcher(command);
+                switcher.switchTheme();
+            } else if (user.getCurrentTheme().equals("Dark")) {
+                Command command = new SwitchToDarkMode(views);
                 ThemeSwitcher switcher = new ThemeSwitcher(command);
                 switcher.switchTheme();
             }
