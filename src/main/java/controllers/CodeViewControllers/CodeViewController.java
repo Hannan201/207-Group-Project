@@ -4,8 +4,11 @@ import behaviors.ManualInputReader;
 import behaviors.interfaces.ReadCodeBehavior;
 import code.readers.CodeReader;
 import code.readers.CodeReaderFactory;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
@@ -30,12 +33,28 @@ public class CodeViewController implements Initializable {
     private BorderPane background;
 
     @FXML
+    private VBox titleSection;
+
+    @FXML
+    private VBox left;
+
+    @FXML
+    private VBox right;
+
+    @FXML
+    private Region aboveListView;
+
+    @FXML
     private Label placeholderText;
     @FXML
     private ListView<CodeCell> codeListView;
 
     @FXML
     private Label codesTitle;
+
+    @FXML
+    private Region aboveButtons;
+
     @FXML
     private Button importCodes;
 
@@ -52,14 +71,91 @@ public class CodeViewController implements Initializable {
     private Label usernameTitle;
 
     @FXML
+    private Region beforeCodeInput;
+
+    @FXML
     private TextField addCodeInput;
+
+    @FXML
+    private Region spaceBetween;
 
     private Account account;
 
     private static List<String> SUPPORTED_PLATFORMS;
 
+    private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
+    private final ObjectProperty<Insets> rightSidePadding = new SimpleObjectProperty<>(new Insets(0, 12, 0, 10));
+    private final ObjectProperty<Insets> windowPadding = new SimpleObjectProperty<>(new Insets(5, 5, 5, 5));
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        background.paddingProperty().bind(windowPadding);
+        left.paddingProperty().bind(padding);
+        right.paddingProperty().bind(rightSidePadding);
+
+        addCodeInput.prefWidthProperty().bind(
+                codeListView.widthProperty()
+                        .multiply(246.0 / 374.0)
+        );
+
+        addCode.prefWidthProperty().bind(
+                codeListView.widthProperty()
+                        .multiply(96.0 / 374.0)
+        );
+
+        spaceBetween.prefWidthProperty().bind(
+                codeListView.widthProperty()
+                        .multiply(32.0 / 374.0)
+        );
+
+        aboveButtons.prefHeightProperty().bind(
+                codesTitle.heightProperty()
+                        .add(aboveListView.heightProperty())
+                        .add(34)
+        );
+
+        background.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
+            if (newHeight.doubleValue() < 318) {
+                double newPadding = Math.max(0, 5 - (318 - newHeight.doubleValue()));
+                windowPadding.set(new Insets(newPadding, 5, newPadding, 5));
+                BorderPane.setMargin(titleSection, new Insets(Math.max(0, 10 - (318 - newHeight.doubleValue())), 0, 0, 0));
+            } else {
+                windowPadding.set(new Insets(5, 5, 5, 5));
+                BorderPane.setMargin(titleSection, new Insets(10, 0, 0, 0));
+            }
+        }));
+
+        background.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
+            if (newWidth.doubleValue() < 480) {
+                padding.set(new Insets(0, 0, 0, Math.max(0, 30 - (480 - newWidth.doubleValue()))));
+                beforeCodeInput.prefWidthProperty().unbind();
+                beforeCodeInput.setPrefWidth(padding.getValue().getLeft());
+
+                if (newWidth.doubleValue() < 261) {
+                    double newPadding = Math.max(0, 5 - (261 - newWidth.doubleValue()));
+                    windowPadding.set(new Insets(newPadding, newPadding, newPadding, newPadding));
+
+                    double newMargin = Math.max(0, 10 - (261 - newWidth.doubleValue()));
+                    BorderPane.setMargin(titleSection, new Insets(newMargin, 0, 0, 0));
+                    titleSection.setPrefHeight(57 + 200 - newWidth.doubleValue());
+
+                    if (newWidth.doubleValue() < 221) {
+                        double delta = 221 - newWidth.doubleValue();
+                        rightSidePadding.set(new Insets(0, Math.max(0, 12 - delta), 0, Math.max(0, 10 - delta)));
+                    } else {
+                        rightSidePadding.set(new Insets(0, 12, 0, 10));
+                    }
+                } else {
+                    windowPadding.set(new Insets(5, 5, 5, 5));
+                    BorderPane.setMargin(titleSection, new Insets(10, 0, 0, 0));
+                    titleSection.setPrefHeight(57);
+                }
+            } else {
+                padding.set(new Insets(0, 0, 0, 30));
+                beforeCodeInput.setPrefWidth(30);
+            }
+        }));
+
         SUPPORTED_PLATFORMS = new ArrayList<>(List.of("shopify", "discord", "google", "github"));
         codeListView.setCellFactory(test -> {
             try {
