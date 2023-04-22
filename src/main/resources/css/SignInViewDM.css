@@ -1,0 +1,37 @@
+#background{
+    -fx-background-color: #222426;
+}
+
+#Title {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 20;
+    -fx-text-fill: #d6d3d3;
+}
+
+.text-field{
+    -fx-background-color: #2d3133;
+    -fx-text-fill: white;
+}
+.text-field:focused{
+}
+.text-field:hover{
+}
+
+.label{
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #c1c0be;
+}
+
+.button{
+    -fx-font-weight: bold;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #babcc0;
+    -fx-background-color: #161618;
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+}
+.button:hover{
+    -fx-background-color: linear-gradient(#20262e, #163b79);
+}
+
