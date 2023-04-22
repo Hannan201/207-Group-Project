@@ -74,8 +74,12 @@
     -fx-text-fill: white;
 }
 
-.list-cell:even, .list-cell:odd {
+.list-cell:odd {
     -fx-background-color: #181a1b;
+}
+
+.list-cell:even {
+    -fx-background-color: #404040;
 }
 
 .list-cell:hover{

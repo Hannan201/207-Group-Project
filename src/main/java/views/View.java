@@ -108,6 +108,39 @@ public abstract class View {
      */
     public void switchToDarkMode() {
         this.currentThemePath = this.cssFilesPaths[1];
+
+        Map<String, String> icons = Account.getIcons();
+        URL url;
+
+        url = Account.class.getClassLoader().getResource("images/discord_darkmode.png");
+        if (url != null) {
+            String discord = url.toExternalForm();
+            icons.put("discord", discord);
+        }
+
+        url = Account.class.getClassLoader().getResource("images/github_darkmode.png");
+        if (url != null) {
+            String github = url.toExternalForm();
+            icons.put("github", github);
+        }
+
+        url = Account.class.getClassLoader().getResource("images/google_darkmode.png");
+        if (url != null) {
+            String google = url.toExternalForm();
+            icons.put("google", google);
+        }
+
+        url = Account.class.getClassLoader().getResource("images/shopify_darkmode.png");
+        if (url != null) {
+            String shopify = url.toExternalForm();
+            icons.put("shopify", shopify);
+        }
+
+        url = Account.class.getClassLoader().getResource("images/app_darkmode.png");
+        if (url != null) {
+            String defaultIcon = url.toExternalForm();
+            icons.put("default", defaultIcon);
+        }
     }
 
     /**
