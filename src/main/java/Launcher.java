@@ -32,8 +32,8 @@ public class Launcher extends Application {
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
-        Database.setConfigurationsSource(PATH_TO_CONFIG_FILE);
-        Database.setUsersSource(PATH_TO_USERS_FILE);
+        //Database.setConfigurationsSource(PATH_TO_CONFIG_FILE);
+        //Database.setUsersSource(PATH_TO_USERS_FILE);
         launch(args);
     }
 
@@ -47,10 +47,10 @@ public class Launcher extends Application {
     public void start(Stage stage) {
         stage.setOnCloseRequest(windowEvent -> Database.saveUserData());
 
-        View view = loadView();
+        View view = AccountView.getInstance();
         Scene scene = new Scene(view.getRoot());
         adjustTheme();
-        scene.getStylesheets().add(view.getCurrentThemePath());
+        scene.getStylesheets().add(Launcher.class.getClassLoader().getResource("css/AccountsViewDM.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }

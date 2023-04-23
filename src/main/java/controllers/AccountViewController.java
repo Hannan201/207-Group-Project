@@ -118,6 +118,10 @@ public class AccountViewController implements Initializable {
                 padding.set(new Insets(40, 5, 0, 5));
             }
         }));
+
+        for (int i = 0; i < 10; i++) {
+            accounts.getItems().add(new Account("Google", "1234"));
+        }
     }
 
     /**
