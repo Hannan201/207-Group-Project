@@ -32,8 +32,8 @@ public class Launcher extends Application {
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
-        Database.setConfigurationsSource(PATH_TO_CONFIG_FILE);
-        Database.setUsersSource(PATH_TO_USERS_FILE);
+        //Database.setConfigurationsSource(PATH_TO_CONFIG_FILE);
+        //Database.setUsersSource(PATH_TO_USERS_FILE);
         launch(args);
     }
 
