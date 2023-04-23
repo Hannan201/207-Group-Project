@@ -31,6 +31,53 @@
     -fx-background-color: #181a1b;
 }
 
+#codeListView .scroll-bar:vertical .track,
+#codeListView .scroll-bar:horizontal .track {
+    -fx-background-color: #181a1b;
+}
+
+#codeListView .scroll-bar:vertical .thumb,
+#codeListView .scroll-bar:horizontal .thumb {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: #404040;
+}
+
+#codeListView .scroll-bar:vertical .thumb:hover,
+#codeListView .scroll-bar:horizontal .thumb:hover {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: #5f5f5f;
+}
+
+#codeListView .scroll-bar:horizontal .increment-button ,
+#codeListView .scroll-bar:horizontal .decrement-button {
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-background-color : #181a1b;
+}
+
+#codeListView .scroll-bar:vertical .increment-button ,
+#codeListView .scroll-bar:vertical .decrement-button {
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-background-color : #181a1b;
+}
+
+#codeListView .scroll-bar:horizontal .increment-arrow,
+#codeListView .scroll-bar:horizontal .decrement-arrow{
+    -fx-background-color : #404040;
+}
+
+#codeListView .scroll-bar:vertical .increment-arrow,
+#codeListView .scroll-bar:vertical .decrement-arrow {
+    -fx-background-color : #404040;
+}
+
+#codeListView .virtual-flow > .corner {
+    -fx-background-color: #181a1b;
+}
+
 .text-field {
     -fx-background-color: #2d3133;
     -fx-text-fill: white;

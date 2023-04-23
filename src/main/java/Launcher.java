@@ -47,10 +47,10 @@ public class Launcher extends Application {
     public void start(Stage stage) {
         stage.setOnCloseRequest(windowEvent -> Database.saveUserData());
 
-        View view = AccountView.getInstance();
+        View view = loadView();
         Scene scene = new Scene(view.getRoot());
         adjustTheme();
-        scene.getStylesheets().add(Launcher.class.getClassLoader().getResource("css/AccountsViewDM.css").toExternalForm());
+        scene.getStylesheets().add(view.getCurrentThemePath());
         stage.setScene(scene);
         stage.show();
     }
