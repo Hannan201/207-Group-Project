@@ -1,4 +1,4 @@
-#back{
+#back {
     -fx-background-image: url('/images/back_darkmode.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
@@ -6,7 +6,7 @@
     -fx-background-position: center;
 }
 
-#logout{
+#logout {
     -fx-background-image: url('/images/logout_darkmode.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
@@ -19,29 +19,35 @@
     -fx-font-family: "Montserrat";
 }
 
-#highContrastModeButton {
+.toggle-button {
     -fx-text-fill: #d3d1cf;
     -fx-background-color: #222426;
 }
 
-#darkModeButton {
+.toggle-button:hover {
+    -fx-background-color: #3e4144;
+}
+
+.toggle-button:pressed {
+    -fx-background-color: black;
+}
+
+.toggle-button:selected {
+    -fx-border-color: gray;
+    -fx-background-color: linear-gradient(#1d1d1d, #292929);
+}
+
+.button {
     -fx-text-fill: #d3d1cf;
     -fx-background-color: #222426;
 }
 
-#lightModeButton {
-    -fx-text-fill: #d3d1cf;
-    -fx-background-color: #222426;
+.button:hover {
+    -fx-background-color: #3e4144;
 }
 
-#deleteAccount {
-    -fx-text-fill: #d3d1cf;
-    -fx-background-color: #222426;
-}
-
-#exportData {
-    -fx-text-fill: #d3d1cf;
-    -fx-background-color: #222426;
+.button:pressed {
+    -fx-background-color: black;
 }
 
 .label {
