@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
@@ -9,12 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 import views.SignInView;
 import views.SignUpView;
 import views.View;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 
 public class HomePageController implements Initializable {
 
@@ -62,8 +66,13 @@ public class HomePageController implements Initializable {
         View.loadNewWindow(SignUpView.getInstance());
     }
 
+    private ObjectExpression<Font> fontTracking;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        fontTracking = Bindings.createObjectBinding(() -> Font.font("Montserrat", (((main.getWidth() + main.getHeight()) / (2000.0)) * 100.0) * (45.0 / 58.0)), main.widthProperty(), main.heightProperty());
+        title.fontProperty().bind(fontTracking);
+
         below.prefHeightProperty().bind(main.heightProperty().subtract(title.prefHeightProperty()).subtract(buttons.heightProperty()).divide(2).add(17));
         above.prefHeightProperty().bind(main.heightProperty().subtract(title.prefHeightProperty()).subtract(buttons.heightProperty()).divide(2).subtract(17));
         space.prefWidthProperty().bind(title.widthProperty().subtract(signIn.widthProperty()).subtract(signUp.widthProperty()));
