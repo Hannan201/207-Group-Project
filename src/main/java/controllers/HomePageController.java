@@ -35,17 +35,29 @@ public class HomePageController implements Initializable {
     @FXML
     private BorderPane main;
 
+    // Preferred widths for the height and width of the
+    // window. So the width and height can be restored
+    // to their default values.
     private final static int PREF_WIDTH  = 540;
-
     private final static int PREF_HEIGHT = 620;
 
+    // This is needed to adjust the width and height
+    // of the title so each word is on a new line.
     private static final int TITLE_PREF_WIDTH = 207;
     private static final int TITLE_MAX_WIDTH = 380;
 
+    // Default font size of the title when application
+    // launches.
     private static final int BASE_FONT_SIZE = 45;
+
+    // Don't want the font to be too large.
     private static final int MAX_FONT_SIZE = 85;
+
+    // Font size of the buttons.
     private static final int DEFAULT_FONT_SIZE = 15;
 
+    // To ensure the title's and button's font size grow
+    // proportionally.
     private static final double FONT_RATIO = (double) DEFAULT_FONT_SIZE / BASE_FONT_SIZE;
 
     // For the title.
@@ -55,7 +67,9 @@ public class HomePageController implements Initializable {
     // For the buttons.
     private final ObjectProperty<Font> buttonFontTracking = new SimpleObjectProperty<>(Font.font("Montserrat-Regular"));
 
-    private DoubleProperty test = new SimpleDoubleProperty();
+    // For the title's width so each word is on a new line.
+    private final DoubleProperty titleWidthSize = new SimpleDoubleProperty();
+
 
     /**
      * A handle method for the Sign-In button that opens a pop-up to allow the
@@ -84,44 +98,34 @@ public class HomePageController implements Initializable {
         main.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
-            buttonFontTracking.set(Font.font("Montserrat-Regular", result * FONT_RATIO));
+            buttonFontTracking.set(Font.font(result * FONT_RATIO));
         }));
 
         main.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
-            buttonFontTracking.set(Font.font("Montserrat-Regular", result * FONT_RATIO));
+            buttonFontTracking.set(Font.font(result * FONT_RATIO));
         }));
 
+        titleWidthSize.set(TITLE_PREF_WIDTH);
         title.fontProperty().bind(titleFontTracking);
         signUp.fontProperty().bind(buttonFontTracking);
         signIn.fontProperty().bind(buttonFontTracking);
-        title.prefWidthProperty().bind(test);
+        title.prefWidthProperty().bind(titleWidthSize);
 
         main.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
-            if (newWidth.doubleValue() > PREF_WIDTH) {
-                double delta = (newWidth.doubleValue() - PREF_WIDTH) / 6.0;
-                test.set(Math.min(TITLE_MAX_WIDTH, TITLE_PREF_WIDTH + delta));
-            } else if (newWidth.doubleValue() < PREF_WIDTH) {
-                double delta = (PREF_WIDTH - newWidth.doubleValue()) / 3.0;
-                test.set(TITLE_PREF_WIDTH - delta);
-            } else {
-                test.set(TITLE_PREF_WIDTH);
+            if (newWidth.doubleValue() != PREF_WIDTH) {
+                double delta = (oldWidth.doubleValue() - newWidth.doubleValue()) / 6.0;
+                titleWidthSize.set(Math.min(TITLE_MAX_WIDTH, titleWidthSize.getValue() - delta));
             }
         }));
 
         main.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
-            if (newHeight.doubleValue() > PREF_HEIGHT) {
-                double delta = (newHeight.doubleValue() - PREF_HEIGHT) / 5.0;
-                test.set(Math.min(TITLE_MAX_WIDTH, test.getValue() + delta));
-            } else if (newHeight.doubleValue() < PREF_HEIGHT) {
-                double delta = (PREF_HEIGHT - newHeight.doubleValue()) / 5.0;
-                test.set(test.getValue() - delta);
-            } else {
-                test.set(TITLE_PREF_WIDTH);
+            if (newHeight.doubleValue() != PREF_HEIGHT) {
+                double delta = (oldHeight.doubleValue() - newHeight.doubleValue()) / 6.0;
+                titleWidthSize.set(Math.min(TITLE_MAX_WIDTH, titleWidthSize.getValue() - delta));
             }
         }));
-
 
         space.prefWidthProperty().bind(title.widthProperty().subtract(signIn.widthProperty()).subtract(signUp.widthProperty()));
     }
