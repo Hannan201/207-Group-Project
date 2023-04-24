@@ -38,27 +38,27 @@ public class HomePageController implements Initializable {
     // Preferred widths for the height and width of the
     // window. So the width and height can be restored
     // to their default values.
-    private final static int PREF_WIDTH  = 540;
-    private final static int PREF_HEIGHT = 620;
+    private final int PREF_WIDTH  = 540;
+    private final int PREF_HEIGHT = 620;
 
     // This is needed to adjust the width and height
     // of the title so each word is on a new line.
-    private static final int TITLE_PREF_WIDTH = 207;
-    private static final int TITLE_MAX_WIDTH = 380;
+    private final int TITLE_PREF_WIDTH = 207;
+    private final int TITLE_MAX_WIDTH = 380;
 
     // Default font size of the title when application
     // launches.
-    private static final int BASE_FONT_SIZE = 45;
+    private final int BASE_FONT_SIZE = 45;
 
     // Don't want the font to be too large.
-    private static final int MAX_FONT_SIZE = 85;
+    private final int MAX_FONT_SIZE = 85;
 
     // Font size of the buttons.
-    private static final int DEFAULT_FONT_SIZE = 15;
+    private final int DEFAULT_FONT_SIZE = 15;
 
     // To ensure the title's and button's font size grow
     // proportionally.
-    private static final double FONT_RATIO = (double) DEFAULT_FONT_SIZE / BASE_FONT_SIZE;
+    private final double FONT_RATIO = (double) DEFAULT_FONT_SIZE / BASE_FONT_SIZE;
 
     // For the title.
     private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
@@ -70,6 +70,10 @@ public class HomePageController implements Initializable {
     // For the title's width so each word is on a new line.
     private final DoubleProperty titleWidthSize = new SimpleDoubleProperty();
 
+    // The amount of pixels before the title's width can change.
+    // In other words, the width/height will need to be changed
+    // by at least 6 pixels before the width will adjust.
+    private final double PIXEL_GROWTH_FACTOR = 6.0;
 
     /**
      * A handle method for the Sign-In button that opens a pop-up to allow the
@@ -115,14 +119,14 @@ public class HomePageController implements Initializable {
 
         main.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
             if (newWidth.doubleValue() != PREF_WIDTH) {
-                double delta = (oldWidth.doubleValue() - newWidth.doubleValue()) / 6.0;
+                double delta = (oldWidth.doubleValue() - newWidth.doubleValue()) / PIXEL_GROWTH_FACTOR;
                 titleWidthSize.set(Math.min(TITLE_MAX_WIDTH, titleWidthSize.getValue() - delta));
             }
         }));
 
         main.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
             if (newHeight.doubleValue() != PREF_HEIGHT) {
-                double delta = (oldHeight.doubleValue() - newHeight.doubleValue()) / 6.0;
+                double delta = (oldHeight.doubleValue() - newHeight.doubleValue()) / PIXEL_GROWTH_FACTOR;
                 titleWidthSize.set(Math.min(TITLE_MAX_WIDTH, titleWidthSize.getValue() - delta));
             }
         }));
