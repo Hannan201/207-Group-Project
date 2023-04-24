@@ -35,7 +35,7 @@ public class HomePageController implements Initializable {
     @FXML
     private BorderPane main;
 
-    // Preferred widths for the height and width of the
+    // Preferred height and width of the
     // window. So the width and height can be restored
     // to their default values.
     private final int PREF_WIDTH  = 540;
