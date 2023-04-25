@@ -7,7 +7,9 @@ import commands.managers.ThemeSwitcher;
 import data.Database;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import user.User;
@@ -77,6 +80,10 @@ public class SignInController implements Initializable {
 
     @FXML
     private Region belowButton;
+
+    private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
+    private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
+    private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>();
 
     @FXML
     private final DoubleProperty delta = new SimpleDoubleProperty();
@@ -142,6 +149,28 @@ public class SignInController implements Initializable {
                 .decorates(unameInput)
                 .decorates(passInput)
                 .immediate();
+
+
+        titleFontSize.bind(background.widthProperty()
+                .add(background.heightProperty())
+                .divide(1280 + 720)
+                .multiply(100)
+                .multiply(20.0 / 27.5)
+        );
+
+        background.widthProperty().addListener(((observableValue, number, t1) -> {
+            double result = Math.min(65, titleFontSize.doubleValue());
+            titleFontTracking.set(Font.font(result));
+            labelFontSize.set(Font.font(result * 0.75));
+        }));
+
+        background.heightProperty().addListener(((observableValue, number, t1) -> {
+            double result = Math.min(65, titleFontSize.doubleValue());
+            titleFontTracking.set(Font.font(result));
+            labelFontSize.set(Font.font(result * 0.75));
+        }));
+
+        Title.fontProperty().bind(titleFontTracking);
 
         background.widthProperty().addListener((observableValue, number, t1) -> {
             if (t1.doubleValue() < Title.getWidth()) {
