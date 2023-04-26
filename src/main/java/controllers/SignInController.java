@@ -54,11 +54,17 @@ public class SignInController implements Initializable {
     @FXML
     private Label Title;
 
+    @FXML
+    private Label Username;
+
     /**
      * TextField for the user to type their username
      */
     @FXML
     private TextField unameInput;
+
+    @FXML
+    private Label Password;
 
     /**
      * TextField for the user to type their password
@@ -83,7 +89,7 @@ public class SignInController implements Initializable {
 
     private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
     private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
-    private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>();
+    private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
     @FXML
     private final DoubleProperty delta = new SimpleDoubleProperty();
@@ -171,6 +177,8 @@ public class SignInController implements Initializable {
         }));
 
         Title.fontProperty().bind(titleFontTracking);
+        Username.fontProperty().bind(labelFontSize);
+        Password.fontProperty().bind(labelFontSize);
 
         background.widthProperty().addListener((observableValue, number, t1) -> {
             if (t1.doubleValue() < Title.getWidth()) {
