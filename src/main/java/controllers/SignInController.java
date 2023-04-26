@@ -41,9 +41,6 @@ public class SignInController implements Initializable {
 
     private final Validator validator = new Validator();
 
-    @FXML
-    private HBox box;
-
     /**
      * Background of the scene
      */
@@ -56,6 +53,9 @@ public class SignInController implements Initializable {
     private Label Title;
 
     @FXML
+    private HBox usernameRow;
+
+    @FXML
     private Label Username;
 
     /**
@@ -63,6 +63,9 @@ public class SignInController implements Initializable {
      */
     @FXML
     private TextField unameInput;
+
+    @FXML
+    private HBox passwordRow;
 
     @FXML
     private Label Password;
@@ -82,12 +85,6 @@ public class SignInController implements Initializable {
     // To store all the views.
     private static List<View> views;
 
-    @FXML
-    private Region aboveTitle;
-
-    @FXML
-    private Region belowButton;
-
     private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
     private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
     private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>(Font.getDefault());
@@ -105,7 +102,7 @@ public class SignInController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        aboveTitle.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+        background.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                     if (oldWindow == null && newWindow != null) {
@@ -118,16 +115,6 @@ public class SignInController implements Initializable {
         views = new ArrayList<>(List.of(HomePageView.getInstance(), SignUpView.getInstance(),
                     AccountView.getInstance(), AddAccountView.getInstance(),
                     CodeView.getInstance()));
-
-        aboveTitle.prefHeightProperty().bind(
-                background.heightProperty()
-                        .multiply(27.0 / 250.0)
-        );
-
-        belowButton.prefHeightProperty().bind(
-                aboveTitle.prefHeightProperty()
-                        .multiply(37.0 / 27.0)
-        );
 
         boolean[] isBelow = {false};
 
@@ -151,7 +138,7 @@ public class SignInController implements Initializable {
         // Handles the event where the enter key is pressed while the
         // passInput TextField is selected
         passInput.setOnKeyPressed(this::signInFromEnterKey);
-        box.getChildren().add(createAccountWrapper);
+        background.getChildren().add(3, createAccountWrapper);
 
         validator.createCheck()
                 .withMethod(c -> {
@@ -212,27 +199,17 @@ public class SignInController implements Initializable {
         Username.paddingProperty().bind(usernameLabelPaddingSize);
         Password.paddingProperty().bind(passwordLabelPaddingSize);
 
+        VBox.setMargin(usernameRow, new Insets(20, 0, 5.9166666, 0));
+        VBox.setMargin(passwordRow, new Insets(5.9166666, 0, 28.5, 0));
 
         background.widthProperty().addListener((observableValue, number, t1) -> {
             if (t1.doubleValue() < Title.getWidth()) {
                 delta.set(Title.getWidth() - t1.doubleValue());
                 if (!isBelow[0]) {
-                    Title.setMaxHeight(Title.getPrefHeight() * 2);
-                    aboveTitle.prefHeightProperty().bind(aboveTitle.heightProperty().subtract(delta));
-                    belowButton.prefHeightProperty().bind(belowButton.heightProperty().subtract(delta));
                     isBelow[0] = true;
                 }
             } else {
                 if (isBelow[0]) {
-                    Title.setMaxHeight(Title.getPrefHeight());
-                    aboveTitle.prefHeightProperty().bind(
-                            background.heightProperty()
-                                    .multiply(27.0 / 250.0)
-                    );
-                    belowButton.prefHeightProperty().bind(
-                            aboveTitle.prefHeightProperty()
-                                    .multiply(37.0 / 27.0)
-                    );
                     isBelow[0] = false;
                 }
             }
