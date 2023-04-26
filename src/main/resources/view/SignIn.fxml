@@ -11,21 +11,16 @@
         <Region fx:id="aboveTitle" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
           <Label fx:id="Title" alignment="CENTER" prefHeight="37.0" text="Welcome Back!" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
         <Region prefHeight="23.0" prefWidth="300.0" />
-        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="300.0">
+        <HBox alignment="CENTER" prefWidth="300.0">
             <children>
-                <Region prefHeight="36.0" prefWidth="23.0" />
-                <Label fx:id="Username" alignment="CENTER" prefHeight="17.0" prefWidth="105.0" text="Username" />
+                <Label fx:id="Username" alignment="CENTER" prefHeight="17.0" text="Username" />
                 <TextField fx:id="unameInput" alignment="CENTER" prefHeight="25.0" prefWidth="140.0" />
-                <Region prefHeight="36.0" prefWidth="35.0" />
             </children>
         </HBox>
-        <Region prefHeight="10.0" prefWidth="300.0" />
-        <HBox alignment="CENTER" prefHeight="47.0" prefWidth="300.0">
+        <HBox alignment="CENTER" prefWidth="300.0">
             <children>
-                <Region prefHeight="39.0" prefWidth="23.0" />
-                <Label fx:id="Password" alignment="CENTER" prefHeight="17.0" prefWidth="105.0" text="Password" />
+                <Label fx:id="Password" alignment="CENTER" prefHeight="17.0" text="Password" />
                 <TextField fx:id="passInput" alignment="CENTER" prefHeight="25.0" prefWidth="140.0" />
-                <Region prefHeight="39.0" prefWidth="35.0" />
             </children>
         </HBox>
         <Region prefHeight="29.0" prefWidth="300.0" />

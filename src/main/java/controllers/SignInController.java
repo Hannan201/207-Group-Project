@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -91,6 +92,14 @@ public class SignInController implements Initializable {
     private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
     private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
+    private final DoubleProperty fieldWidthSize = new SimpleDoubleProperty();
+    private final DoubleProperty fieldHeightSize = new SimpleDoubleProperty();
+
+    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 26, 5, 26));
+
+    private final ObjectProperty<Insets> usernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 18.5, 0, 18));
+    private final ObjectProperty<Insets> passwordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 20.5, 0, 20));
+
     @FXML
     private final DoubleProperty delta = new SimpleDoubleProperty();
 
@@ -123,9 +132,9 @@ public class SignInController implements Initializable {
         boolean[] isBelow = {false};
 
         signInButton = new Button("Sign In");
-        signInButton.setPrefHeight(25);
-        signInButton.setPrefWidth(100);
+        signInButton.setPrefSize(Button.USE_COMPUTED_SIZE, Button.USE_COMPUTED_SIZE);
         signInButton.setAlignment(Pos.CENTER);
+        signInButton.paddingProperty().bind(buttonPaddingSize);
 
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signInButton,
@@ -168,17 +177,41 @@ public class SignInController implements Initializable {
             double result = Math.min(65, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
             labelFontSize.set(Font.font(result * 0.75));
+            fieldWidthSize.set(result * 7);
+            fieldHeightSize.set(result * 1.25);
+            buttonPaddingSize.set(new Insets(result * (0.25), result * (26.0 / 20.0), result * (0.25), result * (26.0 / 20.0)));
+            usernameLabelPaddingSize.set(new Insets(0, result * 0.925, 0, result * 0.9));
+            passwordLabelPaddingSize.set(new Insets(0, result * 1.025, 0, result));
         }));
 
         background.heightProperty().addListener(((observableValue, number, t1) -> {
             double result = Math.min(65, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
             labelFontSize.set(Font.font(result * 0.75));
+            fieldWidthSize.set(result * 7);
+            fieldHeightSize.set(result * 1.25);
+            buttonPaddingSize.set(new Insets(result * (0.25), result * (26.0 / 20.0), result * (0.25), result * (26.0 / 20.0)));
+            usernameLabelPaddingSize.set(new Insets(0, result * 0.925, 0, result * 0.9));
+            passwordLabelPaddingSize.set(new Insets(0, result * 1.025, 0, result));
         }));
 
         Title.fontProperty().bind(titleFontTracking);
+
         Username.fontProperty().bind(labelFontSize);
         Password.fontProperty().bind(labelFontSize);
+        signInButton.fontProperty().bind(labelFontSize);
+
+        unameInput.prefWidthProperty().bind(fieldWidthSize);
+        unameInput.prefHeightProperty().bind(fieldHeightSize);
+        passInput.prefWidthProperty().bind(fieldWidthSize);
+        passInput.prefHeightProperty().bind(fieldHeightSize);
+
+        unameInput.fontProperty().bind(labelFontSize);
+        passInput.fontProperty().bind(labelFontSize);
+
+        Username.paddingProperty().bind(usernameLabelPaddingSize);
+        Password.paddingProperty().bind(passwordLabelPaddingSize);
+
 
         background.widthProperty().addListener((observableValue, number, t1) -> {
             if (t1.doubleValue() < Title.getWidth()) {
