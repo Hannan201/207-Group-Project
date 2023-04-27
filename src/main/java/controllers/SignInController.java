@@ -85,20 +85,31 @@ public class SignInController implements Initializable {
     // To store all the views.
     private static List<View> views;
 
+    // Don't want the font to be too large.
+    private final int MAX_FONT_SIZE = 50;
+
+    // To change the font size of the title.
     private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
+
+    // To dynamically calculate the font size needed, of the title.
     private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
+
+    // To dynamically calculate the font size needed, of the labels.
     private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
+    // To dynamically calculate the width/height size needed,
+    // of the password and username text fields.
     private final DoubleProperty fieldWidthSize = new SimpleDoubleProperty();
     private final DoubleProperty fieldHeightSize = new SimpleDoubleProperty();
 
+    // To dynamically calculate the padding needed, of the button
+    // based on the font size.
     private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 26, 5, 26));
 
+    // To dynamically calculate the padding needed, of the labels
+    // based on the font size.
     private final ObjectProperty<Insets> usernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 18.5, 0, 18));
     private final ObjectProperty<Insets> passwordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 20.5, 0, 20));
-
-    @FXML
-    private final DoubleProperty delta = new SimpleDoubleProperty();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -115,8 +126,6 @@ public class SignInController implements Initializable {
         views = new ArrayList<>(List.of(HomePageView.getInstance(), SignUpView.getInstance(),
                     AccountView.getInstance(), AddAccountView.getInstance(),
                     CodeView.getInstance()));
-
-        boolean[] isBelow = {false};
 
         signInButton = new Button("Sign In");
         signInButton.setPrefSize(Button.USE_COMPUTED_SIZE, Button.USE_COMPUTED_SIZE);
@@ -161,7 +170,7 @@ public class SignInController implements Initializable {
         );
 
         background.widthProperty().addListener(((observableValue, number, t1) -> {
-            double result = Math.min(65, titleFontSize.doubleValue());
+            double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
             labelFontSize.set(Font.font(result * 0.75));
             fieldWidthSize.set(result * 7);
@@ -169,10 +178,12 @@ public class SignInController implements Initializable {
             buttonPaddingSize.set(new Insets(result * (0.25), result * (26.0 / 20.0), result * (0.25), result * (26.0 / 20.0)));
             usernameLabelPaddingSize.set(new Insets(0, result * 0.925, 0, result * 0.9));
             passwordLabelPaddingSize.set(new Insets(0, result * 1.025, 0, result));
+            VBox.setMargin(usernameRow, new Insets(result * 1.025, 0, 6.25, 0));
+            VBox.setMargin(passwordRow, new Insets(6.25, 0, result * 1.4, 0));
         }));
 
         background.heightProperty().addListener(((observableValue, number, t1) -> {
-            double result = Math.min(65, titleFontSize.doubleValue());
+            double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
             labelFontSize.set(Font.font(result * 0.75));
             fieldWidthSize.set(result * 7);
@@ -180,6 +191,8 @@ public class SignInController implements Initializable {
             buttonPaddingSize.set(new Insets(result * (0.25), result * (26.0 / 20.0), result * (0.25), result * (26.0 / 20.0)));
             usernameLabelPaddingSize.set(new Insets(0, result * 0.925, 0, result * 0.9));
             passwordLabelPaddingSize.set(new Insets(0, result * 1.025, 0, result));
+            VBox.setMargin(usernameRow, new Insets(result * 1.025, 0, result * 0.3125, 0));
+            VBox.setMargin(passwordRow, new Insets(result * 0.3125, 0, result * 1.4, 0));
         }));
 
         Title.fontProperty().bind(titleFontTracking);
@@ -199,21 +212,8 @@ public class SignInController implements Initializable {
         Username.paddingProperty().bind(usernameLabelPaddingSize);
         Password.paddingProperty().bind(passwordLabelPaddingSize);
 
-        VBox.setMargin(usernameRow, new Insets(20, 0, 5.9166666, 0));
-        VBox.setMargin(passwordRow, new Insets(5.9166666, 0, 28.5, 0));
-
-        background.widthProperty().addListener((observableValue, number, t1) -> {
-            if (t1.doubleValue() < Title.getWidth()) {
-                delta.set(Title.getWidth() - t1.doubleValue());
-                if (!isBelow[0]) {
-                    isBelow[0] = true;
-                }
-            } else {
-                if (isBelow[0]) {
-                    isBelow[0] = false;
-                }
-            }
-        });
+        VBox.setMargin(usernameRow, new Insets(20.5, 0, 6.25, 0));
+        VBox.setMargin(passwordRow, new Insets(6.25, 0, 28.0, 0));
     }
 
     /**

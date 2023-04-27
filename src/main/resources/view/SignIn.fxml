@@ -21,6 +21,6 @@
                 <TextField fx:id="passInput" alignment="CENTER" prefHeight="25.0" prefWidth="140.0" />
             </children>
         </HBox>
-      <Region maxHeight="-Infinity" prefHeight="25.0" VBox.vgrow="NEVER" />
+      <Region maxWidth="-Infinity" minWidth="-Infinity" prefHeight="8.0" prefWidth="0.0" />
     </children>
 </VBox>
