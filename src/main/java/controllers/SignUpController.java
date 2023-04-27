@@ -16,6 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import net.synedra.validatorfx.TooltipWrapper;
@@ -44,10 +45,16 @@ public class SignUpController implements Initializable {
     public VBox box;
 
     @FXML
+    private HBox initialPasswordRow;
+
+    @FXML
     private Label initialPasswordLabel;
 
     @FXML
     public PasswordField initialPassword;
+
+    @FXML
+    private HBox verifiedPasswordRow;
 
     @FXML
     private Label verifiedPasswordLabel;
@@ -56,10 +63,16 @@ public class SignUpController implements Initializable {
     public PasswordField verifiedPassword;
 
     @FXML
+    private HBox initialUsernameRow;
+
+    @FXML
     private Label initialUsernameLabel;
 
     @FXML
     public TextField initialUsername;
+
+    @FXML
+    private HBox verifiedUsernameRow;
 
     @FXML
     private Label verifiedUsernameLabel;
@@ -241,6 +254,9 @@ public class SignUpController implements Initializable {
             verifiedUsernameLabelPaddingSize.set(new Insets(0, result * 1.5 , 0, 0));
             initialPasswordLabelPaddingSize.set(new Insets(0, result * (82.0 / 24.0), 0, 0));
             verifiedPasswordLabelPaddingSize.set(new Insets(0, result * (40.0 / 24.0), 0, 0));
+            VBox.setMargin(initialUsernameRow, new Insets(result * (8.0 / 24.0), 0, result * (8.0 / 24.0), 0));
+            VBox.setMargin(initialPasswordRow, new Insets(result * (11.0 / 24.0), 0, 0, 0));
+            VBox.setMargin(verifiedPasswordRow, new Insets(result * (4.0 / 24.0), 0, result, 0));
         }));
 
         background.heightProperty().addListener(((observableValue, number, t1) -> {
@@ -255,6 +271,9 @@ public class SignUpController implements Initializable {
             verifiedUsernameLabelPaddingSize.set(new Insets(0, result * 1.5 , 0, 0));
             initialPasswordLabelPaddingSize.set(new Insets(0, result * (82.0 / 24.0), 0, 0));
             verifiedPasswordLabelPaddingSize.set(new Insets(0, result * (40.0 / 24.0), 0, 0));
+            VBox.setMargin(initialUsernameRow, new Insets(result * (8.0 / 24.0), 0, result * (8.0 / 24.0), 0));
+            VBox.setMargin(initialPasswordRow, new Insets(result * (11.0 / 24.0), 0, 0, 0));
+            VBox.setMargin(verifiedPasswordRow, new Insets(result * (4.0 / 24.0), 0, result, 0));
         }));
 
         title.fontProperty().bind(titleFontTracking);
@@ -270,6 +289,12 @@ public class SignUpController implements Initializable {
         verifiedPassword.prefWidthProperty().bind(fieldWidthSize);
         verifiedPassword.prefHeightProperty().bind(fieldHeightSize);
 
+        initialUsername.fontProperty().bind(labelFontSize);
+        verifiedUsername.fontProperty().bind(labelFontSize);
+
+        initialPassword.fontProperty().bind(labelFontSize);
+        verifiedPassword.fontProperty().bind(labelFontSize);
+
         initialUsernameLabel.fontProperty().bind(labelFontSize);
         verifiedUsernameLabel.fontProperty().bind(labelFontSize);
 
@@ -281,6 +306,11 @@ public class SignUpController implements Initializable {
 
         initialPasswordLabel.paddingProperty().bind(initialPasswordLabelPaddingSize);
         verifiedPasswordLabel.paddingProperty().bind(verifiedPasswordLabelPaddingSize);
+
+        VBox.setMargin(initialUsernameRow, new Insets(8, 0, 8, 0));
+        VBox.setMargin(verifiedUsernameRow, new Insets(0, 0, 0, 0));
+        VBox.setMargin(initialPasswordRow, new Insets(11, 0, 0, 0));
+        VBox.setMargin(verifiedPasswordRow, new Insets(4.0, 0, 4.0 + 20, 0));
     }
 
     /**

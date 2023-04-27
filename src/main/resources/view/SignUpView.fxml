@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -26,34 +25,45 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="47.0" prefWidth="380.0">
+            <HBox fx:id="initialUsernameRow" alignment="CENTER" prefWidth="380.0">
                <children>
                   <Label fx:id="initialUsernameLabel" prefHeight="17.0" text="Username/Email">
                      <HBox.margin>
                         <Insets />
-                     </HBox.margin></Label>
+                     </HBox.margin>
+                     <padding>
+                        <Insets right="37.0" />
+                     </padding></Label>
                   <TextField fx:id="initialUsername" prefHeight="25.0" prefWidth="149.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="29.0" prefWidth="384.0">
+            <HBox fx:id="verifiedUsernameRow" alignment="CENTER" prefWidth="384.0">
                <children>
-                  <Label fx:id="verifiedUsernameLabel" prefHeight="17.0" text="Verify Username" />
+                  <Label fx:id="verifiedUsernameLabel" prefHeight="17.0" text="Verify Username">
+                     <padding>
+                        <Insets right="36.0" />
+                     </padding></Label>
                   <TextField fx:id="verifiedUsername" prefHeight="25.0" prefWidth="149.0" />
                </children>
             </HBox>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="380.0">
+            <HBox fx:id="initialPasswordRow" alignment="BOTTOM_CENTER" prefWidth="380.0">
                <children>
-                  <Label fx:id="initialPasswordLabel" prefHeight="17.0" text="Password" />
+                  <Label fx:id="initialPasswordLabel" prefHeight="17.0" text="Password">
+                     <padding>
+                        <Insets right="82.0" />
+                     </padding></Label>
                   <PasswordField fx:id="initialPassword" prefHeight="25.0" prefWidth="149.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="39.0" prefWidth="380.0">
+            <HBox fx:id="verifiedPasswordRow" alignment="CENTER" prefWidth="380.0">
                <children>
-                  <Label fx:id="verifiedPasswordLabel" prefHeight="17.0" text="Verify Password" />
+                  <Label fx:id="verifiedPasswordLabel" prefHeight="17.0" text="Verify Password">
+                     <padding>
+                        <Insets right="40.0" />
+                     </padding></Label>
                   <PasswordField fx:id="verifiedPassword" prefHeight="25.0" prefWidth="149.0" />
                </children>
             </HBox>
-            <Region prefHeight="19.0" prefWidth="380.0" />
          </children>
       </VBox>
    </center>
