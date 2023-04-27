@@ -2,14 +2,22 @@ package controllers;
 
 import data.Database;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import views.AccountView;
@@ -22,6 +30,13 @@ import java.util.ResourceBundle;
 public class SignUpController implements Initializable {
 
     private final Validator validator = new Validator();
+
+    @FXML
+    private BorderPane background;
+
+    @FXML
+    private Label title;
+
     @FXML
     public Button signUp;
 
@@ -29,16 +44,60 @@ public class SignUpController implements Initializable {
     public VBox box;
 
     @FXML
+    private Label initialPasswordLabel;
+
+    @FXML
     public PasswordField initialPassword;
+
+    @FXML
+    private Label verifiedPasswordLabel;
 
     @FXML
     public PasswordField verifiedPassword;
 
     @FXML
+    private Label initialUsernameLabel;
+
+    @FXML
     public TextField initialUsername;
 
     @FXML
+    private Label verifiedUsernameLabel;
+
+    @FXML
     public TextField verifiedUsername;
+
+    // Don't want the font to be too large.
+    private final int MAX_FONT_SIZE = 50;
+
+    // To change the font size of the title.
+    private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
+
+    // To dynamically calculate the font size needed, of the title.
+    private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
+
+    // To dynamically calculate the padding needed, of the title
+    // based on the font size.
+    private final ObjectProperty<Insets> titlePaddingSize = new SimpleObjectProperty<>(new Insets(5, 0, 5, 0));
+
+    // To dynamically calculate the font size needed, of the labels.
+    private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>(Font.getDefault());
+
+    // To dynamically calculate the width/height size needed,
+    // of the password and username text fields.
+    private final DoubleProperty fieldWidthSize = new SimpleDoubleProperty();
+    private final DoubleProperty fieldHeightSize = new SimpleDoubleProperty();
+
+    // To dynamically calculate the padding needed, of the button
+    // based on the font size.
+    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 38, 5, 38.5));
+
+    // To dynamically calculate the padding needed, of the labels
+    // based on the font size.
+    private final ObjectProperty<Insets> initialUsernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 37, 0, 0));
+    private final ObjectProperty<Insets> verifiedUsernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 36, 0, 0));
+    private final ObjectProperty<Insets> initialPasswordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 82, 0, 0));
+    private final ObjectProperty<Insets> verifiedPasswordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 40, 0, 0));
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
@@ -57,8 +116,9 @@ public class SignUpController implements Initializable {
         }));
 
         signUp = new Button("Sign Up");
-        signUp.setPrefHeight(25);
-        signUp.setPrefWidth(130);
+        signUp.setPrefSize(Button.USE_COMPUTED_SIZE, Button.USE_COMPUTED_SIZE);
+        signUp.fontProperty().bind(labelFontSize);
+        signUp.paddingProperty().bind(buttonPaddingSize);
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signUp,
@@ -161,6 +221,66 @@ public class SignUpController implements Initializable {
                 .decorates(initialUsername)
                 .decorates(verifiedUsername)
                 .immediate();
+
+        titleFontSize.bind(background.widthProperty()
+                .add(background.heightProperty())
+                .divide(1280 + 720)
+                .multiply(100)
+                .multiply(24.0 / 34.0)
+        );
+
+        background.widthProperty().addListener(((observableValue, number, t1) -> {
+            double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
+            titleFontTracking.set(Font.font(result));
+            titlePaddingSize.set(new Insets(result * (5.0 / 24.0), 0, result * (5.0 / 24.0), 0));
+            labelFontSize.set(Font.font(result * 0.625));
+            fieldWidthSize.set(result * (149.0 / 24.0));
+            fieldHeightSize.set(result * (31.0 / 24.0));
+            buttonPaddingSize.set(new Insets(result * (5.0 / 24.0), result * (38.0 / 24.0), result * (5.0 / 24.0), result * (38.5 / 24.0)));
+            initialUsernameLabelPaddingSize.set(new Insets(0, result * (37.0 / 24.0), 0, 0));
+            verifiedUsernameLabelPaddingSize.set(new Insets(0, result * 1.5 , 0, 0));
+            initialPasswordLabelPaddingSize.set(new Insets(0, result * (82.0 / 24.0), 0, 0));
+            verifiedPasswordLabelPaddingSize.set(new Insets(0, result * (40.0 / 24.0), 0, 0));
+        }));
+
+        background.heightProperty().addListener(((observableValue, number, t1) -> {
+            double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
+            titleFontTracking.set(Font.font(result));
+            titlePaddingSize.set(new Insets(result * (5.0 / 24.0), 0, result * (5.0 / 24.0), 0));
+            labelFontSize.set(Font.font(result * 0.625));
+            fieldWidthSize.set(result * (149.0 / 24.0));
+            fieldHeightSize.set(result * (31.0 / 24.0));
+            buttonPaddingSize.set(new Insets(result * (5.0 / 24.0), result * (38.0 / 24.0), result * (5.0 / 24.0), result * (38.5 / 24.0)));
+            initialUsernameLabelPaddingSize.set(new Insets(0, result * (37.0 / 24.0), 0, 0));
+            verifiedUsernameLabelPaddingSize.set(new Insets(0, result * 1.5 , 0, 0));
+            initialPasswordLabelPaddingSize.set(new Insets(0, result * (82.0 / 24.0), 0, 0));
+            verifiedPasswordLabelPaddingSize.set(new Insets(0, result * (40.0 / 24.0), 0, 0));
+        }));
+
+        title.fontProperty().bind(titleFontTracking);
+        title.paddingProperty().bind(titlePaddingSize);
+
+        initialUsername.prefWidthProperty().bind(fieldWidthSize);
+        initialUsername.prefHeightProperty().bind(fieldHeightSize);
+        verifiedUsername.prefWidthProperty().bind(fieldWidthSize);
+        verifiedUsername.prefHeightProperty().bind(fieldHeightSize);
+
+        initialPassword.prefWidthProperty().bind(fieldWidthSize);
+        initialPassword.prefHeightProperty().bind(fieldHeightSize);
+        verifiedPassword.prefWidthProperty().bind(fieldWidthSize);
+        verifiedPassword.prefHeightProperty().bind(fieldHeightSize);
+
+        initialUsernameLabel.fontProperty().bind(labelFontSize);
+        verifiedUsernameLabel.fontProperty().bind(labelFontSize);
+
+        initialPasswordLabel.fontProperty().bind(labelFontSize);
+        verifiedPasswordLabel.fontProperty().bind(labelFontSize);
+
+        initialUsernameLabel.paddingProperty().bind(initialUsernameLabelPaddingSize);
+        verifiedUsernameLabel.paddingProperty().bind(verifiedUsernameLabelPaddingSize);
+
+        initialPasswordLabel.paddingProperty().bind(initialPasswordLabelPaddingSize);
+        verifiedPasswordLabel.paddingProperty().bind(verifiedPasswordLabelPaddingSize);
     }
 
     /**
