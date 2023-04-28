@@ -1,6 +1,8 @@
 package controllers;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import user.Account;
 import data.Database;
 import user.User;
@@ -46,10 +49,16 @@ public class AccountViewController implements Initializable {
     private Region top;
 
     @FXML
+    private Button select;
+
+    @FXML
     public Button add;
 
     @FXML
     public Button pin;
+
+    @FXML
+    private Button delete;
 
     @FXML
     private Region bottomButtons;
@@ -69,6 +78,25 @@ public class AccountViewController implements Initializable {
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(40, 5, 0 ,5));
 
     private final ObjectProperty<Insets> leftBoxPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
+
+    // Don't want the font to be too large.
+    private final int MAX_FONT_SIZE = 50;
+
+    // To change the font size of the title.
+    private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
+
+    // To dynamically calculate the font size needed, of the title.
+    private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
+
+    // To dynamically calculate the font size needed, of the buttons.
+    private final ObjectProperty<Font> buttonFontSize = new SimpleObjectProperty<>(Font.getDefault());
+
+    // To dynamically calculate the padding needed, of the
+    // buttons to select all, add, pin and delete.
+    private final ObjectProperty<Insets> selectPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 12, 24.0, 12.5));
+    private final ObjectProperty<Insets> addPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 17, 24.0, 17.5));
+    private final ObjectProperty<Insets> pinPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 38, 24.0, 38.5));
+    private final ObjectProperty<Insets> deletePaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 38, 24.0, 38.5));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -118,6 +146,34 @@ public class AccountViewController implements Initializable {
                 padding.set(new Insets(40, 5, 0, 5));
             }
         }));
+
+        titleFontSize.bind(box.widthProperty()
+                .add(box.heightProperty())
+                .divide(1280 + 720)
+                .multiply(100)
+                .multiply(20.0 / 58.0)
+        );
+
+        box.widthProperty().addListener(((observableValue, number, t1) -> {
+            double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
+            titleFontTracking.set(Font.font(result));
+            buttonFontSize.set(Font.font(result * 0.75));
+            double verticalButtonPadding = result * 1.2;
+
+        }));
+
+        box.heightProperty().addListener(((observableValue, number, t1) -> {
+            double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
+            titleFontTracking.set(Font.font(result));
+            buttonFontSize.set(Font.font(result * 0.75));
+        }));
+
+        title.fontProperty().bind(titleFontTracking);
+
+        select.fontProperty().bind(buttonFontSize);
+        add.fontProperty().bind(buttonFontSize);
+        pin.fontProperty().bind(buttonFontSize);
+        delete.fontProperty().bind(buttonFontSize);
     }
 
     /**

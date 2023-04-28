@@ -56,7 +56,7 @@
       </GridPane>
    </center>
    <top>
-      <Label fx:id="title" alignment="BOTTOM_CENTER" prefHeight="25.0" prefWidth="179.0" text="Accounts" BorderPane.alignment="BASELINE_CENTER" />
+      <Label fx:id="title" alignment="BOTTOM_CENTER" text="Accounts" BorderPane.alignment="BASELINE_CENTER" />
    </top>
    <padding>
       <Insets left="5.0" right="5.0" top="40.0" />
@@ -64,17 +64,17 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="0.0" prefWidth="39.0">
+            <Button id="back" fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="0.0" prefWidth="39.0">
                <padding>
                   <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
                </padding></Button>
             <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0">
+            <Button id="logout" fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0">
                <padding>
                   <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
                </padding></Button>
             <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0">
+            <Button id="settings" fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0">
                <padding>
                   <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
                </padding></Button>
