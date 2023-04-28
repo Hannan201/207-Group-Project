@@ -37,16 +37,10 @@ public class AccountViewController implements Initializable {
     private TextField search;
 
     @FXML
-    private Region space;
-
-    @FXML
     public ListView<Account> accounts;
 
     @FXML
-    private Region bottomListView;
-
-    @FXML
-    private Region top;
+    private VBox right;
 
     @FXML
     private Button select;
@@ -61,9 +55,6 @@ public class AccountViewController implements Initializable {
     private Button delete;
 
     @FXML
-    private Region bottomButtons;
-
-    @FXML
     public Label title;
 
     @FXML
@@ -74,8 +65,6 @@ public class AccountViewController implements Initializable {
 
     @FXML
     public Button settings;
-
-    private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(40, 5, 0 ,5));
 
     private final ObjectProperty<Insets> leftBoxPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
 
@@ -98,25 +87,16 @@ public class AccountViewController implements Initializable {
     private final ObjectProperty<Insets> pinPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 15));
     private final ObjectProperty<Insets> deletePaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 14.5));
 
+    private final ObjectProperty<Insets> boxPadding = new SimpleObjectProperty<>(new Insets(40, 5, 0, 5));
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        top.prefHeightProperty().bind(
-                search.heightProperty()
-                        .add(space.heightProperty())
-        );
-
-        bottomButtons.prefHeightProperty().bind(
-                bottomListView.heightProperty()
-        );
-
         search.prefWidthProperty().bind(
                 accounts.widthProperty()
         );
 
-        box.paddingProperty().bind(padding);
         left.paddingProperty().bind(leftBoxPadding);
 
         box.widthProperty().addListener((observableValue, number, t1) -> {
@@ -128,22 +108,10 @@ public class AccountViewController implements Initializable {
         });
 
         box.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
-            if (newHeight.doubleValue() < 594) {
-                padding.set(new Insets(Math.max(0, 40 - 594 + newHeight.doubleValue()), 5, 0, 5));
-
-                if (newHeight.doubleValue() < 570) {
-                    BorderPane.setAlignment(title, Pos.CENTER);
-
-                    if (newHeight.doubleValue() < 395) {
-                        space.setMinHeight(Region.USE_COMPUTED_SIZE);
-                    } else {
-                        space.setMinHeight(space.getPrefHeight());
-                    }
-                } else {
-                    BorderPane.setAlignment(title, Pos.BASELINE_CENTER);
-                }
+            if (newHeight.doubleValue() < 570) {
+                BorderPane.setAlignment(title, Pos.CENTER);
             } else {
-                padding.set(new Insets(40, 5, 0, 5));
+                BorderPane.setAlignment(title, Pos.BASELINE_CENTER);
             }
         }));
 
@@ -159,13 +127,23 @@ public class AccountViewController implements Initializable {
             titleFontTracking.set(Font.font(result));
             buttonFontSize.set(Font.font(result * 0.75));
             double verticalButtonPadding = result * 1.2;
-
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.6, verticalButtonPadding, result * 0.625));
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.85, verticalButtonPadding, result * 0.875));
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
+            boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
         }));
 
         box.heightProperty().addListener(((observableValue, number, t1) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
             buttonFontSize.set(Font.font(result * 0.75));
+            double verticalButtonPadding = result * 1.2;
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.6, verticalButtonPadding, result * 0.625));
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.85, verticalButtonPadding, result * 0.875));
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
+            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
+            boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
         }));
 
         title.fontProperty().bind(titleFontTracking);
@@ -174,6 +152,27 @@ public class AccountViewController implements Initializable {
         add.fontProperty().bind(buttonFontSize);
         pin.fontProperty().bind(buttonFontSize);
         delete.fontProperty().bind(buttonFontSize);
+
+        select.paddingProperty().bind(selectPaddingSize);
+        add.paddingProperty().bind(addPaddingSize);
+        pin.paddingProperty().bind(pinPaddingSize);
+        delete.paddingProperty().bind(deletePaddingSize);
+
+        box.paddingProperty().bind(boxPadding);
+
+        BorderPane.setMargin(left, new Insets(0, 0, 39, 0));
+        BorderPane.setMargin(right, new Insets(search.getHeight() + 9.0, 0, 39, 0));
+
+        left.setSpacing(9);
+
+        right.spacingProperty().bind(
+                accounts.heightProperty()
+                        .subtract(select.heightProperty())
+                        .subtract(add.heightProperty())
+                        .subtract(pin.heightProperty())
+                        .subtract(delete.heightProperty())
+                        .divide(3.0)
+        );
     }
 
     /**

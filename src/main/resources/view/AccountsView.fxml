@@ -24,44 +24,43 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <VBox fx:id="left" prefHeight="450.0" prefWidth="399.0" GridPane.halignment="CENTER">
+            <VBox fx:id="left" alignment="CENTER" prefHeight="443.0" prefWidth="382.0">
                <children>
-                  <TextField fx:id="search" focusTraversable="false" prefHeight="32.0" prefWidth="383.0" promptText="Search for your username..." />
-                  <Region fx:id="space" minHeight="-Infinity" prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0" VBox.vgrow="ALWAYS">
+                  <TextField fx:id="search" focusTraversable="false" prefHeight="31.0" prefWidth="383.0" promptText="Search for your username...">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></TextField>
+                  <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0">
                      <placeholder>
                         <Label fx:id="default" maxHeight="1.7976931348623157E308" text="Please add an account!" wrapText="true" />
                      </placeholder>
                   </ListView>
-                  <Region fx:id="bottomListView" maxHeight="-Infinity" prefHeight="40.0" prefWidth="383.0" VBox.vgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets left="30.0" />
                </padding>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </VBox>
-            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="603.0" prefWidth="134.0" GridPane.columnIndex="1">
+            <VBox fx:id="right" alignment="CENTER" prefWidth="134.0" GridPane.columnIndex="1">
                <children>
-                  <Region fx:id="top" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="39.0" prefWidth="118.0" VBox.vgrow="ALWAYS" />
                   <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="12.5" right="12.0" top="24.0" />
                      </padding></Button>
-                  <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" text="Add &#10;Account" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="17.5" right="17.0" top="24.0" />
                      </padding></Button>
-                  <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" text="Pin &#10;Accounts" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="15.0" right="14.0" top="24.0" />
                      </padding></Button>
-                  <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" text="Delete&#10;Accounts" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="14.5" right="14.0" top="24.0" />
                      </padding></Button>
-                  <Region fx:id="bottomButtons" maxHeight="-Infinity" prefHeight="38.0" prefWidth="118.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </children>
