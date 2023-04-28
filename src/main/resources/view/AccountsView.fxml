@@ -42,13 +42,25 @@
             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="603.0" prefWidth="134.0" GridPane.columnIndex="1">
                <children>
                   <Region fx:id="top" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="39.0" prefWidth="118.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="90.0" prefWidth="90.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
+                     <padding>
+                        <Insets bottom="24.0" left="12.5" right="12.0" top="24.0" />
+                     </padding></Button>
                   <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="90.0" prefWidth="90.0" text="Add &#10;Account" textAlignment="CENTER" />
+                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" text="Add &#10;Account" textAlignment="CENTER">
+                     <padding>
+                        <Insets bottom="24.0" left="17.5" right="17.0" top="24.0" />
+                     </padding></Button>
                   <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="90.0" prefWidth="90.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" text="Pin &#10;Accounts" textAlignment="CENTER">
+                     <padding>
+                        <Insets bottom="24.0" left="15.0" right="14.0" top="24.0" />
+                     </padding></Button>
                   <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="90.0" prefWidth="90.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
+                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" text="Delete&#10;Accounts" textAlignment="CENTER">
+                     <padding>
+                        <Insets bottom="24.0" left="14.5" right="14.0" top="24.0" />
+                     </padding></Button>
                   <Region fx:id="bottomButtons" maxHeight="-Infinity" prefHeight="38.0" prefWidth="118.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>

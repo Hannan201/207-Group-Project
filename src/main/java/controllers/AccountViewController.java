@@ -95,8 +95,8 @@ public class AccountViewController implements Initializable {
     // buttons to select all, add, pin and delete.
     private final ObjectProperty<Insets> selectPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 12, 24.0, 12.5));
     private final ObjectProperty<Insets> addPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 17, 24.0, 17.5));
-    private final ObjectProperty<Insets> pinPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 38, 24.0, 38.5));
-    private final ObjectProperty<Insets> deletePaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 38, 24.0, 38.5));
+    private final ObjectProperty<Insets> pinPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 15));
+    private final ObjectProperty<Insets> deletePaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 14.5));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
