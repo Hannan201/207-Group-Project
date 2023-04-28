@@ -24,11 +24,11 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <VBox fx:id="left" alignment="CENTER" prefHeight="443.0" prefWidth="382.0">
+            <VBox fx:id="left" alignment="TOP_CENTER" prefHeight="443.0" prefWidth="382.0">
                <children>
                   <TextField fx:id="search" focusTraversable="false" prefHeight="31.0" prefWidth="383.0" promptText="Search for your username...">
                      <VBox.margin>
-                        <Insets />
+                        <Insets bottom="9.0" />
                      </VBox.margin></TextField>
                   <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0">
                      <placeholder>
@@ -43,7 +43,7 @@
                   <Insets />
                </GridPane.margin>
             </VBox>
-            <VBox fx:id="right" alignment="CENTER" prefWidth="134.0" GridPane.columnIndex="1">
+            <VBox fx:id="right" alignment="TOP_CENTER" prefWidth="134.0" spacing="19.0" GridPane.columnIndex="1">
                <children>
                   <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
                      <padding>

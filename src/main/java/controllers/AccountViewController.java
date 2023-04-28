@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -160,19 +161,9 @@ public class AccountViewController implements Initializable {
 
         box.paddingProperty().bind(boxPadding);
 
-        BorderPane.setMargin(left, new Insets(0, 0, 39, 0));
-        BorderPane.setMargin(right, new Insets(search.getHeight() + 9.0, 0, 39, 0));
+        GridPane.setMargin(right, new Insets(40, 0, 0, 0));
 
-        left.setSpacing(9);
-
-        right.spacingProperty().bind(
-                accounts.heightProperty()
-                        .subtract(select.heightProperty())
-                        .subtract(add.heightProperty())
-                        .subtract(pin.heightProperty())
-                        .subtract(delete.heightProperty())
-                        .divide(3.0)
-        );
+        right.setSpacing(57.0 / 3.0);
     }
 
     /**
