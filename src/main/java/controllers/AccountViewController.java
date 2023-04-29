@@ -32,6 +32,9 @@ public class AccountViewController implements Initializable {
     private BorderPane box;
 
     @FXML
+    private GridPane grid;
+
+    @FXML
     private VBox left;
 
     @FXML
@@ -39,6 +42,9 @@ public class AccountViewController implements Initializable {
 
     @FXML
     public ListView<Account> accounts;
+
+    @FXML
+    private Label defaultText;
 
     @FXML
     private VBox right;
@@ -70,7 +76,10 @@ public class AccountViewController implements Initializable {
     private final ObjectProperty<Insets> leftBoxPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
 
     // Don't want the font to be too large.
-    private final int MAX_FONT_SIZE = 50;
+    private final int MAX_FONT_SIZE = 30;
+
+    private final DoubleProperty gridWidthSize = new SimpleDoubleProperty(530);
+    private final DoubleProperty gridHeightSize = new SimpleDoubleProperty(491);
 
     // To change the font size of the title.
     private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
@@ -87,6 +96,15 @@ public class AccountViewController implements Initializable {
     private final ObjectProperty<Insets> addPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 17, 24.0, 17.5));
     private final ObjectProperty<Insets> pinPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 15));
     private final ObjectProperty<Insets> deletePaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 14.5));
+
+    private final DoubleProperty spacingSize = new SimpleDoubleProperty(21);
+
+    private final DoubleProperty fieldHeight = new SimpleDoubleProperty(31);
+
+    private final DoubleProperty listViewWidth = new SimpleDoubleProperty(352);
+    private final DoubleProperty listViewHeight = new SimpleDoubleProperty(412);
+
+    private final ObjectProperty<Font> noItemsFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
     private final ObjectProperty<Insets> boxPadding = new SimpleObjectProperty<>(new Insets(40, 5, 0, 5));
     @Override
@@ -108,14 +126,6 @@ public class AccountViewController implements Initializable {
             }
         });
 
-        box.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
-            if (newHeight.doubleValue() < 570) {
-                BorderPane.setAlignment(title, Pos.CENTER);
-            } else {
-                BorderPane.setAlignment(title, Pos.BASELINE_CENTER);
-            }
-        }));
-
         titleFontSize.bind(box.widthProperty()
                 .add(box.heightProperty())
                 .divide(1280 + 720)
@@ -133,6 +143,15 @@ public class AccountViewController implements Initializable {
             selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
             selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
             boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
+            spacingSize.set(result * 1.05);
+            GridPane.setMargin(left, new Insets(0, 0, result * 1.95, 0));
+            GridPane.setMargin(right, new Insets(result * 1.9235, 0, result * 1.95, 0));
+            fieldHeight.set(result * 1.55);
+            listViewWidth.set(result * 17.6);
+            listViewHeight.set(result * 20.6);
+            noItemsFontSize.set(Font.font(result * 1.25));
+            gridWidthSize.set(result * 26.5);
+            gridHeightSize.set(result * 24.55);
         }));
 
         box.heightProperty().addListener(((observableValue, number, t1) -> {
@@ -145,6 +164,15 @@ public class AccountViewController implements Initializable {
             selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
             selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
             boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
+            spacingSize.set(result * 1.05);
+            GridPane.setMargin(left, new Insets(0, 0, result * 1.95, 0));
+            GridPane.setMargin(right, new Insets(result * 1.9235, 0, result * 1.95, 0));
+            fieldHeight.set(result * 1.55);
+            listViewWidth.set(result * 17.6);
+            listViewHeight.set(result * 20.6);
+            noItemsFontSize.set(Font.font(result * 1.25));
+            gridWidthSize.set(result * 26.5);
+            gridHeightSize.set(result * 24.55);
         }));
 
         title.fontProperty().bind(titleFontTracking);
@@ -161,9 +189,20 @@ public class AccountViewController implements Initializable {
 
         box.paddingProperty().bind(boxPadding);
 
-        GridPane.setMargin(right, new Insets(40, 0, 0, 0));
+        GridPane.setMargin(left, new Insets(0, 0, 39, 0));
+        GridPane.setMargin(right, new Insets(38.47, 0, 39, 0));
 
-        right.setSpacing(57.0 / 3.0);
+        right.spacingProperty().bind(spacingSize);
+
+        search.prefHeightProperty().bind(fieldHeight);
+
+        accounts.prefWidthProperty().bind(listViewWidth);
+        accounts.prefHeightProperty().bind(listViewHeight);
+
+        defaultText.fontProperty().bind(noItemsFontSize);
+
+        grid.prefWidthProperty().bind(gridWidthSize);
+        grid.prefHeightProperty().bind(gridHeightSize);
     }
 
     /**

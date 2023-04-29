@@ -15,7 +15,7 @@
 
 <BorderPane fx:id="box" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AccountViewController">
    <center>
-      <GridPane maxWidth="528.0" prefHeight="620.0" prefWidth="375.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="grid" BorderPane.alignment="CENTER">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="72.2611509" />
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="27.7358491" />
@@ -30,9 +30,9 @@
                      <VBox.margin>
                         <Insets bottom="9.0" />
                      </VBox.margin></TextField>
-                  <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0">
+                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0">
                      <placeholder>
-                        <Label fx:id="default" maxHeight="1.7976931348623157E308" text="Please add an account!" wrapText="true" />
+                        <Label fx:id="defaultText" text="Please add an account!" wrapText="true" />
                      </placeholder>
                   </ListView>
                </children>
