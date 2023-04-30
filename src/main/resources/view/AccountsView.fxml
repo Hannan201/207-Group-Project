@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
@@ -24,13 +23,13 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <VBox fx:id="left" alignment="TOP_CENTER" prefHeight="443.0" prefWidth="382.0">
+            <VBox fx:id="left" spacing="9.0" GridPane.halignment="CENTER">
                <children>
-                  <TextField fx:id="search" focusTraversable="false" prefHeight="31.0" prefWidth="383.0" promptText="Search for your username...">
+                  <TextField fx:id="search" focusTraversable="false" prefWidth="383.0" promptText="Search for your username...">
                      <VBox.margin>
-                        <Insets bottom="9.0" />
+                        <Insets />
                      </VBox.margin></TextField>
-                  <ListView fx:id="accounts" prefHeight="417.0" prefWidth="383.0">
+                  <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0" VBox.vgrow="ALWAYS">
                      <placeholder>
                         <Label fx:id="defaultText" text="Please add an account!" wrapText="true" />
                      </placeholder>
@@ -39,11 +38,8 @@
                <padding>
                   <Insets left="30.0" />
                </padding>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
             </VBox>
-            <VBox fx:id="right" alignment="TOP_CENTER" prefWidth="134.0" spacing="19.0" GridPane.columnIndex="1">
+            <VBox fx:id="right" alignment="CENTER" spacing="17.0" GridPane.columnIndex="1">
                <children>
                   <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
                      <padding>
@@ -62,8 +58,14 @@
                         <Insets bottom="24.0" left="14.5" right="14.0" top="24.0" />
                      </padding></Button>
                </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </VBox>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="39.0" />
+         </BorderPane.margin>
       </GridPane>
    </center>
    <top>
@@ -73,23 +75,27 @@
       <Insets left="5.0" right="5.0" top="40.0" />
    </padding>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="buttonsRow" alignment="CENTER" spacing="170.0" BorderPane.alignment="CENTER">
          <children>
-            <Button id="back" fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="0.0" prefWidth="39.0">
+            <Button fx:id="back" mnemonicParsing="false" onAction="#handleLogout">
                <padding>
-                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                  <Insets bottom="7.0" left="17.5" right="17.0" top="7.0" />
                </padding></Button>
-            <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
-            <Button id="logout" fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0">
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout">
                <padding>
-                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                  <Insets bottom="7.0" left="17.5" right="17.0" top="7.0" />
                </padding></Button>
-            <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
-            <Button id="settings" fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0">
+            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings">
                <padding>
-                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                  <Insets bottom="7.0" left="17.5" right="17.0" top="7.0" />
                </padding></Button>
          </children>
+         <padding>
+            <Insets bottom="12.0" top="12.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets left="42.5" right="42.0" />
+         </BorderPane.margin>
       </HBox>
    </bottom>
 </BorderPane>

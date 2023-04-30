@@ -7,12 +7,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import user.Account;
 import data.Database;
@@ -65,6 +64,9 @@ public class AccountViewController implements Initializable {
     public Label title;
 
     @FXML
+    private HBox buttonsRow;
+
+    @FXML
     public Button back;
 
     @FXML
@@ -77,9 +79,6 @@ public class AccountViewController implements Initializable {
 
     // Don't want the font to be too large.
     private final int MAX_FONT_SIZE = 30;
-
-    private final DoubleProperty gridWidthSize = new SimpleDoubleProperty(530);
-    private final DoubleProperty gridHeightSize = new SimpleDoubleProperty(491);
 
     // To change the font size of the title.
     private final ObjectProperty<Font> titleFontTracking = new SimpleObjectProperty<>(Font.getDefault());
@@ -97,16 +96,20 @@ public class AccountViewController implements Initializable {
     private final ObjectProperty<Insets> pinPaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 15));
     private final ObjectProperty<Insets> deletePaddingSize = new SimpleObjectProperty<>(new Insets(24.0, 14, 24.0, 14.5));
 
-    private final DoubleProperty spacingSize = new SimpleDoubleProperty(21);
-
-    private final DoubleProperty fieldHeight = new SimpleDoubleProperty(31);
-
-    private final DoubleProperty listViewWidth = new SimpleDoubleProperty(352);
-    private final DoubleProperty listViewHeight = new SimpleDoubleProperty(412);
+    private final ObjectProperty<Insets> bottomButtonsPadding = new SimpleObjectProperty<>(new Insets(7, 17, 7, 17.5));
+    private final ObjectProperty<Insets> rowPadding = new SimpleObjectProperty<>(new Insets(12, 0, 12, 0));
+    private final DoubleProperty rowSpacing = new SimpleDoubleProperty(170);
 
     private final ObjectProperty<Font> noItemsFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
+    private final DoubleProperty gridMaxWidth = new SimpleDoubleProperty(530);
+    private final DoubleProperty gridMaxHeight = new SimpleDoubleProperty(451);
+
+    private final DoubleProperty leftSpacing = new SimpleDoubleProperty(9);
+    private final DoubleProperty rightSpacing = new SimpleDoubleProperty(17);
+
     private final ObjectProperty<Insets> boxPadding = new SimpleObjectProperty<>(new Insets(40, 5, 0, 5));
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());
@@ -139,19 +142,20 @@ public class AccountViewController implements Initializable {
             buttonFontSize.set(Font.font(result * 0.75));
             double verticalButtonPadding = result * 1.2;
             selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.6, verticalButtonPadding, result * 0.625));
-            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.85, verticalButtonPadding, result * 0.875));
-            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
-            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
+            addPaddingSize.set(new Insets(verticalButtonPadding, result * 0.85, verticalButtonPadding, result * 0.875));
+            pinPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
+            deletePaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
             boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
-            spacingSize.set(result * 1.05);
-            GridPane.setMargin(left, new Insets(0, 0, result * 1.95, 0));
-            GridPane.setMargin(right, new Insets(result * 1.9235, 0, result * 1.95, 0));
-            fieldHeight.set(result * 1.55);
-            listViewWidth.set(result * 17.6);
-            listViewHeight.set(result * 20.6);
+            rowPadding.set(new Insets(result * 0.6));
+            BorderPane.setMargin(buttonsRow, new Insets(0, result * 2.1, 0, result * 2.125));
+            bottomButtonsPadding.set(new Insets(result * 0.35, result * 0.85, result * 0.35, result * 0.875));
+            rowSpacing.set(result * 8.5);
             noItemsFontSize.set(Font.font(result * 1.25));
-            gridWidthSize.set(result * 26.5);
-            gridHeightSize.set(result * 24.55);
+            gridMaxWidth.set(result * 26.5);
+            gridMaxHeight.set(result * 22.55);
+            BorderPane.setMargin(grid, new Insets(0, 0, result * 1.95, 0));
+            leftSpacing.set(result * 0.45);
+            GridPane.setMargin(right, new Insets(search.getHeight() + leftSpacing.getValue(), 0, 0, 0));
         }));
 
         box.heightProperty().addListener(((observableValue, number, t1) -> {
@@ -160,19 +164,19 @@ public class AccountViewController implements Initializable {
             buttonFontSize.set(Font.font(result * 0.75));
             double verticalButtonPadding = result * 1.2;
             selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.6, verticalButtonPadding, result * 0.625));
-            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.85, verticalButtonPadding, result * 0.875));
-            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
-            selectPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
+            addPaddingSize.set(new Insets(verticalButtonPadding, result * 0.85, verticalButtonPadding, result * 0.875));
+            pinPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
+            deletePaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
             boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
-            spacingSize.set(result * 1.05);
-            GridPane.setMargin(left, new Insets(0, 0, result * 1.95, 0));
-            GridPane.setMargin(right, new Insets(result * 1.9235, 0, result * 1.95, 0));
-            fieldHeight.set(result * 1.55);
-            listViewWidth.set(result * 17.6);
-            listViewHeight.set(result * 20.6);
+            rowPadding.set(new Insets(result * 0.6));
+            BorderPane.setMargin(buttonsRow, new Insets(0, result * 2.1, 0, result * 2.125));
+            bottomButtonsPadding.set(new Insets(result * 0.35, result * 0.85, result * 0.35, result * 0.875));
+            rowSpacing.set(result * 8.5);
             noItemsFontSize.set(Font.font(result * 1.25));
-            gridWidthSize.set(result * 26.5);
-            gridHeightSize.set(result * 24.55);
+            gridMaxWidth.set(result * 26.5);
+            gridMaxHeight.set(result * 22.55);
+            BorderPane.setMargin(grid, new Insets(0, 0, result * 1.95, 0));
+            leftSpacing.set(result * 0.45);
         }));
 
         title.fontProperty().bind(titleFontTracking);
@@ -189,20 +193,23 @@ public class AccountViewController implements Initializable {
 
         box.paddingProperty().bind(boxPadding);
 
-        GridPane.setMargin(left, new Insets(0, 0, 39, 0));
-        GridPane.setMargin(right, new Insets(38.47, 0, 39, 0));
+        buttonsRow.paddingProperty().bind(rowPadding);
+        buttonsRow.spacingProperty().bind(rowSpacing);
 
-        right.spacingProperty().bind(spacingSize);
-
-        search.prefHeightProperty().bind(fieldHeight);
-
-        accounts.prefWidthProperty().bind(listViewWidth);
-        accounts.prefHeightProperty().bind(listViewHeight);
+        back.paddingProperty().bind(bottomButtonsPadding);
+        logout.paddingProperty().bind(bottomButtonsPadding);
+        settings.paddingProperty().bind(bottomButtonsPadding);
 
         defaultText.fontProperty().bind(noItemsFontSize);
 
-        grid.prefWidthProperty().bind(gridWidthSize);
-        grid.prefHeightProperty().bind(gridHeightSize);
+        grid.prefWidthProperty().bind(gridMaxWidth);
+        grid.maxWidthProperty().bind(gridMaxWidth);
+
+        right.spacingProperty().bind(rightSpacing);
+
+        left.spacingProperty().bind(leftSpacing);
+
+        search.fontProperty().bind(buttonFontSize);
     }
 
     /**
