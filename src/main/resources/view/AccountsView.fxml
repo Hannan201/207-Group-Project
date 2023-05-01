@@ -41,19 +41,19 @@
             </VBox>
             <VBox fx:id="right" alignment="BOTTOM_CENTER" spacing="17.0" GridPane.columnIndex="1">
                <children>
-                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
+                  <Button fx:id="select" minHeight="-Infinity" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="12.5" right="12.0" top="24.0" />
                      </padding></Button>
-                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" text="Add &#10;Account" textAlignment="CENTER">
+                  <Button fx:id="add" minHeight="-Infinity" mnemonicParsing="false" onAction="#handleAddAccount" text="Add &#10;Account" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="17.5" right="17.0" top="24.0" />
                      </padding></Button>
-                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" text="Pin &#10;Accounts" textAlignment="CENTER">
+                  <Button fx:id="pin" minHeight="-Infinity" mnemonicParsing="false" onAction="#handlePinAccount" text="Pin &#10;Accounts" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="15.0" right="14.0" top="24.0" />
                      </padding></Button>
-                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" text="Delete&#10;Accounts" textAlignment="CENTER">
+                  <Button fx:id="delete" minHeight="-Infinity" mnemonicParsing="false" onAction="#handleDeleteAccount" text="Delete&#10;Accounts" textAlignment="CENTER">
                      <padding>
                         <Insets bottom="24.0" left="14.5" right="14.0" top="24.0" />
                      </padding></Button>
