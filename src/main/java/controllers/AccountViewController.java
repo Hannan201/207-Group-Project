@@ -102,11 +102,12 @@ public class AccountViewController implements Initializable {
 
     private final ObjectProperty<Font> noItemsFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
-    private final DoubleProperty gridMaxWidth = new SimpleDoubleProperty(530);
-    private final DoubleProperty gridMaxHeight = new SimpleDoubleProperty(451);
-
     private final DoubleProperty leftSpacing = new SimpleDoubleProperty(9);
-    private final DoubleProperty rightSpacing = new SimpleDoubleProperty(17);
+    private final ObjectProperty<Insets> leftPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
+
+    private final ObjectProperty<Insets> rightPadding = new SimpleObjectProperty<>(new Insets(0, 28, 0, 28));
+
+    private final DoubleProperty listViewWidth = new SimpleDoubleProperty(352);
 
     private final ObjectProperty<Insets> boxPadding = new SimpleObjectProperty<>(new Insets(40, 5, 0, 5));
 
@@ -151,11 +152,11 @@ public class AccountViewController implements Initializable {
             bottomButtonsPadding.set(new Insets(result * 0.35, result * 0.85, result * 0.35, result * 0.875));
             rowSpacing.set(result * 8.5);
             noItemsFontSize.set(Font.font(result * 1.25));
-            gridMaxWidth.set(result * 26.5);
-            gridMaxHeight.set(result * 22.55);
             BorderPane.setMargin(grid, new Insets(0, 0, result * 1.95, 0));
             leftSpacing.set(result * 0.45);
-            GridPane.setMargin(right, new Insets(search.getHeight() + leftSpacing.getValue(), 0, 0, 0));
+            leftPadding.set(new Insets(0, 0, 0, result * 1.5));
+            rightPadding.set(new Insets(0, result * 1.4, 0, result * 1.4));
+            listViewWidth.set(result * 17.6);
         }));
 
         box.heightProperty().addListener(((observableValue, number, t1) -> {
@@ -173,10 +174,11 @@ public class AccountViewController implements Initializable {
             bottomButtonsPadding.set(new Insets(result * 0.35, result * 0.85, result * 0.35, result * 0.875));
             rowSpacing.set(result * 8.5);
             noItemsFontSize.set(Font.font(result * 1.25));
-            gridMaxWidth.set(result * 26.5);
-            gridMaxHeight.set(result * 22.55);
             BorderPane.setMargin(grid, new Insets(0, 0, result * 1.95, 0));
             leftSpacing.set(result * 0.45);
+            leftPadding.set(new Insets(0, 0, 0, result * 1.5));
+            rightPadding.set(new Insets(0, result * 1.4, 0, result * 1.4));
+            listViewWidth.set(result * 17.6);
         }));
 
         title.fontProperty().bind(titleFontTracking);
@@ -202,14 +204,21 @@ public class AccountViewController implements Initializable {
 
         defaultText.fontProperty().bind(noItemsFontSize);
 
-        grid.prefWidthProperty().bind(gridMaxWidth);
-        grid.maxWidthProperty().bind(gridMaxWidth);
-
-        right.spacingProperty().bind(rightSpacing);
+        right.paddingProperty().bind(rightPadding);
+        right.spacingProperty().bind(
+                accounts.heightProperty()
+                        .subtract(add.heightProperty())
+                        .subtract(select.heightProperty())
+                        .subtract(pin.heightProperty())
+                        .subtract(delete.heightProperty())
+                        .divide(3.0)
+        );
 
         left.spacingProperty().bind(leftSpacing);
+        left.paddingProperty().bind(leftPadding);
 
         search.fontProperty().bind(buttonFontSize);
+        accounts.prefWidthProperty().bind(listViewWidth);
     }
 
     /**

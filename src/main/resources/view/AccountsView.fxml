@@ -14,22 +14,22 @@
 
 <BorderPane fx:id="box" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AccountViewController">
    <center>
-      <GridPane fx:id="grid" BorderPane.alignment="CENTER">
+      <GridPane fx:id="grid" maxWidth="-Infinity" BorderPane.alignment="CENTER">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="72.2611509" />
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="27.7358491" />
+            <ColumnConstraints hgrow="NEVER" />
+            <ColumnConstraints hgrow="NEVER" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="ALWAYS" />
          </rowConstraints>
          <children>
             <VBox fx:id="left" spacing="9.0" GridPane.halignment="CENTER">
                <children>
-                  <TextField fx:id="search" focusTraversable="false" prefWidth="383.0" promptText="Search for your username...">
+                  <TextField fx:id="search" focusTraversable="false" promptText="Search for your username...">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></TextField>
-                  <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0" VBox.vgrow="ALWAYS">
+                  <ListView fx:id="accounts" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <placeholder>
                         <Label fx:id="defaultText" text="Please add an account!" wrapText="true" />
                      </placeholder>
@@ -39,7 +39,7 @@
                   <Insets left="30.0" />
                </padding>
             </VBox>
-            <VBox fx:id="right" alignment="CENTER" spacing="17.0" GridPane.columnIndex="1">
+            <VBox fx:id="right" alignment="BOTTOM_CENTER" spacing="17.0" GridPane.columnIndex="1">
                <children>
                   <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" text="Select All &#10;Accounts" textAlignment="CENTER">
                      <padding>
@@ -61,6 +61,9 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
+               <padding>
+                  <Insets left="28.0" right="28.0" />
+               </padding>
             </VBox>
          </children>
          <BorderPane.margin>
