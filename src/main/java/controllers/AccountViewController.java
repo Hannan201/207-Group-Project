@@ -114,9 +114,13 @@ public class AccountViewController implements Initializable {
 
     private final ObjectProperty<Insets> boxPadding = new SimpleObjectProperty<>(new Insets(40, 5, 0, 5));
 
+    private final DoubleProperty listViewBaseSize = new SimpleDoubleProperty();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        accounts.setCellFactory(new AccountCellFactory());
+        AccountCellFactory factory = new AccountCellFactory();
+        factory.setDefaultSizes(listViewBaseSize, buttonFontSize);
+        accounts.setCellFactory(factory);
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         search.prefWidthProperty().bind(
@@ -124,14 +128,6 @@ public class AccountViewController implements Initializable {
         );
 
         left.paddingProperty().bind(leftBoxPadding);
-
-        box.widthProperty().addListener((observableValue, number, t1) -> {
-            if (t1.doubleValue() < 480) {
-                leftBoxPadding.set(new Insets(0, 0, 0, Math.max(0, 30 - (480 - t1.doubleValue()))));
-            } else {
-                leftBoxPadding.set(new Insets(0, 0, 0, 30));
-            }
-        });
 
         titleFontSize.bind(box.widthProperty()
                 .add(box.heightProperty())
@@ -150,16 +146,17 @@ public class AccountViewController implements Initializable {
             pinPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
             deletePaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
             boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
-            rowPadding.set(new Insets(result * 0.6));
+            rowPadding.set(new Insets(result * 0.6, 0, result * 0.6, 0));
             BorderPane.setMargin(buttonsRow, new Insets(0, result * 2.1, 0, result * 2.125));
             bottomButtonsPadding.set(new Insets(result * 0.35, result * 0.85, result * 0.35, result * 0.875));
             rowSpacing.set(result * 8.5);
             noItemsFontSize.set(Font.font(result * 1.25));
-            BorderPane.setMargin(grid, new Insets(0, 0, result * 1.95, 0));
+            BorderPane.setMargin(grid, new Insets(0, 0, result * 1.75, 0));
             leftSpacing.set(result * 0.45);
             leftPadding.set(new Insets(0, 0, 0, result * 1.5));
             rightPadding.set(new Insets(0, result * 1.4, 0, result * 1.4));
             listViewWidth.set(result * 17.6);
+            listViewBaseSize.set(result);
         }));
 
         box.heightProperty().addListener(((observableValue, number, t1) -> {
@@ -172,16 +169,17 @@ public class AccountViewController implements Initializable {
             pinPaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.75));
             deletePaddingSize.set(new Insets(verticalButtonPadding, result * 0.7, verticalButtonPadding, result * 0.725));
             boxPadding.set(new Insets(result * 2, result * 0.25, 0, result * 0.25));
-            rowPadding.set(new Insets(result * 0.6));
+            rowPadding.set(new Insets(result * 0.6, 0, result * 0.6, 0));
             BorderPane.setMargin(buttonsRow, new Insets(0, result * 2.1, 0, result * 2.125));
             bottomButtonsPadding.set(new Insets(result * 0.35, result * 0.85, result * 0.35, result * 0.875));
             rowSpacing.set(result * 8.5);
             noItemsFontSize.set(Font.font(result * 1.25));
-            BorderPane.setMargin(grid, new Insets(0, 0, result * 1.95, 0));
+            BorderPane.setMargin(grid, new Insets(0, 0, result * 1.75, 0));
             leftSpacing.set(result * 0.45);
             leftPadding.set(new Insets(0, 0, 0, result * 1.5));
             rightPadding.set(new Insets(0, result * 1.4, 0, result * 1.4));
             listViewWidth.set(result * 17.6);
+            listViewBaseSize.set(result);
         }));
 
         title.fontProperty().bind(titleFontTracking);

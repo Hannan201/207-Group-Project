@@ -1,5 +1,7 @@
 package views.utilities;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContentDisplay;
@@ -11,6 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import user.Account;
 import views.AccountView;
 import views.CodeView;
@@ -35,7 +38,12 @@ public class AccountCell extends ListCell<Account> {
     @FXML
     private VBox textBox;
 
-    public AccountCell() {
+    private final DoubleProperty baseSize;
+    private final ObjectProperty<Font> baseFontSize;
+
+    public AccountCell(DoubleProperty newBaseSize, ObjectProperty<Font> newBaseFontSize) {
+        this.baseSize = newBaseSize;
+        this.baseFontSize = newBaseFontSize;
         loadFXML();
     }
 
@@ -89,18 +97,24 @@ public class AccountCell extends ListCell<Account> {
                 logo.setImage(image);
             }
 
-            logo.setFitWidth(50);
-            logo.setFitHeight(50);
+            //logo.setFitWidth(50);
+            //logo.setFitHeight(50);
+
+            logo.fitWidthProperty().bind(baseSize.multiply(2.5));
+            logo.fitHeightProperty().bind(baseSize.multiply(2.5));
             cell.getChildren();
             HBox.setHgrow(cell, Priority.NEVER);
             setWrapText(true); // wraps the text in the ListCell to avoid long text
 
             platformName.setText(item.getSocialMediaType());
             platformName.setMaxWidth(200); // limits the amount of space that a username can take in the AccountCell
+            platformName.fontProperty().bind(baseFontSize);
             username.setText(item.getName());
-            platformName.setMaxWidth(200); // limits the amount of space that a platform can take in the AccountCell
+            username.setMaxWidth(200); // limits the amount of space that a platform can take in the AccountCell
+            username.fontProperty().bind(baseFontSize);
             HBox.setHgrow(textBox, Priority.ALWAYS);
-            cell.setSpacing(10);
+            //cell.setSpacing(10);
+            cell.spacingProperty().bind(baseSize.divide(2.0));
 
             // If the AccountCell is double-clicked, then this handle method will transition
             // the view from the AccountsView to the CodeView

@@ -18,13 +18,13 @@
     -fx-font-size: 25px;
 }
 
-VBox .button{
+.button{
     -fx-font-family: "Montserrat";
     -fx-background-color: #eaeaea;
     -fx-text-fill: black;
 }
 
-VBox .button:hover{
+.button:hover{
     -fx-font-family: "Montserrat";
     -fx-background-color: #eaeaea;
     -fx-text-fill: #235480;
