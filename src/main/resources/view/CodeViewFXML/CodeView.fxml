@@ -14,7 +14,7 @@
 
 <BorderPane fx:id="background" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CodeViewControllers.CodeViewController">
    <center>
-      <GridPane alignment="CENTER" maxWidth="-Infinity" BorderPane.alignment="CENTER">
+      <GridPane fx:id="grid" alignment="CENTER" maxWidth="-Infinity" BorderPane.alignment="CENTER">
          <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />
             <ColumnConstraints hgrow="NEVER" />
@@ -23,18 +23,21 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <VBox fx:id="left" alignment="CENTER_LEFT" spacing="7.0" GridPane.halignment="CENTER">
+            <VBox fx:id="left" alignment="CENTER_LEFT" spacing="9.0" GridPane.halignment="CENTER">
                <children>
-                  <Label fx:id="codesTitle" text="Codes">
+                  <Label fx:id="codesTitle" maxWidth="1.7976931348623157E308" text="Codes">
                      <VBox.margin>
-                        <Insets top="13.0" />
-                     </VBox.margin></Label>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="4.0" left="5.0" top="4.0" />
+                     </padding></Label>
                   <ListView fx:id="codeListView" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <placeholder>
                         <Label fx:id="placeholderText" text="Please Add a Code" wrapText="true" />
                      </placeholder>
                   </ListView>
-                  <HBox spacing="25.0">
+                  <HBox fx:id="manualInputRow" spacing="25.0">
                      <children>
                         <TextField fx:id="addCodeInput" onKeyPressed="#addCodeOnEnter" prefWidth="55.0" HBox.hgrow="ALWAYS" />
                         <Button fx:id="addCode" alignment="CENTER" mnemonicParsing="false" onAction="#addCodeOnAction" text="Add Code" wrapText="true">
@@ -49,13 +52,13 @@
                   <Insets left="30.0" />
                </padding>
             </VBox>
-            <VBox fx:id="right" alignment="CENTER" GridPane.columnIndex="1">
+            <VBox fx:id="right" alignment="TOP_CENTER" GridPane.columnIndex="1">
                <children>
-                  <Button fx:id="importCodes" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#importCodeOnAction" text="Import &#10;Codes&#10;" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="importCodes" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#importCodeOnAction" text="Import &#10;Codes&#10;">
                      <padding>
                         <Insets bottom="23.0" left="19.0" right="20.0" top="23.0" />
                      </padding></Button>
-                  <Button fx:id="deleteAll" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteAllOnAction" text="Delete All &#10;Codes" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="deleteAll" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteAllOnAction" text="Delete All &#10;Codes" textAlignment="CENTER">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -69,15 +72,18 @@
                <padding>
                   <Insets left="28.0" right="28.0" />
                </padding>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </VBox>
          </children>
          <BorderPane.margin>
-            <Insets bottom="35.0" />
+            <Insets top="9.0" />
          </BorderPane.margin>
       </GridPane>
    </center>
    <padding>
-      <Insets left="5.0" right="5.0" top="16.0" />
+      <Insets left="5.0" right="5.0" top="10.0" />
    </padding>
    <opaqueInsets>
       <Insets />
@@ -85,7 +91,7 @@
    <top>
       <VBox fx:id="titleSection" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" />
             <Label fx:id="usernameTitle" alignment="CENTER" text="Label" />
          </children>
          <BorderPane.margin>
@@ -113,7 +119,7 @@
             </Button>
          </children>
          <padding>
-            <Insets bottom="12.0" top="12.0" />
+            <Insets bottom="12.0" top="7.0" />
          </padding>
          <BorderPane.margin>
             <Insets left="42.5" right="42.0" />

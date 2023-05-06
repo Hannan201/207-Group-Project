@@ -13,11 +13,13 @@
     -fx-font-family: "Montserrat";
     -fx-text-fill: Black;
     -fx-font-weight: 600;
+    -fx-background-color: white;
+    -fx-border-color: #b9b8b8;
 }
 
 #placeholderText{
     -fx-font-family: "Montserrat SemiBold";
-    -fx-font-size: 18;
+    -fx-font-size: 25;
     -fx-text-fill: #676767;
 }
 .list-cell:hover{

@@ -1,17 +1,24 @@
 package controllers.CodeViewControllers;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import user.Account;
 import views.CodeView;
 import views.utilities.CodeViewUtilities.CodeCell;
 
-
 public class CodeCellController {
+    @FXML
+    private StackPane stackpane;
+
     @FXML
     private Label code;
 
@@ -56,6 +63,83 @@ public class CodeCellController {
         copy.setDisable(true);
 
         userInput.setVisible(false);
+    }
+
+    public void setBindings(
+            DoubleProperty baseSize,
+            ObjectProperty<Font> baseFontSize,
+            ObjectProperty<Font> baseLabelSize) {
+
+        backgroundLayout.paddingProperty().bind(
+                Bindings.createObjectBinding(() -> {
+                    double value = baseSize.getValue();
+                    return new Insets(
+                             0,
+                            value / 2.0,
+                            0,
+                            value / 2.0
+                    );
+                }, baseSize)
+        );
+        backgroundLayout.spacingProperty().bind(
+                baseSize.divide(2.0)
+        );
+        backgroundLayout.prefHeightProperty().bind(
+                baseSize.multiply(2.5)
+        );
+
+        copy.fontProperty().bind(baseFontSize);
+        edit.fontProperty().bind(baseFontSize);
+        delete.fontProperty().bind(baseFontSize);
+
+        copy.paddingProperty().bind(
+                Bindings.createObjectBinding(() -> {
+                    double value = baseSize.getValue();
+                    return new Insets(
+                             value * 0.4,
+                            value * 0.7,
+                            value * 0.425,
+                            value * 0.7
+                    );
+                }, baseSize)
+        );
+
+        edit.paddingProperty().bind(
+                Bindings.createObjectBinding(() -> {
+                    double value = baseSize.getValue();
+                    return new Insets(
+                            value * 0.4,
+                            value * 0.925,
+                            value * 0.425,
+                            value * 0.9
+                    );
+                }, baseSize)
+        );
+
+        delete.paddingProperty().bind(
+                Bindings.createObjectBinding(() -> {
+                    double value = baseSize.getValue();
+                    return new Insets(
+                            value * 0.4,
+                            value / 2.0,
+                            value * 0.425,
+                            value / 2.0
+                    );
+                }, baseSize)
+        );
+
+        stackpane.maxWidthProperty().bind(
+                backgroundLayout.widthProperty()
+                        .multiply(89.0 / 344.0)
+        );
+
+        code.fontProperty().bind(baseLabelSize);
+        userInput.fontProperty().bind(baseLabelSize);
+
+        userInput.prefWidthProperty().bind(
+                code.widthProperty()
+                        .add(baseSize)
+        );
     }
 
     /**
@@ -127,7 +211,9 @@ public class CodeCellController {
      * Handles when the copy button is pressed
      */
     public void copyOnAction() {
-
+        System.out.println(code.getWidth());
+        System.out.println(code.getPrefWidth());
+        System.out.println(code.getMaxWidth());
         copy.setOnAction(e -> {
 
             //Get the system clipboard so the code be copied accordingly
