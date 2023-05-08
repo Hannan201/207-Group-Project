@@ -2,15 +2,16 @@ package controllers;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
@@ -43,7 +44,19 @@ public class CreateAccountController implements Initializable{
     public ToggleButton discord;
 
     @FXML
+    private HBox platformRow;
+
+    @FXML
+    private Label platformLabel;
+
+    @FXML
     public TextField platform;
+
+    @FXML
+    private HBox usernameRow;
+
+    @FXML
+    private Label usernameLabel;
 
     @FXML
     public TextField username;
@@ -51,7 +64,37 @@ public class CreateAccountController implements Initializable{
     @FXML
     public VBox box;
 
+    // To dynamically calculate the spacing between the
+    // social media icons.
     private final DoubleProperty spacing = new SimpleDoubleProperty(10);
+
+
+    // Don't want the font to be too large.
+    private final int MAX_FONT_SIZE = 40;
+
+    // To change the font size of the label.
+    private final ObjectProperty<Font> labelFontTracking = new SimpleObjectProperty<>(Font.getDefault());
+
+    // To dynamically calculate the font size needed, of the labels.
+    private final DoubleProperty labelFontSize = new SimpleDoubleProperty();
+
+    // To dynamically calculate the width/height size needed,
+    // of the platform and username text fields.
+    private final DoubleProperty fieldWidthSize = new SimpleDoubleProperty(157);
+    private final DoubleProperty fieldHeightSize = new SimpleDoubleProperty(31);
+
+    // To dynamically calculate the padding needed, of the button
+    // based on the font size.
+    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 26.5, 5.5, 26));
+
+    // To dynamically calculate the size needed, of the button
+    // for the icons based on the font size.
+    private final DoubleProperty iconButtonSize = new SimpleDoubleProperty(50);
+
+    // To dynamically calculate the padding needed, of the labels
+    // based on the font size.
+    private final ObjectProperty<Insets> platformLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 88, 0, 0));
+    private final ObjectProperty<Insets> usernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 37, 0, 0));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -70,8 +113,22 @@ public class CreateAccountController implements Initializable{
 
         createAccount = new Button("Create Account");
         createAccount.setContentDisplay(ContentDisplay.CENTER);
-        createAccount.setPrefHeight(32);
-        createAccount.setPrefWidth(155);
+//        createAccount.setPrefHeight(32);
+//        createAccount.setPrefWidth(155);
+        createAccount.setMinSize(
+                Button.USE_COMPUTED_SIZE,
+                Button.USE_COMPUTED_SIZE
+        );
+        createAccount.setPrefSize(
+                Button.USE_COMPUTED_SIZE,
+                Button.USE_COMPUTED_SIZE
+        );
+        createAccount.setMaxSize(
+                Button.USE_COMPUTED_SIZE,
+                Button.USE_COMPUTED_SIZE
+        );
+        createAccount.paddingProperty().bind(buttonPaddingSize);
+        createAccount.fontProperty().bind(labelFontTracking);
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,
@@ -137,13 +194,189 @@ public class CreateAccountController implements Initializable{
 
         icons.spacingProperty().bind(spacing);
 
-        box.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
-            if (newWidth.doubleValue() < 285) {
-                spacing.set(Math.max(0, (10 - (285 - newWidth.doubleValue()))));
-            } else {
-                spacing.set(10);
-            }
-        }));
+        labelFontSize.bind(
+                box.widthProperty()
+                   .add(box.heightProperty())
+                   .divide(1280 + 720)
+                   .multiply(100)
+                   .multiply(15 / 30.65)
+        );
+
+        box.widthProperty().addListener((observableValue, number, t1) -> {
+            double result = Math.min(
+                    MAX_FONT_SIZE,
+                    labelFontSize.getValue()
+            );
+            labelFontTracking.set(Font.font(result));
+            platformLabelPaddingSize.set(
+                    new Insets(
+                             0,
+                            result * (88.0 / 15.0),
+                            0,
+                            0
+                    )
+            );
+            usernameLabelPaddingSize.set(
+                    new Insets(
+                            0,
+                            result * (37.0 / 15.0),
+                            0,
+                            0
+                    )
+            );
+            fieldWidthSize.set(result * (157.0 / 15.0));
+            fieldHeightSize.set(result * (31.0 / 15.0));
+            buttonPaddingSize.set(
+                    new Insets(
+                            result * (1.0 / 3.0),
+                            result * (26.5 / 15.0),
+                            result * (5.5 / 15.0),
+                            result * (26.0 / 15.0)
+                    )
+            );
+            iconButtonSize.set(result * (50.0 / 15.0));
+            VBox.setMargin(
+                    icons,
+                    new Insets(
+                            0,
+                            0,
+                            result * (6.5 / 15.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    platformRow,
+                    new Insets(
+                            result * 0.4,
+                            0,
+                            result * (2.0 / 15.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    usernameRow,
+                    new Insets(
+                            result * (2.0 / 15.0),
+                            0,
+                            result * (10.0 / 15.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    createAccountWrapper,
+                    new Insets(
+                            result * 0.7,
+                            0,
+                            0,
+                            0
+                    )
+            );
+            spacing.set(result * (10.0 / 15.0));
+        });
+
+        box.heightProperty().addListener((observableValue, number, t1) -> {
+            double result = Math.min(
+                    MAX_FONT_SIZE,
+                    labelFontSize.getValue()
+            );
+            labelFontTracking.set(Font.font(result));
+            platformLabelPaddingSize.set(
+                    new Insets(
+                            0,
+                            result * (88.0 / 15.0),
+                            0,
+                            0
+                    )
+            );
+            usernameLabelPaddingSize.set(
+                    new Insets(
+                            0,
+                            result * (37.0 / 15.0),
+                            0,
+                            0
+                    )
+            );
+            fieldWidthSize.set(result * (157.0 / 15.0));
+            fieldHeightSize.set(result * (31.0 / 15.0));
+            buttonPaddingSize.set(
+                    new Insets(
+                            result * (1.0 / 3.0),
+                            result * (26.5 / 15.0),
+                            result * (5.5 / 15.0),
+                            result * (26.0 / 15.0)
+                    )
+            );
+            iconButtonSize.set(result * (50.0 / 15.0));
+            VBox.setMargin(
+                    icons,
+                    new Insets(
+                            0,
+                            0,
+                            result * (6.5 / 15.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    platformRow,
+                    new Insets(
+                            result * 0.4,
+                            0,
+                            result * (2.0 / 15.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    usernameRow,
+                    new Insets(
+                            result * (2.0 / 15.0),
+                            0,
+                            result * (10.0 / 15.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    createAccountWrapper,
+                    new Insets(
+                            result * 0.7,
+                            0,
+                            0,
+                            0
+                    )
+            );
+            spacing.set(result * (10.0 / 15.0));
+        });
+
+        icons.spacingProperty().bind(spacing);
+
+        platformLabel.fontProperty().bind(labelFontTracking);
+        platformLabel.paddingProperty().bind(
+                platformLabelPaddingSize
+        );
+
+        usernameLabel.fontProperty().bind(labelFontTracking);
+        usernameLabel.paddingProperty().bind(
+                usernameLabelPaddingSize
+        );
+
+        platform.prefWidthProperty().bind(fieldWidthSize);
+        platform.prefHeightProperty().bind(fieldHeightSize);
+        platform.fontProperty().bind(labelFontTracking);
+
+        username.prefWidthProperty().bind(fieldWidthSize);
+        username.prefHeightProperty().bind(fieldHeightSize);
+        username.fontProperty().bind(labelFontTracking);
+
+        github.prefWidthProperty().bind(iconButtonSize);
+        github.prefHeightProperty().bind(iconButtonSize);
+
+        google.prefWidthProperty().bind(iconButtonSize);
+        google.prefHeightProperty().bind(iconButtonSize);
+
+        shopify.prefWidthProperty().bind(iconButtonSize);
+        shopify.prefHeightProperty().bind(iconButtonSize);
+
+        discord.prefWidthProperty().bind(iconButtonSize);
+        discord.prefHeightProperty().bind(iconButtonSize);
     }
 
     /**
@@ -155,14 +388,8 @@ public class CreateAccountController implements Initializable{
      *             un-editable.
      */
     public void toggle(String text) {
-        if (platform.isEditable()) {
-            platform.setText(text);
-            platform.setEditable(false);
-        }
-        else {
-            platform.setText("");
-            platform.setEditable(true);
-        }
+        platform.setText(platform.isEditable() ? text : "");
+        platform.setEditable(!platform.isEditable());
     }
 
     /**
