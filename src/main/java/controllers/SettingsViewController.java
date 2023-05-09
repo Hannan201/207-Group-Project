@@ -5,6 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -225,6 +226,7 @@ public class SettingsViewController implements Initializable {
                     )
             );
             copyrightTextSize.set(result / 2.0);
+            centerSpacing.set(result * (22.0 / 30.0));
         });
 
         mainLayout.heightProperty().addListener((observableValue, number, t1) -> {
@@ -296,6 +298,7 @@ public class SettingsViewController implements Initializable {
                     )
             );
             copyrightTextSize.set(result / 2.0);
+            centerSpacing.set(result * (22.0 / 30.0));
         });
 
         mainLayout.paddingProperty().bind(windowPadding);
@@ -320,15 +323,17 @@ public class SettingsViewController implements Initializable {
         );
         lightModeButton.fontProperty().bind(baseFont);
 
-        dataRow.spacingProperty().bind(
-            highContrastModeButton.widthProperty()
-                    .add(
-                        darkModeButton.widthProperty()
-                    )
-                    .add(lightModeButton.widthProperty())
-                    .subtract(exportData.widthProperty())
-                    .subtract(deleteAccount.widthProperty())
-        );
+        Platform.runLater(() -> {
+            dataRow.spacingProperty().bind(
+                    highContrastModeButton.widthProperty()
+                            .add(
+                                darkModeButton.widthProperty()
+                            )
+                            .add(lightModeButton.widthProperty())
+                            .subtract(exportData.widthProperty())
+                            .subtract(deleteAccount.widthProperty())
+            );
+        });
 
         exportData.paddingProperty().bind(
                 exportPaddingSize
