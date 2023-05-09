@@ -5,57 +5,87 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.HyperlinkLabel?>
 
-<VBox fx:id="mainLayout" alignment="CENTER" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SettingsViewController">
-   <children>
-      <Region maxHeight="-Infinity" prefHeight="24.0" prefWidth="149.0" />
-      <Label fx:id="label" alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="149.0" text="Settings" textAlignment="CENTER">
+
+<BorderPane fx:id="mainLayout" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SettingsViewController">
+   <center>
+      <VBox fx:id="centerLayout" alignment="TOP_CENTER" spacing="22.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  <ToggleButton fx:id="highContrastModeButton" mnemonicParsing="false" onAction="#switchToHighContrastMode" text="High Contrast Mode">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="Buttons" />
+                     </toggleGroup>
+                     <padding>
+                        <Insets bottom="23.0" left="10.0" right="10.0" top="22.0" />
+                     </padding>
+                  </ToggleButton>
+                  <ToggleButton fx:id="darkModeButton" mnemonicParsing="false" onAction="#switchToDarkMode" text="Dark Mode" toggleGroup="$Buttons">
+                     <padding>
+                        <Insets bottom="23.0" left="41.0" right="40.0" top="22.0" />
+                     </padding>
+                  </ToggleButton>
+                  <ToggleButton fx:id="lightModeButton" mnemonicParsing="false" onAction="#switchToLightMode" text="Light" toggleGroup="$Buttons">
+                     <padding>
+                        <Insets bottom="23.0" left="61.0" right="60.0" top="22.0" />
+                     </padding>
+                  </ToggleButton>
+               </children>
+            </HBox>
+            <HBox fx:id="dataRow" alignment="CENTER" spacing="227.0">
+               <children>
+                  <Button fx:id="deleteAccount" mnemonicParsing="false" onAction="#handleDeleteAccounts" text="Delete All Data" />
+                  <Button fx:id="exportData" mnemonicParsing="false" text="Export Data">
+                     <padding>
+                        <Insets bottom="5.0" left="21.0" right="20.0" top="5.0" />
+                     </padding>
+                  </Button>
+               </children>
+            </HBox>
+            <HyperlinkLabel fx:id="copyright" maxWidth="-Infinity" onAction="#handleLinkClick" text="Special thanks to [Icons8] for the following icons:  [app] icon, [Google] icon, [Discord]icon, [Shopify] icon, [Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon.">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="23.0" top="23.0" />
+               </padding>
+            </HyperlinkLabel>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox fx:id="bottomRow" alignment="CENTER" spacing="170.0" BorderPane.alignment="BOTTOM_CENTER">
+         <children>
+            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" onAction="#handleGoBack">
+               <padding>
+                  <Insets bottom="7.0" left="17.5" right="17.0" top="7.0" />
+               </padding>
+            </Button>
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout">
+               <padding>
+                  <Insets bottom="7.0" left="17.5" right="17.0" top="7.0" />
+               </padding>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+   <padding>
+      <Insets bottom="12.0" left="37.5" right="37.5" top="24.0" />
+   </padding>
+   <top>
+      <Label fx:id="label" alignment="TOP_CENTER" text="Settings" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Region maxHeight="-Infinity" prefHeight="20.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="31.0" prefHeight="66.0" prefWidth="540.0">
-         <children>
-            <ToggleButton fx:id="highContrastModeButton" minHeight="31.0" mnemonicParsing="false" onAction="#switchToHighContrastMode" prefHeight="66.0" prefWidth="141.0" text="High Contrast Mode">
-               <toggleGroup>
-                  <ToggleGroup fx:id="Buttons" />
-               </toggleGroup>
-            </ToggleButton>
-            <ToggleButton fx:id="darkModeButton" minHeight="31.0" mnemonicParsing="false" onAction="#switchToDarkMode" prefHeight="66.0" prefWidth="149.0" text="Dark Mode" toggleGroup="$Buttons" />
-            <ToggleButton fx:id="lightModeButton" minHeight="31.0" mnemonicParsing="false" onAction="#switchToLightMode" prefHeight="66.0" prefWidth="141.0" text="Light" toggleGroup="$Buttons" />
-         </children>
-      </HBox>
-      <Region maxHeight="-Infinity" prefHeight="46.0" prefWidth="200.0" />
-      <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="25.0" prefHeight="31.0" prefWidth="200.0">
-         <children>
-            <Button fx:id="deleteAccount" maxWidth="-Infinity" minHeight="25.0" mnemonicParsing="false" onAction="#handleDeleteAccounts" prefHeight="31.0" prefWidth="119.0" text="Delete Account" />
-            <Region maxWidth="-Infinity" prefHeight="31.0" prefWidth="193.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="exportData" maxWidth="-Infinity" minHeight="25.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0" text="Export Data" />
-         </children>
-      </HBox>
-      <Region maxHeight="-Infinity" prefHeight="22.0" prefWidth="200.0" />
-      <HyperlinkLabel fx:id="copyright" maxWidth="-Infinity" minHeight="68.0" onAction="#handleLinkClick" prefHeight="189.0" prefWidth="435.0" text="Special thanks to [Icons8] for the following icons:  [app] icon, [Google] icon, [Discord]icon, [Shopify] icon, [Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon." VBox.vgrow="ALWAYS" />
-      <HBox alignment="CENTER" prefHeight="79.0" prefWidth="530.0">
-         <children>
-            <Button fx:id="back" alignment="CENTER" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="35.0" prefWidth="35.0">
-               <padding>
-                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
-               </padding>
-            </Button>
-            <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="79.0" prefWidth="135.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0">
-               <padding>
-                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
-               </padding>
-            </Button>
-         </children>
-      </HBox>
-      <Region maxHeight="-Infinity" prefHeight="8.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-   </children>
-</VBox>
+   </top>
+</BorderPane>
