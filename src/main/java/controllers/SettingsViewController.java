@@ -57,6 +57,9 @@ public class SettingsViewController implements Initializable {
     private VBox centerLayout;
 
     @FXML
+    private HBox themeButtons;
+
+    @FXML
     private ToggleButton highContrastModeButton;
 
     @FXML
@@ -227,6 +230,15 @@ public class SettingsViewController implements Initializable {
             );
             copyrightTextSize.set(result / 2.0);
             centerSpacing.set(result * (22.0 / 30.0));
+            VBox.setMargin(
+                    themeButtons,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.8,
+                            0
+                    )
+            );
         });
 
         mainLayout.heightProperty().addListener((observableValue, number, t1) -> {
@@ -299,6 +311,15 @@ public class SettingsViewController implements Initializable {
             );
             copyrightTextSize.set(result / 2.0);
             centerSpacing.set(result * (22.0 / 30.0));
+            VBox.setMargin(
+                    themeButtons,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.8,
+                            0
+                    )
+            );
         });
 
         mainLayout.paddingProperty().bind(windowPadding);

@@ -15,7 +15,7 @@
    <center>
       <VBox fx:id="centerLayout" alignment="TOP_CENTER" spacing="22.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER">
+            <HBox fx:id="themeButtons" alignment="CENTER">
                <children>
                   <ToggleButton fx:id="highContrastModeButton" mnemonicParsing="false" onAction="#switchToHighContrastMode" text="High Contrast Mode">
                      <toggleGroup>
@@ -36,6 +36,9 @@
                      </padding>
                   </ToggleButton>
                </children>
+               <VBox.margin>
+                  <Insets bottom="24.0" />
+               </VBox.margin>
             </HBox>
             <HBox fx:id="dataRow" alignment="CENTER" spacing="227.0">
                <children>
@@ -47,13 +50,10 @@
                   </Button>
                </children>
             </HBox>
-            <HyperlinkLabel fx:id="copyright" maxWidth="-Infinity" onAction="#handleLinkClick" prefWidth="465.0" text="Special thanks to [Icons8] for the following icons:  [app] icon, [Google] icon, [Discord]icon, [Shopify] icon, [Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon.">
+            <HyperlinkLabel fx:id="copyright" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" onAction="#handleLinkClick" prefWidth="465.0" text="Special thanks to [Icons8] for the following icons:  [app] icon, [Google] icon, [Discord]icon, [Shopify] icon, [Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon." VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-               <padding>
-                  <Insets bottom="23.0" top="23.0" />
-               </padding>
             </HyperlinkLabel>
          </children>
          <padding>
