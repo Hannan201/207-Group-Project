@@ -13,7 +13,7 @@
     -fx-font-size: 15;
 }
 
-#default {
+#defaultText {
     -fx-text-fill: black;
     -fx-font-size: 25px;
 }
@@ -31,24 +31,24 @@
 }
 
 #logout{
-    -fx-background-size: 35px;
+    -fx-background-size: contain;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-background-image: url('/images/logout_lightmode.png');
+    -fx-background-image: url('../images/logout_lightmode.png');
 }
 
 #settings{
-    -fx-background-image: url('/images/settings_lightmode.png');
-    -fx-background-size: 35px;
+    -fx-background-image: url('../images/settings_lightmode.png');
+    -fx-background-size: contain;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
 #back{
-    -fx-background-image: url('/images/back_lightmode.png');
-    -fx-background-size: 35px;
+    -fx-background-image: url('../images/back_lightmode.png');
+    -fx-background-size: contain;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
