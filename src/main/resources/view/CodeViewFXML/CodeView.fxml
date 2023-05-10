@@ -9,103 +9,121 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="background" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CodeViewControllers.CodeViewController">
    <center>
-      <GridPane alignment="CENTER" maxWidth="530.0" prefHeight="620.0" prefWidth="375.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="grid" alignment="CENTER" maxWidth="-Infinity" BorderPane.alignment="CENTER">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="75.8502994" />
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="25.1497006" />
+            <ColumnConstraints hgrow="NEVER" />
+            <ColumnConstraints hgrow="NEVER" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <VBox fx:id="left" alignment="CENTER_LEFT" prefHeight="455.0" prefWidth="399.0" GridPane.halignment="CENTER">
+            <VBox fx:id="left" alignment="CENTER_LEFT" spacing="9.0" GridPane.halignment="CENTER">
                <children>
-                  <Label fx:id="codesTitle" text="Codes" />
-                  <Region fx:id="aboveListView" maxHeight="-Infinity" prefHeight="9.0" prefWidth="383.0" />
-                  <ListView fx:id="codeListView" maxHeight="1.7976931348623157E308" prefHeight="388.0" prefWidth="394.0" VBox.vgrow="ALWAYS">
+                  <Label fx:id="codesTitle" maxWidth="1.7976931348623157E308" text="Codes">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="4.0" left="5.0" top="4.0" />
+                     </padding></Label>
+                  <ListView fx:id="codeListView" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <placeholder>
-                        <Label fx:id="placeholderText" maxHeight="1.7976931348623157E308" text="Please Add a Code" wrapText="true" />
+                        <Label fx:id="placeholderText" text="Please Add a Code" wrapText="true" />
                      </placeholder>
                   </ListView>
+                  <HBox fx:id="manualInputRow" spacing="25.0">
+                     <children>
+                        <TextField fx:id="addCodeInput" onKeyPressed="#addCodeOnEnter" prefWidth="55.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addCode" alignment="CENTER" mnemonicParsing="false" onAction="#addCodeOnAction" text="Add Code" wrapText="true">
+                           <padding>
+                              <Insets bottom="3.5" left="13.0" right="13.5" top="3.5" />
+                           </padding>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
                <padding>
                   <Insets left="30.0" />
                </padding>
             </VBox>
-            <VBox fx:id="right" alignment="CENTER" prefHeight="603.0" prefWidth="150.0" GridPane.columnIndex="1">
+            <VBox fx:id="right" alignment="TOP_CENTER" GridPane.columnIndex="1">
                <children>
-                  <Region fx:id="aboveButtons" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="59.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="importCodes" mnemonicParsing="false" onAction="#importCodeOnAction" prefHeight="80.0" prefWidth="80.0" text="Import Codes" textAlignment="CENTER" wrapText="true" />
-                  <Region prefHeight="40.0" />
-                  <Button fx:id="deleteAll" alignment="CENTER" mnemonicParsing="false" onAction="#deleteAllOnAction" prefHeight="80.0" prefWidth="80.0" text="Delete All Codes" textAlignment="CENTER" wrapText="true" />
-                  <Region maxHeight="1.7976931348623157E308" prefHeight="105.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="importCodes" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#importCodeOnAction" text="Import &#10;Codes&#10;">
+                     <padding>
+                        <Insets bottom="23.0" left="19.0" right="20.0" top="23.0" />
+                     </padding></Button>
+                  <Button fx:id="deleteAll" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteAllOnAction" text="Delete All &#10;Codes" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="23.0" left="10.0" right="10.0" top="23.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></Button>
                </children>
                <padding>
-                  <Insets left="10.0" right="12.0" />
+                  <Insets left="28.0" right="28.0" />
                </padding>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </VBox>
          </children>
          <BorderPane.margin>
-            <Insets />
+            <Insets top="9.0" />
          </BorderPane.margin>
       </GridPane>
    </center>
    <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      <Insets left="5.0" right="5.0" top="10.0" />
    </padding>
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
    <top>
-      <VBox fx:id="titleSection" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="57.0" prefWidth="530.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="titleSection" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" prefHeight="40.0" prefWidth="530.0" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />
-            <Label fx:id="usernameTitle" alignment="CENTER" prefHeight="10.0" text="Label" />
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" text="Social Media Platform Name" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="usernameTitle" alignment="CENTER" text="Label" />
          </children>
          <BorderPane.margin>
-            <Insets top="10.0" />
+            <Insets />
          </BorderPane.margin>
       </VBox>
    </top>
    <bottom>
-      <VBox maxWidth="-Infinity" prefHeight="129.0" prefWidth="530.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="buttonsRow" alignment="CENTER" spacing="170.0" BorderPane.alignment="CENTER">
          <children>
-            <Region maxHeight="-Infinity" prefHeight="6.0" prefWidth="530.0" />
-            <HBox maxWidth="-Infinity" prefHeight="9.0" prefWidth="530.0">
-               <children>
-                  <Region fx:id="beforeCodeInput" minWidth="-Infinity" prefHeight="25.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
-                  <TextField fx:id="addCodeInput" maxWidth="-Infinity" minWidth="-Infinity" onKeyPressed="#addCodeOnEnter" prefHeight="27.0" prefWidth="246.0" />
-                  <Region fx:id="spaceBetween" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="25.0" />
-                  <Button fx:id="addCode" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addCodeOnAction" prefHeight="25.0" prefWidth="96.0" text="Add Code" wrapText="true" />
-                  <Region prefHeight="25.0" prefWidth="136.0" HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            <Region maxHeight="-Infinity" prefHeight="23.0" prefWidth="528.0" />
-            <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0">
-               <children>
-                  <Button fx:id="back" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="35.0" prefWidth="35.0">
-                     <padding>
-                        <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
-                     </padding></Button>
-                  <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0">
-                     <padding>
-                        <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
-                     </padding></Button>
-                  <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0">
-                     <padding>
-                        <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
-                     </padding></Button>
-               </children>
-            </HBox>
+            <Button fx:id="back" mnemonicParsing="false" onAction="#handleGoBack">
+               <padding>
+                  <Insets bottom="6.0" left="16.0" right="16.5" top="6.0" />
+               </padding>
+            </Button>
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout">
+               <padding>
+                  <Insets bottom="6.0" left="16.5" right="16.0" top="6.0" />
+               </padding>
+            </Button>
+            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings">
+               <padding>
+                  <Insets bottom="6.0" left="16.5" right="16.0" top="6.0" />
+               </padding>
+            </Button>
          </children>
-      </VBox>
+         <padding>
+            <Insets bottom="12.0" top="7.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets left="42.5" right="42.0" />
+         </BorderPane.margin>
+      </HBox>
    </bottom>
 </BorderPane>
