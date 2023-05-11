@@ -106,10 +106,13 @@ public class SignInController implements Initializable {
     // based on the font size.
     private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 26, 5, 26));
 
-    // To dynamically calculate the padding needed, of the labels
+    // To dynamically calculate the spacing needed, of the rows
     // based on the font size.
-    private final ObjectProperty<Insets> usernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 18.5, 0, 18));
-    private final ObjectProperty<Insets> passwordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 20.5, 0, 20));
+    private final DoubleProperty usernameRowSpacing = new SimpleDoubleProperty(19);
+    private final DoubleProperty passwordRowSpacing = new SimpleDoubleProperty(23);
+
+    private final DoubleProperty spacing =
+            new SimpleDoubleProperty(12);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -147,7 +150,7 @@ public class SignInController implements Initializable {
         // Handles the event where the enter key is pressed while the
         // passInput TextField is selected
         passInput.setOnKeyPressed(this::signInFromEnterKey);
-        background.getChildren().add(3, createAccountWrapper);
+        background.getChildren().add(createAccountWrapper);
 
         validator.createCheck()
                 .withMethod(c -> {
@@ -176,10 +179,45 @@ public class SignInController implements Initializable {
             fieldWidthSize.set(result * 7);
             fieldHeightSize.set(result * 1.25);
             buttonPaddingSize.set(new Insets(result * (0.25), result * (26.0 / 20.0), result * (0.25), result * (26.0 / 20.0)));
-            usernameLabelPaddingSize.set(new Insets(0, result * 0.925, 0, result * 0.9));
-            passwordLabelPaddingSize.set(new Insets(0, result * 1.025, 0, result));
-            VBox.setMargin(usernameRow, new Insets(result * 1.025, 0, 6.25, 0));
-            VBox.setMargin(passwordRow, new Insets(6.25, 0, result * 1.4, 0));
+            usernameRowSpacing.set(result * 0.95);
+            passwordRowSpacing.set(result * 1.15);
+            VBox.setMargin(
+                    Title,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.225,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    usernameRow,
+                    new Insets(
+                            result * 0.2,
+                            0,
+                            0,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    passwordRow,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.3875,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    createAccountWrapper,
+                    new Insets(
+                            result * 0.3875,
+                            0,
+                            0,
+                            0
+                    )
+            );
+            spacing.set(result * 0.6);
         }));
 
         background.heightProperty().addListener(((observableValue, number, t1) -> {
@@ -189,11 +227,48 @@ public class SignInController implements Initializable {
             fieldWidthSize.set(result * 7);
             fieldHeightSize.set(result * 1.25);
             buttonPaddingSize.set(new Insets(result * (0.25), result * (26.0 / 20.0), result * (0.25), result * (26.0 / 20.0)));
-            usernameLabelPaddingSize.set(new Insets(0, result * 0.925, 0, result * 0.9));
-            passwordLabelPaddingSize.set(new Insets(0, result * 1.025, 0, result));
-            VBox.setMargin(usernameRow, new Insets(result * 1.025, 0, result * 0.3125, 0));
-            VBox.setMargin(passwordRow, new Insets(result * 0.3125, 0, result * 1.4, 0));
+            usernameRowSpacing.set(result * 0.95);
+            passwordRowSpacing.set(result * 1.15);
+            VBox.setMargin(
+                    Title,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.225,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    usernameRow,
+                    new Insets(
+                            result * 0.2,
+                            0,
+                            0,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    passwordRow,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.3875,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    createAccountWrapper,
+                    new Insets(
+                            result * 0.3875,
+                            0,
+                            0,
+                            0
+                    )
+            );
+            spacing.set(result * 0.6);
         }));
+
+        background.spacingProperty().bind(spacing);
 
         Title.fontProperty().bind(titleFontTracking);
 
@@ -209,11 +284,12 @@ public class SignInController implements Initializable {
         unameInput.fontProperty().bind(labelFontSize);
         passInput.fontProperty().bind(labelFontSize);
 
-        Username.paddingProperty().bind(usernameLabelPaddingSize);
-        Password.paddingProperty().bind(passwordLabelPaddingSize);
-
-        VBox.setMargin(usernameRow, new Insets(20.5, 0, 6.25, 0));
-        VBox.setMargin(passwordRow, new Insets(6.25, 0, 28.0, 0));
+        usernameRow.spacingProperty().bind(
+                usernameRowSpacing
+        );
+        passwordRow.spacingProperty().bind(
+                passwordRowSpacing
+        );
     }
 
     /**
