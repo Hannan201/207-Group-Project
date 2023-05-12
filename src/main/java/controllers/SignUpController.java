@@ -33,9 +33,6 @@ public class SignUpController implements Initializable {
     private final Validator validator = new Validator();
 
     @FXML
-    private BorderPane background;
-
-    @FXML
     private Label title;
 
     @FXML
@@ -89,10 +86,6 @@ public class SignUpController implements Initializable {
     // To dynamically calculate the font size needed, of the title.
     private final DoubleProperty titleFontSize = new SimpleDoubleProperty();
 
-    // To dynamically calculate the padding needed, of the title
-    // based on the font size.
-    private final ObjectProperty<Insets> titlePaddingSize = new SimpleObjectProperty<>(new Insets(5, 0, 5, 0));
-
     // To dynamically calculate the font size needed, of the labels.
     private final ObjectProperty<Font> labelFontSize = new SimpleObjectProperty<>(Font.getDefault());
 
@@ -105,12 +98,14 @@ public class SignUpController implements Initializable {
     // based on the font size.
     private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 38, 5, 38.5));
 
-    // To dynamically calculate the padding needed, of the labels
-    // based on the font size.
-    private final ObjectProperty<Insets> initialUsernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 37, 0, 0));
-    private final ObjectProperty<Insets> verifiedUsernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 36, 0, 0));
-    private final ObjectProperty<Insets> initialPasswordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 82, 0, 0));
-    private final ObjectProperty<Insets> verifiedPasswordLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 40, 0, 0));
+    // To dynamically compute the spacing needed, of the gap
+    // between the label and text fields.
+    private final DoubleProperty initialUsernameRowSpacing = new SimpleDoubleProperty(20);
+    private final DoubleProperty verifiedUsernameRowSpacing = new SimpleDoubleProperty(19);
+    private final DoubleProperty initialPasswordRowSpacing = new SimpleDoubleProperty(65);
+    private final DoubleProperty verifiedPasswordRowSpacing = new SimpleDoubleProperty(23);
+
+    private final DoubleProperty boxSpacing = new SimpleDoubleProperty(12);
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
@@ -235,49 +230,117 @@ public class SignUpController implements Initializable {
                 .decorates(verifiedUsername)
                 .immediate();
 
-        titleFontSize.bind(background.widthProperty()
-                .add(background.heightProperty())
-                .divide(1280 + 720)
-                .multiply(100)
-                .multiply(24.0 / 34.0)
+        titleFontSize.bind(
+                box.widthProperty()
+                        .add(box.heightProperty())
+                        .divide(2000.0)
+                        .multiply(100.0)
+                        .multiply(24.0 / 34.0)
         );
 
-        background.widthProperty().addListener(((observableValue, number, t1) -> {
+        box.widthProperty().addListener(((observableValue, number, t1) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
-            titlePaddingSize.set(new Insets(result * (5.0 / 24.0), 0, result * (5.0 / 24.0), 0));
             labelFontSize.set(Font.font(result * 0.625));
-            fieldWidthSize.set(result * (149.0 / 24.0));
+            fieldWidthSize.set(result * (140 / 24.0));
             fieldHeightSize.set(result * (31.0 / 24.0));
             buttonPaddingSize.set(new Insets(result * (5.0 / 24.0), result * (38.0 / 24.0), result * (5.0 / 24.0), result * (38.5 / 24.0)));
-            initialUsernameLabelPaddingSize.set(new Insets(0, result * (37.0 / 24.0), 0, 0));
-            verifiedUsernameLabelPaddingSize.set(new Insets(0, result * 1.5 , 0, 0));
-            initialPasswordLabelPaddingSize.set(new Insets(0, result * (82.0 / 24.0), 0, 0));
-            verifiedPasswordLabelPaddingSize.set(new Insets(0, result * (40.0 / 24.0), 0, 0));
-            VBox.setMargin(initialUsernameRow, new Insets(result * (8.0 / 24.0), 0, result * (8.0 / 24.0), 0));
-            VBox.setMargin(initialPasswordRow, new Insets(result * (11.0 / 24.0), 0, 0, 0));
-            VBox.setMargin(verifiedPasswordRow, new Insets(result * (4.0 / 24.0), 0, result, 0));
+            boxSpacing.set(result * 0.5);
+            initialUsernameRowSpacing.set(result * (20.0 / 24.0));
+            verifiedUsernameRowSpacing.set(result * (19.0 / 24.0));
+            initialPasswordRowSpacing.set(result * (65.0 / 24.0));
+            verifiedPasswordRowSpacing.set(result * (23 / 24.0));
+            VBox.setMargin(
+                    title,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.1875,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    initialUsernameRow,
+                    new Insets(
+                            result * (4.0 / 24.0),
+                            0,
+                            0,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    verifiedPasswordRow,
+                    new Insets(
+                            0,
+                            0,
+                            result * (7.75 / 24.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    createAccountWrapper,
+                    new Insets(
+                            result * (7.75 / 24.0),
+                            0,
+                            0,
+                            0
+                    )
+            );
         }));
 
-        background.heightProperty().addListener(((observableValue, number, t1) -> {
+        box.heightProperty().addListener(((observableValue, number, t1) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
-            titlePaddingSize.set(new Insets(result * (5.0 / 24.0), 0, result * (5.0 / 24.0), 0));
             labelFontSize.set(Font.font(result * 0.625));
-            fieldWidthSize.set(result * (149.0 / 24.0));
+            fieldWidthSize.set(result * (140 / 24.0));
             fieldHeightSize.set(result * (31.0 / 24.0));
             buttonPaddingSize.set(new Insets(result * (5.0 / 24.0), result * (38.0 / 24.0), result * (5.0 / 24.0), result * (38.5 / 24.0)));
-            initialUsernameLabelPaddingSize.set(new Insets(0, result * (37.0 / 24.0), 0, 0));
-            verifiedUsernameLabelPaddingSize.set(new Insets(0, result * 1.5 , 0, 0));
-            initialPasswordLabelPaddingSize.set(new Insets(0, result * (82.0 / 24.0), 0, 0));
-            verifiedPasswordLabelPaddingSize.set(new Insets(0, result * (40.0 / 24.0), 0, 0));
-            VBox.setMargin(initialUsernameRow, new Insets(result * (8.0 / 24.0), 0, result * (8.0 / 24.0), 0));
-            VBox.setMargin(initialPasswordRow, new Insets(result * (11.0 / 24.0), 0, 0, 0));
-            VBox.setMargin(verifiedPasswordRow, new Insets(result * (4.0 / 24.0), 0, result, 0));
+            boxSpacing.set(result * 0.5);
+            initialUsernameRowSpacing.set(result * (20.0 / 24.0));
+            verifiedUsernameRowSpacing.set(result * (19.0 / 24.0));
+            initialPasswordRowSpacing.set(result * (65.0 / 24.0));
+            verifiedPasswordRowSpacing.set(result * (23 / 24.0));
+            VBox.setMargin(
+                    title,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.1875,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    initialUsernameRow,
+                    new Insets(
+                            result * (4.0 / 24.0),
+                            0,
+                            0,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    verifiedPasswordRow,
+                    new Insets(
+                            0,
+                            0,
+                            result * (7.75 / 24.0),
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    createAccountWrapper,
+                    new Insets(
+                            result * (7.75 / 24.0),
+                            0,
+                            0,
+                            0
+                    )
+            );
         }));
+
+        box.spacingProperty().bind(boxSpacing);
 
         title.fontProperty().bind(titleFontTracking);
-        title.paddingProperty().bind(titlePaddingSize);
 
         initialUsername.prefWidthProperty().bind(fieldWidthSize);
         initialUsername.prefHeightProperty().bind(fieldHeightSize);
@@ -301,16 +364,18 @@ public class SignUpController implements Initializable {
         initialPasswordLabel.fontProperty().bind(labelFontSize);
         verifiedPasswordLabel.fontProperty().bind(labelFontSize);
 
-        initialUsernameLabel.paddingProperty().bind(initialUsernameLabelPaddingSize);
-        verifiedUsernameLabel.paddingProperty().bind(verifiedUsernameLabelPaddingSize);
-
-        initialPasswordLabel.paddingProperty().bind(initialPasswordLabelPaddingSize);
-        verifiedPasswordLabel.paddingProperty().bind(verifiedPasswordLabelPaddingSize);
-
-        VBox.setMargin(initialUsernameRow, new Insets(8, 0, 8, 0));
-        VBox.setMargin(verifiedUsernameRow, new Insets(0, 0, 0, 0));
-        VBox.setMargin(initialPasswordRow, new Insets(11, 0, 0, 0));
-        VBox.setMargin(verifiedPasswordRow, new Insets(4.0, 0, 4.0 + 20, 0));
+        initialUsernameRow.spacingProperty().bind(
+                initialUsernameRowSpacing
+        );
+        verifiedUsernameRow.spacingProperty().bind(
+                verifiedUsernameRowSpacing
+        );
+        initialPasswordRow.spacingProperty().bind(
+                initialPasswordRowSpacing
+        );
+        verifiedPasswordRow.spacingProperty().bind(
+                verifiedPasswordRowSpacing
+        );
     }
 
     /**
