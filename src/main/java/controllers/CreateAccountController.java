@@ -70,7 +70,7 @@ public class CreateAccountController implements Initializable{
 
 
     // Don't want the font to be too large.
-    private final int MAX_FONT_SIZE = 40;
+    private final int MAX_FONT_SIZE = 50;
 
     // To change the font size of the label.
     private final ObjectProperty<Font> labelFontTracking = new SimpleObjectProperty<>(Font.getDefault());
@@ -91,10 +91,8 @@ public class CreateAccountController implements Initializable{
     // for the icons based on the font size.
     private final DoubleProperty iconButtonSize = new SimpleDoubleProperty(50);
 
-    // To dynamically calculate the padding needed, of the labels
-    // based on the font size.
-    private final ObjectProperty<Insets> platformLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 88, 0, 0));
-    private final ObjectProperty<Insets> usernameLabelPaddingSize = new SimpleObjectProperty<>(new Insets(0, 37, 0, 0));
+    private final DoubleProperty platformRowSpacing = new SimpleDoubleProperty(71);
+    private final DoubleProperty usernameRowSpacing = new SimpleDoubleProperty(19);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -113,8 +111,6 @@ public class CreateAccountController implements Initializable{
 
         createAccount = new Button("Create Account");
         createAccount.setContentDisplay(ContentDisplay.CENTER);
-//        createAccount.setPrefHeight(32);
-//        createAccount.setPrefWidth(155);
         createAccount.setMinSize(
                 Button.USE_COMPUTED_SIZE,
                 Button.USE_COMPUTED_SIZE
@@ -195,11 +191,11 @@ public class CreateAccountController implements Initializable{
         icons.spacingProperty().bind(spacing);
 
         labelFontSize.bind(
-                box.widthProperty()
-                   .add(box.heightProperty())
-                   .divide(1280 + 720)
-                   .multiply(100)
-                   .multiply(15 / 30.65)
+                box.heightProperty()
+                        .add(box.widthProperty())
+                        .divide(2000.0)
+                        .multiply(100.0)
+                        .multiply(15.0 / 30.5)
         );
 
         box.widthProperty().addListener((observableValue, number, t1) -> {
@@ -208,24 +204,10 @@ public class CreateAccountController implements Initializable{
                     labelFontSize.getValue()
             );
             labelFontTracking.set(Font.font(result));
-            platformLabelPaddingSize.set(
-                    new Insets(
-                             0,
-                            result * (88.0 / 15.0),
-                            0,
-                            0
-                    )
-            );
-            usernameLabelPaddingSize.set(
-                    new Insets(
-                            0,
-                            result * (37.0 / 15.0),
-                            0,
-                            0
-                    )
-            );
-            fieldWidthSize.set(result * (157.0 / 15.0));
+            fieldWidthSize.set(result * (140.0 / 15.0));
             fieldHeightSize.set(result * (31.0 / 15.0));
+            platformRowSpacing.set(result * (71.0 / 15.0));
+            usernameRowSpacing.set(result * (19.0 / 15.0));
             buttonPaddingSize.set(
                     new Insets(
                             result * (1.0 / 3.0),
@@ -240,32 +222,32 @@ public class CreateAccountController implements Initializable{
                     new Insets(
                             0,
                             0,
-                            result * (6.5 / 15.0),
+                            result * 0.3,
                             0
                     )
             );
             VBox.setMargin(
                     platformRow,
                     new Insets(
-                            result * 0.4,
+                            result * (4.0 / 15.0),
                             0,
-                            result * (2.0 / 15.0),
+                            0,
                             0
                     )
             );
             VBox.setMargin(
                     usernameRow,
                     new Insets(
-                            result * (2.0 / 15.0),
                             0,
-                            result * (10.0 / 15.0),
+                            0,
+                            result * (7.75 / 15.0),
                             0
                     )
             );
             VBox.setMargin(
                     createAccountWrapper,
                     new Insets(
-                            result * 0.7,
+                            result * (7.75 / 15.0),
                             0,
                             0,
                             0
@@ -280,24 +262,10 @@ public class CreateAccountController implements Initializable{
                     labelFontSize.getValue()
             );
             labelFontTracking.set(Font.font(result));
-            platformLabelPaddingSize.set(
-                    new Insets(
-                            0,
-                            result * (88.0 / 15.0),
-                            0,
-                            0
-                    )
-            );
-            usernameLabelPaddingSize.set(
-                    new Insets(
-                            0,
-                            result * (37.0 / 15.0),
-                            0,
-                            0
-                    )
-            );
-            fieldWidthSize.set(result * (157.0 / 15.0));
+            fieldWidthSize.set(result * (140.0 / 15.0));
             fieldHeightSize.set(result * (31.0 / 15.0));
+            platformRowSpacing.set(result * (71.0 / 15.0));
+            usernameRowSpacing.set(result * (19.0 / 15.0));
             buttonPaddingSize.set(
                     new Insets(
                             result * (1.0 / 3.0),
@@ -312,32 +280,32 @@ public class CreateAccountController implements Initializable{
                     new Insets(
                             0,
                             0,
-                            result * (6.5 / 15.0),
+                            result * 0.3,
                             0
                     )
             );
             VBox.setMargin(
                     platformRow,
                     new Insets(
-                            result * 0.4,
+                            result * (4.0 / 15.0),
                             0,
-                            result * (2.0 / 15.0),
+                            0,
                             0
                     )
             );
             VBox.setMargin(
                     usernameRow,
                     new Insets(
-                            result * (2.0 / 15.0),
                             0,
-                            result * (10.0 / 15.0),
+                            0,
+                            result * (7.75 / 15.0),
                             0
                     )
             );
             VBox.setMargin(
                     createAccountWrapper,
                     new Insets(
-                            result * 0.7,
+                            result * (7.75 / 15.0),
                             0,
                             0,
                             0
@@ -349,14 +317,8 @@ public class CreateAccountController implements Initializable{
         icons.spacingProperty().bind(spacing);
 
         platformLabel.fontProperty().bind(labelFontTracking);
-        platformLabel.paddingProperty().bind(
-                platformLabelPaddingSize
-        );
 
         usernameLabel.fontProperty().bind(labelFontTracking);
-        usernameLabel.paddingProperty().bind(
-                usernameLabelPaddingSize
-        );
 
         platform.prefWidthProperty().bind(fieldWidthSize);
         platform.prefHeightProperty().bind(fieldHeightSize);
@@ -365,6 +327,13 @@ public class CreateAccountController implements Initializable{
         username.prefWidthProperty().bind(fieldWidthSize);
         username.prefHeightProperty().bind(fieldHeightSize);
         username.fontProperty().bind(labelFontTracking);
+
+        platformRow.spacingProperty().bind(
+                platformRowSpacing
+        );
+        usernameRow.spacingProperty().bind(
+                usernameRowSpacing
+        );
 
         github.prefWidthProperty().bind(iconButtonSize);
         github.prefHeightProperty().bind(iconButtonSize);
