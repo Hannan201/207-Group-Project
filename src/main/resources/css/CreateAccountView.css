@@ -1,28 +1,53 @@
-#github{
+.root {
+    -fx-background-color: #eeeeee;
+}
+
+.text-field {
+    -fx-background-color: #d9d9d9;
+}
+
+.label {
+    -fx-text-fill: #232323;
+    -fx-font-family: "Montserrat";
+}
+
+.button {
+    -fx-background-color: #b6d7a8;
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+    -fx-font-family: "Montserrat";
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-background-color: #aecca1;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+#github {
     -fx-background-image: url('../images/icons8-github-100.png');
     -fx-background-size: stretch;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-
 }
 
-#google{
+#google {
     -fx-background-image: url('../images/icons8-google-100.png');
     -fx-background-size: stretch;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-
 }
 
-#shopify{
+#shopify {
     -fx-background-image: url('../images/icons8-shopify-100.png');
     -fx-background-size: stretch;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-
 }
 
-#discord{
+#discord {
     -fx-background-image: url('../images/icons8-discord-100.png');
     -fx-background-size: stretch;
     -fx-background-repeat: no-repeat;

@@ -8,10 +8,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
@@ -85,7 +87,7 @@ public class CreateAccountController implements Initializable{
 
     // To dynamically calculate the padding needed, of the button
     // based on the font size.
-    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 26.5, 5.5, 26));
+    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(0, 21, 0, 21.5));
 
     // To dynamically calculate the size needed, of the button
     // for the icons based on the font size.
@@ -93,6 +95,8 @@ public class CreateAccountController implements Initializable{
 
     private final DoubleProperty platformRowSpacing = new SimpleDoubleProperty(71);
     private final DoubleProperty usernameRowSpacing = new SimpleDoubleProperty(19);
+
+    private final DoubleProperty boxSpacing = new SimpleDoubleProperty(12);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -109,7 +113,9 @@ public class CreateAccountController implements Initializable{
             }
         }));
 
-        createAccount = new Button("Create Account");
+        createAccount = new Button("Create\nAccount");
+        createAccount.setLineSpacing(-5);
+        createAccount.setTextAlignment(TextAlignment.CENTER);
         createAccount.setContentDisplay(ContentDisplay.CENTER);
         createAccount.setMinSize(
                 Button.USE_COMPUTED_SIZE,
@@ -208,14 +214,6 @@ public class CreateAccountController implements Initializable{
             fieldHeightSize.set(result * (31.0 / 15.0));
             platformRowSpacing.set(result * (71.0 / 15.0));
             usernameRowSpacing.set(result * (19.0 / 15.0));
-            buttonPaddingSize.set(
-                    new Insets(
-                            result * (1.0 / 3.0),
-                            result * (26.5 / 15.0),
-                            result * (5.5 / 15.0),
-                            result * (26.0 / 15.0)
-                    )
-            );
             iconButtonSize.set(result * (50.0 / 15.0));
             VBox.setMargin(
                     icons,
@@ -254,6 +252,7 @@ public class CreateAccountController implements Initializable{
                     )
             );
             spacing.set(result * (10.0 / 15.0));
+            boxSpacing.set(result * 0.8);
         });
 
         box.heightProperty().addListener((observableValue, number, t1) -> {
@@ -266,14 +265,6 @@ public class CreateAccountController implements Initializable{
             fieldHeightSize.set(result * (31.0 / 15.0));
             platformRowSpacing.set(result * (71.0 / 15.0));
             usernameRowSpacing.set(result * (19.0 / 15.0));
-            buttonPaddingSize.set(
-                    new Insets(
-                            result * (1.0 / 3.0),
-                            result * (26.5 / 15.0),
-                            result * (5.5 / 15.0),
-                            result * (26.0 / 15.0)
-                    )
-            );
             iconButtonSize.set(result * (50.0 / 15.0));
             VBox.setMargin(
                     icons,
@@ -312,9 +303,11 @@ public class CreateAccountController implements Initializable{
                     )
             );
             spacing.set(result * (10.0 / 15.0));
+            boxSpacing.set(result * 0.8);
         });
 
         icons.spacingProperty().bind(spacing);
+        box.spacingProperty().bind(boxSpacing);
 
         platformLabel.fontProperty().bind(labelFontTracking);
 
