@@ -12,17 +12,11 @@
 }
 
 .button {
-    -fx-background-color: #b6d7a8;
-    -fx-background-radius: 4;
-    -fx-border-color: transparent;
-    -fx-border-radius: 4;
     -fx-font-family: "Montserrat";
     -fx-font-weight: bold;
 }
 
 .button:hover {
-    -fx-background-color: #aecca1;
-    -fx-background-radius: 4;
     -fx-cursor: hand;
 }
 

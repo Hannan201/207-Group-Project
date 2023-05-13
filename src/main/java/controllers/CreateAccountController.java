@@ -5,13 +5,15 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -20,6 +22,7 @@ import net.synedra.validatorfx.Validator;
 import user.Account;
 import views.AccountView;
 import views.AddAccountView;
+import views.View;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -131,6 +134,25 @@ public class CreateAccountController implements Initializable{
         );
         createAccount.paddingProperty().bind(buttonPaddingSize);
         createAccount.fontProperty().bind(labelFontTracking);
+        createAccount.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.web("#b6d7a8"),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+        createAccount.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.TRANSPARENT,
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(4),
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,
@@ -144,6 +166,30 @@ public class CreateAccountController implements Initializable{
             stage.close();
             username.clear();
             platform.clear();
+        });
+
+        createAccount.setOnMouseEntered(mouseEvent -> {
+            View.setHoverFillEffect(
+                    createAccount,
+                    createAccount.getBackground()
+                            .getFills()
+                            .get(0)
+                            .getFill(),
+                    Color.web("#aecca1"),
+                    250
+            );
+        });
+
+        createAccount.setOnMouseExited(mouseEvent -> {
+            View.setHoverFillEffect(
+                    createAccount,
+                    createAccount.getBackground()
+                            .getFills()
+                            .get(0)
+                            .getFill(),
+                    Color.web("#b6d7a8"),
+                    250
+            );
         });
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox

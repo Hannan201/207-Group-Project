@@ -1,12 +1,21 @@
 package views;
 
+import javafx.animation.FillTransition;
+import javafx.animation.Interpolator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import user.Account;
 
 import javafx.scene.input.KeyEvent;
@@ -329,5 +338,51 @@ public abstract class View {
         Node node = (Node) e.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Add a hover effect to a control to change the background
+     * colour of a component by controlling the original colour,
+     * colour on hover, and duration of the effect.
+     *
+     * @param control The UI component which the effect will be
+     *                applied on.
+     * @param fromFillColour The start colour of the component.
+     * @param toFillColour The end colour of the component for
+     *                     when the effect finishes.
+     * @param duration The duration of the event.
+     */
+    public static void setHoverFillEffect(
+            Control control,
+            Paint fromFillColour,
+            Paint toFillColour,
+            double duration
+    ) {
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(fromFillColour);
+
+        FillTransition customTransition = new FillTransition();
+        customTransition.setShape(rectangle);
+        customTransition.setFromValue((Color) fromFillColour);
+        customTransition.setToValue((Color) toFillColour);
+        customTransition.setCycleCount(1);
+        customTransition.setDuration(Duration.millis(duration));
+        customTransition.setInterpolator(new Interpolator() {
+            @Override
+            protected double curve(double v) {
+                control.setBackground(
+                        new Background(
+                                new BackgroundFill(
+                                        rectangle.getFill(),
+                                        new CornerRadii(4),
+                                        Insets.EMPTY
+                                )
+                        )
+                );
+                return v;
+            }
+        });
+
+        customTransition.play();
     }
 }
