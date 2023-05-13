@@ -385,4 +385,53 @@ public abstract class View {
 
         customTransition.play();
     }
+
+    /**
+     * Add a hover effect to a control to change the border
+     * colour of a component by controlling the original colour,
+     * colour on hover, and duration of the effect.
+     *
+     * @param control The UI component which the effect will be
+     *                applied on.
+     * @param fromBorderColour The start border colour of
+     *                         the component.
+     * @param toBorderColour The end border colour of
+     *                       the component for when the
+     *                       effect finishes.
+     * @param duration The duration of the event.
+     */
+    public static void setHoverBorderEffect(
+            Control control,
+            Paint fromBorderColour,
+            Paint toBorderColour,
+            double duration
+    ) {
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(fromBorderColour);
+
+        FillTransition customTransition = new FillTransition();
+        customTransition.setShape(rectangle);
+        customTransition.setFromValue((Color) fromBorderColour);
+        customTransition.setToValue((Color) toBorderColour);
+        customTransition.setCycleCount(1);
+        customTransition.setDuration(Duration.millis(duration));
+        customTransition.setInterpolator(new Interpolator() {
+            @Override
+            protected double curve(double v) {
+                control.setBorder(
+                        new Border(
+                                new BorderStroke(
+                                        rectangle.getFill(),
+                                        BorderStrokeStyle.SOLID,
+                                        new CornerRadii(4),
+                                        BorderWidths.DEFAULT
+                                )
+                        )
+                );
+                return v;
+            }
+        });
+
+        customTransition.play();
+    }
 }

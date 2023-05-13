@@ -15,9 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
@@ -96,7 +95,7 @@ public class SignUpController implements Initializable {
 
     // To dynamically calculate the padding needed, of the button
     // based on the font size.
-    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 38, 5, 38.5));
+    private final ObjectProperty<Insets> buttonPaddingSize = new SimpleObjectProperty<>(new Insets(5, 22, 5, 22.5));
 
     // To dynamically compute the spacing needed, of the gap
     // between the label and text fields.
@@ -127,6 +126,28 @@ public class SignUpController implements Initializable {
         signUp.setPrefSize(Button.USE_COMPUTED_SIZE, Button.USE_COMPUTED_SIZE);
         signUp.fontProperty().bind(labelFontSize);
         signUp.paddingProperty().bind(buttonPaddingSize);
+
+        signUp.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.web("#d7d7d7"),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        signUp.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.TRANSPARENT,
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(4),
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signUp,
@@ -244,8 +265,15 @@ public class SignUpController implements Initializable {
             labelFontSize.set(Font.font(result * 0.625));
             fieldWidthSize.set(result * (140 / 24.0));
             fieldHeightSize.set(result * (31.0 / 24.0));
-            buttonPaddingSize.set(new Insets(result * (5.0 / 24.0), result * (38.0 / 24.0), result * (5.0 / 24.0), result * (38.5 / 24.0)));
             boxSpacing.set(result * 0.5);
+            buttonPaddingSize.set(
+                    new Insets(
+                            result * (5.0 / 24.0),
+                            result * (22.0 / 24.0),
+                            result * (5.0 / 24.0),
+                            result * 0.9375
+                    )
+            );
             initialUsernameRowSpacing.set(result * (20.0 / 24.0));
             verifiedUsernameRowSpacing.set(result * (19.0 / 24.0));
             initialPasswordRowSpacing.set(result * (65.0 / 24.0));
@@ -294,8 +322,15 @@ public class SignUpController implements Initializable {
             labelFontSize.set(Font.font(result * 0.625));
             fieldWidthSize.set(result * (140 / 24.0));
             fieldHeightSize.set(result * (31.0 / 24.0));
-            buttonPaddingSize.set(new Insets(result * (5.0 / 24.0), result * (38.0 / 24.0), result * (5.0 / 24.0), result * (38.5 / 24.0)));
             boxSpacing.set(result * 0.5);
+            buttonPaddingSize.set(
+                    new Insets(
+                            result * (5.0 / 24.0),
+                            result * (22.0 / 24.0),
+                            result * (5.0 / 24.0),
+                            result * 0.9375
+                    )
+            );
             initialUsernameRowSpacing.set(result * (20.0 / 24.0));
             verifiedUsernameRowSpacing.set(result * (19.0 / 24.0));
             initialPasswordRowSpacing.set(result * (65.0 / 24.0));
