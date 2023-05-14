@@ -1,6 +1,7 @@
 package controllers;
 
 import data.Database;
+import javafx.animation.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,15 +16,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import views.AccountView;
 import views.HomePageView;
 import views.View;
 
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -147,6 +154,66 @@ public class SignUpController implements Initializable {
                         )
                 )
         );
+
+        LinearGradient start = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#d7d7d7")),
+                new Stop(1, Color.web("#d7d7d7"))
+        );
+
+        LinearGradient end = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#d4e1f9")),
+                new Stop(1, Color.web("#7ea6e9"))
+        );
+
+        signUp.setOnMouseEntered(mouseEvent -> {
+            View.setHoverLinearGradientEffect(
+                    signUp,
+                    start,
+                    end,
+                    125
+            );
+            View.setHoverBorderEffect(
+                    signUp,
+                    signUp.getBorder()
+                            .getStrokes()
+                            .get(0)
+                            .getTopStroke(),
+                    Color.WHITE,
+                    125
+            );
+        });
+
+        signUp.setOnMouseExited(mouseEvent -> {
+            View.setHoverLinearGradientEffect(
+                    signUp,
+                    end,
+                    start,
+                    125
+            );
+            View.setHoverBorderEffect(
+                    signUp,
+                    signUp.getBorder()
+                            .getStrokes()
+                            .get(0)
+                            .getTopStroke(),
+                    Color.TRANSPARENT,
+                    125
+            );
+        });
+
+
 
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
@@ -411,6 +478,11 @@ public class SignUpController implements Initializable {
         verifiedPasswordRow.spacingProperty().bind(
                 verifiedPasswordRowSpacing
         );
+
+        initialUsername.setText("h");
+        verifiedUsername.setText("h");
+        initialPassword.setText("h");
+        verifiedPassword.setText("h");
     }
 
     /**
