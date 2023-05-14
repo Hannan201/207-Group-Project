@@ -247,7 +247,7 @@ public class CreateAccountController implements Initializable{
                         .add(box.widthProperty())
                         .divide(2000.0)
                         .multiply(100.0)
-                        .multiply(15.0 / 30.5)
+                        .multiply(15.0 / 31.05)
         );
 
         box.widthProperty().addListener((observableValue, number, t1) -> {
@@ -260,6 +260,14 @@ public class CreateAccountController implements Initializable{
             fieldHeightSize.set(result * (31.0 / 15.0));
             platformRowSpacing.set(result * (71.0 / 15.0));
             usernameRowSpacing.set(result * (19.0 / 15.0));
+            buttonPaddingSize.set(
+                    new Insets(
+                            0,
+                            result * 1.4,
+                            0,
+                            result * (21.5 / 15.0)
+                    )
+            );
             iconButtonSize.set(result * (50.0 / 15.0));
             VBox.setMargin(
                     icons,
@@ -311,6 +319,14 @@ public class CreateAccountController implements Initializable{
             fieldHeightSize.set(result * (31.0 / 15.0));
             platformRowSpacing.set(result * (71.0 / 15.0));
             usernameRowSpacing.set(result * (19.0 / 15.0));
+            buttonPaddingSize.set(
+                    new Insets(
+                            0,
+                            result * 1.4,
+                            0,
+                            result * (21.5 / 15.0)
+                    )
+            );
             iconButtonSize.set(result * (50.0 / 15.0));
             VBox.setMargin(
                     icons,
