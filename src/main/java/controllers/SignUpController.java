@@ -323,7 +323,7 @@ public class SignUpController implements Initializable {
                         .add(box.heightProperty())
                         .divide(2000.0)
                         .multiply(100.0)
-                        .multiply(24.0 / 34.0)
+                        .multiply(24.0 / 34.7)
         );
 
         box.widthProperty().addListener(((observableValue, number, t1) -> {
@@ -358,6 +358,24 @@ public class SignUpController implements Initializable {
                     initialUsernameRow,
                     new Insets(
                             result * (4.0 / 24.0),
+                            0,
+                            0,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    verifiedUsernameRow,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.25,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    initialPasswordRow,
+                    new Insets(
+                            result * 0.25,
                             0,
                             0,
                             0
@@ -415,6 +433,24 @@ public class SignUpController implements Initializable {
                     initialUsernameRow,
                     new Insets(
                             result * (4.0 / 24.0),
+                            0,
+                            0,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    verifiedUsernameRow,
+                    new Insets(
+                            0,
+                            0,
+                            result * 0.25,
+                            0
+                    )
+            );
+            VBox.setMargin(
+                    initialPasswordRow,
+                    new Insets(
+                            result * 0.25,
                             0,
                             0,
                             0
