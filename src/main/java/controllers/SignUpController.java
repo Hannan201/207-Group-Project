@@ -478,11 +478,6 @@ public class SignUpController implements Initializable {
         verifiedPasswordRow.spacingProperty().bind(
                 verifiedPasswordRowSpacing
         );
-
-        initialUsername.setText("h");
-        verifiedUsername.setText("h");
-        initialPassword.setText("h");
-        verifiedPassword.setText("h");
     }
 
     /**

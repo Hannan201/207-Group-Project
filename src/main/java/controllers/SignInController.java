@@ -20,9 +20,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
@@ -135,6 +137,85 @@ public class SignInController implements Initializable {
         signInButton.setAlignment(Pos.CENTER);
         signInButton.paddingProperty().bind(buttonPaddingSize);
 
+        signInButton.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.web("#d7d7d7"),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        signInButton.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.TRANSPARENT,
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(4),
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
+        LinearGradient start = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#d7d7d7")),
+                new Stop(1, Color.web("#d7d7d7"))
+        );
+
+        LinearGradient end = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#d4e1f9")),
+                new Stop(1, Color.web("#7ea6e9"))
+        );
+
+        signInButton.setOnMouseEntered(mouseEvent -> {
+            View.setHoverLinearGradientEffect(
+                    signInButton,
+                    start,
+                    end,
+                    125
+            );
+            View.setHoverBorderEffect(
+                    signInButton,
+                    signInButton.getBorder()
+                            .getStrokes()
+                            .get(0)
+                            .getTopStroke(),
+                    Color.WHITE,
+                    125
+            );
+        });
+
+        signInButton.setOnMouseExited(mouseEvent -> {
+            View.setHoverLinearGradientEffect(
+                    signInButton,
+                    end,
+                    start,
+                    125
+            );
+            View.setHoverBorderEffect(
+                    signInButton,
+                    signInButton.getBorder()
+                            .getStrokes()
+                            .get(0)
+                            .getTopStroke(),
+                    Color.TRANSPARENT,
+                    125
+            );
+        });
+
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signInButton,
                 validator.containsErrorsProperty(),
@@ -154,7 +235,7 @@ public class SignInController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (!Database.authenticateUser(unameInput.getText(), passInput.getText())){
+                    if (!Database.authenticateUser(unameInput.getText(), passInput.getText())) {
                         c.error("Wrong username or password, please try again.");
                     }
                 })
