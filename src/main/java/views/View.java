@@ -3,6 +3,7 @@ package views;
 import javafx.animation.FillTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -418,7 +419,7 @@ public abstract class View {
      * colour of a component by controlling the original colour,
      * colour on hover, and duration of the effect.
      *
-     * @param control The UI component which the effect will be
+     * @param component The UI component which the effect will be
      *                applied on.
      * @param fromBorderColour The start border colour of
      *                         the component.
@@ -428,7 +429,7 @@ public abstract class View {
      * @param duration The duration of the event.
      */
     public static void setHoverBorderEffect(
-            Control control,
+            ObjectProperty<Border> component,
             Paint fromBorderColour,
             Paint toBorderColour,
             double duration
@@ -442,7 +443,7 @@ public abstract class View {
         customTransition.setInterpolator(new Interpolator() {
             @Override
             protected double curve(double v) {
-                control.setBorder(
+                component.set(
                         new Border(
                                 new BorderStroke(
                                         ((Color) fromBorderColour).interpolate((Color) toBorderColour,
@@ -466,7 +467,7 @@ public abstract class View {
      * the original linear-gradient colour, linear-gradient
      * colour on hover, and duration of the effect.
      *
-     * @param control The UI component which the effect will be
+     * @param component The UI component which the effect will be
      *                applied on.
      * @param fromLinearGradient The start linear-gradient
      *                           colour of the component.
@@ -476,7 +477,7 @@ public abstract class View {
      * @param duration The duration of the event.
      */
     public static void setHoverLinearGradientEffect(
-            Control control,
+            ObjectProperty<Background> component,
             LinearGradient fromLinearGradient,
             LinearGradient toLinearGradient,
             double duration
@@ -517,7 +518,7 @@ public abstract class View {
                                 (Color) second.getShape().getFill()
                         )
                 );
-                control.setBackground(
+                component.set(
                         new Background(
                                 new BackgroundFill(
                                         gradient,
