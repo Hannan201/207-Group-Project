@@ -4,27 +4,28 @@ import javafx.animation.Transition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
-import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
-public class FillTransition extends Transition {
+public class BackgroundFillTransition extends Transition {
 
     private Color start;
 
     private Color end;
 
-    private ObjectProperty<Node> node;
+    private ObjectProperty<Region> region;
 
-    private static final Node DEFAULT_NODE = null;
-
-    private Node cachedNode;
+    private static final Region DEFAULT_REGION = null;
 
     private ObjectProperty<Duration> duration;
 
-    private static final Duration DEFAULT_DURATION = Duration.ofMillis(400);
+    private static final Duration DEFAULT_DURATION = Duration.millis(400);
 
     private ObjectProperty<Color> fromValue;
 
@@ -34,22 +35,22 @@ public class FillTransition extends Transition {
 
     private static final Color DEFAULT_TO_VALUE = null;
 
-    public final void setNode(Node node) {
-        if (this.node != null || node != null) {
-            this.nodeProperty().set(node);
+    public final void setBackgroundFill(Region region) {
+        if (this.region != null || region != null) {
+            this.regionProperty().set(region);
         }
     }
 
-    public final Node getNode() {
-        return this.node == null ? DEFAULT_NODE : (Node) this.node.get();
+    public final Region getRegion() {
+        return this.region == null ? DEFAULT_REGION : (BackgroundFill) this.backgroundFill.get();
     }
 
-    public final ObjectProperty<Node> nodeProperty() {
-        if (this.node == null) {
-            this.node = new SimpleObjectProperty<>(this, "node", DEFAULT_NODE);
+    public final ObjectProperty<Region> regionProperty() {
+        if (this.region == null) {
+            this.region = new SimpleObjectProperty<>(this, "region", DEFAULT_REGION);
         }
 
-        return this.node;
+        return this.region;
     }
 
     public final void setDuration(Duration duration) {
@@ -67,20 +68,20 @@ public class FillTransition extends Transition {
             this.duration = new ObjectPropertyBase<Duration>() {
                 public void invalidated() {
                     try {
-                        FillTransition.this.setCycleDuration(FillTransition.this.getDuration());
+                        BackgroundFillTransition.this.setCycleDuration(BackgroundFillTransition.this.getDuration());
                     } catch (IllegalArgumentException e) {
                         if (this.isBound()) {
                             this.unbind();
                         }
 
-                        this.set(FillTransition.this.getCycleDuration());
+                        this.set(BackgroundFillTransition.this.getCycleDuration());
                         throw e;
                     }
                 }
 
                 @Override
                 public Object getBean() {
-                    return FillTransition.this;
+                    return BackgroundFillTransition.this;
                 }
 
                 @Override
@@ -94,8 +95,8 @@ public class FillTransition extends Transition {
     }
 
     public final void setFromValue(Color color) {
-        if (this.fromValue != null || var1 != null) {
-            this.fromValueProperty().set(var1);
+        if (this.fromValue != null || color != null) {
+            this.fromValueProperty().set(color);
         }
     }
 
@@ -129,73 +130,42 @@ public class FillTransition extends Transition {
         return this.toValue;
     }
 
-    public FillTransition(Duration duration,
-                          Node node,
-                          Color from,
-                          Color to
+    public BackgroundFillTransition(Duration duration,
+                                    BackgroundFill backgroundFill,
+                                    Color from,
+                                    Color to
                           ) {
         this.setDuration(duration);
-        this.setNode(node);
+        this.setBackgroundFill(backgroundFill);
         this.setFromValue(from);
         this.setToValue(to);
         this.setCycleDuration(duration);
     }
 
-    public FillTransition(
+    public BackgroundFillTransition(
             Duration duration,
             Color from,
             Color to
     ) {
-        this(duration, (Node) null, from, to);
+        this(duration, (BackgroundFill) null, from, to);
     }
 
-    public FillTransition(Duration duration, Node node) {
-        this(duration, node, (Color) null, (Color) null);
+    public BackgroundFillTransition(Duration duration, BackgroundFill backgroundFill) {
+        this(duration, backgroundFill, (Color) null, (Color) null);
     }
 
-    public FillTransition(Duration duration) {
-        this(duration, (Node) null);
+    public BackgroundFillTransition(Duration duration) {
+        this(duration, (BackgroundFill) null);
     }
 
-    public FillTransition() {
-        this(DEFAULT_DURATION, (Node) null);
+    public BackgroundFillTransition() {
+        this(DEFAULT_DURATION, (BackgroundFill) null);
     }
 
     @Override
     protected void interpolate(double v) {
-
-    }
-
-    private Node getTargetNode() {
-        Node node = this.getNode();
-        if (node == null) {
-            Node targetNode = this.getParentTargetNode();
-            if (targetNode instanceof Node) {
-                node = (Shape) targetNode;
-            }
-        }
-
-        return node;
-    }
-
-    boolean startable(boolean bool) {
-        if (!super.startable(bool)) {
-            return false;
-        } else if (!bool && this.cachedNode != null) {
-            return true;
-        } else {
-            Node targetNode = this.getTargetNode();
-            return targetNode != null && (this.getFromValue() != null) && this.getToValue() != null;
-        }
-    }
-
-    void sync(boolean bool) {
-        super.sync(bool);
-        if (bool || this.cachedNode == null) {
-            this.cachedNode = this.getTargetNode();
-            Color fromValue = this.getFromValue();
-            this.start = fromValue != null ? fromValue : (Color) null;
-            this.end = this.getToValue();
-        }
+        Color afterShift = this.start.interpolate(
+                this.end, v
+        );
     }
 }
