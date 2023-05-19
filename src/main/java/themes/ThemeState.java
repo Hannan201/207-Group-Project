@@ -2,26 +2,54 @@ package themes;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.paint.Paint;
 
 public class ThemeState<T> {
 
-    private T start;
-    private T end;
+    private ObjectProperty<T> start;
+    private ObjectProperty<T> end;
 
     public ThemeState() {
+        this(null, null);
     }
 
     public ThemeState(T regular, T onHover) {
-        this.start = regular;
-        this.end = onHover;
+        setStart(regular);
+        setEnd(onHover);
+    }
+
+    public void setStart(T newStart) {
+        if (this.start != null || newStart != null) {
+            this.startProperty().set(newStart);
+        }
     }
 
     public T getStart() {
-        return this.start;
+        return this.start == null ? null : this.start.get();
+    }
+
+    public ObjectProperty<T> startProperty() {
+        if (this.start == null) {
+            start = new SimpleObjectProperty<>(this, "start", null);
+        }
+
+        return start;
+    }
+
+    public void setEnd(T newEnd) {
+        if (this.end != null || newEnd != null) {
+            this.endProperty().set(newEnd);
+        }
     }
 
     public T getEnd() {
-        return this.end;
+        return this.end == null ? null : this.end.get();
+    }
+
+    public ObjectProperty<T> endProperty() {
+        if (this.end == null) {
+            end = new SimpleObjectProperty<>(this, "end", null);
+        }
+
+        return end;
     }
 }

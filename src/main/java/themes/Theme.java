@@ -1,13 +1,13 @@
 package themes;
 
 public class Theme {
-    private static ThemeConfiguration configuration =
+    private static final ThemeConfiguration configuration =
             ThemeConfiguration.LIGHT;
 
     public static void setConfiguration(
             ThemeConfiguration newConfiguration
     ) {
-        configuration = newConfiguration;
+        configuration.update(newConfiguration);
     }
 
     public static ThemeConfiguration getConfiguration() {

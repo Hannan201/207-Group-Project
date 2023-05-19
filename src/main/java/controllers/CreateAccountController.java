@@ -5,24 +5,26 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
+import themes.Theme;
+import transitions.BackgroundFillTransition;
+import transitions.BorderFillTransition;
+import transitions.LinearGradientFillTransition;
+import transitions.TextFillTransition;
 import user.Account;
 import views.AccountView;
 import views.AddAccountView;
-import views.View;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -134,25 +136,170 @@ public class CreateAccountController implements Initializable{
         );
         createAccount.paddingProperty().bind(buttonPaddingSize);
         createAccount.fontProperty().bind(labelFontTracking);
+
+        Theme.getConfiguration()
+                .getSecondaryText()
+                .startProperty()
+                .addListener(
+                        (observableValue, oldValue, newValue) -> {
+                            createAccount.setTextFill(newValue);
+                        }
+                );
+
+        createAccount.setTextFill(Theme.getConfiguration()
+                .getSecondaryText()
+                .getStart());
+
+//        createAccount.setBackground(
+//                new Background(
+//                        new BackgroundFill(
+//                                Color.web("#b6d7a8"),
+//                                new CornerRadii(4),
+//                                Insets.EMPTY
+//                        )
+//                )
+//        );
+        Theme.getConfiguration()
+                .getSecondaryBackground()
+                .startProperty()
+                .addListener(
+                        (observableValue, oldValue, newValue) -> {
+                            createAccount.setBackground(
+                                    new Background(
+                                            new BackgroundFill(
+                                                    newValue,
+                                                    new CornerRadii(4),
+                                                    Insets.EMPTY
+                                            )
+                                    )
+                            );
+                        }
+                );
+
         createAccount.setBackground(
                 new Background(
                         new BackgroundFill(
-                                Color.web("#b6d7a8"),
+                                Theme.getConfiguration()
+                                        .getSecondaryBackground()
+                                        .getStart(),
                                 new CornerRadii(4),
                                 Insets.EMPTY
                         )
                 )
         );
+
+//        createAccount.setBorder(
+//                new Border(
+//                        new BorderStroke(
+//                                Color.TRANSPARENT,
+//                                BorderStrokeStyle.SOLID,
+//                                new CornerRadii(4),
+//                                BorderWidths.DEFAULT
+//                        )
+//                )
+//        );
+
+        Theme.getConfiguration()
+                .getSecondaryBorder()
+                .startProperty()
+                .addListener(
+                        (observableValue, oldValue, newValue) -> {
+                            createAccount.setBorder(
+                                    new Border(
+                                            new BorderStroke(
+                                                    newValue,
+                                                    BorderStrokeStyle.SOLID,
+                                                    new CornerRadii(4),
+                                                    BorderWidths.DEFAULT
+                                            )
+                                    )
+                            );
+                        }
+                );
+
         createAccount.setBorder(
                 new Border(
                         new BorderStroke(
-                                Color.TRANSPARENT,
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(4),
                                 BorderWidths.DEFAULT
                         )
                 )
         );
+
+        //
+        // FOR THE CREATE ACCOUNT BUTTON BACKGROUND.
+        //
+
+        BackgroundFillTransition backgroundHover =
+                new BackgroundFillTransition(
+                        Duration.millis(125),
+                        createAccount
+                );
+        backgroundHover.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .secondaryBackgroundEndProperty()
+        );
+
+        BackgroundFillTransition backgroundExit =
+                new BackgroundFillTransition(
+                        Duration.millis(125),
+                        createAccount
+                );
+        backgroundExit.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .secondaryBackgroundStartProperty()
+        );
+
+        //
+        // FOR THE CREATE ACCOUNT BUTTON BORDER.
+        //
+
+        BorderFillTransition borderHover =
+                new BorderFillTransition(
+                        Duration.millis(125),
+                        createAccount
+                );
+        borderHover.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .secondaryBorderEndProperty()
+        );
+
+        BorderFillTransition borderExit =
+                new BorderFillTransition(
+                        Duration.millis(125),
+                        createAccount
+                );
+        borderExit.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .secondaryBorderStartProperty()
+        );
+
+        //
+        // FOR THE CREATE ACCOUNT BUTTON TEXT.
+        //
+
+        TextFillTransition textHover = new TextFillTransition(
+                Duration.millis(125),
+                createAccount
+        );
+        textHover.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .secondaryTextEndProperty()
+        );
+        TextFillTransition textExit = new TextFillTransition(
+                Duration.millis(125),
+                createAccount
+        );
+        textExit.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .secondaryTextStartProperty()
+        );
+
+
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,
@@ -169,27 +316,63 @@ public class CreateAccountController implements Initializable{
         });
 
         createAccount.setOnMouseEntered(mouseEvent -> {
-            View.setHoverFillEffect(
-                    createAccount,
-                    createAccount.getBackground()
+//            View.setHoverFillEffect(
+//                    createAccount,
+//                    createAccount.getBackground()
+//                            .getFills()
+//                            .get(0)
+//                            .getFill(),
+//                    Color.web("#aecca1"),
+//                    250
+//            );
+            backgroundHover.setFromValue(
+                    (Color) createAccount.getBackground()
                             .getFills()
                             .get(0)
-                            .getFill(),
-                    Color.web("#aecca1"),
-                    250
+                            .getFill()
             );
+            backgroundHover.play();
+            borderHover.setFromValue(
+                    (Color) createAccount.getBorder()
+                            .getStrokes()
+                            .get(0)
+                            .getTopStroke()
+            );
+            borderHover.play();
+            textHover.setFromValue(
+                    createAccount.getTextFill()
+            );
+            textHover.play();
         });
 
         createAccount.setOnMouseExited(mouseEvent -> {
-            View.setHoverFillEffect(
-                    createAccount,
-                    createAccount.getBackground()
+//            View.setHoverFillEffect(
+//                    createAccount,
+//                    createAccount.getBackground()
+//                            .getFills()
+//                            .get(0)
+//                            .getFill(),
+//                    Color.web("#b6d7a8"),
+//                    250
+//            );
+            backgroundExit.setFromValue(
+                    (Color) createAccount.getBackground()
                             .getFills()
                             .get(0)
-                            .getFill(),
-                    Color.web("#b6d7a8"),
-                    250
+                            .getFill()
             );
+            backgroundExit.play();
+            borderExit.setFromValue(
+                    (Color) createAccount.getBorder()
+                            .getStrokes()
+                            .get(0)
+                            .getTopStroke()
+            );
+            borderExit.play();
+            textExit.setFromValue(
+                    createAccount.getTextFill()
+            );
+            textExit.play();
         });
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox

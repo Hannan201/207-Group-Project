@@ -1,7 +1,6 @@
 package themes;
 
-import javafx.geometry.Insets;
-import javafx.scene.layout.*;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.*;
 
 public enum ThemeConfiguration {
@@ -11,188 +10,442 @@ public enum ThemeConfiguration {
     HIGH_CONTRAST;
 
     static {
-        Background primaryBackgroundDefault = new Background(
-                new BackgroundFill(
-                        new LinearGradient(
-                                0,
-                                0,
-                                0,
-                                1,
-                                true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#d7d7d7")),
-                                new Stop(1, Color.web("#d7d7d7"))
-                        ),
-                        new CornerRadii(4),
-                        Insets.EMPTY
-                )
-        );
+        //
+        // Light Mode Configurations.
+        //
+        LinearGradient primaryBackgroundDefault =
+                new LinearGradient(
+                    0,
+                    0,
+                    0,
+                    1,
+                    true,
+                    CycleMethod.NO_CYCLE,
+                    new Stop(0, Color.web("#d7d7d7")),
+                    new Stop(1, Color.web("#d7d7d7"))
+                );
+        LinearGradient primaryBackgroundHover =
+                new LinearGradient(
+                        0,
+                        0,
+                        0,
+                        1,
+                        true,
+                        CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.web("#d4e1f9")),
+                        new Stop(1, Color.web("#7ea6e9"))
+                );
 
-        Background primaryBackgroundHover = new Background(
-                new BackgroundFill(
-                        new LinearGradient(
-                                0,
-                                0,
-                                0,
-                                1,
-                                true,
-                                CycleMethod.NO_CYCLE,
-                                new Stop(0, Color.web("#d4e1f9")),
-                                new Stop(1, Color.web("#7ea6e9"))
-                        ),
-                        new CornerRadii(4),
-                        Insets.EMPTY
-                )
-        );
+        Color secondaryBackgroundDefault = Color.web("#b6d7a8");
+        Color secondaryBackgroundHover = Color.web("#aecca1");
 
-        Background secondaryBackgroundDefault = new Background(
-                new BackgroundFill(
-                        Color.web("#b6d7a8"),
-                        new CornerRadii(4),
-                        Insets.EMPTY
-                )
-        );
+        Color primaryTextDefault = Color.BLACK;
+        Color primaryTextHover = Color.BLACK;
 
-        Background secondaryBackgroundHover = new Background(
-                new BackgroundFill(
-                        Color.web("#aecca1"),
-                        new CornerRadii(4),
-                        Insets.EMPTY
-                )
-        );
+        Color secondaryTextDefault = Color.BLACK;
+        Color secondaryTextHover = Color.BLACK;
 
-        Border primaryBorderDefault = new Border(
-                new BorderStroke(
-                        Color.TRANSPARENT,
-                        BorderStrokeStyle.SOLID,
-                        new CornerRadii(4),
-                        BorderWidths.DEFAULT
-                )
-        );
+        Color tertiaryTextDefault = Color.BLACK;
+        Color tertiaryTextHover = Color.BLACK;
 
-        Border primaryBorderHover = new Border(
-                new BorderStroke(
-                        Color.WHITE,
-                        BorderStrokeStyle.SOLID,
-                        new CornerRadii(4),
-                        BorderWidths.DEFAULT
-                )
-        );
+        Color primaryBorderDefault = Color.TRANSPARENT;
+        Color primaryBorderHover = Color.WHITE;
 
-        ThemeState<Background> backgroundOne = new ThemeState<>(
-                primaryBackgroundDefault,
-                primaryBackgroundHover
-        );
+        Color secondaryBorderDefault = Color.TRANSPARENT;
+        Color secondaryBorderHover = Color.TRANSPARENT;
 
-        ThemeState<Background> backgroundTwo = new ThemeState<>(
+        ThemeState<LinearGradient> backgroundOne =
+                new ThemeState<>(
+                    primaryBackgroundDefault,
+                    primaryBackgroundHover
+                );
+
+        ThemeState<Color> backgroundTwo = new ThemeState<>(
                 secondaryBackgroundDefault,
                 secondaryBackgroundHover
         );
 
-        ThemeState<Border> borderOne = new ThemeState<>(
+        ThemeState<Color> textOne = new ThemeState<>(
+                primaryTextDefault,
+                primaryTextHover
+        );
+
+        ThemeState<Color> textTwo = new ThemeState<>(
+                secondaryTextDefault,
+                secondaryTextHover
+        );
+
+        ThemeState<Color> textThree = new ThemeState<>(
+                tertiaryTextDefault,
+                tertiaryTextHover
+        );
+
+        ThemeState<Color> borderOne = new ThemeState<>(
                 primaryBorderDefault,
                 primaryBorderHover
+        );
+
+        ThemeState<Color> borderTwo = new ThemeState<>(
+                secondaryBorderDefault,
+                secondaryBorderHover
         );
 
         values()[0].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
+                textOne,
+                textTwo,
+                textThree,
                 borderOne,
-                new ThemeState<>()
+                borderTwo
+        );
+
+        //
+        // Dark Mode Configurations.
+        //
+
+        primaryBackgroundDefault = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#161618")),
+                new Stop(1, Color.web("#161618"))
+        );
+        primaryBackgroundHover = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#20262e")),
+                new Stop(1, Color.web("#163b79"))
+        );
+
+        secondaryBackgroundDefault = Color.web("#3e5728");
+        secondaryBackgroundHover = Color.web("#354a22");
+
+        primaryTextDefault = primaryTextHover = Color.web(
+                "#babcc0"
+        );
+
+        secondaryTextDefault = secondaryTextHover = Color.web(
+                "#c9cbc1"
+        );
+
+        tertiaryTextHover = tertiaryTextDefault = Color.web(
+                "#adadad"
+        );
+
+        primaryBorderDefault = Color.TRANSPARENT;
+        primaryBorderHover = Color.WHITE;
+
+        secondaryBorderDefault = Color.TRANSPARENT;
+        secondaryBorderHover = Color.TRANSPARENT;
+
+        backgroundOne =
+                new ThemeState<>(
+                        primaryBackgroundDefault,
+                        primaryBackgroundHover
+                );
+
+        backgroundTwo = new ThemeState<>(
+                secondaryBackgroundDefault,
+                secondaryBackgroundHover
+        );
+
+        textOne = new ThemeState<>(
+                primaryTextDefault,
+                primaryTextHover
+        );
+
+        textTwo = new ThemeState<>(
+                secondaryTextDefault,
+                secondaryTextHover
+        );
+
+        textThree = new ThemeState<>(
+                tertiaryTextDefault,
+                tertiaryTextHover
+        );
+
+        borderOne = new ThemeState<>(
+                primaryBorderDefault,
+                primaryBorderHover
+        );
+
+        borderTwo = new ThemeState<>(
+                secondaryBorderDefault,
+                secondaryBorderHover
+        );
+
+        values()[1].setConfiguration(
+                backgroundOne,
+                backgroundTwo,
+                textOne,
+                textTwo,
+                textThree,
+                borderOne,
+                borderTwo
+        );
+
+        //
+        // High Contrast mode configurations.
+        //
+
+        primaryBackgroundDefault = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.TRANSPARENT),
+                new Stop(1, Color.TRANSPARENT)
+        );
+        primaryBackgroundHover = new LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                true,
+                CycleMethod.NO_CYCLE,
+                new Stop(0, Color.TRANSPARENT),
+                new Stop(1, Color.TRANSPARENT)
+        );
+
+        secondaryBackgroundDefault = Color.TRANSPARENT;
+        secondaryBackgroundHover = Color.TRANSPARENT;
+
+        primaryTextDefault = Color.web("#ff7600");
+        primaryTextHover = Color.web("#00ffff");
+
+        secondaryTextDefault = Color.web("#ff7600");
+        secondaryTextHover = Color.web("#00ffff");
+
+        tertiaryTextDefault = Color.web("#ff7600");
+        tertiaryTextHover = Color.web("#00ffff");
+
+        primaryBorderDefault = Color.web("#ff7600");
+        primaryBorderHover = Color.web("#00ffff");
+
+        secondaryBorderDefault = Color.web("#ff7600");
+        secondaryBorderHover = Color.web("#00ffff");
+
+        backgroundOne = new ThemeState<>(
+                        primaryBackgroundDefault,
+                        primaryBackgroundHover
+        );
+
+        backgroundTwo = new ThemeState<>(
+                secondaryBackgroundDefault,
+                secondaryBackgroundHover
+        );
+
+        textOne = new ThemeState<>(
+                primaryTextDefault,
+                primaryTextHover
+        );
+
+        textTwo = new ThemeState<>(
+                secondaryTextDefault,
+                secondaryTextHover
+        );
+
+        textThree = new ThemeState<>(
+                tertiaryTextDefault,
+                tertiaryTextHover
+        );
+
+        borderOne = new ThemeState<>(
+                primaryBorderDefault,
+                primaryBorderHover
+        );
+
+        borderTwo = new ThemeState<>(
+                secondaryBorderDefault,
+                secondaryBorderHover
+        );
+
+        values()[2].setConfiguration(
+                backgroundOne,
+                backgroundTwo,
+                textOne,
+                textTwo,
+                textThree,
+                borderOne,
+                borderTwo
         );
     }
 
-    private ThemeState<Background> primaryBackground;
-    private ThemeState<Background> secondaryBackground;
-    private ThemeState<Border> primaryBorder;
-    private ThemeState<Border> secondaryBorder;
+    private ThemeState<LinearGradient> primaryBackground;
+    private ThemeState<Color> secondaryBackground;
+
+    private ThemeState<Color> primaryText;
+    private ThemeState<Color> secondaryText;
+    private ThemeState<Color> tertiaryText;
+
+    private ThemeState<Color> primaryBorder;
+    private ThemeState<Color> secondaryBorder;
 
     private void setConfiguration(
-            ThemeState<Background> primaryBackground,
-            ThemeState<Background> secondaryBackground,
-            ThemeState<Border> primaryBorder,
-            ThemeState<Border> secondaryBorder
+            ThemeState<LinearGradient> primaryBackground,
+            ThemeState<Color> secondaryBackground,
+            ThemeState<Color> primaryText,
+            ThemeState<Color> secondaryText,
+            ThemeState<Color> tertiaryText,
+            ThemeState<Color> primaryBorder,
+            ThemeState<Color> secondaryBorder
     ) {
         this.primaryBackground = primaryBackground;
         this.secondaryBackground = secondaryBackground;
+
+        this.primaryText = primaryText;
+        this.secondaryText = secondaryText;
+        this.tertiaryText = tertiaryText;
+
         this.primaryBorder = primaryBorder;
         this.secondaryBorder = secondaryBorder;
     }
 
-    public ThemeState<Background> getPrimaryBackground() {
+    public ThemeState<LinearGradient> getPrimaryBackground() {
         return primaryBackground;
     }
 
-    public Paint getPrimaryBackgroundStartFill() {
-        return this.getBackgroundFill(
-                this.primaryBackground.getStart()
-        );
+    public ObjectProperty<LinearGradient> primaryBackgroundStartProperty() {
+        return this.primaryBackground.startProperty();
     }
 
-    public Paint getPrimaryBackgroundEndFill() {
-        return this.getBackgroundFill(
-                this.primaryBackground.getEnd()
-        );
+    public ObjectProperty<LinearGradient> primaryBackgroundEndProperty() {
+        return this.primaryBackground.endProperty();
     }
 
-    public ThemeState<Background> getSecondaryBackground() {
+    public ThemeState<Color> getSecondaryBackground() {
         return secondaryBackground;
     }
 
-    public Paint getSecondaryBackgroundStartFill() {
-        return this.getBackgroundFill(
-                this.secondaryBackground.getStart()
-        );
+    public ObjectProperty<Color> secondaryBackgroundStartProperty() {
+        return this.secondaryBackground.startProperty();
     }
 
-    public Paint getSecondaryBackgroundEndFill() {
-        return this.getBackgroundFill(
-                this.secondaryBackground.getEnd()
-        );
+    public ObjectProperty<Color> secondaryBackgroundEndProperty() {
+        return this.secondaryBackground.endProperty();
     }
 
-    public ThemeState<Border> getPrimaryBorder() {
+    public ThemeState<Color> getPrimaryText() {
+        return this.primaryText;
+    }
+
+    public ObjectProperty<Color> primaryTextStartProperty() {
+        return this.primaryText.startProperty();
+    }
+
+    public ObjectProperty<Color> primaryTextEndProperty() {
+        return this.primaryText.endProperty();
+    }
+
+    public ThemeState<Color> getSecondaryText() {
+        return this.secondaryText;
+    }
+
+    public ObjectProperty<Color> secondaryTextStartProperty() {
+        return this.secondaryText.startProperty();
+    }
+
+    public ObjectProperty<Color> secondaryTextEndProperty() {
+        return this.secondaryText.endProperty();
+    }
+
+    public ThemeState<Color> getTertiaryText() {
+        return this.tertiaryText;
+    }
+
+    public ObjectProperty<Color> tertiaryTextStartProperty() {
+        return this.tertiaryText.startProperty();
+    }
+
+    public ObjectProperty<Color> tertiaryTextEndProperty() {
+        return this.tertiaryText.endProperty();
+    }
+
+    public ThemeState<Color> getPrimaryBorder() {
         return this.primaryBorder;
     }
 
-    public Paint getPrimaryBorderStartFill() {
-        return this.getBorderFill(
-                this.primaryBorder.getStart()
-        );
+    public ObjectProperty<Color> primaryBorderStartProperty() {
+        return this.primaryBorder.startProperty();
     }
 
-    public Paint getPrimaryBorderEndFill() {
-        return this.getBorderFill(
-                this.primaryBorder.getEnd()
-        );
+    public ObjectProperty<Color> primaryBorderEndProperty() {
+        return this.primaryBorder.endProperty();
     }
 
-    public ThemeState<Border> getSecondaryBorder() {
+    public ThemeState<Color> getSecondaryBorder() {
         return this.secondaryBorder;
     }
 
 
-    public Paint getSecondaryBorderStartFill() {
-        return this.getBorderFill(
-                this.secondaryBorder.getStart()
+    public ObjectProperty<Color> secondaryBorderStartProperty() {
+        return this.secondaryBorder.startProperty();
+    }
+
+    public ObjectProperty<Color> secondaryBorderEndProperty() {
+        return this.secondaryBorder.endProperty();
+    }
+
+    public void update(ThemeConfiguration newConfiguration) {
+        primaryBackground.setStart(
+                newConfiguration.getPrimaryBackground().getStart()
         );
-    }
-
-    public Paint getSecondaryBorderEndFill() {
-        return this.getBorderFill(
-                this.secondaryBorder.getEnd()
+        primaryBackground.setEnd(
+                newConfiguration.getPrimaryBackground().getEnd()
         );
-    }
 
-    private Paint getBackgroundFill(Background background) {
-        return background.getFills()
-                .get(0)
-                .getFill();
-    }
+        primaryText.setStart(
+                newConfiguration.getPrimaryText().getStart()
+        );
+        primaryText.setEnd(
+                newConfiguration.getPrimaryText().getEnd()
+        );
+        secondaryText.setStart(
+                newConfiguration.getSecondaryText().getStart()
+        );
+        secondaryText.setEnd(
+                newConfiguration.getSecondaryText().getEnd()
+        );
+        tertiaryText.setStart(
+                newConfiguration.getTertiaryText().getStart()
+        );
+        tertiaryText.setEnd(
+                newConfiguration.getTertiaryText().getEnd()
+        );
 
-    private Paint getBorderFill(Border border) {
-        return border.getStrokes()
-                .get(0)
-                .getTopStroke();
+        secondaryBackground.setStart(
+                newConfiguration.getSecondaryBackground()
+                        .getStart()
+        );
+        secondaryBackground.setEnd(
+                newConfiguration.getSecondaryBackground()
+                        .getEnd()
+        );
+        primaryBorder.setStart(
+                newConfiguration.getPrimaryBorder()
+                        .getStart()
+        );
+        primaryBorder.setEnd(
+                newConfiguration.getPrimaryBorder()
+                        .getEnd()
+        );
+        secondaryBorder.setStart(
+                newConfiguration.getSecondaryBorder()
+                        .getStart()
+        );
+        secondaryBorder.setEnd(
+                newConfiguration.getSecondaryBorder()
+                        .getEnd()
+        );
     }
 }

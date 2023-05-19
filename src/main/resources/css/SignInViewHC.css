@@ -1,5 +1,4 @@
-
-#background{
+#background {
     -fx-background-color: #000000;
 }
 
@@ -9,37 +8,35 @@
     -fx-text-fill: White;
 }
 
-.text-field{
+.text-field {
     -fx-background-color: transparent;
     -fx-border-color: #ff7600;
     -fx-text-fill: white;
 }
-.text-field:focused{
+
+.text-field:focused {
     -fx-border-color: #00ffff;
     -fx-background-color: rgba(0, 255, 255, 0.09);
 }
-.text-field:hover{
+
+.text-field:hover {
     -fx-border-color: #00ffff;
 }
 
-.label{
+.label {
     -fx-font-size: 14;
     -fx-font-family: "Montserrat";
     -fx-text-fill: #ffffff;
     -fx-font-weight: 600;
 }
 
-.button{
-    -fx-font-size: 14;
+.button {
+    -fx-font-size: 15;
     -fx-font-weight: bold;
     -fx-font-family: "Montserrat";
-    -fx-text-fill: #ff7600;
-    -fx-border-color: #ff7600;
-    -fx-background-color: transparent;
 }
-.button:hover{
-    -fx-text-fill: #00ffff;
-    -fx-border-color: #00ffff;
-    -fx-background-color: transparent;
+
+.button:hover {
+    -fx-cursor: hand;
 }
 

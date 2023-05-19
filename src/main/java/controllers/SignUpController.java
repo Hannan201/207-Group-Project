@@ -1,7 +1,6 @@
 package controllers;
 
 import data.Database;
-import javafx.animation.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -16,21 +15,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
+import javafx.scene.paint.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
+import themes.Theme;
+import transitions.BorderFillTransition;
+import transitions.LinearGradientFillTransition;
+import transitions.TextFillTransition;
 import views.AccountView;
 import views.HomePageView;
 import views.View;
 
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -134,20 +132,43 @@ public class SignUpController implements Initializable {
         signUp.fontProperty().bind(labelFontSize);
         signUp.paddingProperty().bind(buttonPaddingSize);
 
-        signUp.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.web("#d7d7d7"),
-                                new CornerRadii(4),
-                                Insets.EMPTY
-                        )
-                )
-        );
+        Theme.getConfiguration()
+                .getPrimaryText()
+                .startProperty()
+                .addListener(
+                        (observableValue, oldValue, newValue) -> {
+                            signUp.setTextFill(newValue);
+                        }
+                );
+
+        signUp.setTextFill(Theme.getConfiguration()
+                .getPrimaryText()
+                .getStart());
+
+        Theme.getConfiguration()
+                .getPrimaryBorder()
+                .startProperty()
+                .addListener(
+                        (observableValue, oldValue, newValue) -> {
+                            signUp.setBorder(
+                                    new Border(
+                                            new BorderStroke(
+                                                    newValue,
+                                                    BorderStrokeStyle.SOLID,
+                                                    new CornerRadii(4),
+                                                    BorderWidths.DEFAULT
+                                            )
+                                    )
+                            );
+                        }
+                );
 
         signUp.setBorder(
                 new Border(
                         new BorderStroke(
-                                Color.TRANSPARENT,
+                                Theme.getConfiguration()
+                                        .getPrimaryBorder()
+                                        .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(4),
                                 BorderWidths.DEFAULT
@@ -155,65 +176,200 @@ public class SignUpController implements Initializable {
                 )
         );
 
-        LinearGradient start = new LinearGradient(
-                0,
-                0,
-                0,
-                1,
-                true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#d7d7d7")),
-                new Stop(1, Color.web("#d7d7d7"))
+        Theme.getConfiguration()
+                .getPrimaryBackground()
+                .startProperty()
+                .addListener(
+                        (observableValue, oldValue, newValue) -> {
+                            signUp.setBackground(
+                                    new Background(
+                                            new BackgroundFill(
+                                                    newValue,
+                                                    new CornerRadii(4),
+                                                    Insets.EMPTY
+                                            )
+                                    )
+                            );
+                        }
+                );
+
+//        LinearGradient start = new LinearGradient(
+//                0,
+//                0,
+//                0,
+//                1,
+//                true,
+//                CycleMethod.NO_CYCLE,
+//                new Stop(0, Color.web("#d7d7d7")),
+//                new Stop(1, Color.web("#d7d7d7"))
+//        );
+//
+//        LinearGradient end = new LinearGradient(
+//                0,
+//                0,
+//                0,
+//                1,
+//                true,
+//                CycleMethod.NO_CYCLE,
+//                new Stop(0, Color.web("#d4e1f9")),
+//                new Stop(1, Color.web("#7ea6e9"))
+//        );
+
+        signUp.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getPrimaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
         );
 
-        LinearGradient end = new LinearGradient(
-                0,
-                0,
-                0,
-                1,
-                true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#d4e1f9")),
-                new Stop(1, Color.web("#7ea6e9"))
+        //
+        // FOR THE SIGN-UP BUTTON BACKGROUND.
+        //
+
+        LinearGradientFillTransition backgroundHover =
+                new LinearGradientFillTransition(
+                        Duration.millis(125),
+                        signUp
+                );
+        backgroundHover.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .primaryBackgroundEndProperty()
+        );
+
+        LinearGradientFillTransition backgroundExit =
+                new LinearGradientFillTransition(
+                        Duration.millis(125),
+                        signUp
+                );
+        backgroundExit.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .primaryBackgroundStartProperty()
+        );
+
+        //
+        // FOR THE SIGN-UP BUTTON TEXT.
+        //
+
+        TextFillTransition textHover =
+                new TextFillTransition(
+                        Duration.millis(125),
+                        signUp
+                );
+        textHover.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .primaryTextEndProperty()
+        );
+
+        TextFillTransition textExit =
+                new TextFillTransition(
+                        Duration.millis(125),
+                        signUp
+                );
+        textExit.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .primaryTextStartProperty()
+        );
+
+        //
+        // FOR THE SIGN-UP BUTTON BORDER.
+        //
+
+        BorderFillTransition borderHover =
+                new BorderFillTransition(
+                        Duration.millis(125),
+                        signUp
+                );
+        borderHover.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .primaryBorderEndProperty()
+        );
+
+        BorderFillTransition borderExit =
+                new BorderFillTransition(
+                        Duration.millis(125),
+                        signUp
+                );
+        borderExit.toValueProperty().bind(
+                Theme.getConfiguration()
+                        .primaryBorderStartProperty()
         );
 
         signUp.setOnMouseEntered(mouseEvent -> {
-            View.setHoverLinearGradientEffect(
-                    signUp,
-                    start,
-                    end,
-                    125
+//            View.setHoverLinearGradientEffect(
+//                    signUp,
+//                    start,
+//                    end,
+//                    125
+//            );
+            backgroundHover.setFromValue(
+                    (LinearGradient) signUp.getBackground()
+                            .getFills()
+                            .get(0)
+                            .getFill()
             );
-            View.setHoverBorderEffect(
-                    signUp,
-                    signUp.getBorder()
+            backgroundHover.play();
+//            View.setHoverBorderEffect(
+//                    signUp,
+//                    signUp.getBorder()
+//                            .getStrokes()
+//                            .get(0)
+//                            .getTopStroke(),
+//                    Color.WHITE,
+//                    125
+//            );
+            textHover.setFromValue(
+                    signUp.getTextFill()
+            );
+            textHover.play();
+            borderHover.setFromValue(
+                    (Color) signUp.getBorder()
                             .getStrokes()
                             .get(0)
-                            .getTopStroke(),
-                    Color.WHITE,
-                    125
+                            .getTopStroke()
             );
+            borderHover.play();
         });
 
         signUp.setOnMouseExited(mouseEvent -> {
-            View.setHoverLinearGradientEffect(
-                    signUp,
-                    end,
-                    start,
-                    125
+//            View.setHoverLinearGradientEffect(
+//                    signUp,
+//                    end,
+//                    start,
+//                    125
+//            );
+            backgroundExit.setFromValue(
+                    (LinearGradient) signUp.getBackground()
+                            .getFills()
+                            .get(0)
+                            .getFill()
             );
-            View.setHoverBorderEffect(
-                    signUp,
-                    signUp.getBorder()
+            backgroundExit.play();
+//            View.setHoverBorderEffect(
+//                    signUp,
+//                    signUp.getBorder()
+//                            .getStrokes()
+//                            .get(0)
+//                            .getTopStroke(),
+//                    Color.TRANSPARENT,
+//                    125
+//            );
+            textExit.setFromValue(
+                    signUp.getTextFill()
+            );
+            textExit.play();
+            borderExit.setFromValue(
+                    (Color) signUp.getBorder()
                             .getStrokes()
                             .get(0)
-                            .getTopStroke(),
-                    Color.TRANSPARENT,
-                    125
+                            .getTopStroke()
             );
+            borderExit.play();
         });
-
-
 
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(

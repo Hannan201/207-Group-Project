@@ -17,6 +17,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import themes.Theme;
+import themes.ThemeConfiguration;
 import user.Account;
 
 import javafx.scene.input.KeyEvent;
@@ -78,6 +80,7 @@ public abstract class View {
      */
     public void switchToLightMode() {
         this.currentThemePath = this.cssFilesPaths[0];
+        Theme.setConfiguration(ThemeConfiguration.LIGHT);
 
         Map<String, String> icons = Account.getIcons();
         URL url;
@@ -118,6 +121,7 @@ public abstract class View {
      */
     public void switchToDarkMode() {
         this.currentThemePath = this.cssFilesPaths[1];
+        Theme.setConfiguration(ThemeConfiguration.DARK);
 
         Map<String, String> icons = Account.getIcons();
         URL url;
@@ -158,6 +162,7 @@ public abstract class View {
      */
     public void switchToHighContrastMode() {
         this.currentThemePath = this.cssFilesPaths[2];
+        Theme.setConfiguration(ThemeConfiguration.HIGH_CONTRAST);
 
         Map<String, String> icons = Account.getIcons();
         URL url;
@@ -339,199 +344,5 @@ public abstract class View {
         Node node = (Node) e.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.close();
-    }
-
-    /**
-     * Create a fill transition that starts from a colour and
-     * ends at a colour over a set duration.
-     *
-     * @param fromColour The start colour of the transition.
-     * @param toColour The end colour of the transition.
-     * @param duration The duration of the transition.
-     * @return A new fill transition.
-     */
-    private static FillTransition makeFillTransition(
-            Paint fromColour,
-            Paint toColour,
-            double duration
-    ) {
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(fromColour);
-
-        FillTransition fillTransition = new FillTransition(
-                Duration.millis(duration),
-                rectangle,
-                (Color) fromColour,
-                (Color) toColour
-        );
-        fillTransition.setCycleCount(1);
-
-        return fillTransition;
-    }
-
-    /**
-     * Add a hover effect to a control to change the background
-     * colour of a component by controlling the original colour,
-     * colour on hover, and duration of the effect.
-     *
-     * @param control The UI component which the effect will be
-     *                applied on.
-     * @param fromFillColour The start colour of the component.
-     * @param toFillColour The end colour of the component for
-     *                     when the effect finishes.
-     * @param duration The duration of the event.
-     */
-    public static void setHoverFillEffect(
-            Control control,
-            Paint fromFillColour,
-            Paint toFillColour,
-            double duration
-    ) {
-        FillTransition customTransition = makeFillTransition(
-                fromFillColour,
-                toFillColour,
-                duration
-        );
-
-        customTransition.setInterpolator( new Interpolator() {
-            @Override
-            protected double curve(double v) {
-                control.setBackground(
-                        new Background(
-                                new BackgroundFill(
-                                        customTransition
-                                                .getShape()
-                                                .getFill(),
-                                        new CornerRadii(4),
-                                        Insets.EMPTY
-                                )
-                        )
-                );
-                return v;
-            }
-        });
-
-        customTransition.play();
-    }
-
-    /**
-     * Add a hover effect to a control to change the border
-     * colour of a component by controlling the original colour,
-     * colour on hover, and duration of the effect.
-     *
-     * @param component The UI component which the effect will be
-     *                applied on.
-     * @param fromBorderColour The start border colour of
-     *                         the component.
-     * @param toBorderColour The end border colour of
-     *                       the component for when the
-     *                       effect finishes.
-     * @param duration The duration of the event.
-     */
-    public static void setHoverBorderEffect(
-            ObjectProperty<Border> component,
-            Paint fromBorderColour,
-            Paint toBorderColour,
-            double duration
-    ) {
-        FillTransition customTransition = makeFillTransition(
-                fromBorderColour,
-                toBorderColour,
-                duration
-        );
-
-        customTransition.setInterpolator(new Interpolator() {
-            @Override
-            protected double curve(double v) {
-                component.set(
-                        new Border(
-                                new BorderStroke(
-                                        ((Color) fromBorderColour).interpolate((Color) toBorderColour,
-                                                v),
-                                        BorderStrokeStyle.SOLID,
-                                        new CornerRadii(4),
-                                        BorderWidths.DEFAULT
-                                )
-                        )
-                );
-                return v;
-            }
-        });
-
-        customTransition.playFromStart();
-    }
-
-    /**
-     * Add a hover effect to a control to change the
-     * linear-gradient colour of a component by controlling
-     * the original linear-gradient colour, linear-gradient
-     * colour on hover, and duration of the effect.
-     *
-     * @param component The UI component which the effect will be
-     *                applied on.
-     * @param fromLinearGradient The start linear-gradient
-     *                           colour of the component.
-     * @param toLinearGradient The end linear-gradient
-     *                         colour of the component for
-     *                         when the effect finishes.
-     * @param duration The duration of the event.
-     */
-    public static void setHoverLinearGradientEffect(
-            ObjectProperty<Background> component,
-            LinearGradient fromLinearGradient,
-            LinearGradient toLinearGradient,
-            double duration
-    ) {
-        FillTransition first = makeFillTransition(
-                fromLinearGradient.getStops().get(0).getColor(),
-                toLinearGradient.getStops().get(0).getColor(),
-                duration
-        );
-
-        FillTransition second = makeFillTransition(
-                fromLinearGradient.getStops().get(1).getColor(),
-                toLinearGradient.getStops().get(1).getColor(),
-                duration
-        );
-
-        ParallelTransition transition = new ParallelTransition(
-                first,
-                second
-        );
-
-        first.setInterpolator(new Interpolator() {
-            @Override
-            protected double curve(double v) {
-                LinearGradient gradient = new LinearGradient(
-                        0,
-                        0,
-                        0,
-                        1,
-                        true,
-                        CycleMethod.NO_CYCLE,
-                        new Stop(
-                                0,
-                                (Color) first.getShape().getFill()
-                        ),
-                        new Stop(
-                                1,
-                                (Color) second.getShape().getFill()
-                        )
-                );
-                component.set(
-                        new Background(
-                                new BackgroundFill(
-                                        gradient,
-                                        new CornerRadii(4),
-                                        Insets.EMPTY
-                                )
-                        )
-                );
-
-                return v;
-            }
-        });
-
-        transition.play();
     }
 }
