@@ -77,6 +77,17 @@ public class LinearGradientFillTransition extends BaseFillTransition {
     }
 
     @Override
+    public void prepareTransition() {
+        this.setFromValue(
+                this.getRegion()
+                        .getBackground()
+                        .getFills()
+                        .get(0)
+                        .getFill()
+        );
+    }
+
+    @Override
     protected void interpolate(double v) {
         List<Stop> fromValueStops = ((LinearGradient) this.getFromValue()).getStops();
         List<Stop> toValueStops = ((LinearGradient) this.getToValue()).getStops();

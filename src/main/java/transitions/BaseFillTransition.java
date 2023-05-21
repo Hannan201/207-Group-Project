@@ -128,4 +128,6 @@ public abstract class BaseFillTransition extends Transition {
     public BaseFillTransition() {
         this(DEFAULT_DURATION, (Region) null);
     }
+
+    public abstract void prepareTransition();
 }

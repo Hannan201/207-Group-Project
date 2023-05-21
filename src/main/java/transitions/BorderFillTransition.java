@@ -71,6 +71,17 @@ public class BorderFillTransition extends BaseFillTransition {
     }
 
     @Override
+    public void prepareTransition() {
+        this.setFromValue(
+                this.getRegion()
+                        .getBorder()
+                        .getStrokes()
+                        .get(0)
+                        .getTopStroke()
+        );
+    }
+
+    @Override
     protected void interpolate(double v) {
         Color afterShift = ((Color) this.getFromValue()).interpolate(
                 (Color) this.getToValue(), v

@@ -39,6 +39,13 @@ public class TextFillTransition extends BaseFillTransition {
     }
 
     @Override
+    public void prepareTransition() {
+        this.setFromValue(
+                ((Labeled) this.getRegion()).getTextFill()
+        );
+    }
+
+    @Override
     public ObjectProperty<Duration> durationProperty() {
         if (this.duration == null) {
             this.duration = new ObjectPropertyBase<Duration>() {

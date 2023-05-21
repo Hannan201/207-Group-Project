@@ -75,6 +75,17 @@ public class BackgroundFillTransition extends BaseFillTransition {
     }
 
     @Override
+    public void prepareTransition() {
+        this.setFromValue(
+                this.getRegion()
+                        .getBackground()
+                        .getFills()
+                        .get(0)
+                        .getFill()
+        );
+    }
+
+    @Override
     protected void interpolate(double v) {
         Color afterShift = ((Color) this.getFromValue()).interpolate(
                 (Color) this.getToValue(), v
