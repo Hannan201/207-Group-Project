@@ -1,5 +1,6 @@
 package controllers;
 
+import effects.HoverEffect;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -230,76 +231,6 @@ public class CreateAccountController implements Initializable{
                 )
         );
 
-        //
-        // FOR THE CREATE ACCOUNT BUTTON BACKGROUND.
-        //
-
-        BackgroundFillTransition backgroundHover =
-                new BackgroundFillTransition(
-                        Duration.millis(125),
-                        createAccount
-                );
-        backgroundHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .secondaryBackgroundEndProperty()
-        );
-
-        BackgroundFillTransition backgroundExit =
-                new BackgroundFillTransition(
-                        Duration.millis(125),
-                        createAccount
-                );
-        backgroundExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .secondaryBackgroundStartProperty()
-        );
-
-        //
-        // FOR THE CREATE ACCOUNT BUTTON BORDER.
-        //
-
-        BorderFillTransition borderHover =
-                new BorderFillTransition(
-                        Duration.millis(125),
-                        createAccount
-                );
-        borderHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .secondaryBorderEndProperty()
-        );
-
-        BorderFillTransition borderExit =
-                new BorderFillTransition(
-                        Duration.millis(125),
-                        createAccount
-                );
-        borderExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .secondaryBorderStartProperty()
-        );
-
-        //
-        // FOR THE CREATE ACCOUNT BUTTON TEXT.
-        //
-
-        TextFillTransition textHover = new TextFillTransition(
-                Duration.millis(125),
-                createAccount
-        );
-        textHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .secondaryTextEndProperty()
-        );
-        TextFillTransition textExit = new TextFillTransition(
-                Duration.millis(125),
-                createAccount
-        );
-        textExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .secondaryTextStartProperty()
-        );
-
-
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,
@@ -315,65 +246,17 @@ public class CreateAccountController implements Initializable{
             platform.clear();
         });
 
-        createAccount.setOnMouseEntered(mouseEvent -> {
-//            View.setHoverFillEffect(
-//                    createAccount,
-//                    createAccount.getBackground()
-//                            .getFills()
-//                            .get(0)
-//                            .getFill(),
-//                    Color.web("#aecca1"),
-//                    250
-//            );
-            backgroundHover.setFromValue(
-                    (Color) createAccount.getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill()
-            );
-            backgroundHover.play();
-            borderHover.setFromValue(
-                    (Color) createAccount.getBorder()
-                            .getStrokes()
-                            .get(0)
-                            .getTopStroke()
-            );
-            borderHover.play();
-            textHover.setFromValue(
-                    createAccount.getTextFill()
-            );
-            textHover.play();
-        });
+        HoverEffect effect = Utilities.makeHoverBackgroundColorEffect(
+                Duration.millis(125),
+                createAccount,
+                Theme.getConfiguration().getSecondaryBackground(),
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getSecondaryText()
+        );
 
-        createAccount.setOnMouseExited(mouseEvent -> {
-//            View.setHoverFillEffect(
-//                    createAccount,
-//                    createAccount.getBackground()
-//                            .getFills()
-//                            .get(0)
-//                            .getFill(),
-//                    Color.web("#b6d7a8"),
-//                    250
-//            );
-            backgroundExit.setFromValue(
-                    (Color) createAccount.getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill()
-            );
-            backgroundExit.play();
-            borderExit.setFromValue(
-                    (Color) createAccount.getBorder()
-                            .getStrokes()
-                            .get(0)
-                            .getTopStroke()
-            );
-            borderExit.play();
-            textExit.setFromValue(
-                    createAccount.getTextFill()
-            );
-            textExit.play();
-        });
+        createAccount.setOnMouseEntered(mouseEvent -> effect.playOnHover());
+
+        createAccount.setOnMouseExited(mouseEvent -> effect.playOnExit());
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox
 

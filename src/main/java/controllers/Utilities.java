@@ -29,7 +29,7 @@ public class Utilities {
      * hovered/exited to adjust the colors of the background, border, and
      * text.
      */
-    public HoverEffect makeHoverBackgroundColorEffect(
+    public static HoverEffect makeHoverBackgroundColorEffect(
             Duration duration,
             Region node,
             ThemeState<Color> background,
@@ -59,7 +59,7 @@ public class Utilities {
      * hovered/exited to adjust the linear gradient of the background,
      * and the colors of the border, and text.
      */
-    public HoverEffect makeHoverBackgroundLinearGradientEffect(
+    public static HoverEffect makeHoverBackgroundLinearGradientEffect(
             Duration duration,
             Region node,
             ThemeState<LinearGradient> background,
