@@ -1,6 +1,7 @@
 package controllers;
 
 import data.Database;
+import effects.HoverEffect;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -227,149 +228,17 @@ public class SignUpController implements Initializable {
                 )
         );
 
-        //
-        // FOR THE SIGN-UP BUTTON BACKGROUND.
-        //
-
-        LinearGradientFillTransition backgroundHover =
-                new LinearGradientFillTransition(
-                        Duration.millis(125),
-                        signUp
-                );
-        backgroundHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBackgroundEndProperty()
+        HoverEffect effect = Utilities.makeHoverBackgroundLinearGradientEffect(
+                Duration.millis(125),
+                signUp,
+                Theme.getConfiguration().getPrimaryBackground(),
+                Theme.getConfiguration().getPrimaryBorder(),
+                Theme.getConfiguration().getPrimaryText()
         );
 
-        LinearGradientFillTransition backgroundExit =
-                new LinearGradientFillTransition(
-                        Duration.millis(125),
-                        signUp
-                );
-        backgroundExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBackgroundStartProperty()
-        );
+        signUp.setOnMouseEntered(mouseEvent -> effect.playOnHover());
 
-        //
-        // FOR THE SIGN-UP BUTTON TEXT.
-        //
-
-        TextFillTransition textHover =
-                new TextFillTransition(
-                        Duration.millis(125),
-                        signUp
-                );
-        textHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryTextEndProperty()
-        );
-
-        TextFillTransition textExit =
-                new TextFillTransition(
-                        Duration.millis(125),
-                        signUp
-                );
-        textExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryTextStartProperty()
-        );
-
-        //
-        // FOR THE SIGN-UP BUTTON BORDER.
-        //
-
-        BorderFillTransition borderHover =
-                new BorderFillTransition(
-                        Duration.millis(125),
-                        signUp
-                );
-        borderHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBorderEndProperty()
-        );
-
-        BorderFillTransition borderExit =
-                new BorderFillTransition(
-                        Duration.millis(125),
-                        signUp
-                );
-        borderExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBorderStartProperty()
-        );
-
-        signUp.setOnMouseEntered(mouseEvent -> {
-//            View.setHoverLinearGradientEffect(
-//                    signUp,
-//                    start,
-//                    end,
-//                    125
-//            );
-            backgroundHover.setFromValue(
-                    (LinearGradient) signUp.getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill()
-            );
-            backgroundHover.play();
-//            View.setHoverBorderEffect(
-//                    signUp,
-//                    signUp.getBorder()
-//                            .getStrokes()
-//                            .get(0)
-//                            .getTopStroke(),
-//                    Color.WHITE,
-//                    125
-//            );
-            textHover.setFromValue(
-                    signUp.getTextFill()
-            );
-            textHover.play();
-            borderHover.setFromValue(
-                    (Color) signUp.getBorder()
-                            .getStrokes()
-                            .get(0)
-                            .getTopStroke()
-            );
-            borderHover.play();
-        });
-
-        signUp.setOnMouseExited(mouseEvent -> {
-//            View.setHoverLinearGradientEffect(
-//                    signUp,
-//                    end,
-//                    start,
-//                    125
-//            );
-            backgroundExit.setFromValue(
-                    (LinearGradient) signUp.getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill()
-            );
-            backgroundExit.play();
-//            View.setHoverBorderEffect(
-//                    signUp,
-//                    signUp.getBorder()
-//                            .getStrokes()
-//                            .get(0)
-//                            .getTopStroke(),
-//                    Color.TRANSPARENT,
-//                    125
-//            );
-            textExit.setFromValue(
-                    signUp.getTextFill()
-            );
-            textExit.play();
-            borderExit.setFromValue(
-                    (Color) signUp.getBorder()
-                            .getStrokes()
-                            .get(0)
-                            .getTopStroke()
-            );
-            borderExit.play();
-        });
+        signUp.setOnMouseExited(mouseEvent -> effect.playOnExit());
 
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
