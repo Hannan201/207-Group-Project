@@ -5,6 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
+import effects.HoverEffect;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -234,78 +235,6 @@ public class SignInController implements Initializable {
                 )
         );
 
-        //
-        // FOR THE SIGN-IN BUTTON BACKGROUND.
-        //
-
-        LinearGradientFillTransition backgroundHover =
-                new LinearGradientFillTransition(
-                        Duration.millis(125),
-                        signInButton
-                );
-        backgroundHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBackgroundEndProperty()
-        );
-
-        LinearGradientFillTransition backgroundExit =
-                new LinearGradientFillTransition(
-                        Duration.millis(125),
-                        signInButton
-                );
-        backgroundExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBackgroundStartProperty()
-        );
-
-        //
-        // FOR THE SIGN-IN BUTTON TEXT.
-        //
-
-        TextFillTransition textHover =
-                new TextFillTransition(
-                        Duration.millis(125),
-                        signInButton
-                );
-        textHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryTextEndProperty()
-        );
-
-        TextFillTransition textExit =
-                new TextFillTransition(
-                        Duration.millis(125),
-                        signInButton
-                );
-        textExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryTextStartProperty()
-        );
-
-        //
-        // FOR THE SIGN-IN BUTTON BORDER.
-        //
-
-        BorderFillTransition borderHover =
-                new BorderFillTransition(
-                        Duration.millis(125),
-                        signInButton
-                );
-        borderHover.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBorderEndProperty()
-        );
-
-        BorderFillTransition borderExit =
-                new BorderFillTransition(
-                        Duration.millis(125),
-                        signInButton
-                );
-        borderExit.toValueProperty().bind(
-                Theme.getConfiguration()
-                        .primaryBorderStartProperty()
-        );
-
 //        LinearGradient start = new LinearGradient(
 //                0,
 //                0,
@@ -328,77 +257,17 @@ public class SignInController implements Initializable {
 //                new Stop(1, Color.web("#7ea6e9"))
 //        );
 
-        signInButton.setOnMouseEntered(mouseEvent -> {
-//            View.setHoverLinearGradientEffect(
-//                    signInButton,
-//                    start,
-//                    end,
-//                    125
-//            );
-            backgroundHover.setFromValue(
-                    (LinearGradient) signInButton.getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill()
-            );
-            backgroundHover.play();
-//            View.setHoverBorderEffect(
-//                    signInButton,
-//                    signInButton.getBorder()
-//                            .getStrokes()
-//                            .get(0)
-//                            .getTopStroke(),
-//                    Color.WHITE,
-//                    125
-//            );
-            textHover.setFromValue(
-                    signInButton.getTextFill()
-            );
-            textHover.play();
-            borderHover.setFromValue(
-                    (Color) signInButton.getBorder()
-                            .getStrokes()
-                            .get(0)
-                            .getTopStroke()
-            );
-            borderHover.play();
-        });
+        HoverEffect effect = Utilities.makeHoverBackgroundLinearGradientEffect(
+                Duration.millis(125),
+                signInButton,
+                Theme.getConfiguration().getPrimaryBackground(),
+                Theme.getConfiguration().getPrimaryBorder(),
+                Theme.getConfiguration().getPrimaryText()
+        );
 
-        signInButton.setOnMouseExited(mouseEvent -> {
-//            View.setHoverLinearGradientEffect(
-//                    signInButton,
-//                    end,
-//                    start,
-//                    125
-//            );
-            backgroundExit.setFromValue(
-                    (LinearGradient) signInButton.getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill()
-            );
-            backgroundExit.play();
-            textExit.setFromValue(
-                    signInButton.getTextFill()
-            );
-            textExit.play();
-//            View.setHoverBorderEffect(
-//                    signInButton,
-//                    signInButton.getBorder()
-//                            .getStrokes()
-//                            .get(0)
-//                            .getTopStroke(),
-//                    Color.TRANSPARENT,
-//                    125
-//            );
-            borderExit.setFromValue(
-                    (Color) signInButton.getBorder()
-                            .getStrokes()
-                            .get(0)
-                            .getTopStroke()
-            );
-            borderExit.play();
-        });
+        signInButton.setOnMouseEntered(mouseEvent -> effect.playOnHover());
+
+        signInButton.setOnMouseExited(mouseEvent -> effect.playOnExit());
 
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signInButton,
