@@ -1,13 +1,13 @@
-#box{
+#box {
     -fx-background-color: black;
 }
 
-.label{
+.label {
     -fx-text-fill: white;
     -fx-font-family: "Montserrat";
 }
 
-.button{
+.button {
     -fx-font-size: 15;
     -fx-font-family: "Montserrat";
 }
@@ -16,13 +16,6 @@
     -fx-cursor: hand;
 }
 
-.text-field{
-    -fx-background-color: transparent;
-    -fx-border-color: #ff7600;
+.text-field {
     -fx-text-fill: white;
-
-}
-
-.text-field:focused{
-    -fx-border-color: #00ffff;
 }

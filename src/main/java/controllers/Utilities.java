@@ -7,6 +7,8 @@ import javafx.scene.paint.LinearGradient;
 import javafx.util.Duration;
 import themes.ThemeState;
 
+import java.awt.*;
+
 /*
 Class containing utility methods used among the
 controllers.
@@ -73,4 +75,45 @@ public class Utilities {
         return effect;
     }
 
+    /**
+     * Set a effect where the start and end colours of the border and
+     * background of a region are provided over a duration.
+     *
+     * @param duration Duration of the effect.
+     * @param textField Region to apply the effect to.
+     * @param border State to control the start and end effect of the
+     *               border.
+     * @param background State to control the start and end effect of
+     *                   the background.
+     */
+    public static void setFocusBorderEffect(
+            Duration duration,
+            Region textField,
+            ThemeState<Color> border,
+            ThemeState<Color> background
+    ) {
+        HoverEffect effect = new HoverEffect(duration, textField);
+        effect.setBorderEffect(border);
+        effect.setBackgroundColorEffect(background);
+        textField.focusedProperty()
+                .addListener((observableValue, oldValue, newValue) -> {
+                    if (!oldValue && newValue) {
+                        effect.playOnHover();
+                    } else if (oldValue && !newValue) {
+                        effect.playOnExit();
+                    }
+                });
+
+        textField.setOnMouseEntered(mouseEvent -> {
+            if (!textField.isFocused()) {
+                effect.playOnHover();
+            }
+        });
+
+        textField.setOnMouseExited(mouseEvent -> {
+            if (!textField.isFocused()) {
+                effect.playOnExit();
+            }
+        });
+    }
 }

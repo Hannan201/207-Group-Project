@@ -9,18 +9,7 @@
 }
 
 .text-field {
-    -fx-background-color: transparent;
-    -fx-border-color: #ff7600;
     -fx-text-fill: white;
-}
-
-.text-field:focused {
-    -fx-border-color: #00ffff;
-    -fx-background-color: rgba(0, 255, 255, 0.09);
-}
-
-.text-field:hover {
-    -fx-border-color: #00ffff;
 }
 
 .label {

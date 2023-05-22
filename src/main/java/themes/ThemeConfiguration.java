@@ -39,6 +39,9 @@ public enum ThemeConfiguration {
         Color secondaryBackgroundDefault = Color.web("#b6d7a8");
         Color secondaryBackgroundHover = Color.web("#aecca1");
 
+        Color tertiaryBackgroundDefault = Color.web("#d9d9d9");
+        Color tertiaryBackgroundHover = Color.web("#d9d9d9");
+
         Color primaryTextDefault = Color.BLACK;
         Color primaryTextHover = Color.BLACK;
 
@@ -63,6 +66,11 @@ public enum ThemeConfiguration {
         ThemeState<Color> backgroundTwo = new ThemeState<>(
                 secondaryBackgroundDefault,
                 secondaryBackgroundHover
+        );
+
+        ThemeState<Color> backgroundThree = new ThemeState<>(
+                tertiaryBackgroundDefault,
+                tertiaryBackgroundHover
         );
 
         ThemeState<Color> textOne = new ThemeState<>(
@@ -93,6 +101,7 @@ public enum ThemeConfiguration {
         values()[0].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
+                backgroundThree,
                 textOne,
                 textTwo,
                 textThree,
@@ -128,6 +137,9 @@ public enum ThemeConfiguration {
         secondaryBackgroundDefault = Color.web("#3e5728");
         secondaryBackgroundHover = Color.web("#354a22");
 
+        tertiaryBackgroundDefault = tertiaryBackgroundHover =
+                Color.web("#2d3133");
+
         primaryTextDefault = primaryTextHover = Color.web(
                 "#babcc0"
         );
@@ -155,6 +167,11 @@ public enum ThemeConfiguration {
         backgroundTwo = new ThemeState<>(
                 secondaryBackgroundDefault,
                 secondaryBackgroundHover
+        );
+
+        backgroundThree = new ThemeState<>(
+                tertiaryBackgroundDefault,
+                tertiaryBackgroundHover
         );
 
         textOne = new ThemeState<>(
@@ -185,6 +202,7 @@ public enum ThemeConfiguration {
         values()[1].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
+                backgroundThree,
                 textOne,
                 textTwo,
                 textThree,
@@ -220,6 +238,9 @@ public enum ThemeConfiguration {
         secondaryBackgroundDefault = Color.TRANSPARENT;
         secondaryBackgroundHover = Color.TRANSPARENT;
 
+        tertiaryBackgroundDefault = Color.TRANSPARENT;
+        tertiaryBackgroundHover = Color.rgb(0, 255, 255, 0.09);
+
         primaryTextDefault = Color.web("#ff7600");
         primaryTextHover = Color.web("#00ffff");
 
@@ -243,6 +264,11 @@ public enum ThemeConfiguration {
         backgroundTwo = new ThemeState<>(
                 secondaryBackgroundDefault,
                 secondaryBackgroundHover
+        );
+
+        backgroundThree = new ThemeState<>(
+                tertiaryBackgroundDefault,
+                tertiaryBackgroundHover
         );
 
         textOne = new ThemeState<>(
@@ -273,6 +299,7 @@ public enum ThemeConfiguration {
         values()[2].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
+                backgroundThree,
                 textOne,
                 textTwo,
                 textThree,
@@ -283,6 +310,7 @@ public enum ThemeConfiguration {
 
     private ThemeState<LinearGradient> primaryBackground;
     private ThemeState<Color> secondaryBackground;
+    private ThemeState<Color> tertiaryBackground;
 
     private ThemeState<Color> primaryText;
     private ThemeState<Color> secondaryText;
@@ -294,6 +322,7 @@ public enum ThemeConfiguration {
     private void setConfiguration(
             ThemeState<LinearGradient> primaryBackground,
             ThemeState<Color> secondaryBackground,
+            ThemeState<Color> tertiaryBackground,
             ThemeState<Color> primaryText,
             ThemeState<Color> secondaryText,
             ThemeState<Color> tertiaryText,
@@ -302,6 +331,7 @@ public enum ThemeConfiguration {
     ) {
         this.primaryBackground = primaryBackground;
         this.secondaryBackground = secondaryBackground;
+        this.tertiaryBackground = tertiaryBackground;
 
         this.primaryText = primaryText;
         this.secondaryText = secondaryText;
@@ -333,6 +363,18 @@ public enum ThemeConfiguration {
 
     public ObjectProperty<Color> secondaryBackgroundEndProperty() {
         return this.secondaryBackground.endProperty();
+    }
+
+    public ThemeState<Color> getTertiaryBackground() {
+        return tertiaryBackground;
+    }
+
+    public ObjectProperty<Color> tertiaryBackgroundStartProperty() {
+        return this.tertiaryBackground.startProperty();
+    }
+
+    public ObjectProperty<Color> tertiaryBackgroundEndProperty() {
+        return this.tertiaryBackground.endProperty();
     }
 
     public ThemeState<Color> getPrimaryText() {
@@ -403,6 +445,39 @@ public enum ThemeConfiguration {
         primaryBackground.setEnd(
                 newConfiguration.getPrimaryBackground().getEnd()
         );
+        secondaryBackground.setStart(
+                newConfiguration.getSecondaryBackground()
+                        .getStart()
+        );
+        secondaryBackground.setEnd(
+                newConfiguration.getSecondaryBackground()
+                        .getEnd()
+        );
+        tertiaryBackground.setStart(
+                newConfiguration.getTertiaryBackground()
+                        .getStart()
+        );
+        tertiaryBackground.setEnd(
+                newConfiguration.getTertiaryBackground()
+                        .getEnd()
+        );
+
+        primaryBorder.setStart(
+                newConfiguration.getPrimaryBorder()
+                        .getStart()
+        );
+        primaryBorder.setEnd(
+                newConfiguration.getPrimaryBorder()
+                        .getEnd()
+        );
+        secondaryBorder.setStart(
+                newConfiguration.getSecondaryBorder()
+                        .getStart()
+        );
+        secondaryBorder.setEnd(
+                newConfiguration.getSecondaryBorder()
+                        .getEnd()
+        );
 
         primaryText.setStart(
                 newConfiguration.getPrimaryText().getStart()
@@ -421,31 +496,6 @@ public enum ThemeConfiguration {
         );
         tertiaryText.setEnd(
                 newConfiguration.getTertiaryText().getEnd()
-        );
-
-        secondaryBackground.setStart(
-                newConfiguration.getSecondaryBackground()
-                        .getStart()
-        );
-        secondaryBackground.setEnd(
-                newConfiguration.getSecondaryBackground()
-                        .getEnd()
-        );
-        primaryBorder.setStart(
-                newConfiguration.getPrimaryBorder()
-                        .getStart()
-        );
-        primaryBorder.setEnd(
-                newConfiguration.getPrimaryBorder()
-                        .getEnd()
-        );
-        secondaryBorder.setStart(
-                newConfiguration.getSecondaryBorder()
-                        .getStart()
-        );
-        secondaryBorder.setEnd(
-                newConfiguration.getSecondaryBorder()
-                        .getEnd()
         );
     }
 }

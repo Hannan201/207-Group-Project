@@ -182,12 +182,76 @@ public class CreateAccountController implements Initializable{
             platform.clear();
         });
 
+        platform.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        platform.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
+        username.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        username.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
         HoverEffect effect = Utilities.makeHoverBackgroundColorEffect(
                 Duration.millis(125),
                 createAccount,
                 Theme.getConfiguration().getSecondaryBackground(),
                 Theme.getConfiguration().getSecondaryBorder(),
                 Theme.getConfiguration().getSecondaryText()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                platform,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                username,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
         );
 
         createAccount.setOnMouseEntered(mouseEvent -> effect.playOnHover());

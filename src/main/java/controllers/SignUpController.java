@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.Font;
@@ -28,6 +29,7 @@ import transitions.LinearGradientFillTransition;
 import transitions.TextFillTransition;
 import views.AccountView;
 import views.HomePageView;
+import views.SignUpView;
 import views.View;
 
 import java.net.URL;
@@ -162,6 +164,106 @@ public class SignUpController implements Initializable {
                 )
         );
 
+        initialUsername.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        initialUsername.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
+        verifiedUsername.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        verifiedUsername.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
+        initialPassword.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        initialPassword.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
+        verifiedPassword.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        verifiedPassword.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
         HoverEffect effect = Utilities.makeHoverBackgroundLinearGradientEffect(
                 Duration.millis(125),
                 signUp,
@@ -174,6 +276,34 @@ public class SignUpController implements Initializable {
 
         signUp.setOnMouseExited(mouseEvent -> effect.playOnExit());
 
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                initialUsername,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                verifiedUsername,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                initialPassword,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                verifiedPassword,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
+        );
+        
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signUp,

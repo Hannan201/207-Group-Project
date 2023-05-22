@@ -172,12 +172,76 @@ public class SignInController implements Initializable {
                 )
         );
 
+        unameInput.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        unameInput.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
+        passInput.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Theme.getConfiguration()
+                                        .getTertiaryBackground()
+                                        .getStart(),
+                                new CornerRadii(4),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        passInput.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Theme.getConfiguration()
+                                        .getSecondaryBorder()
+                                        .getStart(),
+                                BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY,
+                                BorderWidths.DEFAULT
+                        )
+                )
+        );
+
         HoverEffect effect = Utilities.makeHoverBackgroundLinearGradientEffect(
                 Duration.millis(125),
                 signInButton,
                 Theme.getConfiguration().getPrimaryBackground(),
                 Theme.getConfiguration().getPrimaryBorder(),
                 Theme.getConfiguration().getPrimaryText()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                unameInput,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
+        );
+
+        Utilities.setFocusBorderEffect(
+                Duration.millis(125),
+                passInput,
+                Theme.getConfiguration().getSecondaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground()
         );
 
         signInButton.setOnMouseEntered(mouseEvent -> effect.playOnHover());
