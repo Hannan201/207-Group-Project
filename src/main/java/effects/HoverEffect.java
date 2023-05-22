@@ -2,7 +2,9 @@ package effects;
 
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
-import javafx.scene.layout.Region;
+import javafx.geometry.Insets;
+import javafx.scene.control.Labeled;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
@@ -52,6 +54,19 @@ public class HoverEffect {
      *              color of the effect.
      */
     public void setBackgroundColorEffect(ThemeState<Color> color) {
+        color.startProperty()
+                .addListener((observableValue, oldValue, newValue) ->
+                        this.component.setBackground(
+                            new Background(
+                                    new BackgroundFill(
+                                            newValue,
+                                            new CornerRadii(4),
+                                            Insets.EMPTY
+                                    )
+                            )
+                        )
+                );
+
         // On hover.
         BaseFillTransition hover = new BackgroundFillTransition(
                 this.baseDuration,
@@ -77,6 +92,19 @@ public class HoverEffect {
     public void setBackgroundLinearGradientEffect(
             ThemeState<LinearGradient> linearGradient
     ) {
+        linearGradient.startProperty()
+                .addListener((observableValue, oldValue, newValue) ->
+                        this.component.setBackground(
+                            new Background(
+                                    new BackgroundFill(
+                                            newValue,
+                                            new CornerRadii(4),
+                                            Insets.EMPTY
+                                    )
+                            )
+                        )
+                );
+
         // On hover.
         BaseFillTransition hover = new LinearGradientFillTransition(
                 this.baseDuration,
@@ -100,6 +128,20 @@ public class HoverEffect {
      *               border of the effect.
      */
     public void setBorderEffect(ThemeState<Color> border) {
+        border.startProperty()
+                .addListener((observableValue, oldValue, newValue) ->
+                        this.component.setBorder(
+                            new Border(
+                                    new BorderStroke(
+                                            newValue,
+                                            BorderStrokeStyle.SOLID,
+                                            new CornerRadii(4),
+                                            BorderWidths.DEFAULT
+                                    )
+                            )
+                        )
+                );
+
         // On hover.
         BaseFillTransition hover = new BorderFillTransition(
                 this.baseDuration,
@@ -123,6 +165,11 @@ public class HoverEffect {
      *             text of the effect.
      */
     public void setTextEffect(ThemeState<Color> text) {
+        text.startProperty()
+                .addListener((observableValue, oldValue, newValue) ->
+                    ((Labeled) this.component).setTextFill(newValue)
+                );
+
         // On hover.
         BaseFillTransition hover = new TextFillTransition(
                 this.baseDuration,

@@ -133,36 +133,9 @@ public class SignUpController implements Initializable {
         signUp.fontProperty().bind(labelFontSize);
         signUp.paddingProperty().bind(buttonPaddingSize);
 
-        Theme.getConfiguration()
-                .getPrimaryText()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            signUp.setTextFill(newValue);
-                        }
-                );
-
         signUp.setTextFill(Theme.getConfiguration()
                 .getPrimaryText()
                 .getStart());
-
-        Theme.getConfiguration()
-                .getPrimaryBorder()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            signUp.setBorder(
-                                    new Border(
-                                            new BorderStroke(
-                                                    newValue,
-                                                    BorderStrokeStyle.SOLID,
-                                                    new CornerRadii(4),
-                                                    BorderWidths.DEFAULT
-                                            )
-                                    )
-                            );
-                        }
-                );
 
         signUp.setBorder(
                 new Border(
@@ -176,45 +149,6 @@ public class SignUpController implements Initializable {
                         )
                 )
         );
-
-        Theme.getConfiguration()
-                .getPrimaryBackground()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            signUp.setBackground(
-                                    new Background(
-                                            new BackgroundFill(
-                                                    newValue,
-                                                    new CornerRadii(4),
-                                                    Insets.EMPTY
-                                            )
-                                    )
-                            );
-                        }
-                );
-
-//        LinearGradient start = new LinearGradient(
-//                0,
-//                0,
-//                0,
-//                1,
-//                true,
-//                CycleMethod.NO_CYCLE,
-//                new Stop(0, Color.web("#d7d7d7")),
-//                new Stop(1, Color.web("#d7d7d7"))
-//        );
-//
-//        LinearGradient end = new LinearGradient(
-//                0,
-//                0,
-//                0,
-//                1,
-//                true,
-//                CycleMethod.NO_CYCLE,
-//                new Stop(0, Color.web("#d4e1f9")),
-//                new Stop(1, Color.web("#7ea6e9"))
-//        );
 
         signUp.setBackground(
                 new Background(

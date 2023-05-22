@@ -138,44 +138,9 @@ public class CreateAccountController implements Initializable{
         createAccount.paddingProperty().bind(buttonPaddingSize);
         createAccount.fontProperty().bind(labelFontTracking);
 
-        Theme.getConfiguration()
-                .getSecondaryText()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            createAccount.setTextFill(newValue);
-                        }
-                );
-
         createAccount.setTextFill(Theme.getConfiguration()
                 .getSecondaryText()
                 .getStart());
-
-//        createAccount.setBackground(
-//                new Background(
-//                        new BackgroundFill(
-//                                Color.web("#b6d7a8"),
-//                                new CornerRadii(4),
-//                                Insets.EMPTY
-//                        )
-//                )
-//        );
-        Theme.getConfiguration()
-                .getSecondaryBackground()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            createAccount.setBackground(
-                                    new Background(
-                                            new BackgroundFill(
-                                                    newValue,
-                                                    new CornerRadii(4),
-                                                    Insets.EMPTY
-                                            )
-                                    )
-                            );
-                        }
-                );
 
         createAccount.setBackground(
                 new Background(
@@ -188,35 +153,6 @@ public class CreateAccountController implements Initializable{
                         )
                 )
         );
-
-//        createAccount.setBorder(
-//                new Border(
-//                        new BorderStroke(
-//                                Color.TRANSPARENT,
-//                                BorderStrokeStyle.SOLID,
-//                                new CornerRadii(4),
-//                                BorderWidths.DEFAULT
-//                        )
-//                )
-//        );
-
-        Theme.getConfiguration()
-                .getSecondaryBorder()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            createAccount.setBorder(
-                                    new Border(
-                                            new BorderStroke(
-                                                    newValue,
-                                                    BorderStrokeStyle.SOLID,
-                                                    new CornerRadii(4),
-                                                    BorderWidths.DEFAULT
-                                            )
-                                    )
-                            );
-                        }
-                );
 
         createAccount.setBorder(
                 new Border(

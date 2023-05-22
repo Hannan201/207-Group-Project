@@ -143,44 +143,9 @@ public class SignInController implements Initializable {
         signInButton.setAlignment(Pos.CENTER);
         signInButton.paddingProperty().bind(buttonPaddingSize);
 
-        Theme.getConfiguration()
-                .getPrimaryText()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            signInButton.setTextFill(newValue);
-                        }
-                );
-
         signInButton.setTextFill(Theme.getConfiguration()
                 .getPrimaryText()
                 .getStart());
-
-//        signInButton.setBackground(
-//                new Background(
-//                        new BackgroundFill(
-//                                Color.web("#d7d7d7"),
-//                                new CornerRadii(4),
-//                                Insets.EMPTY
-//                        )
-//                )
-//        );
-        Theme.getConfiguration()
-                .getPrimaryBackground()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            signInButton.setBackground(
-                                    new Background(
-                                            new BackgroundFill(
-                                                    newValue,
-                                                    new CornerRadii(4),
-                                                    Insets.EMPTY
-                                            )
-                                    )
-                            );
-                        }
-                );
 
         signInButton.setBackground(
                 new Background(
@@ -194,34 +159,6 @@ public class SignInController implements Initializable {
                 )
         );
 
-//        signInButton.setBorder(
-//                new Border(
-//                        new BorderStroke(
-//                                Color.TRANSPARENT,
-//                                BorderStrokeStyle.SOLID,
-//                                new CornerRadii(4),
-//                                BorderWidths.DEFAULT
-//                        )
-//                )
-//        );
-        Theme.getConfiguration()
-                .getPrimaryBorder()
-                .startProperty()
-                .addListener(
-                        (observableValue, oldValue, newValue) -> {
-                            signInButton.setBorder(
-                                    new Border(
-                                            new BorderStroke(
-                                                    newValue,
-                                                    BorderStrokeStyle.SOLID,
-                                                    new CornerRadii(4),
-                                                    BorderWidths.DEFAULT
-                                            )
-                                    )
-                            );
-                        }
-                );
-
         signInButton.setBorder(
                 new Border(
                         new BorderStroke(
@@ -234,28 +171,6 @@ public class SignInController implements Initializable {
                         )
                 )
         );
-
-//        LinearGradient start = new LinearGradient(
-//                0,
-//                0,
-//                0,
-//                1,
-//                true,
-//                CycleMethod.NO_CYCLE,
-//                new Stop(0, Color.web("#d7d7d7")),
-//                new Stop(1, Color.web("#d7d7d7"))
-//        );
-//
-//        LinearGradient end = new LinearGradient(
-//                0,
-//                0,
-//                0,
-//                1,
-//                true,
-//                CycleMethod.NO_CYCLE,
-//                new Stop(0, Color.web("#d4e1f9")),
-//                new Stop(1, Color.web("#7ea6e9"))
-//        );
 
         HoverEffect effect = Utilities.makeHoverBackgroundLinearGradientEffect(
                 Duration.millis(125),
