@@ -7,8 +7,6 @@ import javafx.scene.paint.LinearGradient;
 import javafx.util.Duration;
 import themes.ThemeState;
 
-import java.awt.*;
-
 /*
 Class containing utility methods used among the
 controllers.
