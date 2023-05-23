@@ -135,8 +135,15 @@ public class HoverEffect {
                                     new BorderStroke(
                                             newValue,
                                             BorderStrokeStyle.SOLID,
-                                            new CornerRadii(4),
-                                            BorderWidths.DEFAULT
+                                            this.component.getBorder()
+                                                    .getStrokes()
+                                                    .get(0)
+                                                    .getRadii(),
+                                            BorderWidths.DEFAULT,
+                                            this.component.getBorder()
+                                                    .getStrokes()
+                                                    .get(0)
+                                                    .getInsets()
                                     )
                             )
                         )
