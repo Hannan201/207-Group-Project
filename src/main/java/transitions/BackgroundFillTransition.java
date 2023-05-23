@@ -14,6 +14,12 @@ import javafx.util.Duration;
 
 public class BackgroundFillTransition extends BaseFillTransition {
 
+    // To maintain the background fill radius.
+    private CornerRadii backgroundRadius;
+
+    // To maintain the background fill insets.
+    private Insets backgroundInsets;
+
     @Override
     public final ObjectProperty<Duration> durationProperty() {
         if (this.duration == null) {
@@ -64,6 +70,14 @@ public class BackgroundFillTransition extends BaseFillTransition {
 
     public BackgroundFillTransition(Duration duration, Region region) {
         super(duration, region, (Paint) null, (Paint) null);
+        this.backgroundRadius = region.getBackground()
+                .getFills()
+                .get(0)
+                .getRadii();
+        this.backgroundInsets = region.getBackground()
+                .getFills()
+                .get(0)
+                .getInsets();
     }
 
     public BackgroundFillTransition(Duration duration) {
@@ -94,8 +108,8 @@ public class BackgroundFillTransition extends BaseFillTransition {
                 new Background(
                         new BackgroundFill(
                                 afterShift,
-                                new CornerRadii(4),
-                                Insets.EMPTY
+                                this.backgroundRadius,
+                                this.backgroundInsets
                         )
                 )
         );
