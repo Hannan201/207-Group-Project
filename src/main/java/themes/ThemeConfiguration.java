@@ -57,6 +57,9 @@ public enum ThemeConfiguration {
         Color secondaryBorderDefault = Color.TRANSPARENT;
         Color secondaryBorderHover = Color.TRANSPARENT;
 
+        Color tertiaryBorderDefault = Color.TRANSPARENT;
+        Color tertiaryBorderHover = Color.web("#235480");
+
         ThemeState<LinearGradient> backgroundOne =
                 new ThemeState<>(
                     primaryBackgroundDefault,
@@ -98,6 +101,11 @@ public enum ThemeConfiguration {
                 secondaryBorderHover
         );
 
+        ThemeState<Color> borderThree = new ThemeState<>(
+                tertiaryBorderDefault,
+                tertiaryBorderHover
+        );
+
         values()[0].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
@@ -106,7 +114,8 @@ public enum ThemeConfiguration {
                 textTwo,
                 textThree,
                 borderOne,
-                borderTwo
+                borderTwo,
+                borderThree
         );
 
         //
@@ -158,6 +167,9 @@ public enum ThemeConfiguration {
         secondaryBorderDefault = Color.TRANSPARENT;
         secondaryBorderHover = Color.TRANSPARENT;
 
+        tertiaryBorderDefault = Color.TRANSPARENT;
+        tertiaryBorderHover = Color.WHITE;
+
         backgroundOne =
                 new ThemeState<>(
                         primaryBackgroundDefault,
@@ -199,6 +211,11 @@ public enum ThemeConfiguration {
                 secondaryBorderHover
         );
 
+        borderThree = new ThemeState<>(
+                tertiaryBorderDefault,
+                tertiaryBorderHover
+        )
+
         values()[1].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
@@ -207,7 +224,8 @@ public enum ThemeConfiguration {
                 textTwo,
                 textThree,
                 borderOne,
-                borderTwo
+                borderTwo,
+                borderThree
         );
 
         //
@@ -256,6 +274,9 @@ public enum ThemeConfiguration {
         secondaryBorderDefault = Color.web("#ff7600");
         secondaryBorderHover = Color.web("#00ffff");
 
+        tertiaryBorderDefault = Color.web("#ff7600");
+        tertiaryBorderHover = Color.web("#00ffff");
+
         backgroundOne = new ThemeState<>(
                         primaryBackgroundDefault,
                         primaryBackgroundHover
@@ -296,6 +317,11 @@ public enum ThemeConfiguration {
                 secondaryBorderHover
         );
 
+        borderThree = new ThemeState<>(
+                tertiaryBorderDefault,
+                tertiaryBorderHover
+        );
+
         values()[2].setConfiguration(
                 backgroundOne,
                 backgroundTwo,
@@ -304,7 +330,8 @@ public enum ThemeConfiguration {
                 textTwo,
                 textThree,
                 borderOne,
-                borderTwo
+                borderTwo,
+                borderThree
         );
     }
 
@@ -318,6 +345,7 @@ public enum ThemeConfiguration {
 
     private ThemeState<Color> primaryBorder;
     private ThemeState<Color> secondaryBorder;
+    private ThemeState<Color> tertiaryBorder;
 
     private void setConfiguration(
             ThemeState<LinearGradient> primaryBackground,
@@ -327,7 +355,8 @@ public enum ThemeConfiguration {
             ThemeState<Color> secondaryText,
             ThemeState<Color> tertiaryText,
             ThemeState<Color> primaryBorder,
-            ThemeState<Color> secondaryBorder
+            ThemeState<Color> secondaryBorder,
+            ThemeState<Color> tertiaryBorder
     ) {
         this.primaryBackground = primaryBackground;
         this.secondaryBackground = secondaryBackground;
@@ -339,6 +368,7 @@ public enum ThemeConfiguration {
 
         this.primaryBorder = primaryBorder;
         this.secondaryBorder = secondaryBorder;
+        this.tertiaryBorder = tertiaryBorder;
     }
 
     public ThemeState<LinearGradient> getPrimaryBackground() {
@@ -438,6 +468,19 @@ public enum ThemeConfiguration {
         return this.secondaryBorder.endProperty();
     }
 
+    public ThemeState<Color> getTertiaryBorder() {
+        return this.secondaryBorder;
+    }
+
+    public ObjectProperty<Color> tertiaryBorderStartProperty() {
+        return this.tertiaryBorder.startProperty();
+    }
+
+    public ObjectProperty<Color> tertiaryBorderEndProperty() {
+        return this.tertiaryBorder.endProperty();
+    }
+
+
     public void update(ThemeConfiguration newConfiguration) {
         primaryBackground.setStart(
                 newConfiguration.getPrimaryBackground().getStart()
@@ -476,6 +519,14 @@ public enum ThemeConfiguration {
         );
         secondaryBorder.setEnd(
                 newConfiguration.getSecondaryBorder()
+                        .getEnd()
+        );
+        tertiaryBorder.setStart(
+                newConfiguration.getTertiaryBorder()
+                        .getStart()
+        );
+        tertiaryBorder.setEnd(
+                newConfiguration.getTertiaryBorder()
                         .getEnd()
         );
 
