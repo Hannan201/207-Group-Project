@@ -2,13 +2,25 @@ package transitions;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
+import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
+/*
+ This class is responsible for playing a
+ transition that changes the border color
+ smoothly over a certain duration.
+ */
 public class BorderFillTransition extends BaseFillTransition {
+
+    // To maintain the regions border radius.
+    private CornerRadii borderRadius;
+
+    // To maintain the regions border insets.
+    private Insets borderInsets;
 
     @Override
     public ObjectProperty<Duration> durationProperty() {
@@ -48,6 +60,14 @@ public class BorderFillTransition extends BaseFillTransition {
                                 Color to
     ) {
         super(duration, region, from, to);
+        this.borderRadius = region.getBackground()
+                .getFills()
+                .get(0)
+                .getRadii();
+        this.borderInsets = region.getBackground()
+                .getFills()
+                .get(0)
+                .getInsets();
     }
 
     public BorderFillTransition(
@@ -91,8 +111,9 @@ public class BorderFillTransition extends BaseFillTransition {
                         new BorderStroke(
                                 afterShift,
                                 BorderStrokeStyle.SOLID,
-                                new CornerRadii(4),
-                                BorderWidths.DEFAULT
+                                this.borderRadius,
+                                BorderWidths.DEFAULT,
+                                this.borderInsets
                         )
                 )
         );
