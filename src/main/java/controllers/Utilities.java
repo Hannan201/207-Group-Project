@@ -102,15 +102,18 @@ public class Utilities {
                     }
                 });
 
+        HoverEffect hoverEffect = new HoverEffect(duration, textField);
+        hoverEffect.setBorderEffect(border);
+
         textField.setOnMouseEntered(mouseEvent -> {
             if (!textField.isFocused()) {
-                effect.playOnHover();
+                hoverEffect.playOnHover();
             }
         });
 
         textField.setOnMouseExited(mouseEvent -> {
             if (!textField.isFocused()) {
-                effect.playOnExit();
+                hoverEffect.playOnExit();
             }
         });
     }
