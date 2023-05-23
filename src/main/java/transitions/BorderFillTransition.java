@@ -60,14 +60,6 @@ public class BorderFillTransition extends BaseFillTransition {
                                 Color to
     ) {
         super(duration, region, from, to);
-        this.borderRadius = region.getBackground()
-                .getFills()
-                .get(0)
-                .getRadii();
-        this.borderInsets = region.getBackground()
-                .getFills()
-                .get(0)
-                .getInsets();
     }
 
     public BorderFillTransition(
@@ -80,6 +72,14 @@ public class BorderFillTransition extends BaseFillTransition {
 
     public BorderFillTransition(Duration duration, Region region) {
         super(duration, region, (Paint) null, (Paint) null);
+        this.borderRadius = region.getBorder()
+                .getStrokes()
+                .get(0)
+                .getRadii();
+        this.borderInsets = region.getBorder()
+                .getStrokes()
+                .get(0)
+                .getInsets();
     }
 
     public BorderFillTransition(Duration duration) {
