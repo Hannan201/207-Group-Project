@@ -104,8 +104,14 @@ public class HoverEffect {
                             new Background(
                                     new BackgroundFill(
                                             newValue,
-                                            new CornerRadii(4),
-                                            Insets.EMPTY
+                                            this.component.getBackground()
+                                                    .getFills()
+                                                    .get(0)
+                                                    .getRadii(),
+                                            this.component.getBackground()
+                                                    .getFills()
+                                                    .get(0)
+                                                    .getInsets()
                                     )
                             )
                         )
