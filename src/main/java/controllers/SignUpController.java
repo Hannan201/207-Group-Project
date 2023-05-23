@@ -170,7 +170,7 @@ public class SignUpController implements Initializable {
                                 Theme.getConfiguration()
                                         .getTertiaryBackground()
                                         .getStart(),
-                                new CornerRadii(4),
+                                new CornerRadii(3),
                                 Insets.EMPTY
                         )
                 )
@@ -183,8 +183,9 @@ public class SignUpController implements Initializable {
                                         .getSecondaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
-                                CornerRadii.EMPTY,
-                                BorderWidths.DEFAULT
+                                new CornerRadii(2),
+                                BorderWidths.DEFAULT,
+                                new Insets(1)
                         )
                 )
         );
@@ -195,7 +196,7 @@ public class SignUpController implements Initializable {
                                 Theme.getConfiguration()
                                         .getTertiaryBackground()
                                         .getStart(),
-                                new CornerRadii(4),
+                                new CornerRadii(3),
                                 Insets.EMPTY
                         )
                 )
@@ -208,8 +209,9 @@ public class SignUpController implements Initializable {
                                         .getSecondaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
-                                CornerRadii.EMPTY,
-                                BorderWidths.DEFAULT
+                                new CornerRadii(2),
+                                BorderWidths.DEFAULT,
+                                new Insets(1)
                         )
                 )
         );
@@ -220,7 +222,7 @@ public class SignUpController implements Initializable {
                                 Theme.getConfiguration()
                                         .getTertiaryBackground()
                                         .getStart(),
-                                new CornerRadii(4),
+                                new CornerRadii(3),
                                 Insets.EMPTY
                         )
                 )
@@ -233,8 +235,9 @@ public class SignUpController implements Initializable {
                                         .getSecondaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
-                                CornerRadii.EMPTY,
-                                BorderWidths.DEFAULT
+                                new CornerRadii(2),
+                                BorderWidths.DEFAULT,
+                                new Insets(1)
                         )
                 )
         );
@@ -245,7 +248,7 @@ public class SignUpController implements Initializable {
                                 Theme.getConfiguration()
                                         .getTertiaryBackground()
                                         .getStart(),
-                                new CornerRadii(4),
+                                new CornerRadii(3),
                                 Insets.EMPTY
                         )
                 )
@@ -258,8 +261,9 @@ public class SignUpController implements Initializable {
                                         .getSecondaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
-                                CornerRadii.EMPTY,
-                                BorderWidths.DEFAULT
+                                new CornerRadii(2),
+                                BorderWidths.DEFAULT,
+                                new Insets(1)
                         )
                 )
         );
