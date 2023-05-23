@@ -214,7 +214,7 @@ public enum ThemeConfiguration {
         borderThree = new ThemeState<>(
                 tertiaryBorderDefault,
                 tertiaryBorderHover
-        )
+        );
 
         values()[1].setConfiguration(
                 backgroundOne,
