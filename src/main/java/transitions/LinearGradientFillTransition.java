@@ -16,6 +16,12 @@ import java.util.List;
 
 public class LinearGradientFillTransition extends BaseFillTransition {
 
+    // To maintain the linear gradient's radius.
+    private CornerRadii linearGradientRadius;
+
+    // To maintain the linear gradient's insets.
+    private Insets linearGradientInsets;
+
     @Override
     public final ObjectProperty<Duration> durationProperty() {
         if (this.duration == null) {
@@ -66,6 +72,14 @@ public class LinearGradientFillTransition extends BaseFillTransition {
 
     public LinearGradientFillTransition(Duration duration, Region region) {
         super(duration, region, (Paint) null, (Paint) null);
+        this.linearGradientRadius = region.getBackground()
+                .getFills()
+                .get(0)
+                .getRadii();
+        this.linearGradientInsets = region.getBackground()
+                .getFills()
+                .get(0)
+                .getInsets();
     }
 
     public LinearGradientFillTransition(Duration duration) {
@@ -125,8 +139,8 @@ public class LinearGradientFillTransition extends BaseFillTransition {
                 new Background(
                         new BackgroundFill(
                                 linearGradient,
-                                new CornerRadii(4),
-                                Insets.EMPTY
+                                this.linearGradientRadius,
+                                this.linearGradientInsets
                         )
                 )
         );
