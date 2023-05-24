@@ -4,7 +4,7 @@
 
 #Title {
     -fx-font-family: "Montserrat SemiBold";
-    -fx-font-size: 25;
+    -fx-font-size: 20;
     -fx-text-fill: White;
 }
 
@@ -13,7 +13,7 @@
 }
 
 .label {
-    -fx-font-size: 14;
+    -fx-font-size: 15;
     -fx-font-family: "Montserrat";
     -fx-text-fill: #ffffff;
     -fx-font-weight: 600;

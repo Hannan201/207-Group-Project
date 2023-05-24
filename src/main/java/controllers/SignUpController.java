@@ -392,41 +392,41 @@ public class SignUpController implements Initializable {
                         .add(box.heightProperty())
                         .divide(2000.0)
                         .multiply(100.0)
-                        .multiply(24.0 / 34.7)
+                        .multiply(20.0 / 34.7)
         );
 
         box.widthProperty().addListener(((observableValue, number, t1) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
-            labelFontSize.set(Font.font(result * 0.625));
-            fieldWidthSize.set(result * (140 / 24.0));
-            fieldHeightSize.set(result * (31.0 / 24.0));
-            boxSpacing.set(result * 0.5);
+            labelFontSize.set(Font.font(result * 0.75));
+            fieldWidthSize.set(result * 7);
+            fieldHeightSize.set(result * 1.55);
+            boxSpacing.set(result * 0.6);
             buttonPaddingSize.set(
                     new Insets(
-                            result * (5.0 / 24.0),
-                            result * (22.0 / 24.0),
-                            result * (5.0 / 24.0),
-                            result * 0.9375
+                            result * 0.25,
+                            result * 1.1,
+                            result * 0.25,
+                            result * 1.125
                     )
             );
-            initialUsernameRowSpacing.set(result * (20.0 / 24.0));
-            verifiedUsernameRowSpacing.set(result * (19.0 / 24.0));
-            initialPasswordRowSpacing.set(result * (65.0 / 24.0));
-            verifiedPasswordRowSpacing.set(result * (23 / 24.0));
+            initialUsernameRowSpacing.set(result);
+            verifiedUsernameRowSpacing.set(result * 0.95);
+            initialPasswordRowSpacing.set(result * 3.25);
+            verifiedPasswordRowSpacing.set(result * 1.15);
             VBox.setMargin(
                     title,
                     new Insets(
                             0,
                             0,
-                            result * 0.1875,
+                            result * 0.225,
                             0
                     )
             );
             VBox.setMargin(
                     initialUsernameRow,
                     new Insets(
-                            result * (4.0 / 24.0),
+                            result * 0.2,
                             0,
                             0,
                             0
@@ -437,14 +437,14 @@ public class SignUpController implements Initializable {
                     new Insets(
                             0,
                             0,
-                            result * 0.25,
+                            result * 0.3,
                             0
                     )
             );
             VBox.setMargin(
                     initialPasswordRow,
                     new Insets(
-                            result * 0.25,
+                            result * 0.3,
                             0,
                             0,
                             0
@@ -455,14 +455,14 @@ public class SignUpController implements Initializable {
                     new Insets(
                             0,
                             0,
-                            result * (7.75 / 24.0),
+                            result * 0.3875,
                             0
                     )
             );
             VBox.setMargin(
                     createAccountWrapper,
                     new Insets(
-                            result * (7.75 / 24.0),
+                            result * 0.3875,
                             0,
                             0,
                             0
@@ -473,35 +473,35 @@ public class SignUpController implements Initializable {
         box.heightProperty().addListener(((observableValue, number, t1) -> {
             double result = Math.min(MAX_FONT_SIZE, titleFontSize.doubleValue());
             titleFontTracking.set(Font.font(result));
-            labelFontSize.set(Font.font(result * 0.625));
-            fieldWidthSize.set(result * (140 / 24.0));
-            fieldHeightSize.set(result * (31.0 / 24.0));
-            boxSpacing.set(result * 0.5);
+            labelFontSize.set(Font.font(result * 0.75));
+            fieldWidthSize.set(result * 7);
+            fieldHeightSize.set(result * 1.55);
+            boxSpacing.set(result * 0.6);
             buttonPaddingSize.set(
                     new Insets(
-                            result * (5.0 / 24.0),
-                            result * (22.0 / 24.0),
-                            result * (5.0 / 24.0),
-                            result * 0.9375
+                            result * 0.25,
+                            result * 1.1,
+                            result * 0.25,
+                            result * 1.125
                     )
             );
-            initialUsernameRowSpacing.set(result * (20.0 / 24.0));
-            verifiedUsernameRowSpacing.set(result * (19.0 / 24.0));
-            initialPasswordRowSpacing.set(result * (65.0 / 24.0));
-            verifiedPasswordRowSpacing.set(result * (23 / 24.0));
+            initialUsernameRowSpacing.set(result);
+            verifiedUsernameRowSpacing.set(result * 0.95);
+            initialPasswordRowSpacing.set(result * 3.25);
+            verifiedPasswordRowSpacing.set(result * 1.15);
             VBox.setMargin(
                     title,
                     new Insets(
                             0,
                             0,
-                            result * 0.1875,
+                            result * 0.225,
                             0
                     )
             );
             VBox.setMargin(
                     initialUsernameRow,
                     new Insets(
-                            result * (4.0 / 24.0),
+                            result * 0.2,
                             0,
                             0,
                             0
@@ -512,14 +512,14 @@ public class SignUpController implements Initializable {
                     new Insets(
                             0,
                             0,
-                            result * 0.25,
+                            result * 0.3,
                             0
                     )
             );
             VBox.setMargin(
                     initialPasswordRow,
                     new Insets(
-                            result * 0.25,
+                            result * 0.3,
                             0,
                             0,
                             0
@@ -530,14 +530,14 @@ public class SignUpController implements Initializable {
                     new Insets(
                             0,
                             0,
-                            result * (7.75 / 24.0),
+                            result * 0.3875,
                             0
                     )
             );
             VBox.setMargin(
                     createAccountWrapper,
                     new Insets(
-                            result * (7.75 / 24.0),
+                            result * 0.3875,
                             0,
                             0,
                             0
