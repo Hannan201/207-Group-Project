@@ -2,7 +2,6 @@ package effects;
 
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
-import javafx.geometry.Insets;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
