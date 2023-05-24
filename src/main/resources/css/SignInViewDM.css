@@ -12,12 +12,6 @@
     -fx-text-fill: white;
 }
 
-.text-field:focused {
-}
-
-.text-field:hover {
-}
-
 .label {
     -fx-font-family: "Montserrat";
     -fx-text-fill: #c1c0be;
