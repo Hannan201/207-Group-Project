@@ -188,12 +188,11 @@ public class SignInController implements Initializable {
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -214,12 +213,11 @@ public class SignInController implements Initializable {
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -232,18 +230,11 @@ public class SignInController implements Initializable {
                 Theme.getConfiguration().getPrimaryText()
         );
 
-        Utilities.setFocusBorderEffect(
+        Utilities.initializeTextFields(
                 Duration.millis(125),
-                unameInput,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
-        );
-
-        Utilities.setFocusBorderEffect(
-                Duration.millis(125),
-                passInput,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
+                Theme.getConfiguration().getTertiaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground(),
+                unameInput, passInput
         );
 
         signInButton.setOnMouseEntered(mouseEvent -> effect.playOnHover());

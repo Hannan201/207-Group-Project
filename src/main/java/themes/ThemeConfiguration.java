@@ -40,7 +40,7 @@ public enum ThemeConfiguration {
         Color secondaryBackgroundHover = Color.web("#aecca1");
 
         Color tertiaryBackgroundDefault = Color.web("#d9d9d9");
-        Color tertiaryBackgroundHover = Color.web("#d9d9d9");
+        Color tertiaryBackgroundHover = Color.rgb(207, 207, 207);
 
         Color primaryTextDefault = Color.BLACK;
         Color primaryTextHover = Color.BLACK;
@@ -146,8 +146,8 @@ public enum ThemeConfiguration {
         secondaryBackgroundDefault = Color.web("#3e5728");
         secondaryBackgroundHover = Color.web("#354a22");
 
-        tertiaryBackgroundDefault = tertiaryBackgroundHover =
-                Color.web("#2d3133");
+        tertiaryBackgroundDefault = Color.web("#2d3133");
+        tertiaryBackgroundHover = Color.rgb(45, 49, 51, 0.09);
 
         primaryTextDefault = primaryTextHover = Color.web(
                 "#babcc0"
@@ -168,7 +168,7 @@ public enum ThemeConfiguration {
         secondaryBorderHover = Color.TRANSPARENT;
 
         tertiaryBorderDefault = Color.TRANSPARENT;
-        tertiaryBorderHover = Color.WHITE;
+        tertiaryBorderHover = Color.rgb(173, 173, 173);
 
         backgroundOne =
                 new ThemeState<>(
@@ -469,7 +469,7 @@ public enum ThemeConfiguration {
     }
 
     public ThemeState<Color> getTertiaryBorder() {
-        return this.secondaryBorder;
+        return this.tertiaryBorder;
     }
 
     public ObjectProperty<Color> tertiaryBorderStartProperty() {

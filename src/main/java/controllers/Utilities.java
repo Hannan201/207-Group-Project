@@ -1,6 +1,7 @@
 package controllers;
 
 import effects.HoverEffect;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
@@ -74,11 +75,11 @@ public class Utilities {
     }
 
     /**
-     * Set a effect where the start and end colours of the border and
-     * background of a region are provided over a duration.
+     * Set an effect where the start and end colours of the border and
+     * background of a text field change on hover or when focused.
      *
      * @param duration Duration of the effect.
-     * @param textField Region to apply the effect to.
+     * @param textField TextField to apply the effect to.
      * @param border State to control the start and end effect of the
      *               border.
      * @param background State to control the start and end effect of
@@ -86,7 +87,7 @@ public class Utilities {
      */
     public static void setFocusBorderEffect(
             Duration duration,
-            Region textField,
+            TextField textField,
             ThemeState<Color> border,
             ThemeState<Color> background
     ) {
@@ -116,5 +117,33 @@ public class Utilities {
                 hoverEffect.playOnExit();
             }
         });
+    }
+
+    /**
+     * Initialise the text fields so that there's a smooth hover effect
+     * where the border abd background colour change any of the text
+     * fields are hovered.
+     *
+     * @param duration Duration of the effect.
+     * @param background State to control the start and end fill color once the
+     *                   text field is hovered/focused.
+     * @param border State to control the start and end border color once the
+     *               text field is hovered/focused.
+     * @param textFields All the text fields this effect needs to be applied on.
+     */
+    public static void initializeTextFields(
+            Duration duration,
+            ThemeState<Color> border,
+            ThemeState<Color> background,
+            TextField ... textFields
+    ) {
+        for (TextField textField : textFields) {
+            Utilities.setFocusBorderEffect(
+                    duration,
+                    textField,
+                    border,
+                    background
+            );
+        }
     }
 }

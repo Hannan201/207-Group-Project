@@ -198,12 +198,11 @@ public class CreateAccountController implements Initializable{
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -224,12 +223,11 @@ public class CreateAccountController implements Initializable{
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -242,18 +240,11 @@ public class CreateAccountController implements Initializable{
                 Theme.getConfiguration().getSecondaryText()
         );
 
-        Utilities.setFocusBorderEffect(
+        Utilities.initializeTextFields(
                 Duration.millis(125),
-                platform,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
-        );
-
-        Utilities.setFocusBorderEffect(
-                Duration.millis(125),
-                username,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
+                Theme.getConfiguration().getTertiaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground(),
+                platform, username
         );
 
         createAccount.setOnMouseEntered(mouseEvent -> effect.playOnHover());

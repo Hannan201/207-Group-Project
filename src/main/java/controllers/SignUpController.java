@@ -180,12 +180,11 @@ public class SignUpController implements Initializable {
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -206,12 +205,11 @@ public class SignUpController implements Initializable {
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -232,12 +230,11 @@ public class SignUpController implements Initializable {
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -258,12 +255,11 @@ public class SignUpController implements Initializable {
                 new Border(
                         new BorderStroke(
                                 Theme.getConfiguration()
-                                        .getSecondaryBorder()
+                                        .getTertiaryBorder()
                                         .getStart(),
                                 BorderStrokeStyle.SOLID,
                                 new CornerRadii(2),
-                                BorderWidths.DEFAULT,
-                                new Insets(1)
+                                BorderWidths.DEFAULT
                         )
                 )
         );
@@ -280,32 +276,12 @@ public class SignUpController implements Initializable {
 
         signUp.setOnMouseExited(mouseEvent -> effect.playOnExit());
 
-        Utilities.setFocusBorderEffect(
+        Utilities.initializeTextFields(
                 Duration.millis(125),
-                initialUsername,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
-        );
-
-        Utilities.setFocusBorderEffect(
-                Duration.millis(125),
-                verifiedUsername,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
-        );
-
-        Utilities.setFocusBorderEffect(
-                Duration.millis(125),
-                initialPassword,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
-        );
-
-        Utilities.setFocusBorderEffect(
-                Duration.millis(125),
-                verifiedPassword,
-                Theme.getConfiguration().getSecondaryBorder(),
-                Theme.getConfiguration().getTertiaryBackground()
+                Theme.getConfiguration().getTertiaryBorder(),
+                Theme.getConfiguration().getTertiaryBackground(),
+                initialUsername, verifiedUsername,
+                initialPassword, verifiedPassword
         );
         
         // creates the decorated button
