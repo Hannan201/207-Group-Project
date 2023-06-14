@@ -7,7 +7,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import user.Account;
+import models.Account;
 import views.CodeView;
 import views.utilities.CodeViewUtilities.CodeCell;
 

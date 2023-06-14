@@ -12,7 +12,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
 import data.Database;
-import user.User;
+import models.User;
 import views.*;
 import views.interfaces.Reversible;
 

@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
-import user.Account;
+import models.Account;
 import data.Database;
-import user.User;
+import models.User;
 
 import java.util.List;
 

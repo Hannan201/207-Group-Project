@@ -6,7 +6,7 @@ import data.Database;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import user.User;
+import models.User;
 import views.*;
 
 import java.util.ArrayList;

@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
-import user.Account;
+import models.Account;
 import views.AccountView;
 import views.AddAccountView;
 

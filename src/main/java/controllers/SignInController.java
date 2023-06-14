@@ -22,7 +22,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
-import user.User;
+import models.User;
 import views.*;
 
 import java.net.URL;

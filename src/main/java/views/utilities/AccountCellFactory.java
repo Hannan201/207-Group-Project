@@ -3,7 +3,7 @@ package views.utilities;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-import user.Account;
+import models.Account;
 
 public class AccountCellFactory implements Callback<ListView<Account>, ListCell<Account>> {
 

@@ -1,6 +1,6 @@
 package data;
 
-import user.User;
+import models.User;
 
 import java.io.*;
 import java.util.*;
