@@ -80,8 +80,6 @@ public class CodeViewController implements Initializable {
 
     private Account account;
 
-    private static final List<String> SUPPORTED_PLATFORMS  = new ArrayList<>(List.of("shopify", "discord", "google", "github"));
-
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
     private final ObjectProperty<Insets> rightSidePadding = new SimpleObjectProperty<>(new Insets(0, 12, 0, 10));
     private final ObjectProperty<Insets> windowPadding = new SimpleObjectProperty<>(new Insets(5, 5, 5, 5));
@@ -258,7 +256,7 @@ public class CodeViewController implements Initializable {
 
             // Only allow user to click the import codes button
             // if their account is supported.
-            importCodes.setDisable(!SUPPORTED_PLATFORMS.contains(account.getSocialMediaType().toLowerCase()));
+            importCodes.setDisable(!Account.supportsImport(account.getSocialMediaType().toLowerCase()));
 
             List<String> codes = account.getUserCodes();
             for (String s : codes) {

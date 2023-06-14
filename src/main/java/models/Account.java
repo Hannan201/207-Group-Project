@@ -3,10 +3,7 @@ package models;
 import behaviors.interfaces.ReadCodeBehavior;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is responsible for storing data
@@ -14,6 +11,11 @@ import java.util.Map;
  */
 
 public class Account implements java.io.Serializable {
+
+    // List of social media platforms that allow the imports
+    // of text files.
+    private static final Set<String> SUPPORTED_IMPORT_PLATFORMS
+            = Set.copyOf(List.of("shopify", "discord", "google", "github"));
 
     // Social media type for this account.
     private final String socialMediaType;
@@ -187,5 +189,16 @@ public class Account implements java.io.Serializable {
         int result = socialMediaType.hashCode();
         result = 31 * result + name.hashCode();
         return result;
+    }
+
+    /**
+     * Check if a given social media platform is supported by this
+     * application to import codes by using a text file.
+     *
+     * @param socialMediaType Social media type.
+     * @return True if supported, false otherwise.
+     */
+    public static boolean supportsImport(String socialMediaType) {
+        return SUPPORTED_IMPORT_PLATFORMS.contains(socialMediaType.toLowerCase());
     }
 }

@@ -75,7 +75,7 @@ public class AccountCell extends ListCell<Account> {
             // and if so, adds a custom icon to the account
 
             String path;
-            if (Account.getIcons().containsKey(item.getSocialMediaType().toLowerCase())) {
+            if (Account.supportsImport(item.getSocialMediaType().toLowerCase())) {
                 path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
                 Image image = new Image(path);
                 logo.setImage(image);
