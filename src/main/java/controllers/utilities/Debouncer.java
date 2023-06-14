@@ -59,7 +59,6 @@ public class Debouncer {
                 }
                 clearPreviousTasks();
                 tasks.clear();
-                timer.cancel();
             }
         };
 
@@ -100,5 +99,12 @@ public class Debouncer {
 
         timer.schedule(task, interval);
         tasks.put(key, task);
+    }
+
+    /**
+     * Turn off the debouncer.
+     */
+    public void tearDown() {
+        timer.cancel();
     }
 }

@@ -1,5 +1,7 @@
 package controllers;
 
+import controllers.utilities.Debouncer;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -7,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -70,8 +73,27 @@ public class AccountViewController implements Initializable {
 
     private final ObjectProperty<Insets> leftBoxPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
 
+    // To make searching more efficient.
+    private Debouncer debounce;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        box.sceneProperty().addListener(
+                (observableValue, oldScene, newScene) -> {
+                    if (oldScene == null && newScene != null) {
+                        newScene.windowProperty().addListener(
+                                (observableValue1, oldWindow, newWindow) -> {
+                                    if (oldWindow == null && newWindow != null) {
+                                        newWindow.setOnCloseRequest(windowEvent -> {
+                                            debounce.tearDown();
+                                        });
+                                    }
+                                }
+                        );
+                    }
+                }
+        );
+
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -118,6 +140,53 @@ public class AccountViewController implements Initializable {
                 padding.set(new Insets(40, 5, 0, 5));
             }
         }));
+
+        debounce = new Debouncer();
+    }
+
+
+    /**
+     * Handle method for when a key is released
+     * on the text field to search for an
+     * account.
+     *
+     * @param keyEvent The key event.
+     */
+    @FXML
+    private void handleSearchRelease(KeyEvent keyEvent) {
+        User user = Database.getUser();
+        if (user != null) {
+            if (search.getText().isEmpty()) {
+                debounce.registerFunction(
+                        "DEFAULT",
+                        () -> {
+                            Platform.runLater(() -> {
+                                accounts.getItems().clear();
+                                accounts.getItems().addAll(user.getAccounts());
+                            });
+                            return null;
+                        },
+                        125
+                );
+                return;
+            }
+
+            debounce.registerFunction(
+                    search.getText(),
+                    () -> {
+                        Platform.runLater(() -> {
+                            List<Account> result = user.searchAccounts(
+                                    search.getText()
+                            );
+
+                            accounts.getItems().clear();
+                            accounts.getItems().addAll(result);
+                        });
+                        return null;
+                    },
+                    125
+            );
+        }
     }
 
     /**

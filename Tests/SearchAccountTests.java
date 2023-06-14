@@ -1,5 +1,3 @@
-package ShopifyReaderTests;
-
 import models.Account;
 import models.User;
 import org.junit.jupiter.api.Test;
