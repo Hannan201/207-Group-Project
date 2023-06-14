@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
@@ -170,36 +171,34 @@ public class CodeViewController implements Initializable {
      * .txt file that contains the codes they would like to add.
      */
     public void importCodeOnAction() {
-        importCodes.setOnAction(event -> {
-            // 1) Get the platform for the account
-            String AccountType = account.getSocialMediaType().toLowerCase();
+        // 1) Get the platform for the account
+        String AccountType = account.getSocialMediaType().toLowerCase();
 
-            // 2) select a reader based on the corresponding account type
-            CodeReader reader = CodeReaderFactory.makeCodeReader(AccountType);
+        // 2) select a reader based on the corresponding account type
+        CodeReader reader = CodeReaderFactory.makeCodeReader(AccountType);
 
-            // 3) open the file explorer
-            FileChooser chooser = new FileChooser();
-            File pathway = chooser.showOpenDialog(CodeView.getInstance().getRoot().getScene().getWindow());
+        // 3) open the file explorer
+        FileChooser chooser = new FileChooser();
+        File pathway = chooser.showOpenDialog(CodeView.getInstance().getRoot().getScene().getWindow());
 
-            // 4) get the path to the specified file
-            if (!(pathway == null)) {
-                if (reader != null) {
-                    String filepath = pathway.getPath();
+        // 4) get the path to the specified file
+        if (!(pathway == null)) {
+            if (reader != null) {
+                String filepath = pathway.getPath();
 
-                    // 5) Read the file using the corresponding reader
-                    reader.setFilePath(filepath);
-                    account.setReadCodeBehavior((ReadCodeBehavior) reader);
-                    account.addCodes();
-                    List<String> importedCodes = reader.extractCodes(filepath);
+                // 5) Read the file using the corresponding reader
+                reader.setFilePath(filepath);
+                account.setReadCodeBehavior((ReadCodeBehavior) reader);
+                account.addCodes();
+                List<String> importedCodes = reader.extractCodes(filepath);
 
-                    // 6) Take the List<Strings> that is returned and turn them into CodeCell Objects, which can
-                    //    be added into the list view.
-                    for (String code : importedCodes) {
-                        codeListView.getItems().add(new CodeCell(code));
-                    }
+                // 6) Take the List<Strings> that is returned and turn them into CodeCell Objects, which can
+                //    be added into the list view.
+                for (String code : importedCodes) {
+                    codeListView.getItems().add(new CodeCell(code));
                 }
             }
-        });
+        }
     }
 
     /**
@@ -207,10 +206,8 @@ public class CodeViewController implements Initializable {
      * This method clears the items in the listview.
      */
     public void deleteAllOnAction() {
-        deleteAll.setOnAction(e -> {
-            codeListView.getItems().clear();
-            account.clearUserCodes();
-        });
+        codeListView.getItems().clear();
+        account.clearUserCodes();
     }
 
     /**
@@ -218,33 +215,29 @@ public class CodeViewController implements Initializable {
      * This method allows the user to add a specified code to the listview.
      */
     public void addCodeOnAction() {
-        addCode.setOnAction(event -> {
-            // Don't want to add empty account.
-            String newItem = addCodeInput.getText();
-            if (!newItem.equals("")) {
-                account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
-                account.addCodes();
-                codeListView.getItems().add(new CodeCell(newItem));
-                addCodeInput.setText("");
-            }
-        });
+        // Don't want to add empty account.
+        String newItem = addCodeInput.getText();
+        if (!newItem.equals("")) {
+            account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
+            account.addCodes();
+            codeListView.getItems().add(new CodeCell(newItem));
+            addCodeInput.setText("");
+        }
     }
 
     /**
      * Handles the event where the "Add Code" button is clicked.
      * This method allows the user to add a specified code using the enter button.
      */
-    public void addCodeOnEnter() {
-        addCodeInput.setOnKeyPressed(event -> {
-            // Don't want to add empty codes.
-            String newItem = addCodeInput.getText();
-            if (event.getCode() == KeyCode.ENTER && !newItem.equals("")) {
-                account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
-                account.addCodes();
-                codeListView.getItems().add(new CodeCell(newItem));
-                addCodeInput.setText("");
-            }
-        });
+    public void addCodeOnEnter(KeyEvent event) {
+        // Don't want to add empty codes.
+        String newItem = addCodeInput.getText();
+        if (event.getCode() == KeyCode.ENTER && !newItem.equals("")) {
+            account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
+            account.addCodes();
+            codeListView.getItems().add(new CodeCell(newItem));
+            addCodeInput.setText("");
+        }
     }
 
     /**
