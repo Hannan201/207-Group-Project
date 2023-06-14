@@ -21,7 +21,7 @@
 
 .toggle-button {
     -fx-text-fill: #d3d1cf;
-    -fx-background-color: #222426;
+    -fx-background-color: #191a1c;
 }
 
 .toggle-button:hover {
@@ -39,7 +39,7 @@
 
 .button {
     -fx-text-fill: #d3d1cf;
-    -fx-background-color: #222426;
+    -fx-background-color: #191a1c;
 }
 
 .button:hover {
