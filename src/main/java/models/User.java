@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -109,5 +110,29 @@ public class User implements java.io.Serializable {
             account.clearUserCodes();
         }
         accounts.clear();
+    }
+
+    /**
+     * Search through the list of user's account
+     * to see if any of the names match given
+     * an account name,
+     *
+     * @param name Name of account.
+     * @return List of accounts that match.
+     */
+    public List<Account> searchAccounts(String name) {
+        if (name.isEmpty()) {
+            return Collections.unmodifiableList(
+                   new ArrayList<>()
+            );
+        }
+
+        return accounts.stream()
+                .filter(account -> account.getName()
+                        .toLowerCase()
+                        .contains(
+                                name.toLowerCase()
+                        ))
+                .toList();
     }
 }
