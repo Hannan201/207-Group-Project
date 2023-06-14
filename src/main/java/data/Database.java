@@ -270,10 +270,10 @@ public class Database {
      */
     public static void logUserOut() {
         if (usersSourceSet && configurationsSourceSet && loggedIn) {
-            loggedIn = false;
-            user = null;
             setLoginStatus("false");
             saveUserData();
+            loggedIn = false;
+            user = null;
         }
     }
 
@@ -281,7 +281,7 @@ public class Database {
      * Save user data for the currently logged-in user.
      */
     public static void saveUserData() {
-        if (usersSourceSet && configurationsSourceSet) {
+        if (usersSourceSet && configurationsSourceSet && loggedIn) {
             saveUsers.save();
             saveConfigurations.save();
         }

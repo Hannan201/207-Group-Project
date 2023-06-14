@@ -59,6 +59,10 @@
     -fx-font-family: "Montserrat";
 }
 
+.list-cell .text {
+    -fx-fill: black;
+}
+
 .list-cell:hover .text{
     -fx-fill: white;
 }

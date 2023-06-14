@@ -135,4 +135,15 @@ public class User implements java.io.Serializable {
                         ))
                 .toList();
     }
+
+    /**
+     * Checks if there exists a duplicate account for this user.
+     *
+     * @param compare The Account to search for.
+     * @return True if there exists a duplicate account in the list,
+     * false otherwise.
+     */
+    public boolean existsDuplicate(Account compare) {
+        return this.accounts.contains(compare);
+    }
 }

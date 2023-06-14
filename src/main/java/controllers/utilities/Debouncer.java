@@ -105,6 +105,7 @@ public class Debouncer {
      * Turn off the debouncer.
      */
     public void tearDown() {
+        clearPreviousTasks();
         timer.cancel();
     }
 }

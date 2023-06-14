@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
 import models.Account;
 import data.Database;
 import models.User;
@@ -84,7 +85,7 @@ public class AccountViewController implements Initializable {
                         newScene.windowProperty().addListener(
                                 (observableValue1, oldWindow, newWindow) -> {
                                     if (oldWindow == null && newWindow != null) {
-                                        newWindow.setOnCloseRequest(windowEvent -> {
+                                        newWindow.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (windowEvent) -> {
                                             debounce.tearDown();
                                         });
                                     }
@@ -164,6 +165,7 @@ public class AccountViewController implements Initializable {
                                 accounts.getItems().clear();
                                 accounts.getItems().addAll(user.getAccounts());
                             });
+
                             return null;
                         },
                         125
@@ -244,22 +246,6 @@ public class AccountViewController implements Initializable {
     public void addAccounts(List<Account> userAccounts) {
         accounts.getItems().clear();
         accounts.getItems().addAll(userAccounts);
-    }
-
-    /**
-     * Checks if there exists a duplicate account in the
-     * accounts ListView.
-     *
-     * @param compare The Account to search for.
-     * @return if there exists a duplicate account in the list
-     */
-    public boolean existsDuplicate(Account compare) {
-        for (Account account : accounts.getItems()) {
-            if (compare.equals(account)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

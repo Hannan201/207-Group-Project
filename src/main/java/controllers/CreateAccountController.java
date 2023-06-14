@@ -1,5 +1,6 @@
 package controllers;
 
+import data.Database;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -12,6 +13,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import models.User;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import models.Account;
@@ -19,6 +21,7 @@ import views.AccountView;
 import views.AddAccountView;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class CreateAccountController implements Initializable{
@@ -95,7 +98,8 @@ public class CreateAccountController implements Initializable{
         validator.createCheck()
                 .withMethod(c -> {
                     Account account = new Account(username.getText(), platform.getText());
-                    boolean duplicate = ((AccountView)AccountView.getInstance()).getAccountViewController().existsDuplicate(account);
+                    User user = Database.getUser();
+                    boolean duplicate = user != null && user.existsDuplicate(account);
                     if (duplicate && !(username.getText().equals("") || platform.getText().equals(""))){
                         c.error("This account already exists, please try again!");
                     }
