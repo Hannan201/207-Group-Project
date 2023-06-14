@@ -12,8 +12,3 @@
     -fx-text-fill: #e8e6e3;
     -fx-background-color: transparent;
 }
-
-.button:hover {
-    -fx-text-fill: #8b8888;
-    -fx-background-color: transparent;
-}
