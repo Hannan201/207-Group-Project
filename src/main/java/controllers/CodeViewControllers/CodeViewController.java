@@ -4,6 +4,7 @@ import behaviors.ManualInputReader;
 import behaviors.interfaces.ReadCodeBehavior;
 import code.readers.CodeReader;
 import code.readers.CodeReaderFactory;
+import data.Storage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -16,10 +17,9 @@ import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
 import data.Database;
 import models.Account;
-import models.User;
 import views.*;
 import views.interfaces.Reversible;
-import views.utilities.CodeViewUtilities.CodeCell;
+import models.Code;
 import views.utilities.CodeViewUtilities.CodeCellFactory;
 
 import java.io.File;
@@ -46,7 +46,7 @@ public class CodeViewController implements Initializable {
     private Region aboveListView;
 
     @FXML
-    private ListView<CodeCell> codeListView;
+    private ListView<Code> codeListView;
 
     @FXML
     private Label codesTitle;
@@ -186,15 +186,7 @@ public class CodeViewController implements Initializable {
 
                 // 5) Read the file using the corresponding reader
                 reader.setFilePath(filepath);
-                account.setReadCodeBehavior((ReadCodeBehavior) reader);
-                account.addCodes();
-                List<String> importedCodes = reader.extractCodes(filepath);
-
-                // 6) Take the List<Strings> that is returned and turn them into CodeCell Objects, which can
-                //    be added into the list view.
-                for (String code : importedCodes) {
-                    codeListView.getItems().add(new CodeCell(code));
-                }
+                addCodes((ReadCodeBehavior) reader);
             }
         }
     }
@@ -205,7 +197,7 @@ public class CodeViewController implements Initializable {
      */
     public void deleteAllOnAction() {
         codeListView.getItems().clear();
-        account.clearUserCodes();
+        Database.clearAllCodes(Storage.getToken(), account.getID());
     }
 
     /**
@@ -213,14 +205,7 @@ public class CodeViewController implements Initializable {
      * This method allows the user to add a specified code to the listview.
      */
     public void addCodeOnAction() {
-        // Don't want to add empty account.
-        String newItem = addCodeInput.getText();
-        if (!newItem.equals("")) {
-            account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
-            account.addCodes();
-            codeListView.getItems().add(new CodeCell(newItem));
-            addCodeInput.setText("");
-        }
+        addCodes(new ManualInputReader(addCodeInput));
     }
 
     /**
@@ -228,13 +213,25 @@ public class CodeViewController implements Initializable {
      * This method allows the user to add a specified code using the enter button.
      */
     public void addCodeOnEnter(KeyEvent event) {
-        // Don't want to add empty codes.
-        String newItem = addCodeInput.getText();
-        if (event.getCode() == KeyCode.ENTER && !newItem.equals("")) {
-            account.setReadCodeBehavior(new ManualInputReader(addCodeInput));
-            account.addCodes();
-            codeListView.getItems().add(new CodeCell(newItem));
-            addCodeInput.setText("");
+        if (event.getCode() == KeyCode.ENTER) {
+            addCodes(new ManualInputReader(addCodeInput));
+        }
+    }
+
+    /**
+     * Add list of codes based on the behavior.
+     *
+     * @param behavior Obtains a backup code depending on the source.
+     */
+    private void addCodes(ReadCodeBehavior behavior) {
+        List<String> returned = behavior.readCodes();
+        for (String s : returned) {
+            // Don't want to add empty codes.
+            if (!s.isEmpty()) {
+                int id = Database.addCode(Storage.getToken(), account.getID(), s);
+                codeListView.getItems().add(Database.getCode(Storage.getToken(), id));
+                addCodeInput.setText("");
+            }
         }
     }
 
@@ -243,24 +240,23 @@ public class CodeViewController implements Initializable {
      * and only show the codes for a specific social media
      * account.
      *
-     * @param name Name of the social media account to show
+     * @param ID ID of the social media account to show
      *             the codes for.
      */
-    public void addCodes(String name) {
+    public void addCodes(int ID) {
         codeListView.getItems().clear();
-        User user = Database.getUser();
-        if (user != null) {
-            this.account = user.getAccountByName(name);
+        account = Database.getAccount(Storage.getToken(), ID);
+        if (account != null) {
             title.setText(account.getSocialMediaType() + "\n");
-            usernameTitle.setText(name);
+            usernameTitle.setText(account.getName());
 
             // Only allow user to click the import codes button
             // if their account is supported.
             importCodes.setDisable(!Account.supportsImport(account.getSocialMediaType().toLowerCase()));
 
-            List<String> codes = account.getUserCodes();
-            for (String s : codes) {
-                codeListView.getItems().add(new CodeCell(s));
+            List<Code> codes = Database.getCodes(Storage.getToken(), ID);
+            for (Code c : codes) {
+                codeListView.getItems().add(c);
             }
         }
     }
@@ -280,7 +276,7 @@ public class CodeViewController implements Initializable {
      * Allows a user to logout and redirects them to the home page.
      */
     public void handleLogout() {
-        Database.logUserOut();
+        Database.logUserOut(Storage.getToken());
         View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
     }
 

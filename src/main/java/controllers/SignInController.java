@@ -5,6 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
+import data.Storage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -213,10 +214,8 @@ public class SignInController implements Initializable {
      * for the user that just signed in.
      */
     private void transferData() {
-        User user = Database.getUser();
-        if (user != null) {
-            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
-        }
+        ((AccountView) AccountView.getInstance()).getAccountViewController()
+                .addAccounts(Database.getAccounts(Storage.getToken()));
     }
 
     /**
@@ -224,13 +223,13 @@ public class SignInController implements Initializable {
      * in.
      */
     private void loadTheme() {
-        User user = Database.getUser();
-        if (user != null && !user.getCurrentTheme().equals("Light")) {
-            if (user.getCurrentTheme().equals("High Contrast")) {
+        String theme = Database.getTheme(Storage.getToken());
+        if (theme != null && !theme.equals("Light")) {
+            if (theme.equals("High Contrast")) {
                 Command command = new SwitchToHighContrastMode(views);
                 ThemeSwitcher switcher = new ThemeSwitcher(command);
                 switcher.switchTheme();
-            } else if (user.getCurrentTheme().equals("Dark")) {
+            } else if (theme.equals("Dark")) {
                 Command command = new SwitchToDarkMode(views);
                 ThemeSwitcher switcher = new ThemeSwitcher(command);
                 switcher.switchTheme();

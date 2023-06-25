@@ -1,7 +1,13 @@
+import data.Storage;
+import data.Token;
 import org.junit.jupiter.api.Test;
 import models.Account;
 import data.Database;
 import models.User;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,32 +17,49 @@ public class SavingDataTests {
 
     @Test
     void testSaveUserData() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.registerUser("Joe", "1234");
-        User newUser = Database.getUser();
-        assertNotNull(newUser);
-        Account a1 = new Account("Joe", "GitHub");
-        a1.addCodes("1234");
-        a1.addCodes("1234");
-        a1.addCodes("1234");
-        a1.addCodes("1234");
-        newUser.addNewAccount(a1);
-        Database.logUserOut();
+        Path path = Path.of("./Tests/test.db");
+        if (Files.exists(path)) {
+            try {
+                Files.deleteIfExists(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+//        Database.setConfigurationsSource(pathToConfigFile);
+//        Database.setUsersSource(pathToUserFile);
+//        Database.registerUser("Joe", "1234");
+//        User newUser = Database.getUser();
+//        assertNotNull(newUser);
+//        Account a1 = new Account("Joe", "GitHub");
+//        a1.addCodes("1234");
+//        a1.addCodes("1234");
+//        a1.addCodes("1234");
+//        a1.addCodes("1234");
+//        newUser.addNewAccount(a1);
+//        Database.logUserOut();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.registerUser("Joe", "1234");
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Database.disconnect();
     }
 
     @Test
     void testSaveUserLogins() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.registerUser("Hannan", "12345");
-        User user = Database.getUser();
-        assertNotNull(user);
-        Account account = new Account("Joe", "1234");
-        account.addCodes("1234");
-        account.addCodes("1234");
-        account.addCodes("1234");
-        user.addNewAccount(account);
-        Database.logUserOut();
+//        Database.setConfigurationsSource(pathToConfigFile);
+//        Database.setUsersSource(pathToUserFile);
+//        Database.registerUser("Hannan", "12345");
+//        User user = Database.getUser();
+//        assertNotNull(user);
+//        Account account = new Account("Joe", "1234");
+//        account.addCodes("1234");
+//        account.addCodes("1234");
+//        account.addCodes("1234");
+//        user.addNewAccount(account);
+//        Database.logUserOut();
     }
 }

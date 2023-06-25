@@ -1,6 +1,7 @@
 package controllers;
 
 import data.Database;
+import data.Storage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -82,8 +83,8 @@ public class CreateAccountController implements Initializable{
                 Bindings.concat("Cannot add account:\n", validator.createStringBinding()));
         // adds the Account to the ListView in AccountsView when the button is clicked
         createAccount.setOnAction(c -> {
-            Account account = new Account(username.getText(), platform.getText());
-            ((AccountView)AccountView.getInstance()).getAccountViewController().addAccount(account);
+            int id = Database.addAccount(Storage.getToken(), username.getText(), platform.getText());
+            ((AccountView)AccountView.getInstance()).getAccountViewController().addAccount(id);
             Stage stage = (Stage) AddAccountView.getInstance().getRoot().getScene().getWindow();
             stage.close();
             username.clear();
@@ -97,9 +98,9 @@ public class CreateAccountController implements Initializable{
 
         validator.createCheck()
                 .withMethod(c -> {
-                    Account account = new Account(username.getText(), platform.getText());
-                    User user = Database.getUser();
-                    boolean duplicate = user != null && user.existsDuplicate(account);
+                    List<Account> accounts = Database.getAccounts(Storage.getToken());
+                    Account account = new Account(-1, username.getText(), platform.getText());
+                    boolean duplicate = accounts.contains(account);
                     if (duplicate && !(username.getText().equals("") || platform.getText().equals(""))){
                         c.error("This account already exists, please try again!");
                     }

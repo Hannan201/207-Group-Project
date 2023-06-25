@@ -1,5 +1,8 @@
 package controllers.CodeViewControllers;
 
+import data.Database;
+import data.Storage;
+import data.Token;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
@@ -8,8 +11,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import models.Account;
+import models.Code;
 import views.CodeView;
-import views.utilities.CodeViewUtilities.CodeCell;
 
 
 public class CodeCellController {
@@ -31,9 +34,9 @@ public class CodeCellController {
     @FXML
     private HBox backgroundLayout;
 
-    private CodeCell currentCell;
+    private Code currentCell;
 
-    private ListView<CodeCell> currentListView;
+    private ListView<Code> currentListView;
 
     private boolean selected;
 
@@ -43,7 +46,7 @@ public class CodeCellController {
      * @param cell The current CodeCell
      * @param parent The ListView that contains this CodeCell
      */
-    public void setCodeCell(CodeCell cell, ListView<CodeCell> parent) {
+    public void setCodeCell(Code cell, ListView<Code> parent) {
         currentCell = cell;
         currentListView = parent;
         selected = false;
@@ -102,12 +105,10 @@ public class CodeCellController {
         // handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
         // Don't let the user enter an empty code.
         if (e.getCode() == KeyCode.ENTER && !userInput.getText().equals("")) {
-            Account account = ((CodeView)CodeView.getInstance()).getCodeViewController().getAccount();
-            int index = account.getUserCodes().indexOf(code.getText());
-            account.getUserCodes().set(index, userInput.getText());
+            Database.updateCode(Storage.getToken(), currentCell.getID(), userInput.getText());
 
             code.setText((userInput.getText()));
-            currentCell.setCode(userInput.getText());
+            //currentCell.setCode(userInput.getText());
 
             userInput.setVisible(false);
             code.setVisible(true);
@@ -135,8 +136,7 @@ public class CodeCellController {
     public void deleteOnAction() {
         // handle the event when delete button is clicked
         currentListView.getItems().remove(currentCell);
-        Account account = ((CodeView)CodeView.getInstance()).getCodeViewController().getAccount();
-        account.getUserCodes().remove(code.getText());
+        Database.removeCode(Storage.getToken(), currentCell.getID());
     }
 
     /**

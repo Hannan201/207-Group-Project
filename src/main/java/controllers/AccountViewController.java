@@ -1,6 +1,8 @@
 package controllers;
 
 import controllers.utilities.Debouncer;
+import data.Storage;
+import data.Token;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -155,40 +157,43 @@ public class AccountViewController implements Initializable {
      */
     @FXML
     private void handleSearchRelease(KeyEvent keyEvent) {
-        User user = Database.getUser();
-        if (user != null) {
-            if (search.getText().isEmpty()) {
-                debounce.registerFunction(
-                        "DEFAULT",
-                        () -> {
-                            Platform.runLater(() -> {
-                                accounts.getItems().clear();
-                                accounts.getItems().addAll(user.getAccounts());
-                            });
-
-                            return null;
-                        },
-                        125
-                );
-                return;
-            }
-
+        if (search.getText().isEmpty()) {
             debounce.registerFunction(
-                    search.getText(),
+                    "DEFAULT",
                     () -> {
                         Platform.runLater(() -> {
-                            List<Account> result = user.searchAccounts(
-                                    search.getText()
-                            );
-
                             accounts.getItems().clear();
-                            accounts.getItems().addAll(result);
+                            accounts.getItems().addAll(Database.getAccounts(Storage.getToken()));
                         });
+
                         return null;
                     },
                     125
             );
+            return;
         }
+
+        debounce.registerFunction(
+                search.getText(),
+                () -> {
+                    Platform.runLater(() -> {
+                        List<Account> result = searchAccounts(
+                                search.getText()
+                        );
+
+                        accounts.getItems().clear();
+                        accounts.getItems().addAll(result);
+                    });
+                    return null;
+                },
+                125
+        );
+    }
+
+    private List<Account> searchAccounts(String name) {
+        List<Account> filered = new ArrayList<>();
+
+        return filered;
     }
 
     /**
@@ -204,7 +209,7 @@ public class AccountViewController implements Initializable {
      * to the HomePageView.
      */
     public void handleLogout() {
-        Database.logUserOut();
+        Database.logUserOut(Storage.getToken());
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
     }
 
@@ -229,13 +234,13 @@ public class AccountViewController implements Initializable {
     /**
      * Adds an account to the accounts ListView.
      *
-     * @param account The Account which is to be added.
+     * @param ID ID of the Account to be added.
      */
-    public void addAccount(Account account) {
-        accounts.getItems().add(account);
-        if (Database.getUser() != null) {
-            Database.getUser().addNewAccount(account);
-        }
+    public void addAccount(int ID) {
+        accounts.getItems()
+                .add(
+                        Database.getAccount(Storage.getToken(), ID)
+                );
     }
 
     /**
@@ -265,11 +270,8 @@ public class AccountViewController implements Initializable {
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);
-        User user = Database.getUser();
-        if (user != null) {
-            for (Account account : selectedItemsCopy) {
-                user.removeAccountByName(account.getName());
-            }
+        for (Account account : selectedItemsCopy) {
+            Database.removeAccount(Storage.getToken(), account.getID());
         }
     }
 }

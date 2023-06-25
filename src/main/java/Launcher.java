@@ -3,10 +3,10 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
+import data.Storage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import models.User;
 import views.*;
 
 import java.util.ArrayList;
@@ -32,8 +32,6 @@ public class Launcher extends Application {
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
-        Database.setConfigurationsSource(PATH_TO_CONFIG_FILE);
-        Database.setUsersSource(PATH_TO_USERS_FILE);
         launch(args);
     }
 
@@ -45,7 +43,7 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-        stage.setOnCloseRequest(windowEvent -> Database.saveUserData());
+        stage.setOnCloseRequest(windowEvent -> Database.disconnect());
 
         View view = loadView();
         Scene scene = new Scene(view.getRoot());
@@ -62,7 +60,7 @@ public class Launcher extends Application {
      * @return Correct view to load.
      */
     private static View loadView() {
-        if (Database.getLoginStatus()) {
+        if (Storage.getToken() != null) {
             return AccountView.getInstance();
         }
 
@@ -74,16 +72,23 @@ public class Launcher extends Application {
      * before they quit the application without logging out.
      */
     private static void adjustTheme() {
-        if (Database.getLoginStatus()) {
-            User user = Database.getUser();
-            if (user != null) {
-                String preferredTheme = user.getCurrentTheme();
+        if (Storage.getToken() != null) {
+            String preferredTheme = Database.getTheme(Storage.getToken());
+            if (preferredTheme != null) {
 
                 // Switch to the respective theme.
                 if (!preferredTheme.equals("Light")) {
-                    List<View> views = new ArrayList<>(List.of(HomePageView.getInstance(), SignInView.getInstance(),
-                            SignUpView.getInstance(), AccountView.getInstance(), AddAccountView.getInstance(),
-                            CodeView.getInstance(), SettingsView.getInstance()));
+                    List<View> views = new ArrayList<>(
+                            List.of(
+                                    HomePageView.getInstance(),
+                                    SignInView.getInstance(),
+                                    SignUpView.getInstance(),
+                                    AccountView.getInstance(),
+                                    AddAccountView.getInstance(),
+                                    CodeView.getInstance(),
+                                    SettingsView.getInstance()
+                            )
+                    );
 
                     Command command;
 
@@ -98,7 +103,8 @@ public class Launcher extends Application {
                     }
                 }
 
-                ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
+                ((AccountView) AccountView.getInstance()).getAccountViewController()
+                        .addAccounts(Database.getAccounts(Storage.getToken()));
             }
         }
     }

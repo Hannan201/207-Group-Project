@@ -4,19 +4,20 @@ import controllers.CodeViewControllers.CodeCellController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import models.Code;
 
 import java.io.IOException;
 
 
-public class CodeCellFactory extends ListCell<CodeCell> {
+public class CodeCellFactory extends ListCell<Code> {
 
     private Parent graphic;
 
-    ListView<CodeCell> CodeListView;
+    ListView<Code> CodeListView;
 
     private final CodeCellController cellController;
 
-    public CodeCellFactory(ListView<CodeCell> parentListView) throws IOException {
+    public CodeCellFactory(ListView<Code> parentListView) throws IOException {
 
         // Each cell only loads the FXML file once to speed up runtime
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/CodeViewFXML/CodeCell.fxml"));
@@ -33,16 +34,16 @@ public class CodeCellFactory extends ListCell<CodeCell> {
 
 
     @Override
-    protected void updateItem(CodeCell codecell, boolean empty) {
-        super.updateItem(codecell, empty);
+    protected void updateItem(Code code, boolean empty) {
+        super.updateItem(code, empty);
 
-        if (empty || codecell == null) {
+        if (empty || code == null) {
             setText(null);
             setGraphic(null);
         } else{
 
             // pull data from the cell and apply it to the UI
-            cellController.setCodeCell(codecell, CodeListView);
+            cellController.setCodeCell(code, CodeListView);
             setGraphic(graphic);
         }
     }
