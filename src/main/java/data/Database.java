@@ -196,7 +196,7 @@ public class Database {
      * Check if a username is already taken.
      *
      * @param username The username to check for.
-     * @return True if username is taken, false otherwise.s
+     * @return True if username is taken, false otherwise.
      */
     public static boolean checkUsername(String username) {
         if (username.isEmpty() || connection == null || username.isBlank()) {
@@ -435,30 +435,57 @@ public class Database {
      *
      * @param username The username for the user trying to log-in.
      * @param password The password for the user trying to log-in.
-     * @return True if the user was logged-in, false otherwise.
+     * @return Token if the user was logged-in, null otherwise.
      */
-    public static boolean authenticateUser(String username, String password) {
-        if (username.isEmpty() || password.isEmpty()) {
-            return false;
+    public static Token authenticateUser(String username, String password) {
+        if (!checkUsername(username) || username.isEmpty() || password.isEmpty()) {
+            return null;
         }
 
-        if (!checkUsername(username)) {
-            return false;
+        if (connection != null) {
+            PreparedStatement getLoginStatement = null;
+            try {
+                getLoginStatement = connection.prepareStatement(
+                        """
+                            SELECT id, username, password FROM users
+                            WHERE username = ?
+                           """
+                );
+
+                getLoginStatement.setString(1, username.toLowerCase());
+
+                ResultSet loginsResult = getLoginStatement.executeQuery();
+                String hashedPassword = loginsResult.getString("password");
+
+                String salt = hashedPassword.substring(0, 24);
+                String expectedPassword = hashedPassword.substring(24);
+                if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
+                    String token = generator.nextString();
+                    int id = loginsResult.getInt("id");
+
+                    TokenManager.updateToken(token + "," + id);
+                    CustomToken customToken = new CustomToken(token, id);
+
+                    updateLoginStatus(customToken, true);
+
+                    return customToken;
+                }
+
+                return null;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (getLoginStatement != null) {
+                        getLoginStatement.close();
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
         }
 
-//        List<String> configurations = userConfigurations.get(username.toLowerCase());
-//        String salt = configurations.get(1);
-//        loggedIn = passwordHasher.verifyPassword(configurations.get(0), password, salt);
-//        if (loggedIn) {
-//            user = users.get(username.toLowerCase());
-//            setLoginStatus("true");
-//        } else {
-//            user = null;
-//        }
-//
-//        return loggedIn;
-
-        return true;
+        return null;
     }
 
     /**
@@ -539,6 +566,43 @@ public class Database {
      */
     public static List<Account> getAccounts(Token token) {
         List<Account> accounts = new ArrayList<>();
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement getAccountsStatement = null;
+                try {
+                    getAccountsStatement = connection.prepareStatement(
+                            """
+                               SELECT id, name, type FROM accounts
+                               WHERE user_id = ?
+                               """
+                    );
+                    int id = ((CustomToken) token).ID;
+                    getAccountsStatement.setInt(1, id);
+
+                    ResultSet results = getAccountsStatement.executeQuery();
+
+                    while (results.next()) {
+                        int accountID = results.getInt("id");
+                        String name = results.getString("name");
+                        String type = results.getString("type");
+                        accounts.add(
+                                new Account(accountID, name, type)
+                        );
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (getAccountsStatement != null) {
+                            getAccountsStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return accounts;
     }
 
@@ -637,6 +701,42 @@ public class Database {
      */
     public static List<Code> getCodes(Token token, int accountID) {
         List<Code> codes = new ArrayList<>();
+
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement getCodesStatement = null;
+                try {
+                    getCodesStatement = connection.prepareStatement(
+                            """
+                                SELECT id, code FROM codes
+                                WHERE account_id = ?
+                               """
+                    );
+                    getCodesStatement.setInt(1, accountID);
+
+                    ResultSet results = getCodesStatement.executeQuery();
+
+                    while (results.next()) {
+                        int id = results.getInt("id");
+                        String code = results.getString("code");
+                        codes.add(
+                                new Code(id, code)
+                        );
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (getCodesStatement != null) {
+                            getCodesStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return codes;
     }
 

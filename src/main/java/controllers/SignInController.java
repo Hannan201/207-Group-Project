@@ -134,7 +134,7 @@ public class SignInController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (!Database.authenticateUser(unameInput.getText(), passInput.getText())){
+                    if (Database.authenticateUser(unameInput.getText(), passInput.getText()) == null){
                         c.error("Wrong username or password, please try again.");
                     }
                 })
