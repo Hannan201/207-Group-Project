@@ -1,6 +1,5 @@
 package data;
 
-import javafx.application.Application;
 import models.Account;
 import models.Code;
 import models.User;
@@ -49,6 +48,7 @@ public class Database {
     public static void setConnectionSource(String source) {
         if (connection == null && !source.isEmpty() && !source.isBlank() && source.endsWith(".db")) {
             connect(source);
+            TokenManager.initializeStorage();
             passwordHasher = new PasswordHasher();
             generator = new TokenGenerator(21);
         }
@@ -147,7 +147,7 @@ public class Database {
                             user_id INT NOT NULL,
                             name TEXT NOT NULL CHECK ( length(name) > 0 ),
                             type TEXT NOT NULL CHECK ( length(type) > 0 ),
-                            FOREIGN KEY(user_id) REFERENCES users(id)
+                            FOREIGN KEY(user_id) REFERENCES users(id) 
                         );
                        """
             );
@@ -159,7 +159,7 @@ public class Database {
                             id INTEGER PRIMARY KEY,
                             account_id INT NOT NULL,
                             code TEXT NOT NULL CHECK ( length(code) > 0 ),
-                            FOREIGN KEY(account_id) REFERENCES accounts(id)
+                            FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE 
                         );
                        """
             );
@@ -233,6 +233,24 @@ public class Database {
     private static class TokenManager {
         private static KeyStore storage;
         private static char[] password;
+
+        /**
+         * Load the token into storage, if there's any present.
+         */
+        private static void initializeStorage() {
+            String[] result = Objects.requireNonNull(parseToken());
+
+            if (result.length != 2) {
+                return;
+            }
+
+            Storage.setToken(
+                    new CustomToken(
+                            result[0],
+                            Integer.parseInt(result[1])
+                    )
+            );
+        }
 
         /**
          * Load the properties file.
@@ -515,7 +533,6 @@ public class Database {
         if (authenticateToken(token)) {
             if (connection != null) {
                 PreparedStatement getUserStatement = null;
-                PreparedStatement getThemeNameStatement = null;
                 try {
                     getUserStatement = connection.prepareStatement(
                             """
@@ -529,17 +546,7 @@ public class Database {
 
                     int id = resultKeys.getInt("id");
                     String name = resultKeys.getString("username");
-                    int themeID = resultKeys.getInt("theme_id");
-
-                    getThemeNameStatement = connection.prepareStatement(
-                            """
-                                SELECT name FROM themes
-                                WHERE id = ?
-                               """
-                    );
-                    getThemeNameStatement.setInt(1, themeID);
-                    ResultSet themeResult = getThemeNameStatement.executeQuery();
-                    String theme = themeResult.getString("name");
+                    String theme = getThemeByID(resultKeys.getInt("theme_id"));
                     return new User(id, name, theme);
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -618,6 +625,56 @@ public class Database {
     }
 
     /**
+     * Get an account for a user give the name.
+     *
+     * @param token Token given to the user once registered/logged in,
+     *              for authentication purposes.
+     * @param name Name of the account.
+     * @return Account if found, otherwise null.
+     */
+    public static Account getAccountByName(Token token, String name) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement getAccountStatement = null;
+                try {
+                    getAccountStatement = connection.prepareStatement(
+                            """
+                                SELECT id, name, type FROM accounts
+                                WHERE user_id = ? AND name = ?
+                               """
+                    );
+                    int id = ((CustomToken) token).ID;
+                    getAccountStatement.setInt(1, id);
+                    getAccountStatement.setString(2, name);
+
+                    ResultSet resultSet = getAccountStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        int accountID = resultSet.getInt("id");
+                        String accountName = resultSet.getString("name");
+                        String accountType = resultSet.getString("type");
+                        return new Account(accountID, accountName, accountType);
+                    }
+
+                    return null;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (getAccountStatement != null) {
+                            getAccountStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Add a new account for a user.
      *
      * @param token Token given to the user once registered/logged in,
@@ -688,7 +745,32 @@ public class Database {
      *              for authentication purposes.
      */
     public static void clearAllAccounts(Token token) {
-
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement clearUserStatement = null;
+                try {
+                    clearUserStatement = connection.prepareStatement(
+                            """
+                                DELETE FROM accounts
+                                WHERE user_id = ?
+                               """
+                    );
+                    int id = ((CustomToken) token).ID;
+                    clearUserStatement.setInt(1, id);
+                    clearUserStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (clearUserStatement != null) {
+                            clearUserStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -839,6 +921,41 @@ public class Database {
     }
 
     /**
+     * Get the name of the theme (in string format) based on the ID.
+     *
+     * @param id ID of the theme.
+     * @return Name of the theme as a string.
+     */
+    private static String getThemeByID(int id) {
+        if (connection != null && id >= 1 && id <= 3) {
+            PreparedStatement statement = null;
+            try {
+                statement = connection.prepareStatement(
+                        """
+                            SELECT name FROM themes
+                            WHERE id = ?
+                           """
+                );
+                statement.setInt(1, id);
+                ResultSet themeResult = statement.executeQuery();
+                return themeResult.getString("name");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get the preferred theme for a user.
      *
      * @param token Token given to the user once registered/logged in,
@@ -846,6 +963,35 @@ public class Database {
      * @return The theme for the user.
      */
     public static String getTheme(Token token) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement getThemeStatement = null;
+                try {
+                    getThemeStatement = connection.prepareStatement(
+                            """
+                                SELECT theme_id FROM users
+                                WHERE id = ?
+                               """
+                    );
+                    int id = ((CustomToken) token).ID;
+                    getThemeStatement.setInt(1, id);
+                    ResultSet results = getThemeStatement.executeQuery();
+
+                    return getThemeByID(results.getInt("theme_id"));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (getThemeStatement != null) {
+                            getThemeStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
@@ -857,7 +1003,52 @@ public class Database {
      * @param newTheme The new theme to set for the user.
      */
     public static void updateTheme(Token token, String newTheme) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement updateThemeStatement = null;
+                PreparedStatement themeIDStatement = null;
+                try {
+                    updateThemeStatement = connection.prepareStatement(
+                            """
+                                UPDATE users
+                                SET theme_id = ?
+                                WHERE id = ?
+                               """
+                    );
 
+                    themeIDStatement = connection.prepareStatement(
+                            """
+                                SELECT id FROM themes
+                                WHERE name = ?
+                               """
+                    );
+                    themeIDStatement.setString(1, newTheme);
+
+                    ResultSet themeResults = themeIDStatement.executeQuery();
+
+                    int themeID = themeResults.getInt("id");
+                    int userID = ((CustomToken) token).ID;
+
+                    updateThemeStatement.setInt(1, themeID);
+                    updateThemeStatement.setInt(2, userID);
+                    updateThemeStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (updateThemeStatement != null) {
+                            updateThemeStatement.close();
+                        }
+
+                        if (themeIDStatement != null) {
+                            themeIDStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
