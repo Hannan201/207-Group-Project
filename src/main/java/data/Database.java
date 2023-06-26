@@ -621,6 +621,40 @@ public class Database {
      * @param accountID ID of the account.
      */
     public static Account getAccount(Token token, int accountID) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement getAccountStatement = null;
+                try {
+                    getAccountStatement = connection.prepareStatement(
+                            """
+                                SELECT id, name, type FROM accounts
+                                WHERE id = ?
+                               """
+                    );
+                    getAccountStatement.setInt(1, accountID);
+                    ResultSet accounts = getAccountStatement.executeQuery();
+                    if (accounts.next()) {
+                        int id = accounts.getInt("id");
+                        String name = accounts.getString("name");
+                        String type = accounts.getString("type");
+                        return new Account(id, name, type);
+                    }
+
+                    return null;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (getAccountStatement != null) {
+                            getAccountStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
@@ -735,7 +769,31 @@ public class Database {
      * @param accountID ID of the account.
      */
     public static void removeAccount(Token token, int accountID) {
-
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement removeAccountStatement = null;
+                try {
+                    removeAccountStatement = connection.prepareStatement(
+                            """
+                               DELETE FROM accounts
+                               WHERE id = ?
+                               """
+                    );
+                    removeAccountStatement.setInt(1, accountID);
+                    removeAccountStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (removeAccountStatement != null) {
+                            removeAccountStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -831,6 +889,36 @@ public class Database {
      * @return The code.
      */
     public static Code getCode(Token token, int codeID) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement getCodeStatement = null;
+                try {
+                    getCodeStatement = connection.prepareStatement(
+                            """
+                                SELECT id, code FROM codes
+                                WHERE id = ?
+                               """
+                    );
+                    getCodeStatement.setInt(1, codeID);
+                    ResultSet codes = getCodeStatement.executeQuery();
+                    if (codes.next()) {
+                        int id = codes.getInt("id");
+                        String code = codes.getString("code");
+                        return new Code(id, code);
+                    }
+
+                    return null;
+                } catch (SQLException e) {
+                    try {
+                        if (getCodeStatement != null) {
+                            getCodeStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
         return null;
     }
 
@@ -895,7 +983,33 @@ public class Database {
      * @param newCode Code to update to.
      */
     public static void updateCode(Token token, int codeID, String newCode) {
-
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement updateCodeStatement = null;
+                try {
+                    updateCodeStatement = connection.prepareStatement(
+                            """
+                                UPDATE codes
+                                SET code = ?
+                                WHERE id = ?
+                               """
+                    );
+                    updateCodeStatement.setString(1, newCode);
+                    updateCodeStatement.setInt(2, codeID);
+                    updateCodeStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (updateCodeStatement != null) {
+                            updateCodeStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -906,7 +1020,31 @@ public class Database {
      * @param codeID ID of the code to remove.
      */
     public static void removeCode(Token token, int codeID) {
-
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement removeCodeStatement = null;
+                try {
+                    removeCodeStatement = connection.prepareStatement(
+                            """
+                                DELETE FROM codes
+                                WHERE id = ?
+                               """
+                    );
+                    removeCodeStatement.setInt(1, codeID);
+                    removeCodeStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (removeCodeStatement != null) {
+                            removeCodeStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -917,7 +1055,31 @@ public class Database {
      * @param accountID ID of the account which contains the backup codes.
      */
     public static void clearAllCodes(Token token, int accountID) {
-
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement clearCodesStatement = null;
+                try {
+                    clearCodesStatement = connection.prepareStatement(
+                            """
+                                DELETE FROM codes
+                                WHERE account_id = ?
+                               """
+                    );
+                    clearCodesStatement.setInt(1, accountID);
+                    clearCodesStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (clearCodesStatement != null) {
+                            clearCodesStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**

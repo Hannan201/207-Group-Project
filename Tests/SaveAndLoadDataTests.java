@@ -186,6 +186,160 @@ public class SaveAndLoadDataTests {
     }
 
     @Test
+    void testWhenUserDeletesAccount() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "One");
+        assertNotNull(account);
+
+        Database.removeAccount(token, account.getID());
+
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
+        assertNotNull(user);
+
+        account = Database.getAccount(token, account.getID());
+        assertNull(account);
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenDeleteAllCodes() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        List<Code> codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 16);
+
+        Database.clearAllCodes(token, account.getID());
+
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
+        assertNotNull(user);
+
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 0);
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenGetCode() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        int id = Database.addCode(token, account.getID(), "4EW C0D3");
+        Code c = Database.getCode(token, id);
+        assertNotNull(c);
+        assertEquals(c.getCode(), "4EW C0D3");
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenDeleteCode() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        List<Code> codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 2);
+
+        int id = -1;
+        for (Code c : codes) {
+            if (c.getCode().equals("123 456")) {
+                id = c.getID();
+                break;
+            }
+        }
+
+        Database.removeCode(token, id);
+
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 1);
+
+        assertEquals(codes.get(0).getCode(), "4EW C0D3");
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenUpdateCode() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        List<Code> code = Database.getCodes(token, account.getID());
+        assertEquals(code.size(), 1);
+        Code c = code.get(0);
+        int id = c.getID();
+
+        Database.updateCode(token, c.getID(), "U9D47ED");
+
+        c = Database.getCode(token, id);
+        assertNotNull(c);
+        assertEquals(c.getCode(), "U9D47ED");
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
     void saveDataWhenUserMakesChanges() {
         Database.setConnectionSource("./Tests/test.db");
 
