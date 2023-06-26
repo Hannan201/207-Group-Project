@@ -85,6 +85,7 @@ public class Database {
         try {
             if (connection != null) {
                 connection.close();
+                connection = null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -270,12 +271,7 @@ public class Database {
                 stream = new FileInputStream(url.getPath());
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
-
-                Key key = storage.getKey("token", password);
-                if (key == null) {
-                    updateToken("");
-                }
-            } catch (UnrecoverableKeyException | KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } finally {
                 try {
@@ -473,6 +469,7 @@ public class Database {
      */
     public static void logUserOut(Token token) {
         updateLoginStatus(token, false);
+        TokenManager.updateToken("null");
     }
 
     /*
@@ -566,6 +563,46 @@ public class Database {
      * @return ID of the new account.
      */
     public static int addAccount(Token token, String name, String type) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement addAccountStatement = null;
+                try {
+                    addAccountStatement = connection.prepareStatement(
+                            """
+                               INSERT INTO accounts
+                               (user_id, name, type)
+                               VALUES 
+                               (?, ?, ?)
+                               """,
+                            Statement.RETURN_GENERATED_KEYS
+                    );
+
+                    int id = ((CustomToken) token).ID;
+                    addAccountStatement.setInt(1, id);
+                    addAccountStatement.setString(2, name);
+                    addAccountStatement.setString(3, type);
+                    addAccountStatement.executeUpdate();
+
+                    ResultSet resultKeys = addAccountStatement.getGeneratedKeys();
+                    while (resultKeys.next()) {
+                        id = resultKeys.getInt(1);
+                    }
+
+                    return id;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (addAccountStatement != null) {
+                            addAccountStatement.close();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return 0;
     }
 
@@ -625,6 +662,45 @@ public class Database {
      * @return ID of the new code.
      */
     public static int addCode(Token token, int accountID, String code) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement addCodeStatement = null;
+                try {
+                    addCodeStatement = connection.prepareStatement(
+                            """
+                               INSERT INTO codes
+                               (account_id, code)
+                               VALUES 
+                               (?, ?)
+                               """,
+                            Statement.RETURN_GENERATED_KEYS
+                    );
+
+                    addCodeStatement.setInt(1, accountID);
+                    addCodeStatement.setString(2, code);
+                    addCodeStatement.executeUpdate();
+
+                    ResultSet resultKeys = addCodeStatement.getGeneratedKeys();
+                    int id = 0;
+                    while (resultKeys.next()) {
+                        id = resultKeys.getInt(1);
+                    }
+
+                    return id;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (addCodeStatement != null) {
+                            addCodeStatement.close();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return 0;
     }
 
@@ -694,6 +770,35 @@ public class Database {
      * @param status The new status.
      */
     private static void updateLoginStatus(Token token, boolean status) {
+        if (authenticateToken(token)) {
+            if (connection != null) {
+                PreparedStatement logoutStatement = null;
+                try {
+                    logoutStatement = connection.prepareStatement(
+                            """
+                                UPDATE users
+                                SET logged_in = ?
+                                WHERE id = ?
+                               """
+                    );
 
+                    int result = status ? 1 : 0;
+                    logoutStatement.setInt(1, result);
+                    int id = ((CustomToken) token).ID;
+                    logoutStatement.setInt(2, id);
+                    logoutStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (logoutStatement != null) {
+                            logoutStatement.close();
+                        }
+                    } catch (SQLException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }
