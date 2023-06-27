@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class AccountViewController implements Initializable {
 
@@ -178,6 +179,7 @@ public class AccountViewController implements Initializable {
                 () -> {
                     Platform.runLater(() -> {
                         List<Account> result = searchAccounts(
+                                Database.getAccounts(Storage.getToken()),
                                 search.getText()
                         );
 
@@ -190,10 +192,25 @@ public class AccountViewController implements Initializable {
         );
     }
 
-    private List<Account> searchAccounts(String name) {
-        List<Account> filered = new ArrayList<>();
-
-        return filered;
+    /**
+     * Utility method to search through the list of accounts and find all
+     * accounts that have a username that matches the name to search.
+     * <p>
+     * In this case, match means that the name being searched
+     * is contained in the account name.
+     * <p>
+     * Both the account name and the name being searched are converted to
+     * lowercase before the contains-check is done.
+     *
+     * @param accounts List of accounts.
+     * @param name The name of the account to search.
+     * @return List of accounts with usernames that match.
+     */
+    public static List<Account> searchAccounts(List<Account> accounts, String name) {
+        return accounts.stream().filter(account -> account.getName()
+                .toLowerCase()
+                .contains(name.toLowerCase()))
+                .toList();
     }
 
     /**

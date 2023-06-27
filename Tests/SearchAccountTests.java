@@ -1,3 +1,4 @@
+import controllers.AccountViewController;
 import models.Account;
 import models.User;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,14 @@ import java.util.ArrayList;
 public class SearchAccountTests {
 
     private List<Account> createAccounts() {
-//        return new ArrayList<>(
-//                List.of(
-//                        new Account("Joe", "Reddit"),
-//                        new Account("Random", "Slack"),
-//                        new Account("Oof", "Google"),
-//                        new Account("Razor", "Origin")
-//                )
-//        );
-        return null;
+        return new ArrayList<>(
+                List.of(
+                        new Account(1, "Joe", "Reddit"),
+                        new Account(2, "Random", "Slack"),
+                        new Account(3, "Oof", "Google"),
+                        new Account(4, "Razor", "Origin")
+                )
+        );
     }
 
     /**
@@ -33,18 +33,13 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenAccountExists() {
-//        User user = new User("test");
-//        for (Account account : createAccounts()) {
-//            user.addNewAccount(account);
-//        }
-//
-//        List<Account> result = user.searchAccounts("Joe");
-//        assertEquals(1, result.size());
-//        assertEquals("Joe", result.get(0).getName());
-//        assertEquals(
-//                "Reddit",
-//                result.get(0).getSocialMediaType()
-//        );
+        List<Account> result = AccountViewController.searchAccounts(createAccounts(), "Joe");
+        assertEquals(1, result.size());
+        assertEquals("Joe", result.get(0).getName());
+        assertEquals(
+                "Reddit",
+                result.get(0).getSocialMediaType()
+        );
     }
 
     /**
@@ -53,10 +48,12 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenEmpty() {
-//        User user = new User("test");
-//        List<Account> result = user.searchAccounts("");
-//
-//        assertEquals(0, result.size());
+        List<Account> result = AccountViewController.searchAccounts(
+                new ArrayList<>(),
+                ""
+        );
+
+        assertEquals(0, result.size());
     }
 
 
@@ -66,13 +63,11 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenNoMatches() {
-//        User user = new User("test");
-//        for (Account account : createAccounts()) {
-//            user.addNewAccount(account);
-//        }
-//
-//        List<Account> result = user.searchAccounts("Gordan Ramsey");
-//        assertEquals(0, result.size());
+        List<Account> result = AccountViewController.searchAccounts(
+                createAccounts(),
+                "Gordan Ramsey"
+        );
+        assertEquals(0, result.size());
     }
 
     /**
@@ -80,36 +75,34 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenMultipleMatches() {
-//        User user = new User("test");
-//        for (Account account : createAccounts()) {
-//            user.addNewAccount(account);
-//        }
-//
-//        List<Account> result = user.searchAccounts("Ra");
-//        assertEquals(2, result.size());
-//
-//        // First result.
-//        assertEquals(
-//                "Random",
-//                result.get(0)
-//                        .getName()
-//        );
-//        assertEquals(
-//                "Slack",
-//                result.get(0)
-//                        .getSocialMediaType()
-//        );
-//
-//        // Second result.
-//        assertEquals(
-//                "Razor",
-//                result.get(1)
-//                        .getName()
-//        );
-//        assertEquals(
-//                "Origin",
-//                result.get(1)
-//                        .getSocialMediaType()
-//        );
+        List<Account> result = AccountViewController.searchAccounts(
+                createAccounts(),
+                "Ra"
+        );
+        assertEquals(2, result.size());
+
+        // First result.
+        assertEquals(
+                "Random",
+                result.get(0)
+                        .getName()
+        );
+        assertEquals(
+                "Slack",
+                result.get(0)
+                        .getSocialMediaType()
+        );
+
+        // Second result.
+        assertEquals(
+                "Razor",
+                result.get(1)
+                        .getName()
+        );
+        assertEquals(
+                "Origin",
+                result.get(1)
+                        .getSocialMediaType()
+        );
     }
  }
