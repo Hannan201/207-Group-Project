@@ -6,7 +6,6 @@ import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
 import data.Storage;
-import data.Token;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +13,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
 import data.Database;
-import models.User;
 import views.*;
 import views.interfaces.Reversible;
 
@@ -79,7 +77,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToHighContrastMode() {
-        Database.updateTheme(Storage.getToken(), "High Contrast");
+        Database.updateTheme(Storage.getToken(), "high contrast mode");
         updateTheme(highContrastModeCommand);
     }
 
@@ -88,7 +86,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToDarkMode() {
-        Database.updateTheme(Storage.getToken(), "Dark");
+        Database.updateTheme(Storage.getToken(), "dark mode");
         updateTheme(darkModeCommand);
     }
 
@@ -98,7 +96,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToLightMode() {
-        Database.updateTheme(Storage.getToken(), "Light");
+        Database.updateTheme(Storage.getToken(), "light mode");
         updateTheme(lightModeCommand);
     }
 
@@ -134,6 +132,7 @@ public class SettingsViewController implements Initializable {
     public void handleLogout() {
         Database.logUserOut(Storage.getToken());
         View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
+        Storage.setToken(null);
     }
 
     /**

@@ -2,7 +2,6 @@ package controllers;
 
 import controllers.utilities.Debouncer;
 import data.Storage;
-import data.Token;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 import models.Account;
 import data.Database;
-import models.User;
 import views.*;
 import views.interfaces.Reversible;
 import views.utilities.AccountCellFactory;
@@ -27,7 +25,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 public class AccountViewController implements Initializable {
 
@@ -228,6 +225,7 @@ public class AccountViewController implements Initializable {
     public void handleLogout() {
         Database.logUserOut(Storage.getToken());
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
+        Storage.setToken(null);
     }
 
     /**

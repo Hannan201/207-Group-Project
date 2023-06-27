@@ -108,7 +108,7 @@ public class CodeCellController {
             Database.updateCode(Storage.getToken(), currentCell.getID(), userInput.getText());
 
             code.setText((userInput.getText()));
-            //currentCell.setCode(userInput.getText());
+            currentCell = Database.getCode(Storage.getToken(), currentCell.getID());
 
             userInput.setVisible(false);
             code.setVisible(true);

@@ -14,7 +14,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import models.User;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import models.Account;
@@ -76,15 +75,19 @@ public class CreateAccountController implements Initializable{
         createAccount.setContentDisplay(ContentDisplay.CENTER);
         createAccount.setPrefHeight(32);
         createAccount.setPrefWidth(155);
+
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 createAccount,
                 validator.containsErrorsProperty(),
-                Bindings.concat("Cannot add account:\n", validator.createStringBinding()));
+                Bindings.concat("Cannot add account:\n", validator.createStringBinding())
+        );
+
         // adds the Account to the ListView in AccountsView when the button is clicked
         createAccount.setOnAction(c -> {
             int id = Database.addAccount(Storage.getToken(), username.getText(), platform.getText());
-            ((AccountView)AccountView.getInstance()).getAccountViewController().addAccount(id);
+            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccount(id);
+
             Stage stage = (Stage) AddAccountView.getInstance().getRoot().getScene().getWindow();
             stage.close();
             username.clear();
@@ -95,7 +98,6 @@ public class CreateAccountController implements Initializable{
 
         // Renders a button un-clickable and adds a hover message over the button
         // if there exists an Account with the same username and platform
-
         validator.createCheck()
                 .withMethod(c -> {
                     List<Account> accounts = Database.getAccounts(Storage.getToken());

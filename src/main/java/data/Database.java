@@ -61,7 +61,7 @@ public class Database {
      */
     private static void connect(String filename) {
         try {
-            boolean tablesSet = Files.exists(Path.of(filename));
+//            boolean tablesSet = Files.exists(Path.of(filename));
             SQLiteConfig configurations = new SQLiteConfig();
             configurations.enforceForeignKeys(true);
 
@@ -70,9 +70,9 @@ public class Database {
                     configurations.toProperties()
             );
 
-            if (!tablesSet) {
-                initializeTables(connection);
-            }
+//            if (!tablesSet) {
+//                initializeTables(connection);
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

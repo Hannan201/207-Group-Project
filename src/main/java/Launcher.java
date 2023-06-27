@@ -7,6 +7,7 @@ import data.Storage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import utilities.ResourceUtilities;
 import views.*;
 
 import java.util.ArrayList;
@@ -19,19 +20,14 @@ import java.util.List;
 
 public class Launcher extends Application {
 
-    // File for storing the user's accounts and codes.
-    private static final String PATH_TO_USERS_FILE = "src/main/java/data/users.ser";
-
-    // File for storing the user's usernames, passwords, and theme
-    // preference.
-    private static final String PATH_TO_CONFIG_FILE = "src/main/java/data/config.ser";
-
     /**
      * Entry point for this application.
      *
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
+        String path = ResourceUtilities.loadFileByURL("database/database.db").getPath();
+        Database.setConnectionSource(path);
         launch(args);
     }
 
@@ -43,7 +39,9 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-        stage.setOnCloseRequest(windowEvent -> Database.disconnect());
+        stage.setOnCloseRequest(windowEvent -> {
+            Database.disconnect();
+        });
 
         View view = loadView();
         Scene scene = new Scene(view.getRoot());
@@ -77,7 +75,7 @@ public class Launcher extends Application {
             if (preferredTheme != null) {
 
                 // Switch to the respective theme.
-                if (!preferredTheme.equals("Light")) {
+                if (!preferredTheme.equals("light mode")) {
                     List<View> views = new ArrayList<>(
                             List.of(
                                     HomePageView.getInstance(),
@@ -92,11 +90,11 @@ public class Launcher extends Application {
 
                     Command command;
 
-                    if (preferredTheme.equals("High Contrast")) {
+                    if (preferredTheme.equals("high contrast mode")) {
                         command = new SwitchToHighContrastMode(views);
                         ThemeSwitcher switcher = new ThemeSwitcher(command);
                         switcher.switchTheme();
-                    } else if (preferredTheme.equals("Dark")) {
+                    } else if (preferredTheme.equals("dark mode")) {
                         command = new SwitchToDarkMode(views);
                         ThemeSwitcher switcher = new ThemeSwitcher(command);
                         switcher.switchTheme();

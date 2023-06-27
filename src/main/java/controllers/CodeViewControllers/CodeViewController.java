@@ -278,6 +278,7 @@ public class CodeViewController implements Initializable {
     public void handleLogout() {
         Database.logUserOut(Storage.getToken());
         View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
+        Storage.setToken(null);
     }
 
     /**
