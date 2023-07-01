@@ -42,26 +42,13 @@ public class Launcher extends Application {
         ((AccountView) AccountView.getInstance()).getAccountViewController()
                 .configureStage(stage);
 
-        View view = loadView();
+        View view = Storage.getToken() == null
+                ? HomePageView.getInstance() : AccountView.getInstance();
         Scene scene = new Scene(view.getRoot());
         adjustTheme();
         scene.getStylesheets().add(view.getCurrentThemePath());
         stage.setScene(scene);
         stage.show();
-    }
-
-    /**
-     * Return the correct view based on if the user left the application
-     * logged in or logged out.
-     *
-     * @return Correct view to load.
-     */
-    private static View loadView() {
-        if (Storage.getToken() != null) {
-            return AccountView.getInstance();
-        }
-
-        return HomePageView.getInstance();
     }
 
     /**
@@ -87,17 +74,14 @@ public class Launcher extends Application {
                             )
                     );
 
-                    Command command;
+                    Command command = new SwitchToDarkMode(views);
 
                     if (preferredTheme.equals("high contrast mode")) {
                         command = new SwitchToHighContrastMode(views);
-                        ThemeSwitcher switcher = new ThemeSwitcher(command);
-                        switcher.switchTheme();
-                    } else if (preferredTheme.equals("dark mode")) {
-                        command = new SwitchToDarkMode(views);
-                        ThemeSwitcher switcher = new ThemeSwitcher(command);
-                        switcher.switchTheme();
                     }
+
+                    ThemeSwitcher switcher = new ThemeSwitcher(command);
+                    switcher.switchTheme();
                 }
 
                 ((AccountView) AccountView.getInstance()).getAccountViewController()

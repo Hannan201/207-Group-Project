@@ -2,7 +2,6 @@ package controllers.CodeViewControllers;
 
 import data.Database;
 import data.Storage;
-import data.Token;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
@@ -10,10 +9,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import models.Account;
 import models.Code;
-import views.CodeView;
-
 
 public class CodeCellController {
     @FXML
