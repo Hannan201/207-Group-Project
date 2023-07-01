@@ -1,5 +1,6 @@
 package data;
 
+import data.security.Token;
 
 /**
  * This class acts as a global storage so the current loaded token can

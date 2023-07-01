@@ -1,8 +1,8 @@
 package controllers;
 
-import data.Database;
+import data.database.Database;
 import data.Storage;
-import data.Token;
+import data.security.Token;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

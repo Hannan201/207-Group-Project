@@ -16,7 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Account;
-import data.Database;
+import data.database.Database;
 import views.*;
 import views.interfaces.Reversible;
 import views.utilities.AccountCellFactory;

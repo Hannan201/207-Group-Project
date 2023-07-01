@@ -1,5 +1,9 @@
-package data;
+package data.database;
 
+import data.security.PasswordHasher;
+import data.Storage;
+import data.security.Token;
+import data.security.TokenGenerator;
 import models.Account;
 import models.Code;
 import models.User;

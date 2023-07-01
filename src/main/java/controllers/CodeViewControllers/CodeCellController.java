@@ -1,6 +1,6 @@
 package controllers.CodeViewControllers;
 
-import data.Database;
+import data.database.Database;
 import data.Storage;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

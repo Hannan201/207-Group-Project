@@ -1,6 +1,6 @@
 package controllers;
 
-import data.Database;
+import data.database.Database;
 import data.Storage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;

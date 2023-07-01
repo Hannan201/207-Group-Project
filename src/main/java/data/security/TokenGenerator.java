@@ -1,4 +1,4 @@
-package data;
+package data.security;
 
 import java.security.SecureRandom;
 import java.util.Locale;

@@ -2,7 +2,7 @@ import commands.Command;
 import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
-import data.Database;
+import data.database.Database;
 import data.Storage;
 import javafx.application.Application;
 import javafx.scene.Scene;

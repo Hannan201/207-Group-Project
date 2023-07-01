@@ -1,15 +1,13 @@
-import data.Token;
+import data.security.Token;
 import models.Code;
 import org.junit.jupiter.api.Test;
 import models.Account;
-import data.Database;
+import data.database.Database;
 import models.User;
-import org.sqlite.SQLiteConfig;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

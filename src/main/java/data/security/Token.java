@@ -1,4 +1,4 @@
-package data;
+package data.security;
 
 /**
  * This interface is used to hide private data related to the token.

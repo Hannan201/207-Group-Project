@@ -1,9 +1,9 @@
 import data.Storage;
-import data.Token;
+import data.security.Token;
 import models.Code;
 import org.junit.jupiter.api.Test;
 import models.Account;
-import data.Database;
+import data.database.Database;
 import models.User;
 
 import java.util.List;

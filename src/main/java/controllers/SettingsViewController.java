@@ -12,7 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
-import data.Database;
+import data.database.Database;
 import views.*;
 import views.interfaces.Reversible;
 
