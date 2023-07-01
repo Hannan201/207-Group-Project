@@ -39,9 +39,8 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-        stage.setOnCloseRequest(windowEvent -> {
-            Database.disconnect();
-        });
+        ((AccountView) AccountView.getInstance()).getAccountViewController()
+                .configureStage(stage);
 
         View view = loadView();
         Scene scene = new Scene(view.getRoot());

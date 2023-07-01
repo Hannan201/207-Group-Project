@@ -14,7 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.WindowEvent;
+import javafx.stage.Stage;
 import models.Account;
 import data.Database;
 import views.*;
@@ -77,24 +77,21 @@ public class AccountViewController implements Initializable {
     // To make searching more efficient.
     private Debouncer debounce;
 
+    /**
+     * Configure the stage for this view to disconnect and close threads
+     * on shut down.
+     *
+     * @param stage Stage of the application.
+     */
+    public void configureStage(Stage stage) {
+        stage.setOnCloseRequest(windowEvent -> {
+            debounce.tearDown();
+            Database.disconnect();
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        box.sceneProperty().addListener(
-                (observableValue, oldScene, newScene) -> {
-                    if (oldScene == null && newScene != null) {
-                        newScene.windowProperty().addListener(
-                                (observableValue1, oldWindow, newWindow) -> {
-                                    if (oldWindow == null && newWindow != null) {
-                                        newWindow.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (windowEvent) -> {
-                                            debounce.tearDown();
-                                        });
-                                    }
-                                }
-                        );
-                    }
-                }
-        );
-
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -226,6 +223,7 @@ public class AccountViewController implements Initializable {
         Database.logUserOut(Storage.getToken());
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
         Storage.setToken(null);
+        accounts.getItems().clear();
     }
 
     /**
