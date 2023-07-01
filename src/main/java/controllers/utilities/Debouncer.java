@@ -19,7 +19,7 @@ public class Debouncer {
     private final Timer timer;
 
     // Give the ability for tasks to be registered across different
-    // threads,
+    // threads.
     private final ConcurrentHashMap<String, TimerTask> tasks;
 
 

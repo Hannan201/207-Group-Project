@@ -3,10 +3,11 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
+import data.Storage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import models.User;
+import utilities.ResourceUtilities;
 import views.*;
 
 import java.util.ArrayList;
@@ -19,21 +20,14 @@ import java.util.List;
 
 public class Launcher extends Application {
 
-    // File for storing the user's accounts and codes.
-    private static final String PATH_TO_USERS_FILE = "src/main/java/data/users.ser";
-
-    // File for storing the user's usernames, passwords, and theme
-    // preference.
-    private static final String PATH_TO_CONFIG_FILE = "src/main/java/data/config.ser";
-
     /**
      * Entry point for this application.
      *
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
-        Database.setConfigurationsSource(PATH_TO_CONFIG_FILE);
-        Database.setUsersSource(PATH_TO_USERS_FILE);
+        String path = ResourceUtilities.loadFileByURL("database/database.db").getPath();
+        Database.setConnectionSource(path);
         launch(args);
     }
 
@@ -45,7 +39,8 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-        stage.setOnCloseRequest(windowEvent -> Database.saveUserData());
+        ((AccountView) AccountView.getInstance()).getAccountViewController()
+                .configureStage(stage);
 
         View view = loadView();
         Scene scene = new Scene(view.getRoot());
@@ -62,7 +57,7 @@ public class Launcher extends Application {
      * @return Correct view to load.
      */
     private static View loadView() {
-        if (Database.getLoginStatus()) {
+        if (Storage.getToken() != null) {
             return AccountView.getInstance();
         }
 
@@ -74,31 +69,39 @@ public class Launcher extends Application {
      * before they quit the application without logging out.
      */
     private static void adjustTheme() {
-        if (Database.getLoginStatus()) {
-            User user = Database.getUser();
-            if (user != null) {
-                String preferredTheme = user.getCurrentTheme();
+        if (Storage.getToken() != null) {
+            String preferredTheme = Database.getTheme(Storage.getToken());
+            if (preferredTheme != null) {
 
                 // Switch to the respective theme.
-                if (!preferredTheme.equals("Light")) {
-                    List<View> views = new ArrayList<>(List.of(HomePageView.getInstance(), SignInView.getInstance(),
-                            SignUpView.getInstance(), AccountView.getInstance(), AddAccountView.getInstance(),
-                            CodeView.getInstance(), SettingsView.getInstance()));
+                if (!preferredTheme.equals("light mode")) {
+                    List<View> views = new ArrayList<>(
+                            List.of(
+                                    HomePageView.getInstance(),
+                                    SignInView.getInstance(),
+                                    SignUpView.getInstance(),
+                                    AccountView.getInstance(),
+                                    AddAccountView.getInstance(),
+                                    CodeView.getInstance(),
+                                    SettingsView.getInstance()
+                            )
+                    );
 
                     Command command;
 
-                    if (preferredTheme.equals("High Contrast")) {
+                    if (preferredTheme.equals("high contrast mode")) {
                         command = new SwitchToHighContrastMode(views);
                         ThemeSwitcher switcher = new ThemeSwitcher(command);
                         switcher.switchTheme();
-                    } else if (preferredTheme.equals("Dark")) {
+                    } else if (preferredTheme.equals("dark mode")) {
                         command = new SwitchToDarkMode(views);
                         ThemeSwitcher switcher = new ThemeSwitcher(command);
                         switcher.switchTheme();
                     }
                 }
 
-                ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
+                ((AccountView) AccountView.getInstance()).getAccountViewController()
+                        .addAccounts(Database.getAccounts(Storage.getToken()));
             }
         }
     }

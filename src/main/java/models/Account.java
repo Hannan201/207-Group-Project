@@ -10,27 +10,22 @@ import java.util.*;
  * related to a specific social media account.
  */
 
-public class Account implements java.io.Serializable {
+public class Account {
 
     // List of social media platforms that allow the imports
     // of text files.
     private static final Set<String> SUPPORTED_IMPORT_PLATFORMS
             = Set.copyOf(List.of("shopify", "discord", "google", "github"));
 
-    // Social media type for this account.
-    private final String socialMediaType;
+    // ID for this account.
+    private final int ID;
 
     // Name for this account (email/username/handle
     // or some sort of identifier).
     private final String name;
 
-    // List to store all the backup codes for this
-    // specific account.
-    private final List<String> userCodes;
-
-    // The behavior to determine how the user
-    // would like to enter their codes.
-    private transient ReadCodeBehavior readCodeBehavior;
+    // Social media type for this account.
+    private final String socialMediaType;
 
     // To load icons for each type of social
     // media account in this application.
@@ -73,42 +68,22 @@ public class Account implements java.io.Serializable {
     }
 
     /**
-     * Creat a new Social Media Account with
+     * Create a new Social Media Account with
      * a name and of a specific social media
      * type.
      *
+     * @param ID ID for this account.
      * @param name Name of social media account.
      * @param type Type of social media.
      */
-    public Account(String name, String type) {
+    public Account(int ID, String name, String type) {
+        this.ID = ID;
         this.name = name;
         this.socialMediaType = type;
-        this.userCodes = new ArrayList<>();
     }
 
-    /**
-     * Change the behavior for how the codes will
-     * be entered for this social media account.
-     *
-     * @param newBehavior The new behavior to read in the
-     *                    codes for this account.
-     */
-    public void setReadCodeBehavior(ReadCodeBehavior newBehavior) {
-        this.readCodeBehavior = newBehavior;
-    }
-
-    /**
-     * Add codes to this social media account.
-     */
-    public void addCodes() {
-        this.userCodes.addAll(readCodeBehavior.readCodes());
-    }
-
-    /**
-     * Add codes to this social media account.
-     */
-    public void addCodes(String code) {
-        this.userCodes.add(code);
+    public int getID() {
+        return this.ID;
     }
 
     /**
@@ -127,24 +102,6 @@ public class Account implements java.io.Serializable {
      */
     public String getSocialMediaType() {
         return socialMediaType;
-    }
-
-    /**
-     * Return the backup codes for this
-     * social media account.
-     *
-     * @return List of backup codes.
-     */
-    public List<String> getUserCodes() {
-        return this.userCodes;
-    }
-
-    /**
-     * Remove all the backup codes for this social
-     * media account.
-     */
-    public void clearUserCodes() {
-        this.userCodes.clear();
     }
 
     /**

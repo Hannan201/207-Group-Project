@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.utilities.Debouncer;
+import data.Storage;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,10 +14,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.WindowEvent;
+import javafx.stage.Stage;
 import models.Account;
 import data.Database;
-import models.User;
 import views.*;
 import views.interfaces.Reversible;
 import views.utilities.AccountCellFactory;
@@ -77,24 +77,21 @@ public class AccountViewController implements Initializable {
     // To make searching more efficient.
     private Debouncer debounce;
 
+    /**
+     * Configure the stage for this view to disconnect and close threads
+     * on shut down.
+     *
+     * @param stage Stage of the application.
+     */
+    public void configureStage(Stage stage) {
+        stage.setOnCloseRequest(windowEvent -> {
+            debounce.tearDown();
+            Database.disconnect();
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        box.sceneProperty().addListener(
-                (observableValue, oldScene, newScene) -> {
-                    if (oldScene == null && newScene != null) {
-                        newScene.windowProperty().addListener(
-                                (observableValue1, oldWindow, newWindow) -> {
-                                    if (oldWindow == null && newWindow != null) {
-                                        newWindow.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (windowEvent) -> {
-                                            debounce.tearDown();
-                                        });
-                                    }
-                                }
-                        );
-                    }
-                }
-        );
-
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -155,40 +152,59 @@ public class AccountViewController implements Initializable {
      */
     @FXML
     private void handleSearchRelease(KeyEvent keyEvent) {
-        User user = Database.getUser();
-        if (user != null) {
-            if (search.getText().isEmpty()) {
-                debounce.registerFunction(
-                        "DEFAULT",
-                        () -> {
-                            Platform.runLater(() -> {
-                                accounts.getItems().clear();
-                                accounts.getItems().addAll(user.getAccounts());
-                            });
-
-                            return null;
-                        },
-                        125
-                );
-                return;
-            }
-
+        if (search.getText().isEmpty()) {
             debounce.registerFunction(
-                    search.getText(),
+                    "DEFAULT",
                     () -> {
                         Platform.runLater(() -> {
-                            List<Account> result = user.searchAccounts(
-                                    search.getText()
-                            );
-
                             accounts.getItems().clear();
-                            accounts.getItems().addAll(result);
+                            accounts.getItems().addAll(Database.getAccounts(Storage.getToken()));
                         });
+
                         return null;
                     },
                     125
             );
+            return;
         }
+
+        debounce.registerFunction(
+                search.getText(),
+                () -> {
+                    Platform.runLater(() -> {
+                        List<Account> result = searchAccounts(
+                                Database.getAccounts(Storage.getToken()),
+                                search.getText()
+                        );
+
+                        accounts.getItems().clear();
+                        accounts.getItems().addAll(result);
+                    });
+                    return null;
+                },
+                125
+        );
+    }
+
+    /**
+     * Utility method to search through the list of accounts and find all
+     * accounts that have a username that matches the name to search.
+     * <p>
+     * In this case, match means that the name being searched
+     * is contained in the account name.
+     * <p>
+     * Both the account name and the name being searched are converted to
+     * lowercase before the contains-check is done.
+     *
+     * @param accounts List of accounts.
+     * @param name The name of the account to search.
+     * @return List of accounts with usernames that match.
+     */
+    public static List<Account> searchAccounts(List<Account> accounts, String name) {
+        return accounts.stream().filter(account -> account.getName()
+                .toLowerCase()
+                .contains(name.toLowerCase()))
+                .toList();
     }
 
     /**
@@ -204,8 +220,10 @@ public class AccountViewController implements Initializable {
      * to the HomePageView.
      */
     public void handleLogout() {
-        Database.logUserOut();
+        Database.logUserOut(Storage.getToken());
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
+        Storage.setToken(null);
+        accounts.getItems().clear();
     }
 
     /**
@@ -229,13 +247,13 @@ public class AccountViewController implements Initializable {
     /**
      * Adds an account to the accounts ListView.
      *
-     * @param account The Account which is to be added.
+     * @param ID ID of the Account to be added.
      */
-    public void addAccount(Account account) {
-        accounts.getItems().add(account);
-        if (Database.getUser() != null) {
-            Database.getUser().addNewAccount(account);
-        }
+    public void addAccount(int ID) {
+        accounts.getItems()
+                .add(
+                        Database.getAccount(Storage.getToken(), ID)
+                );
     }
 
     /**
@@ -265,11 +283,8 @@ public class AccountViewController implements Initializable {
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);
-        User user = Database.getUser();
-        if (user != null) {
-            for (Account account : selectedItemsCopy) {
-                user.removeAccountByName(account.getName());
-            }
+        for (Account account : selectedItemsCopy) {
+            Database.removeAccount(Storage.getToken(), account.getID());
         }
     }
 }

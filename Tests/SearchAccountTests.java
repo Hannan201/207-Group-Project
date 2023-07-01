@@ -1,3 +1,4 @@
+import controllers.AccountViewController;
 import models.Account;
 import models.User;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,10 @@ public class SearchAccountTests {
     private List<Account> createAccounts() {
         return new ArrayList<>(
                 List.of(
-                        new Account("Joe", "Reddit"),
-                        new Account("Random", "Slack"),
-                        new Account("Oof", "Google"),
-                        new Account("Razor", "Origin")
+                        new Account(1, "Joe", "Reddit"),
+                        new Account(2, "Random", "Slack"),
+                        new Account(3, "Oof", "Google"),
+                        new Account(4, "Razor", "Origin")
                 )
         );
     }
@@ -32,12 +33,7 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenAccountExists() {
-        User user = new User("test");
-        for (Account account : createAccounts()) {
-            user.addNewAccount(account);
-        }
-
-        List<Account> result = user.searchAccounts("Joe");
+        List<Account> result = AccountViewController.searchAccounts(createAccounts(), "Joe");
         assertEquals(1, result.size());
         assertEquals("Joe", result.get(0).getName());
         assertEquals(
@@ -52,8 +48,10 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenEmpty() {
-        User user = new User("test");
-        List<Account> result = user.searchAccounts("");
+        List<Account> result = AccountViewController.searchAccounts(
+                new ArrayList<>(),
+                ""
+        );
 
         assertEquals(0, result.size());
     }
@@ -65,12 +63,10 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenNoMatches() {
-        User user = new User("test");
-        for (Account account : createAccounts()) {
-            user.addNewAccount(account);
-        }
-
-        List<Account> result = user.searchAccounts("Gordan Ramsey");
+        List<Account> result = AccountViewController.searchAccounts(
+                createAccounts(),
+                "Gordan Ramsey"
+        );
         assertEquals(0, result.size());
     }
 
@@ -79,12 +75,10 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenMultipleMatches() {
-        User user = new User("test");
-        for (Account account : createAccounts()) {
-            user.addNewAccount(account);
-        }
-
-        List<Account> result = user.searchAccounts("Ra");
+        List<Account> result = AccountViewController.searchAccounts(
+                createAccounts(),
+                "Ra"
+        );
         assertEquals(2, result.size());
 
         // First result.

@@ -1,44 +1,63 @@
+import data.Token;
+import models.Code;
 import org.junit.jupiter.api.Test;
 import models.Account;
 import data.Database;
 import models.User;
+import org.sqlite.SQLiteConfig;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LoadingDataTests {
-    String pathToUserFile = "Tests/users.ser";
-
-    String pathToConfigFile = "Tests/configurations.ser";
-
-
     @Test
     void userLoginLoaded() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
         assertTrue(Database.checkUsername("haNNan"));
-        assertTrue(Database.authenticateUser("Hannan", "12345"));
-        assertTrue(Database.getLoginStatus());
-        Database.logUserOut();
+
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 
     @Test
     void userAccountLoaded() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.authenticateUser("Hannan", "12345");
-        User user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        assertEquals(user.getUsername(), "Hannan");
-        assertEquals(user.getAccounts().size(), 1);
-        Account accounts = user.getAccounts().get(0);
-        assertEquals(accounts.getName(), "Joe");
-        assertEquals(accounts.getSocialMediaType(), "1234");
-        assertEquals(accounts.getUserCodes().size(), 3);
-        List<String> codes = accounts.getUserCodes();
-        for (String s : codes) {
-            assertEquals(s, "1234");
+        assertEquals(user.getUsername(), "hannan");
+
+        List<Account> accounts = Database.getAccounts(token);
+        assertEquals(accounts.size(), 1);
+        Account account = accounts.get(0);
+        assertEquals(account.getName(), "Joe");
+        assertEquals(account.getSocialMediaType(), "1234");
+
+        List<Code> codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 3);
+        for (Code c : codes) {
+            assertEquals(c.getCode(), "1234");
+        }
+
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        try {
+            Files.deleteIfExists(Path.of("./Tests/test.db"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -5,6 +5,8 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Database;
+import data.Storage;
+import data.Token;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -22,7 +24,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
-import models.User;
 import views.*;
 
 import java.net.URL;
@@ -133,8 +134,11 @@ public class SignInController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (!Database.authenticateUser(unameInput.getText(), passInput.getText())){
+                    Token token = Database.authenticateUser(unameInput.getText(), passInput.getText());
+                    if (token == null) {
                         c.error("Wrong username or password, please try again.");
+                    } else {
+                        Storage.setToken(token);
                     }
                 })
                 .dependsOn("uNameInput", unameInput.textProperty())
@@ -213,10 +217,8 @@ public class SignInController implements Initializable {
      * for the user that just signed in.
      */
     private void transferData() {
-        User user = Database.getUser();
-        if (user != null) {
-            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
-        }
+        ((AccountView) AccountView.getInstance()).getAccountViewController()
+                .addAccounts(Database.getAccounts(Storage.getToken()));
     }
 
     /**
@@ -224,13 +226,13 @@ public class SignInController implements Initializable {
      * in.
      */
     private void loadTheme() {
-        User user = Database.getUser();
-        if (user != null && !user.getCurrentTheme().equals("Light")) {
-            if (user.getCurrentTheme().equals("High Contrast")) {
+        String theme = Database.getTheme(Storage.getToken());
+        if (theme != null && !theme.equals("light mode")) {
+            if (theme.equals("high contrast mode")) {
                 Command command = new SwitchToHighContrastMode(views);
                 ThemeSwitcher switcher = new ThemeSwitcher(command);
                 switcher.switchTheme();
-            } else if (user.getCurrentTheme().equals("Dark")) {
+            } else if (theme.equals("dark mode")) {
                 Command command = new SwitchToDarkMode(views);
                 ThemeSwitcher switcher = new ThemeSwitcher(command);
                 switcher.switchTheme();

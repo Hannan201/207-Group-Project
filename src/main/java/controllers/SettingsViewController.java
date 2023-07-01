@@ -5,6 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
+import data.Storage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +13,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
 import data.Database;
-import models.User;
 import views.*;
 import views.interfaces.Reversible;
 
@@ -77,7 +77,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToHighContrastMode() {
-        Database.setCurrentTheme("High Contrast");
+        Database.updateTheme(Storage.getToken(), "high contrast mode");
         updateTheme(highContrastModeCommand);
     }
 
@@ -86,7 +86,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToDarkMode() {
-        Database.setCurrentTheme("Dark");
+        Database.updateTheme(Storage.getToken(), "dark mode");
         updateTheme(darkModeCommand);
     }
 
@@ -96,7 +96,7 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToLightMode() {
-        Database.setCurrentTheme("Light");
+        Database.updateTheme(Storage.getToken(), "light mode");
         updateTheme(lightModeCommand);
     }
 
@@ -112,10 +112,8 @@ public class SettingsViewController implements Initializable {
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
 
-        User user = Database.getUser();
-        if (user != null ) {
-            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
-        }
+        ((AccountView) AccountView.getInstance()).getAccountViewController()
+                .addAccounts(Database.getAccounts(Storage.getToken()));
     }
 
     /**
@@ -132,8 +130,9 @@ public class SettingsViewController implements Initializable {
      *
      */
     public void handleLogout() {
-        Database.logUserOut();
+        Database.logUserOut(Storage.getToken());
         View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
+        Storage.setToken(null);
     }
 
     /**
@@ -191,10 +190,8 @@ public class SettingsViewController implements Initializable {
      * Delete all accounts for this user.
      */
     public void handleDeleteAccounts() {
-        User user = Database.getUser();
-        if (user != null) {
-            Database.clearUserData();
-            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccounts(user.getAccounts());
-        }
+        Database.clearAllAccounts(Storage.getToken());
+        ((AccountView) AccountView.getInstance()).getAccountViewController()
+                .addAccounts(Database.getAccounts(Storage.getToken()));
     }
 }

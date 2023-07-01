@@ -1,6 +1,8 @@
 package controllers;
 
 import data.Database;
+import data.Storage;
+import data.Token;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -97,7 +99,7 @@ public class SignUpController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (! initialUsername.getText().equals(verifiedUsername.getText())){
+                    if (!initialUsername.getText().equals(verifiedUsername.getText())){
                         c.error("Your usernames do not match, please try again.");
                     }
                 })
@@ -184,7 +186,8 @@ public class SignUpController implements Initializable {
         // Clear the attributes such that when the signs out
         // they do not have access to the credentials
 
-        Database.registerUser(initialUsername.getText(), initialPassword.getText());
+        Token token = Database.registerUser(initialUsername.getText(), initialPassword.getText());
+        Storage.setToken(token);
 
         initialUsername.clear();
         initialPassword.clear();

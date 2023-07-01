@@ -1,3 +1,6 @@
+import data.Storage;
+import data.Token;
+import models.Code;
 import org.junit.jupiter.api.Test;
 import models.Account;
 import data.Database;
@@ -8,243 +11,464 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SaveAndLoadDataTests {
-
-    String pathToUserFile = "Tests/users.ser";
-
-    String pathToConfigFile = "Tests/configurations.ser";
-
     @Test
     void saveDataWithExistingUser() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.registerUser("Test", "hellobro");
-        User user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.registerUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
 
-        Account a1 = new Account("One", "Discord");
-        a1.addCodes("yuyk-775x");
-        a1.addCodes("5n6v-xgbo");
-        a1.addCodes("aqtl-zszl");
-        a1.addCodes("pf6m-lbsi");
-        a1.addCodes("8mhm-kawb");
-        a1.addCodes("9u15-hd56");
-        a1.addCodes("5nqz-84l3");
-        a1.addCodes("7bfa-icwn");
-        a1.addCodes("jzug-ys5l");
-        a1.addCodes("amvu-nius");
-        a1.addCodes("s1ow-8ssl");
-        a1.addCodes("mgv2-vqsj");
-        a1.addCodes("koeo-hzeg");
-        a1.addCodes("e7dh-gqlt");
-        a1.addCodes("mk3o-7njl");
-        a1.addCodes("osyv-2vjq");
+        int id = Database.addAccount(token, "One", "Discord");
+        int codeID = Database.addCode(token, id, "yuyk-775x");
+        codeID = Database.addCode(token, id, "5n6v-xgbo");
+        codeID = Database.addCode(token, id, "aqtl-zszl");
+        codeID = Database.addCode(token, id, "pf6m-lbsi");
+        codeID = Database.addCode(token, id, "8mhm-kawb");
+        codeID = Database.addCode(token, id, "9u15-hd56");
+        codeID = Database.addCode(token, id, "5nqz-84l3");
+        codeID = Database.addCode(token, id, "7bfa-icwn");
+        codeID = Database.addCode(token, id, "jzug-ys5l");
+        codeID = Database.addCode(token, id, "amvu-nius");
+        codeID = Database.addCode(token, id, "s1ow-8ssl");
+        codeID = Database.addCode(token, id, "mgv2-vqsj");
+        codeID = Database.addCode(token, id, "koeo-hzeg");
+        codeID = Database.addCode(token, id, "e7dh-gqlt");
+        codeID = Database.addCode(token, id, "mk3o-7njl");
+        codeID = Database.addCode(token, id, "osyv-2vjq");
 
-        Account a2 = new Account("Two", "GitHub");
-        a2.addCodes("8a4rv-hi4qt");
-        a2.addCodes("cv13u-1e4xp");
-        a2.addCodes("zq44v-rderj");
-        a2.addCodes("gg7xd-amtjq");
-        a2.addCodes("jgz5t-h79hw");
-        a2.addCodes("3bhws-wufnj");
-        a2.addCodes("ik3uo-ctgaj");
-        a2.addCodes("o8vnj-29b2j");
-        a2.addCodes("mfovl-oym5b");
-        a2.addCodes("isfxx-6v29n");
-        a2.addCodes("scxxr-rjdg6");
-        a2.addCodes("62mec-8kjw5");
-        a2.addCodes("ddu4v-2xruj");
-        a2.addCodes("8ceb8-h1bek");
-        a2.addCodes("wjtrm-nkpwb");
-        a2.addCodes("2k3uw-imada");
+        id = Database.addAccount(token, "Two", "GitHub");
+        codeID = Database.addCode(token, id, "8a4rv-hi4qt");
+        codeID = Database.addCode(token, id, "cv13u-1e4xp");
+        codeID = Database.addCode(token, id, "zq44v-rderj");
+        codeID = Database.addCode(token, id, "gg7xd-amtjq");
+        codeID = Database.addCode(token, id, "jgz5t-h79hw");
+        codeID = Database.addCode(token, id, "3bhws-wufnj");
+        codeID = Database.addCode(token, id, "ik3uo-ctgaj");
+        codeID = Database.addCode(token, id, "o8vnj-29b2j");
+        codeID = Database.addCode(token, id, "mfovl-oym5b");
+        codeID = Database.addCode(token, id, "isfxx-6v29n");
+        codeID = Database.addCode(token, id, "scxxr-rjdg6");
+        codeID = Database.addCode(token, id, "62mec-8kjw5");
+        codeID = Database.addCode(token, id, "ddu4v-2xruj");
+        codeID = Database.addCode(token, id, "8ceb8-h1bek");
+        codeID = Database.addCode(token, id, "wjtrm-nkpwb");
+        codeID = Database.addCode(token, id, "2k3uw-imada");
 
-        Account a3 = new Account("Three", "Google");
-        a3.addCodes("7294 8105");
-        a3.addCodes("4328 0505");
-        a3.addCodes("8829 8563");
-        a3.addCodes("5349 1328");
-        a3.addCodes("5804 5408");
-        a3.addCodes("3772 5051");
-        a3.addCodes("0084 5571");
-        a3.addCodes("9576 0658");
-        a3.addCodes("4231 7248");
-        a3.addCodes("8203 6638");
-        a3.addCodes("9286 1762");
-        a3.addCodes("6762 0652");
-        a3.addCodes("0886 4325");
-        a3.addCodes("0857 3901");
-        a3.addCodes("0609 7737");
-        a3.addCodes("1578 1639");
+        id = Database.addAccount(token, "Three", "Google");
+        codeID = Database.addCode(token, id, "7294 8105");
+        codeID = Database.addCode(token, id, "4328 0505");
+        codeID = Database.addCode(token, id, "8829 8563");
+        codeID = Database.addCode(token, id, "5349 1328");
+        codeID = Database.addCode(token, id, "5804 5408");
+        codeID = Database.addCode(token, id, "3772 5051");
+        codeID = Database.addCode(token, id, "0084 5571");
+        codeID = Database.addCode(token, id, "9576 0658");
+        codeID = Database.addCode(token, id, "4231 7248");
+        codeID = Database.addCode(token, id, "8203 6638");
+        codeID = Database.addCode(token, id, "9286 1762");
+        codeID = Database.addCode(token, id, "6762 0652");
+        codeID = Database.addCode(token, id, "0886 4325");
+        codeID = Database.addCode(token, id, "0857 3901");
+        codeID = Database.addCode(token, id, "0609 7737");
+        codeID = Database.addCode(token, id, "1578 1639");
 
-        user.addNewAccount(a1);
-        user.addNewAccount(a2);
-        user.addNewAccount(a3);
-        Database.logUserOut();
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 
     @Test
     void loadDataWithExistingUser() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.authenticateUser("Test", "hellobro");
-        User user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        assertEquals(user.getUsername(), "Test");
-        List<Account> accounts = user.getAccounts();
+        assertEquals(user.getUsername(), "test");
+
+        List<Account> accounts = Database.getAccounts(token);
         assertEquals(accounts.size(), 3);
+
         Account account = accounts.get(0);
         assertEquals(account.getName(), "One");
         assertEquals(account.getSocialMediaType(), "Discord");
-        assertEquals(account.getUserCodes().size(), 16);
 
-        String[] codes = new String[]{"yuyk-775x",
-                                      "5n6v-xgbo",
-                                      "aqtl-zszl",
-                                      "pf6m-lbsi",
-                                      "8mhm-kawb",
-                                      "9u15-hd56",
-                                      "5nqz-84l3",
-                                      "7bfa-icwn",
-                                      "jzug-ys5l",
-                                      "amvu-nius",
-                                      "s1ow-8ssl",
-                                      "mgv2-vqsj",
-                                      "koeo-hzeg",
-                                      "e7dh-gqlt",
-                                      "mk3o-7njl",
-                                      "osyv-2vjq"};
+        List<Code> codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 16);
 
-        String[] actualCodes = account.getUserCodes().toArray(new String[0]);
-        assertArrayEquals(actualCodes, codes);
+        String[] expectedCodes = new String[]{"yuyk-775x",
+                                              "5n6v-xgbo",
+                                              "aqtl-zszl",
+                                              "pf6m-lbsi",
+                                              "8mhm-kawb",
+                                              "9u15-hd56",
+                                              "5nqz-84l3",
+                                              "7bfa-icwn",
+                                              "jzug-ys5l",
+                                              "amvu-nius",
+                                              "s1ow-8ssl",
+                                              "mgv2-vqsj",
+                                              "koeo-hzeg",
+                                              "e7dh-gqlt",
+                                              "mk3o-7njl",
+                                              "osyv-2vjq"};
+
+        String[] actualCodes = codes.stream()
+                        .map(Code::getCode)
+                        .toArray(String[]::new);
+        assertArrayEquals(expectedCodes, actualCodes);
 
         account = accounts.get(1);
         assertEquals(account.getName(), "Two");
         assertEquals(account.getSocialMediaType(), "GitHub");
-        assertEquals(account.getUserCodes().size(), 16);
 
-        codes = new String[]{"8a4rv-hi4qt",
-                             "cv13u-1e4xp",
-                             "zq44v-rderj",
-                             "gg7xd-amtjq",
-                             "jgz5t-h79hw",
-                             "3bhws-wufnj",
-                             "ik3uo-ctgaj",
-                             "o8vnj-29b2j",
-                             "mfovl-oym5b",
-                             "isfxx-6v29n",
-                             "scxxr-rjdg6",
-                             "62mec-8kjw5",
-                             "ddu4v-2xruj",
-                             "8ceb8-h1bek",
-                             "wjtrm-nkpwb",
-                             "2k3uw-imada"};
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 16);
 
-        actualCodes = account.getUserCodes().toArray(new String[0]);
-        assertArrayEquals(actualCodes, codes);
+        expectedCodes = new String[]{"8a4rv-hi4qt",
+                                     "cv13u-1e4xp",
+                                     "zq44v-rderj",
+                                     "gg7xd-amtjq",
+                                     "jgz5t-h79hw",
+                                     "3bhws-wufnj",
+                                     "ik3uo-ctgaj",
+                                     "o8vnj-29b2j",
+                                     "mfovl-oym5b",
+                                     "isfxx-6v29n",
+                                     "scxxr-rjdg6",
+                                     "62mec-8kjw5",
+                                     "ddu4v-2xruj",
+                                     "8ceb8-h1bek",
+                                     "wjtrm-nkpwb",
+                                     "2k3uw-imada"};
+
+        actualCodes = codes.stream()
+                .map(Code::getCode)
+                .toArray(String[]::new);
+        assertArrayEquals(actualCodes, expectedCodes);
 
         account = accounts.get(2);
         assertEquals(account.getName(), "Three");
         assertEquals(account.getSocialMediaType(), "Google");
-        assertEquals(account.getUserCodes().size(), 16);
 
-        codes = new String[]{"7294 8105",
-                             "4328 0505",
-                             "8829 8563",
-                             "5349 1328",
-                             "5804 5408",
-                             "3772 5051",
-                             "0084 5571",
-                             "9576 0658",
-                             "4231 7248",
-                             "8203 6638",
-                             "9286 1762",
-                             "6762 0652",
-                             "0886 4325",
-                             "0857 3901",
-                             "0609 7737",
-                             "1578 1639"};
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 16);
 
-        actualCodes = account.getUserCodes().toArray(new String[0]);
-        assertArrayEquals(actualCodes, codes);
-        Database.logUserOut();
+        expectedCodes = new String[]{"7294 8105",
+                                     "4328 0505",
+                                     "8829 8563",
+                                     "5349 1328",
+                                     "5804 5408",
+                                     "3772 5051",
+                                     "0084 5571",
+                                     "9576 0658",
+                                     "4231 7248",
+                                     "8203 6638",
+                                     "9286 1762",
+                                     "6762 0652",
+                                     "0886 4325",
+                                     "0857 3901",
+                                     "0609 7737",
+                                     "1578 1639"};
+
+        actualCodes = codes.stream()
+                .map(Code::getCode)
+                .toArray(String[]::new);
+
+        assertArrayEquals(expectedCodes, actualCodes);
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenUserDeletesAccount() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "One");
+        assertNotNull(account);
+
+        Database.removeAccount(token, account.getID());
+
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
+        assertNotNull(user);
+
+        account = Database.getAccount(token, account.getID());
+        assertNull(account);
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenDeleteAllCodes() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        List<Code> codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 16);
+
+        Database.clearAllCodes(token, account.getID());
+
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
+        assertNotNull(user);
+
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 0);
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenGetCode() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        int id = Database.addCode(token, account.getID(), "4EW C0D3");
+        Code c = Database.getCode(token, id);
+        assertNotNull(c);
+        assertEquals(c.getCode(), "4EW C0D3");
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenDeleteCode() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        List<Code> codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 2);
+
+        int id = -1;
+        for (Code c : codes) {
+            if (c.getCode().equals("123 456")) {
+                id = c.getID();
+                break;
+            }
+        }
+
+        Database.removeCode(token, id);
+
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), 1);
+
+        assertEquals(codes.get(0).getCode(), "4EW C0D3");
+
+        Database.logUserOut(token);
+        Database.disconnect();
+    }
+
+    @Test
+    void testWhenUpdateCode() {
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Test", "hellobro");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
+        assertNotNull(user);
+
+        Account account = Database.getAccountByName(token, "Two");
+        assertNotNull(account);
+
+        List<Code> code = Database.getCodes(token, account.getID());
+        assertEquals(code.size(), 1);
+        Code c = code.get(0);
+        int id = c.getID();
+
+        Database.updateCode(token, c.getID(), "U9D47ED");
+
+        c = Database.getCode(token, id);
+        assertNotNull(c);
+        assertEquals(c.getCode(), "U9D47ED");
+
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 
     @Test
     void saveDataWhenUserMakesChanges() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.authenticateUser("Hannan", "12345");
-        User user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        Account account = user.getAccountByName("Joe");
-        int before = account.getUserCodes().size();
+
+        Account account = Database.getAccountByName(token, "Joe");
+        assertNotNull(account);
+
+        List<Code> codes = Database.getCodes(token, account.getID());
+        int before = codes.size();
 
         for (int i = 0; i < 5; i++) {
-            account.addCodes("EEEEEEEEEEE");
+            Database.addCode(token, account.getID(), "EEEEEEEEEEE");
         }
 
-        Database.logUserOut();
+        Database.logUserOut(token);
+        Database.disconnect();
 
-        Database.authenticateUser("Hannan", "12345");
-        user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
         assertNotNull(user);
-        account = user.getAccountByName("Joe");
-        assertEquals(account.getUserCodes().size(), before + 5);
-        Database.logUserOut();
+
+        account = Database.getAccountByName(token, "Joe");
+        assertNotNull(account);
+
+        codes = Database.getCodes(token, account.getID());
+        assertEquals(codes.size(), before + 5);
+
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 
     @Test
     void saveUserDataWhenNotLoggedOut() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.authenticateUser("Hannan", "12345");
-        User user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        Database.saveUserData();
+
+        Database.disconnect();
     }
 
     @Test
     void loadUserDataWhenNotLoggedOut() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        assertTrue(Database.getLoginStatus());
-        User user = Database.getUser();
+        Database.setConnectionSource("./Tests/test.db");
+
+        Token token = Storage.getToken();
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        Database.logUserOut();
+
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 
     @Test
     void loadCorrectTheme() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.authenticateUser("Hannan", "12345");
-        User user = Database.getUser();
-        assertNotNull(user);
-        assertEquals(Database.getCurrentTheme(), "Light");
-        Database.setCurrentTheme("High Contrast");
-        Database.logUserOut();
+        Database.setConnectionSource("./Tests/test.db");
 
-        Database.authenticateUser("Hannan", "12345");
-        user = Database.getUser();
+        Token token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        assertEquals(Database.getCurrentTheme(), "High Contrast");
-        Database.logUserOut();
+
+        assertEquals(Database.getTheme(token), "light mode");
+        assertEquals(user.getTheme(), "light mode");
+
+        Database.updateTheme(token, "high contrast mode");
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
+        assertNotNull(user);
+
+        assertEquals(Database.getTheme(token), "high contrast mode");
+        assertEquals(user.getTheme(), "high contrast mode");
+
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 
     @Test
     void testClearUserData() {
-        Database.setConfigurationsSource(pathToConfigFile);
-        Database.setUsersSource(pathToUserFile);
-        Database.authenticateUser("Hannan", "12345");
-        User user = Database.getUser();
-        assertNotNull(user);
-        assertTrue(user.getAccounts().size() > 0);
-        Database.clearUserData();
-        Database.logUserOut();
+        Database.setConnectionSource("./Tests/test.db");
 
-        Database.authenticateUser("Hannan", "12345");
-        user = Database.getUser();
+        Token token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        User user = Database.getUser(token);
         assertNotNull(user);
-        assertEquals(user.getAccounts().size(), 0);
-        Database.logUserOut();
+
+        List<Account> accounts = Database.getAccounts(token);
+        assertTrue(accounts.size() > 0);
+
+        Database.clearAllAccounts(token);
+
+        Database.logUserOut(token);
+        Database.disconnect();
+
+        Database.setConnectionSource("./Tests/test.db");
+
+        token = Database.authenticateUser("Hannan", "12345");
+        assertNotNull(token);
+
+        user = Database.getUser(token);
+        assertNotNull(user);
+
+        accounts = Database.getAccounts(token);
+        assertEquals(accounts.size(), 0);
+
+        Database.logUserOut(token);
+        Database.disconnect();
     }
 }

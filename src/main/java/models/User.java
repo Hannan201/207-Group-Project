@@ -1,63 +1,42 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * This class is responsible for storing data
  * related to a user of this application.
  */
 
-public class User implements java.io.Serializable {
+public class User {
+
+    // ID of the user.
+    private final int ID;
 
     // The user's username.
     private final String username;
 
-    // List of social media accounts for this user.
-    private final List<Account> accounts;
-
-    // Current theme for this user.
-    private String currentTheme;
+    // Theme for this user.
+    private final String theme;
 
     /**
      * Create a new user for this application with the
      * username and password passed in as a parameter.
      *
-     * @param newUsername Username of this user.
+     * @param ID The ID for this user.
+     * @param name The username for this user.
+     * @param theme The theme for this user.
      */
-    public User(String newUsername) {
-        this.username = newUsername;
-        accounts = new ArrayList<>();
-        currentTheme = "Light";
+    public User(int ID, String name, String theme) {
+        this.ID = ID;
+        this.username = name;
+        this.theme = theme;
     }
 
     /**
-     * Get the preferred theme for this user.
+     * Get the ID for this user.
      *
-     * @return The preferred theme of this user.
+     * @return ID for this user.
      */
-    public String getCurrentTheme() {
-        return this.currentTheme;
-    }
-
-    /**
-     * Update the preferred theme for this user.
-     *
-     * @param newTheme The new theme to set for this user.
-     */
-    public void setCurrentTheme(String newTheme) {
-        this.currentTheme = newTheme;
-    }
-
-    /**
-     * Add a new social media account for this user.
-     *
-     * @param newAccount The new social media account
-     *                   to be added.
-     */
-    public void addNewAccount(Account newAccount) {
-        this.accounts.add(newAccount);
+    public int getID() {
+        return this.ID;
     }
 
     /**
@@ -70,80 +49,11 @@ public class User implements java.io.Serializable {
     }
 
     /**
-     * Return the social media accounts for this
-     * user.
+     * Get the theme for this user.
      *
-     * @return List of social media accounts.
+     * @return Theme for this user.
      */
-    public List<Account> getAccounts() {
-        return this.accounts;
-    }
-
-    public Account getAccountByName(String name) {
-        for (Account account : this.accounts) {
-            if (account.getName().equals(name)) {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Remove an account with a specific name.
-     *
-     * @param name Name of the account.
-     */
-    public void removeAccountByName(String name) {
-        for (Account account : this.accounts) {
-            if (account.getName().equals(name)) {
-                accounts.remove(account);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Clear all the backup codes for this user.
-     */
-    public void clearAllAccounts() {
-        for (Account account : this.accounts) {
-            account.clearUserCodes();
-        }
-        accounts.clear();
-    }
-
-    /**
-     * Search through the list of user's account
-     * to see if any of the names match given
-     * an account name,
-     *
-     * @param name Name of account.
-     * @return List of accounts that match.
-     */
-    public List<Account> searchAccounts(String name) {
-        if (name.isEmpty()) {
-            return Collections.unmodifiableList(
-                   new ArrayList<>()
-            );
-        }
-
-        return accounts.stream()
-                .filter(account -> account.getName()
-                        .toLowerCase()
-                        .contains(
-                                name.toLowerCase()
-                        ))
-                .toList();
-    }
-
-    /**
-     * Checks if there exists a duplicate account for this user.
-     *
-     * @param compare The Account to search for.
-     * @return True if there exists a duplicate account in the list,
-     * false otherwise.
-     */
-    public boolean existsDuplicate(Account compare) {
-        return this.accounts.contains(compare);
+    public String getTheme() {
+        return this.theme;
     }
 }
