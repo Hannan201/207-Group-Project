@@ -63,7 +63,6 @@ public class Database {
      */
     private static void connect(String filename) {
         try {
-//            boolean tablesSet = Files.exists(Path.of(filename));
             SQLiteConfig configurations = new SQLiteConfig();
             configurations.enforceForeignKeys(true);
 
@@ -71,10 +70,6 @@ public class Database {
                     "jdbc:sqlite:" + filename,
                     configurations.toProperties()
             );
-
-//            if (!tablesSet) {
-//                initializeTables(connection);
-//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -92,91 +87,6 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Initialize the tables for the database. This is assuming
-     * a database file is being created for the first time and
-     * one does not already exist.
-     *
-     * @param connection Connection to the database.
-     */
-    private static void initializeTables(Connection connection) {
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            // Table for themes.
-            statement.execute(
-                    """
-                        CREATE TABLE themes(
-                            id INTEGER PRIMARY KEY,
-                            name TEXT NOT NULL UNIQUE
-                        );
-                       """
-            );
-
-            // Add in the themes.
-            statement.executeUpdate(
-                    """
-                       INSERT INTO themes
-                       (name)
-                       VALUES 
-                       ('light mode'),
-                       ('dark mode'),
-                       ('high contrast mode');
-                       """
-            );
-
-            // Table for users.
-            statement.execute(
-                    """
-                        CREATE TABLE users(
-                            id INTEGER PRIMARY KEY,
-                            username TEXT NOT NULL UNIQUE CHECK ( length(username) > 0 ),
-                            password TEXT NOT NULL CHECK ( length(password) > 0 ),
-                            theme_id INT NOT NULL DEFAULT 1 CHECK ( theme_id = 1 OR theme_id = 2 OR theme_id = 3 ),
-                            logged_in INT NOT NULL DEFAULT 1 CHECK ( logged_in = 0 OR logged_in = 1 ),
-                            FOREIGN KEY(theme_id) REFERENCES themes(id)
-                        );
-                       """
-            );
-
-            // Table for accounts.
-            statement.execute(
-                    """
-                        CREATE TABLE accounts(
-                            id INTEGER PRIMARY KEY,
-                            user_id INT NOT NULL,
-                            name TEXT NOT NULL CHECK ( length(name) > 0 ),
-                            type TEXT NOT NULL CHECK ( length(type) > 0 ),
-                            FOREIGN KEY(user_id) REFERENCES users(id) 
-                        );
-                       """
-            );
-
-            // Table for codes.
-            statement.execute(
-                    """
-                        CREATE TABLE codes(
-                            id INTEGER PRIMARY KEY,
-                            account_id INT NOT NULL,
-                            code TEXT NOT NULL CHECK ( length(code) > 0 ),
-                            FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE 
-                        );
-                       """
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-        }
-
     }
 
     /*
@@ -418,7 +328,7 @@ public class Database {
                         """
                            INSERT INTO users
                            (username, password)
-                           VALUES 
+                           VALUES
                            (?, ?)
                            """,
                         Statement.RETURN_GENERATED_KEYS
@@ -733,7 +643,7 @@ public class Database {
                             """
                                INSERT INTO accounts
                                (user_id, name, type)
-                               VALUES 
+                               VALUES
                                (?, ?, ?)
                                """,
                             Statement.RETURN_GENERATED_KEYS
@@ -947,7 +857,7 @@ public class Database {
                             """
                                INSERT INTO codes
                                (account_id, code)
-                               VALUES 
+                               VALUES
                                (?, ?)
                                """,
                             Statement.RETURN_GENERATED_KEYS
