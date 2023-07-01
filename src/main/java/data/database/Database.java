@@ -94,21 +94,21 @@ public class Database {
      */
 
     /**
-     * Authenticate a token to ensure that it matches what's currently
+     * Check if a token doesn't match what's currently
      * stored. This is to prevent access from unknown users.
      *
      * @param token The token.
-     * @return True if authenticated, false otherwise.
+     * @return True if the token does not match, false otherwise.
      */
-    private static boolean authenticateToken(Token token) {
+    private static boolean invalidToken(Token token) {
         String[] result = Objects.requireNonNull(TokenManager.parseToken());
         if (result.length != 2) {
             return false;
         }
 
         CustomToken casted = (CustomToken) token;
-        return result[0].equals(casted.key)
-                && Integer.parseInt(result[1]) == casted.ID;
+        return !result[0].equals(casted.key)
+                || Integer.parseInt(result[1]) != casted.ID;
     }
 
     /**
@@ -118,7 +118,11 @@ public class Database {
      * @return True if username is taken, false otherwise.
      */
     public static boolean checkUsername(String username) {
-        if (username.isEmpty() || connection == null || username.isBlank()) {
+        if (username.isEmpty() || username.isBlank()) {
+            return true;
+        }
+
+        if (connection == null) {
             return true;
         }
 
@@ -319,44 +323,46 @@ public class Database {
      * @param password Password for the new user.
      */
     public static Token registerUser(String username, String password) {
-        if (connection != null) {
-            PreparedStatement addUserStatement = null;
+        if (connection == null) {
+            return null;
+        }
+
+        PreparedStatement addUserStatement = null;
+        try {
+            String salt = passwordHasher.generateSalt();
+            String hashed = salt + passwordHasher.hashPassword(password + salt, salt.getBytes());
+            addUserStatement = connection.prepareStatement(
+                    """
+                       INSERT INTO users
+                       (username, password)
+                       VALUES
+                       (?, ?)
+                       """,
+                    Statement.RETURN_GENERATED_KEYS
+            );
+
+            addUserStatement.setString(1, username.toLowerCase());
+            addUserStatement.setString(2, hashed);
+            addUserStatement.executeUpdate();
+
+            ResultSet resultKeys = addUserStatement.getGeneratedKeys();
+            int id = 0;
+            while (resultKeys.next()) {
+                id = resultKeys.getInt(1);
+            }
+
+            String token = generator.nextString();
+            TokenManager.updateToken(token + "," + id);
+            return new CustomToken(token, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                String salt = passwordHasher.generateSalt();
-                String hashed = salt + passwordHasher.hashPassword(password + salt, salt.getBytes());
-                addUserStatement = connection.prepareStatement(
-                        """
-                           INSERT INTO users
-                           (username, password)
-                           VALUES
-                           (?, ?)
-                           """,
-                        Statement.RETURN_GENERATED_KEYS
-                );
-
-                addUserStatement.setString(1, username.toLowerCase());
-                addUserStatement.setString(2, hashed);
-                addUserStatement.executeUpdate();
-
-                ResultSet resultKeys = addUserStatement.getGeneratedKeys();
-                int id = 0;
-                while (resultKeys.next()) {
-                    id = resultKeys.getInt(1);
+                if (addUserStatement != null) {
+                    addUserStatement.close();
                 }
-
-                String token = generator.nextString();
-                TokenManager.updateToken(token + "," + id);
-                return new CustomToken(token, id);
             } catch (SQLException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (addUserStatement != null) {
-                        addUserStatement.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
 
@@ -373,50 +379,56 @@ public class Database {
      * @return Token if the user was logged-in, null otherwise.
      */
     public static Token authenticateUser(String username, String password) {
-        if (!checkUsername(username) || username.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             return null;
         }
 
-        if (connection != null) {
-            PreparedStatement getLoginStatement = null;
+        if (!checkUsername(username)) {
+            return null;
+        }
+
+        if (connection == null) {
+            return null;
+        }
+
+        PreparedStatement getLoginStatement = null;
+        try {
+            getLoginStatement = connection.prepareStatement(
+                    """
+                        SELECT id, username, password FROM users
+                        WHERE username = ?
+                       """
+            );
+
+            getLoginStatement.setString(1, username.toLowerCase());
+
+            ResultSet loginsResult = getLoginStatement.executeQuery();
+            String hashedPassword = loginsResult.getString("password");
+
+            String salt = hashedPassword.substring(0, 24);
+            String expectedPassword = hashedPassword.substring(24);
+            if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
+                String token = generator.nextString();
+                int id = loginsResult.getInt("id");
+
+                TokenManager.updateToken(token + "," + id);
+                CustomToken customToken = new CustomToken(token, id);
+
+                updateLoginStatus(customToken, true);
+
+                return customToken;
+            }
+
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                getLoginStatement = connection.prepareStatement(
-                        """
-                            SELECT id, username, password FROM users
-                            WHERE username = ?
-                           """
-                );
-
-                getLoginStatement.setString(1, username.toLowerCase());
-
-                ResultSet loginsResult = getLoginStatement.executeQuery();
-                String hashedPassword = loginsResult.getString("password");
-
-                String salt = hashedPassword.substring(0, 24);
-                String expectedPassword = hashedPassword.substring(24);
-                if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
-                    String token = generator.nextString();
-                    int id = loginsResult.getInt("id");
-
-                    TokenManager.updateToken(token + "," + id);
-                    CustomToken customToken = new CustomToken(token, id);
-
-                    updateLoginStatus(customToken, true);
-
-                    return customToken;
+                if (getLoginStatement != null) {
+                    getLoginStatement.close();
                 }
-
-                return null;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (getLoginStatement != null) {
-                        getLoginStatement.close();
-                    }
-                } catch (SQLException e2) {
-                    e2.printStackTrace();
-                }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
 
@@ -447,35 +459,39 @@ public class Database {
      * @return User object if logged in, null otherwise.
      */
     public static User getUser(Token token) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getUserStatement = null;
-                try {
-                    getUserStatement = connection.prepareStatement(
-                            """
-                               SELECT * FROM users
-                               WHERE id = ?
-                               """
-                    );
+        if (invalidToken(token)) {
+            return null;
+        }
 
-                    getUserStatement.setInt(1, ((CustomToken) token).ID);
-                    ResultSet resultKeys = getUserStatement.executeQuery();
+        if (connection == null) {
+            return null;
+        }
 
-                    int id = resultKeys.getInt("id");
-                    String name = resultKeys.getString("username");
-                    String theme = getThemeByID(resultKeys.getInt("theme_id"));
-                    return new User(id, name, theme);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (getUserStatement != null) {
-                            getUserStatement.close();
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+        PreparedStatement getUserStatement = null;
+        try {
+            getUserStatement = connection.prepareStatement(
+                    """
+                       SELECT * FROM users
+                       WHERE id = ?
+                       """
+            );
+
+            getUserStatement.setInt(1, ((CustomToken) token).ID);
+            ResultSet resultKeys = getUserStatement.executeQuery();
+
+            int id = resultKeys.getInt("id");
+            String name = resultKeys.getString("username");
+            String theme = getThemeByID(resultKeys.getInt("theme_id"));
+            return new User(id, name, theme);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (getUserStatement != null) {
+                    getUserStatement.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
 
@@ -490,40 +506,45 @@ public class Database {
      */
     public static List<Account> getAccounts(Token token) {
         List<Account> accounts = new ArrayList<>();
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getAccountsStatement = null;
-                try {
-                    getAccountsStatement = connection.prepareStatement(
-                            """
-                               SELECT id, name, type FROM accounts
-                               WHERE user_id = ?
-                               """
-                    );
-                    int id = ((CustomToken) token).ID;
-                    getAccountsStatement.setInt(1, id);
 
-                    ResultSet results = getAccountsStatement.executeQuery();
+        if (invalidToken(token)) {
+            return accounts;
+        }
 
-                    while (results.next()) {
-                        int accountID = results.getInt("id");
-                        String name = results.getString("name");
-                        String type = results.getString("type");
-                        accounts.add(
-                                new Account(accountID, name, type)
-                        );
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (getAccountsStatement != null) {
-                            getAccountsStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (connection == null) {
+            return accounts;
+        }
+
+        PreparedStatement getAccountsStatement = null;
+        try {
+            getAccountsStatement = connection.prepareStatement(
+                    """
+                       SELECT id, name, type FROM accounts
+                       WHERE user_id = ?
+                       """
+            );
+            int id = ((CustomToken) token).ID;
+            getAccountsStatement.setInt(1, id);
+
+            ResultSet results = getAccountsStatement.executeQuery();
+
+            while (results.next()) {
+                int accountID = results.getInt("id");
+                String name = results.getString("name");
+                String type = results.getString("type");
+                accounts.add(
+                        new Account(accountID, name, type)
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (getAccountsStatement != null) {
+                    getAccountsStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
 
@@ -538,37 +559,11 @@ public class Database {
      * @param accountID ID of the account.
      */
     public static Account getAccount(Token token, int accountID) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getAccountStatement = null;
-                try {
-                    getAccountStatement = connection.prepareStatement(
-                            """
-                                SELECT id, name, type FROM accounts
-                                WHERE id = ?
-                               """
-                    );
-                    getAccountStatement.setInt(1, accountID);
-                    ResultSet accounts = getAccountStatement.executeQuery();
-                    if (accounts.next()) {
-                        int id = accounts.getInt("id");
-                        String name = accounts.getString("name");
-                        String type = accounts.getString("type");
-                        return new Account(id, name, type);
-                    }
+        List<Account> accounts = Database.getAccounts(token);
 
-                    return null;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (getAccountStatement != null) {
-                            getAccountStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
-                }
+        for (Account temp : accounts) {
+            if (temp.getID() == accountID) {
+                return temp;
             }
         }
 
@@ -584,41 +579,11 @@ public class Database {
      * @return Account if found, otherwise null.
      */
     public static Account getAccountByName(Token token, String name) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getAccountStatement = null;
-                try {
-                    getAccountStatement = connection.prepareStatement(
-                            """
-                                SELECT id, name, type FROM accounts
-                                WHERE user_id = ? AND name = ?
-                               """
-                    );
-                    int id = ((CustomToken) token).ID;
-                    getAccountStatement.setInt(1, id);
-                    getAccountStatement.setString(2, name);
+        List<Account> accounts = Database.getAccounts(token);
 
-                    ResultSet resultSet = getAccountStatement.executeQuery();
-
-                    if (resultSet.next()) {
-                        int accountID = resultSet.getInt("id");
-                        String accountName = resultSet.getString("name");
-                        String accountType = resultSet.getString("type");
-                        return new Account(accountID, accountName, accountType);
-                    }
-
-                    return null;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (getAccountStatement != null) {
-                            getAccountStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
-                }
+        for (Account temp : accounts) {
+            if (temp.getName().equals(name)) {
+                return temp;
             }
         }
 
@@ -635,47 +600,51 @@ public class Database {
      * @return ID of the new account.
      */
     public static int addAccount(Token token, String name, String type) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement addAccountStatement = null;
-                try {
-                    addAccountStatement = connection.prepareStatement(
-                            """
-                               INSERT INTO accounts
-                               (user_id, name, type)
-                               VALUES
-                               (?, ?, ?)
-                               """,
-                            Statement.RETURN_GENERATED_KEYS
-                    );
+        if (invalidToken(token)) {
+            return -1;
+        }
 
-                    int id = ((CustomToken) token).ID;
-                    addAccountStatement.setInt(1, id);
-                    addAccountStatement.setString(2, name);
-                    addAccountStatement.setString(3, type);
-                    addAccountStatement.executeUpdate();
+        if (connection == null) {
+            return -1;
+        }
 
-                    ResultSet resultKeys = addAccountStatement.getGeneratedKeys();
-                    while (resultKeys.next()) {
-                        id = resultKeys.getInt(1);
-                    }
+        PreparedStatement addAccountStatement = null;
+        try {
+            addAccountStatement = connection.prepareStatement(
+                    """
+                       INSERT INTO accounts
+                       (user_id, name, type)
+                       VALUES
+                       (?, ?, ?)
+                       """,
+                    Statement.RETURN_GENERATED_KEYS
+            );
 
-                    return id;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (addAccountStatement != null) {
-                            addAccountStatement.close();
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+            int id = ((CustomToken) token).ID;
+            addAccountStatement.setInt(1, id);
+            addAccountStatement.setString(2, name);
+            addAccountStatement.setString(3, type);
+            addAccountStatement.executeUpdate();
+
+            ResultSet resultKeys = addAccountStatement.getGeneratedKeys();
+            while (resultKeys.next()) {
+                id = resultKeys.getInt(1);
+            }
+
+            return id;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (addAccountStatement != null) {
+                    addAccountStatement.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
 
-        return 0;
+        return -1;
     }
 
     /**
@@ -686,29 +655,33 @@ public class Database {
      * @param accountID ID of the account.
      */
     public static void removeAccount(Token token, int accountID) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement removeAccountStatement = null;
-                try {
-                    removeAccountStatement = connection.prepareStatement(
-                            """
-                               DELETE FROM accounts
-                               WHERE id = ?
-                               """
-                    );
-                    removeAccountStatement.setInt(1, accountID);
-                    removeAccountStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (removeAccountStatement != null) {
-                            removeAccountStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (invalidToken(token)) {
+            return;
+        }
+
+        if (connection == null) {
+            return;
+        }
+
+        PreparedStatement removeAccountStatement = null;
+        try {
+            removeAccountStatement = connection.prepareStatement(
+                    """
+                       DELETE FROM accounts
+                       WHERE id = ?
+                       """
+            );
+            removeAccountStatement.setInt(1, accountID);
+            removeAccountStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (removeAccountStatement != null) {
+                    removeAccountStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
@@ -720,30 +693,34 @@ public class Database {
      *              for authentication purposes.
      */
     public static void clearAllAccounts(Token token) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement clearUserStatement = null;
-                try {
-                    clearUserStatement = connection.prepareStatement(
-                            """
-                                DELETE FROM accounts
-                                WHERE user_id = ?
-                               """
-                    );
-                    int id = ((CustomToken) token).ID;
-                    clearUserStatement.setInt(1, id);
-                    clearUserStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (clearUserStatement != null) {
-                            clearUserStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (invalidToken(token)) {
+            return;
+        }
+
+        if (connection == null) {
+            return;
+        }
+
+        PreparedStatement clearUserStatement = null;
+        try {
+            clearUserStatement = connection.prepareStatement(
+                    """
+                        DELETE FROM accounts
+                        WHERE user_id = ?
+                       """
+            );
+            int id = ((CustomToken) token).ID;
+            clearUserStatement.setInt(1, id);
+            clearUserStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (clearUserStatement != null) {
+                    clearUserStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
@@ -759,38 +736,42 @@ public class Database {
     public static List<Code> getCodes(Token token, int accountID) {
         List<Code> codes = new ArrayList<>();
 
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getCodesStatement = null;
-                try {
-                    getCodesStatement = connection.prepareStatement(
-                            """
-                                SELECT id, code FROM codes
-                                WHERE account_id = ?
-                               """
-                    );
-                    getCodesStatement.setInt(1, accountID);
+        if (invalidToken(token)) {
+            return codes;
+        }
 
-                    ResultSet results = getCodesStatement.executeQuery();
+        if (connection == null) {
+            return codes;
+        }
 
-                    while (results.next()) {
-                        int id = results.getInt("id");
-                        String code = results.getString("code");
-                        codes.add(
-                                new Code(id, code)
-                        );
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (getCodesStatement != null) {
-                            getCodesStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        PreparedStatement getCodesStatement = null;
+        try {
+            getCodesStatement = connection.prepareStatement(
+                    """
+                        SELECT id, code FROM codes
+                        WHERE account_id = ?
+                       """
+            );
+            getCodesStatement.setInt(1, accountID);
+
+            ResultSet results = getCodesStatement.executeQuery();
+
+            while (results.next()) {
+                int id = results.getInt("id");
+                String code = results.getString("code");
+                codes.add(
+                        new Code(id, code)
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (getCodesStatement != null) {
+                    getCodesStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
 
@@ -806,36 +787,41 @@ public class Database {
      * @return The code.
      */
     public static Code getCode(Token token, int codeID) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getCodeStatement = null;
-                try {
-                    getCodeStatement = connection.prepareStatement(
-                            """
-                                SELECT id, code FROM codes
-                                WHERE id = ?
-                               """
-                    );
-                    getCodeStatement.setInt(1, codeID);
-                    ResultSet codes = getCodeStatement.executeQuery();
-                    if (codes.next()) {
-                        int id = codes.getInt("id");
-                        String code = codes.getString("code");
-                        return new Code(id, code);
-                    }
+        if (invalidToken(token)) {
+            return null;
+        }
 
-                    return null;
-                } catch (SQLException e) {
-                    try {
-                        if (getCodeStatement != null) {
-                            getCodeStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (connection == null) {
+            return null;
+        }
+
+        PreparedStatement getCodeStatement = null;
+        try {
+            getCodeStatement = connection.prepareStatement(
+                    """
+                        SELECT id, code FROM codes
+                        WHERE id = ?
+                       """
+            );
+            getCodeStatement.setInt(1, codeID);
+            ResultSet codes = getCodeStatement.executeQuery();
+            if (codes.next()) {
+                int id = codes.getInt("id");
+                String code = codes.getString("code");
+                return new Code(id, code);
+            }
+
+            return null;
+        } catch (SQLException e) {
+            try {
+                if (getCodeStatement != null) {
+                    getCodeStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
+
         return null;
     }
 
@@ -849,46 +835,50 @@ public class Database {
      * @return ID of the new code.
      */
     public static int addCode(Token token, int accountID, String code) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement addCodeStatement = null;
-                try {
-                    addCodeStatement = connection.prepareStatement(
-                            """
-                               INSERT INTO codes
-                               (account_id, code)
-                               VALUES
-                               (?, ?)
-                               """,
-                            Statement.RETURN_GENERATED_KEYS
-                    );
+        if (invalidToken(token)) {
+            return -1;
+        }
 
-                    addCodeStatement.setInt(1, accountID);
-                    addCodeStatement.setString(2, code);
-                    addCodeStatement.executeUpdate();
+        if (connection == null) {
+            return -1;
+        }
 
-                    ResultSet resultKeys = addCodeStatement.getGeneratedKeys();
-                    int id = 0;
-                    while (resultKeys.next()) {
-                        id = resultKeys.getInt(1);
-                    }
+        PreparedStatement addCodeStatement = null;
+        try {
+            addCodeStatement = connection.prepareStatement(
+                    """
+                       INSERT INTO codes
+                       (account_id, code)
+                       VALUES
+                       (?, ?)
+                       """,
+                    Statement.RETURN_GENERATED_KEYS
+            );
 
-                    return id;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (addCodeStatement != null) {
-                            addCodeStatement.close();
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+            addCodeStatement.setInt(1, accountID);
+            addCodeStatement.setString(2, code);
+            addCodeStatement.executeUpdate();
+
+            ResultSet resultKeys = addCodeStatement.getGeneratedKeys();
+            int id = 0;
+            while (resultKeys.next()) {
+                id = resultKeys.getInt(1);
+            }
+
+            return id;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (addCodeStatement != null) {
+                    addCodeStatement.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
 
-        return 0;
+        return -1;
     }
 
     /**
@@ -900,31 +890,35 @@ public class Database {
      * @param newCode Code to update to.
      */
     public static void updateCode(Token token, int codeID, String newCode) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement updateCodeStatement = null;
-                try {
-                    updateCodeStatement = connection.prepareStatement(
-                            """
-                                UPDATE codes
-                                SET code = ?
-                                WHERE id = ?
-                               """
-                    );
-                    updateCodeStatement.setString(1, newCode);
-                    updateCodeStatement.setInt(2, codeID);
-                    updateCodeStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (updateCodeStatement != null) {
-                            updateCodeStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (invalidToken(token)) {
+            return;
+        }
+
+        if (connection == null) {
+            return;
+        }
+
+        PreparedStatement updateCodeStatement = null;
+        try {
+            updateCodeStatement = connection.prepareStatement(
+                    """
+                        UPDATE codes
+                        SET code = ?
+                        WHERE id = ?
+                       """
+            );
+            updateCodeStatement.setString(1, newCode);
+            updateCodeStatement.setInt(2, codeID);
+            updateCodeStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (updateCodeStatement != null) {
+                    updateCodeStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
@@ -937,29 +931,33 @@ public class Database {
      * @param codeID ID of the code to remove.
      */
     public static void removeCode(Token token, int codeID) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement removeCodeStatement = null;
-                try {
-                    removeCodeStatement = connection.prepareStatement(
-                            """
-                                DELETE FROM codes
-                                WHERE id = ?
-                               """
-                    );
-                    removeCodeStatement.setInt(1, codeID);
-                    removeCodeStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (removeCodeStatement != null) {
-                            removeCodeStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (invalidToken(token)) {
+            return;
+        }
+
+        if (connection == null) {
+            return;
+        }
+
+        PreparedStatement removeCodeStatement = null;
+        try {
+            removeCodeStatement = connection.prepareStatement(
+                    """
+                        DELETE FROM codes
+                        WHERE id = ?
+                       """
+            );
+            removeCodeStatement.setInt(1, codeID);
+            removeCodeStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (removeCodeStatement != null) {
+                    removeCodeStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
@@ -972,29 +970,33 @@ public class Database {
      * @param accountID ID of the account which contains the backup codes.
      */
     public static void clearAllCodes(Token token, int accountID) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement clearCodesStatement = null;
-                try {
-                    clearCodesStatement = connection.prepareStatement(
-                            """
-                                DELETE FROM codes
-                                WHERE account_id = ?
-                               """
-                    );
-                    clearCodesStatement.setInt(1, accountID);
-                    clearCodesStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (clearCodesStatement != null) {
-                            clearCodesStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (invalidToken(token)) {
+            return;
+        }
+
+        if (connection == null) {
+            return;
+        }
+
+        PreparedStatement clearCodesStatement = null;
+        try {
+            clearCodesStatement = connection.prepareStatement(
+                    """
+                        DELETE FROM codes
+                        WHERE account_id = ?
+                       """
+            );
+            clearCodesStatement.setInt(1, accountID);
+            clearCodesStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (clearCodesStatement != null) {
+                    clearCodesStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
@@ -1006,28 +1008,34 @@ public class Database {
      * @return Name of the theme as a string.
      */
     private static String getThemeByID(int id) {
-        if (connection != null && id >= 1 && id <= 3) {
-            PreparedStatement statement = null;
+        if (connection == null) {
+            return null;
+        }
+
+        if (id < 1 || id > 3) {
+            return null;
+        }
+
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(
+                    """
+                        SELECT name FROM themes
+                        WHERE id = ?
+                       """
+            );
+            statement.setInt(1, id);
+            ResultSet themeResult = statement.executeQuery();
+            return themeResult.getString("name");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                statement = connection.prepareStatement(
-                        """
-                            SELECT name FROM themes
-                            WHERE id = ?
-                           """
-                );
-                statement.setInt(1, id);
-                ResultSet themeResult = statement.executeQuery();
-                return themeResult.getString("name");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (statement != null) {
-                        statement.close();
-                    }
-                } catch (SQLException e2) {
-                    e2.printStackTrace();
+                if (statement != null) {
+                    statement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
 
@@ -1042,32 +1050,36 @@ public class Database {
      * @return The theme for the user.
      */
     public static String getTheme(Token token) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement getThemeStatement = null;
-                try {
-                    getThemeStatement = connection.prepareStatement(
-                            """
-                                SELECT theme_id FROM users
-                                WHERE id = ?
-                               """
-                    );
-                    int id = ((CustomToken) token).ID;
-                    getThemeStatement.setInt(1, id);
-                    ResultSet results = getThemeStatement.executeQuery();
+        if (invalidToken(token)) {
+            return null;
+        }
 
-                    return getThemeByID(results.getInt("theme_id"));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (getThemeStatement != null) {
-                            getThemeStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (connection == null) {
+            return null;
+        }
+
+        PreparedStatement getThemeStatement = null;
+        try {
+            getThemeStatement = connection.prepareStatement(
+                    """
+                        SELECT theme_id FROM users
+                        WHERE id = ?
+                       """
+            );
+            int id = ((CustomToken) token).ID;
+            getThemeStatement.setInt(1, id);
+            ResultSet results = getThemeStatement.executeQuery();
+
+            return getThemeByID(results.getInt("theme_id"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (getThemeStatement != null) {
+                    getThemeStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
 
@@ -1082,50 +1094,54 @@ public class Database {
      * @param newTheme The new theme to set for the user.
      */
     public static void updateTheme(Token token, String newTheme) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement updateThemeStatement = null;
-                PreparedStatement themeIDStatement = null;
-                try {
-                    updateThemeStatement = connection.prepareStatement(
-                            """
-                                UPDATE users
-                                SET theme_id = ?
-                                WHERE id = ?
-                               """
-                    );
+        if (invalidToken(token)) {
+            return;
+        }
 
-                    themeIDStatement = connection.prepareStatement(
-                            """
-                                SELECT id FROM themes
-                                WHERE name = ?
-                               """
-                    );
-                    themeIDStatement.setString(1, newTheme);
+        if (connection == null) {
+            return;
+        }
 
-                    ResultSet themeResults = themeIDStatement.executeQuery();
+        PreparedStatement updateThemeStatement = null;
+        PreparedStatement themeIDStatement = null;
+        try {
+            updateThemeStatement = connection.prepareStatement(
+                    """
+                        UPDATE users
+                        SET theme_id = ?
+                        WHERE id = ?
+                       """
+            );
 
-                    int themeID = themeResults.getInt("id");
-                    int userID = ((CustomToken) token).ID;
+            themeIDStatement = connection.prepareStatement(
+                    """
+                        SELECT id FROM themes
+                        WHERE name = ?
+                       """
+            );
+            themeIDStatement.setString(1, newTheme);
 
-                    updateThemeStatement.setInt(1, themeID);
-                    updateThemeStatement.setInt(2, userID);
-                    updateThemeStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (updateThemeStatement != null) {
-                            updateThemeStatement.close();
-                        }
+            ResultSet themeResults = themeIDStatement.executeQuery();
 
-                        if (themeIDStatement != null) {
-                            themeIDStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+            int themeID = themeResults.getInt("id");
+            int userID = ((CustomToken) token).ID;
+
+            updateThemeStatement.setInt(1, themeID);
+            updateThemeStatement.setInt(2, userID);
+            updateThemeStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (updateThemeStatement != null) {
+                    updateThemeStatement.close();
                 }
+
+                if (themeIDStatement != null) {
+                    themeIDStatement.close();
+                }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
@@ -1140,34 +1156,38 @@ public class Database {
      * @param status The new status.
      */
     private static void updateLoginStatus(Token token, boolean status) {
-        if (authenticateToken(token)) {
-            if (connection != null) {
-                PreparedStatement logoutStatement = null;
-                try {
-                    logoutStatement = connection.prepareStatement(
-                            """
-                                UPDATE users
-                                SET logged_in = ?
-                                WHERE id = ?
-                               """
-                    );
+        if (invalidToken(token)) {
+            return;
+        }
 
-                    int result = status ? 1 : 0;
-                    logoutStatement.setInt(1, result);
-                    int id = ((CustomToken) token).ID;
-                    logoutStatement.setInt(2, id);
-                    logoutStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (logoutStatement != null) {
-                            logoutStatement.close();
-                        }
-                    } catch (SQLException e2) {
-                        e2.printStackTrace();
-                    }
+        if (connection == null) {
+            return;
+        }
+
+        PreparedStatement logoutStatement = null;
+        try {
+            logoutStatement = connection.prepareStatement(
+                    """
+                        UPDATE users
+                        SET logged_in = ?
+                        WHERE id = ?
+                       """
+            );
+
+            int result = status ? 1 : 0;
+            logoutStatement.setInt(1, result);
+            int id = ((CustomToken) token).ID;
+            logoutStatement.setInt(2, id);
+            logoutStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (logoutStatement != null) {
+                    logoutStatement.close();
                 }
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
         }
     }
