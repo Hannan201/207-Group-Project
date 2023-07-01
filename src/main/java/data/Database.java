@@ -11,8 +11,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
@@ -181,6 +179,13 @@ public class Database {
      These methods are for signing-up, signing-in, and signing-out.
      */
 
+    /**
+     * Authenticate a token to ensure that it matches what's currently
+     * stored. This is to prevent access from unknown users.
+     *
+     * @param token The token.
+     * @return True if authenticated, false otherwise.
+     */
     private static boolean authenticateToken(Token token) {
         String[] result = Objects.requireNonNull(TokenManager.parseToken());
         if (result.length != 2) {
@@ -230,8 +235,15 @@ public class Database {
         return true;
     }
 
+    /*
+     This class is responsible for loading and saving the current token
+     to protect the database from unauthorised access.
+     */
     private static class TokenManager {
+        // Connection to the keystore object.
         private static KeyStore storage;
+
+        // Password for the keystore.
         private static char[] password;
 
         /**
@@ -377,22 +389,13 @@ public class Database {
         }
     }
 
-    private static class CustomToken implements Token {
-        private final String key;
-        private final int ID;
+    /*
+     This record acts as a token which stores the ID of which user
+     it belongs to in the database. Made private to prevent outside
+     access.
+     */
+    private record CustomToken(String key, int ID) implements Token {
 
-        public CustomToken(String key, int ID) {
-            this.key = key;
-            this.ID = ID;
-        }
-
-        public String getKey() {
-            return this.key;
-        }
-
-        public int getID() {
-            return this.ID;
-        }
     }
 
     /**
