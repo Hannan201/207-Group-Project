@@ -10,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -147,39 +146,28 @@ public class AccountViewController implements Initializable {
      * Handle method for when a key is released
      * on the text field to search for an
      * account.
-     *
-     * @param keyEvent The key event.
      */
     @FXML
-    private void handleSearchRelease(KeyEvent keyEvent) {
+    private void handleSearchRelease() {
+        List<Account> allAccounts = Database.getAccounts(Storage.getToken());
+        final List<Account> result;
+        String key;
         if (search.getText().isEmpty()) {
-            debounce.registerFunction(
-                    "DEFAULT",
-                    () -> {
-                        Platform.runLater(() -> {
-                            accounts.getItems().clear();
-                            accounts.getItems().addAll(Database.getAccounts(Storage.getToken()));
-                        });
-
-                        return null;
-                    },
-                    125
-            );
-            return;
+            key = "DEFAULT";
+            result = allAccounts;
+        } else {
+            key = search.getText();
+            result = searchAccounts(allAccounts, search.getText());
         }
 
         debounce.registerFunction(
-                search.getText(),
+                key,
                 () -> {
                     Platform.runLater(() -> {
-                        List<Account> result = searchAccounts(
-                                Database.getAccounts(Storage.getToken()),
-                                search.getText()
-                        );
-
                         accounts.getItems().clear();
                         accounts.getItems().addAll(result);
                     });
+
                     return null;
                 },
                 125

@@ -194,7 +194,7 @@ public class Database {
      */
     private static boolean invalidToken(Token token) {
         String[] result = Objects.requireNonNull(TokenManager.parseToken());
-        if (result.length != 2) {
+        if (result.length == 2) {
             return false;
         }
 

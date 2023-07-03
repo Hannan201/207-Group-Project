@@ -1,7 +1,4 @@
-import commands.Command;
-import commands.SwitchToDarkMode;
-import commands.SwitchToHighContrastMode;
-import commands.managers.ThemeSwitcher;
+import controllers.utilities.Utilities;
 import data.database.Database;
 import data.Storage;
 import javafx.application.Application;
@@ -10,8 +7,9 @@ import javafx.stage.Stage;
 import utilities.ResourceUtilities;
 import views.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 /**
  * This class is responsible for launching the backup
@@ -26,8 +24,13 @@ public class Launcher extends Application {
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
-        String path = ResourceUtilities.loadFileByURL("database/database.db").getPath();
-        Database.setConnectionSource(path);
+        try {
+            URI uri = ResourceUtilities.loadFileByURL("database/database.db").toURI();
+            String path = Paths.get(uri).toString();
+            Database.setConnectionSource(path);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         launch(args);
     }
 
@@ -57,36 +60,9 @@ public class Launcher extends Application {
      */
     private static void adjustTheme() {
         if (Storage.getToken() != null) {
-            String preferredTheme = Database.getTheme(Storage.getToken());
-            if (preferredTheme != null) {
-
-                // Switch to the respective theme.
-                if (!preferredTheme.equals("light mode")) {
-                    List<View> views = new ArrayList<>(
-                            List.of(
-                                    HomePageView.getInstance(),
-                                    SignInView.getInstance(),
-                                    SignUpView.getInstance(),
-                                    AccountView.getInstance(),
-                                    AddAccountView.getInstance(),
-                                    CodeView.getInstance(),
-                                    SettingsView.getInstance()
-                            )
-                    );
-
-                    Command command = new SwitchToDarkMode(views);
-
-                    if (preferredTheme.equals("high contrast mode")) {
-                        command = new SwitchToHighContrastMode(views);
-                    }
-
-                    ThemeSwitcher switcher = new ThemeSwitcher(command);
-                    switcher.switchTheme();
-                }
-
-                ((AccountView) AccountView.getInstance()).getAccountViewController()
-                        .addAccounts(Database.getAccounts(Storage.getToken()));
-            }
+            Utilities.adjustTheme();
+            Utilities.loadAccounts();
         }
     }
+
 }
