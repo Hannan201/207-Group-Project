@@ -148,33 +148,15 @@ public class SettingsViewController implements Initializable {
         final String str = link == null ? "" : link.getText();
         String url = "";
         switch (str) {
-            case "Icons8" -> {
-                url = "https://icons8.com";
-            }
-            case "app" -> {
-                url = "https://icons8.com/icon/4SBCvFZBi2Rc/app";
-            }
-            case "Google" -> {
-                url = "https://icons8.com/icon/60984/google";
-            }
-            case "Discord" -> {
-                url = "https://icons8.com/icon/30888/discord";
-            }
-            case "Shopify" -> {
-                url = "https://icons8.com/icon/SZ0VDlOvY5zB/shopify";
-            }
-            case "Github" -> {
-                url = "https://icons8.com/icon/62856/github";
-            }
-            case "Settings" -> {
-                url = "https://icons8.com/icon/H6C79JoP90DH/settings";
-            }
-            case "Back Arrow" -> {
-                url = "https://icons8.com/icon/26194/back-arrow";
-            }
-            case "Log Out" -> {
-                url = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
-            }
+            case "Icons8" -> url = "https://icons8.com";
+            case "app" -> url = "https://icons8.com/icon/4SBCvFZBi2Rc/app";
+            case "Google" -> url = "https://icons8.com/icon/60984/google";
+            case "Discord" -> url = "https://icons8.com/icon/30888/discord";
+            case "Shopify" -> url = "https://icons8.com/icon/SZ0VDlOvY5zB/shopify";
+            case "Github" -> url = "https://icons8.com/icon/62856/github";
+            case "Settings" -> url = "https://icons8.com/icon/H6C79JoP90DH/settings";
+            case "Back Arrow" -> url = "https://icons8.com/icon/26194/back-arrow";
+            case "Log Out" -> url = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
         }
 
         Desktop.getDesktop().browse(new URL(url).toURI());
