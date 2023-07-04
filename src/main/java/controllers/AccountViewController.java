@@ -149,23 +149,23 @@ public class AccountViewController implements Initializable {
      */
     @FXML
     private void handleSearchRelease() {
-        List<Account> allAccounts = Database.getAccounts(Storage.getToken());
-        final List<Account> result;
-        String key;
-        if (search.getText().isEmpty()) {
-            key = "DEFAULT";
-            result = allAccounts;
-        } else {
-            key = search.getText();
-            result = searchAccounts(allAccounts, search.getText());
-        }
+        String result = search.getText();
+        String key = result.isEmpty() ? "DEFAULT" : result;
 
         debounce.registerFunction(
                 key,
                 () -> {
                     Platform.runLater(() -> {
+                        List<Account> allAccounts = Database.getAccounts(Storage.getToken());
+
+                        if (!result.isEmpty()) {
+                            allAccounts = searchAccounts(
+                                    allAccounts, key
+                            );
+                        }
+
                         accounts.getItems().clear();
-                        accounts.getItems().addAll(result);
+                        accounts.getItems().addAll(allAccounts);
                     });
 
                     return null;
