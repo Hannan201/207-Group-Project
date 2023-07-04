@@ -122,7 +122,7 @@ public class Database {
                     """
                        INSERT INTO themes
                        (name)
-                       VALUES 
+                       VALUES
                        ('light mode'),
                        ('dark mode'),
                        ('high contrast mode');
@@ -151,7 +151,7 @@ public class Database {
                             user_id INT NOT NULL,
                             name TEXT NOT NULL CHECK ( length(name) > 0 ),
                             type TEXT NOT NULL CHECK ( length(type) > 0 ),
-                            FOREIGN KEY(user_id) REFERENCES users(id) 
+                            FOREIGN KEY(user_id) REFERENCES users(id)
                         );
                        """
             );
@@ -163,7 +163,7 @@ public class Database {
                             id INTEGER PRIMARY KEY,
                             account_id INT NOT NULL,
                             code TEXT NOT NULL CHECK ( length(code) > 0 ),
-                            FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE 
+                            FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE
                         );
                        """
             );
