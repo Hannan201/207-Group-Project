@@ -1,13 +1,12 @@
 package data.database;
 
+import data.*;
 import data.security.PasswordHasher;
-import data.Storage;
 import data.security.Token;
 import data.security.TokenGenerator;
 import models.Account;
 import models.Code;
 import models.User;
-import org.sqlite.SQLiteConfig;
 import utilities.ResourceUtilities;
 
 import javax.crypto.SecretKey;
@@ -15,8 +14,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
@@ -33,11 +30,10 @@ public class Database {
     // To hash passwords which the user enters.
     private static PasswordHasher passwordHasher;
 
-    // Holds the connection to the SQLite database.
-    private static Connection connection = null;
-
     // To generate a token for the user.
     private static TokenGenerator generator;
+
+    private static SQLiteHelper sqLiteHelper;
 
     /*
      These methods are for connecting and
@@ -45,40 +41,26 @@ public class Database {
      */
 
     /**
+     * Perform a safety check before a change to the database is made.
+     *
+     * @param token Token for check for authentication failure.
+     * @return True if there is a failure, false otherwise.
+     */
+    public static boolean safetyChecks(Token token) {
+        return !sqLiteHelper.connectionFailure() && validToken(token);
+    }
+
+    /**
      * The SQLite file this database needs to connect to.
      *
      * @param source Name of the database file.
      */
     public static void setConnectionSource(String source) {
-        if (connection == null && !source.isEmpty() && !source.isBlank() && source.endsWith(".db")) {
-            connect(source);
+        if (!source.isEmpty() && !source.isBlank() && source.endsWith(".db")) {
             TokenManager.initializeStorage();
             passwordHasher = new PasswordHasher();
             generator = new TokenGenerator(21);
-        }
-    }
-
-    /**
-     * Open a connection to the database.
-     *
-     * @param filename Name of the database file.
-     */
-    private static void connect(String filename) {
-        try {
-            boolean tablesSet = Files.exists(Path.of(filename));
-            SQLiteConfig configurations = new SQLiteConfig();
-            configurations.enforceForeignKeys(true);
-
-            connection = DriverManager.getConnection(
-                    "jdbc:sqlite:" + filename,
-                    configurations.toProperties()
-            );
-
-            if (!tablesSet) {
-                initializeTables(connection);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            sqLiteHelper = new SQLiteHelper(source);
         }
     }
 
@@ -86,99 +68,7 @@ public class Database {
      * Disconnect from the database.
      */
     public static void disconnect() {
-        try {
-            if (connection != null) {
-                connection.close();
-                connection = null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Initialize the tables for the database. This is assuming
-     * a database file is being created for the first time and
-     * one does not already exist.
-     *
-     * @param connection Connection to the database.
-     */
-    private static void initializeTables(Connection connection) {
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            // Table for themes.
-            statement.execute(
-                    """
-                        CREATE TABLE themes(
-                            id INTEGER PRIMARY KEY,
-                            name TEXT NOT NULL UNIQUE
-                        );
-                       """
-            );
-
-            // Add in the themes.
-            statement.executeUpdate(
-                    """
-                       INSERT INTO themes
-                       (name)
-                       VALUES
-                       ('light mode'),
-                       ('dark mode'),
-                       ('high contrast mode');
-                       """
-            );
-
-            // Table for users.
-            statement.execute(
-                    """
-                        CREATE TABLE users(
-                            id INTEGER PRIMARY KEY,
-                            username TEXT NOT NULL UNIQUE CHECK ( length(username) > 0 ),
-                            password TEXT NOT NULL CHECK ( length(password) > 0 ),
-                            theme_id INT NOT NULL DEFAULT 1 CHECK ( theme_id = 1 OR theme_id = 2 OR theme_id = 3 ),
-                            logged_in INT NOT NULL DEFAULT 1 CHECK ( logged_in = 0 OR logged_in = 1 ),
-                            FOREIGN KEY(theme_id) REFERENCES themes(id)
-                        );
-                       """
-            );
-
-            // Table for accounts.
-            statement.execute(
-                    """
-                        CREATE TABLE accounts(
-                            id INTEGER PRIMARY KEY,
-                            user_id INT NOT NULL,
-                            name TEXT NOT NULL CHECK ( length(name) > 0 ),
-                            type TEXT NOT NULL CHECK ( length(type) > 0 ),
-                            FOREIGN KEY(user_id) REFERENCES users(id)
-                        );
-                       """
-            );
-
-            // Table for codes.
-            statement.execute(
-                    """
-                        CREATE TABLE codes(
-                            id INTEGER PRIMARY KEY,
-                            account_id INT NOT NULL,
-                            code TEXT NOT NULL CHECK ( length(code) > 0 ),
-                            FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE
-                        );
-                       """
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-        }
-
+        sqLiteHelper.disconnect();
     }
 
     /*
@@ -186,21 +76,21 @@ public class Database {
      */
 
     /**
-     * Check if a token doesn't match what's currently
+     * Check if a token matches what's currently
      * stored. This is to prevent access from unknown users.
      *
      * @param token The token.
-     * @return True if the token does not match, false otherwise.
+     * @return True if the token does match, false otherwise.
      */
-    private static boolean invalidToken(Token token) {
+    private static boolean validToken(Token token) {
         String[] result = Objects.requireNonNull(TokenManager.parseToken());
-        if (result.length == 2) {
+        if (result.length != 2) {
             return false;
         }
 
         CustomToken casted = (CustomToken) token;
-        return !result[0].equals(casted.key)
-                || Integer.parseInt(result[1]) != casted.ID;
+        return result[0].equals(casted.key)
+                && Integer.parseInt(result[1]) == casted.ID;
     }
 
     /**
@@ -214,32 +104,23 @@ public class Database {
             return true;
         }
 
-        if (connection == null) {
-            return true;
-        }
+        if (!sqLiteHelper.connectionFailure()) {
+            return sqLiteHelper.executeSelect(
+                """
+                    SELECT (COUNT(*) > 0) AS 'contains' FROM users
+                    WHERE username = ?
+                    """,
+                    new StringSetter(username.toLowerCase()),
+                    resultSet -> {
+                        try {
+                            return resultSet.getBoolean("contains");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
 
-        PreparedStatement searchStatement = null;
-        try {
-            searchStatement = connection.prepareStatement(
-                    """
-                        SELECT (COUNT(*) > 0) AS 'contains' FROM users
-                        WHERE username = ?
-                       """
+                        return null;
+                    }
             );
-            searchStatement.setString(1, username.toLowerCase());
-            ResultSet results = searchStatement.executeQuery();
-
-            return results.getBoolean("contains");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (searchStatement != null) {
-                    searchStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return true;
@@ -415,47 +296,28 @@ public class Database {
      * @param password Password for the new user.
      */
     public static Token registerUser(String username, String password) {
-        if (connection == null) {
-            return null;
-        }
-
-        PreparedStatement addUserStatement = null;
-        try {
+        if (!sqLiteHelper.connectionFailure()) {
             String salt = passwordHasher.generateSalt();
             String hashed = salt + passwordHasher.hashPassword(password + salt, salt.getBytes());
-            addUserStatement = connection.prepareStatement(
-                    """
-                       INSERT INTO users
-                       (username, password)
-                       VALUES
-                       (?, ?)
-                       """,
-                    Statement.RETURN_GENERATED_KEYS
+
+            Integer i = sqLiteHelper.executeUpdateWithKey(
+                """
+                    INSERT INTO users
+                    (username, password)
+                    VALUES
+                    (?, ?)
+                    """,
+                    new StringSetter(username.toLowerCase()),
+                    new StringSetter(hashed)
             );
 
-            addUserStatement.setString(1, username.toLowerCase());
-            addUserStatement.setString(2, hashed);
-            addUserStatement.executeUpdate();
-
-            ResultSet resultKeys = addUserStatement.getGeneratedKeys();
-            int id = 0;
-            while (resultKeys.next()) {
-                id = resultKeys.getInt(1);
+            if (i != null) {
+                String token = generator.nextString();
+                TokenManager.updateToken(token + "," + i);
+                return new CustomToken(token, i);
             }
 
-            String token = generator.nextString();
-            TokenManager.updateToken(token + "," + id);
-            return new CustomToken(token, id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (addUserStatement != null) {
-                    addUserStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            return null;
         }
 
         return null;
@@ -479,52 +341,40 @@ public class Database {
             return null;
         }
 
-        if (connection == null) {
+        if (sqLiteHelper.connectionFailure()) {
             return null;
         }
 
-        PreparedStatement getLoginStatement = null;
-        try {
-            getLoginStatement = connection.prepareStatement(
-                    """
-                        SELECT id, username, password FROM users
-                        WHERE username = ?
-                       """
-            );
+        return sqLiteHelper.executeSelect(
+            """
+                SELECT id, username, password FROM users
+                WHERE username = ?
+                """,
+                new StringSetter(username.toLowerCase()),
+                resultSet -> {
+                    try {
+                        String hashedPassword = resultSet.getString("password");
 
-            getLoginStatement.setString(1, username.toLowerCase());
+                        String salt = hashedPassword.substring(0, 24);
+                        String expectedPassword = hashedPassword.substring(24);
+                        if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
+                            String token = generator.nextString();
+                            int id = resultSet.getInt("id");
 
-            ResultSet loginsResult = getLoginStatement.executeQuery();
-            String hashedPassword = loginsResult.getString("password");
+                            TokenManager.updateToken(token + "," + id);
+                            CustomToken customToken = new CustomToken(token, id);
 
-            String salt = hashedPassword.substring(0, 24);
-            String expectedPassword = hashedPassword.substring(24);
-            if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
-                String token = generator.nextString();
-                int id = loginsResult.getInt("id");
+                            updateLoginStatus(customToken, true);
 
-                TokenManager.updateToken(token + "," + id);
-                CustomToken customToken = new CustomToken(token, id);
+                            return customToken;
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
 
-                updateLoginStatus(customToken, true);
-
-                return customToken;
-            }
-
-            return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (getLoginStatement != null) {
-                    getLoginStatement.close();
+                    return null;
                 }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-        }
-
-        return null;
+        );
     }
 
     /**
@@ -551,40 +401,26 @@ public class Database {
      * @return User object if logged in, null otherwise.
      */
     public static User getUser(Token token) {
-        if (invalidToken(token)) {
-            return null;
-        }
+        if (safetyChecks(token)) {
+            return sqLiteHelper.executeSelect(
+                """
+                    SELECT * FROM users
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(((CustomToken) token).ID),
+                    resultSet -> {
+                        try {
+                            int id = resultSet.getInt("id");
+                            String name = resultSet.getString("username");
+                            String theme = getThemeByID(resultSet.getInt("theme_id"));
+                            return new User(id, name, theme);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
 
-        if (connection == null) {
-            return null;
-        }
-
-        PreparedStatement getUserStatement = null;
-        try {
-            getUserStatement = connection.prepareStatement(
-                    """
-                       SELECT * FROM users
-                       WHERE id = ?
-                       """
+                        return null;
+                    }
             );
-
-            getUserStatement.setInt(1, ((CustomToken) token).ID);
-            ResultSet resultKeys = getUserStatement.executeQuery();
-
-            int id = resultKeys.getInt("id");
-            String name = resultKeys.getString("username");
-            String theme = getThemeByID(resultKeys.getInt("theme_id"));
-            return new User(id, name, theme);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (getUserStatement != null) {
-                    getUserStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return null;
@@ -599,45 +435,26 @@ public class Database {
     public static List<Account> getAccounts(Token token) {
         List<Account> accounts = new ArrayList<>();
 
-        if (invalidToken(token)) {
-            return accounts;
-        }
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeSelect(
+                """
+                    SELECT id, name, type FROM accounts
+                    WHERE user_id = ?
+                    """,
+                    new IntegerSetter(((CustomToken) token).ID),
+                    new ListRetriever<>(accounts, resultSet -> {
+                        try {
+                            int accountID = resultSet.getInt("id");
+                            String name = resultSet.getString("name");
+                            String type = resultSet.getString("type");
+                            return new Account(accountID, name, type);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
 
-        if (connection == null) {
-            return accounts;
-        }
-
-        PreparedStatement getAccountsStatement = null;
-        try {
-            getAccountsStatement = connection.prepareStatement(
-                    """
-                       SELECT id, name, type FROM accounts
-                       WHERE user_id = ?
-                       """
+                        return null;
+                    })
             );
-            int id = ((CustomToken) token).ID;
-            getAccountsStatement.setInt(1, id);
-
-            ResultSet results = getAccountsStatement.executeQuery();
-
-            while (results.next()) {
-                int accountID = results.getInt("id");
-                String name = results.getString("name");
-                String type = results.getString("type");
-                accounts.add(
-                        new Account(accountID, name, type)
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (getAccountsStatement != null) {
-                    getAccountsStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
 
         return accounts;
@@ -692,48 +509,20 @@ public class Database {
      * @return ID of the new account.
      */
     public static int addAccount(Token token, String name, String type) {
-        if (invalidToken(token)) {
-            return -1;
-        }
-
-        if (connection == null) {
-            return -1;
-        }
-
-        PreparedStatement addAccountStatement = null;
-        try {
-            addAccountStatement = connection.prepareStatement(
-                    """
-                       INSERT INTO accounts
-                       (user_id, name, type)
-                       VALUES
-                       (?, ?, ?)
-                       """,
-                    Statement.RETURN_GENERATED_KEYS
+        if (safetyChecks(token)) {
+            Integer i = sqLiteHelper.executeUpdateWithKey(
+                """
+                    INSERT INTO accounts
+                    (user_id, name, type)
+                    VALUES
+                    (?, ?, ?)
+                    """,
+                    new IntegerSetter(((CustomToken) token).ID),
+                    new StringSetter(name),
+                    new StringSetter(type)
             );
 
-            int id = ((CustomToken) token).ID;
-            addAccountStatement.setInt(1, id);
-            addAccountStatement.setString(2, name);
-            addAccountStatement.setString(3, type);
-            addAccountStatement.executeUpdate();
-
-            ResultSet resultKeys = addAccountStatement.getGeneratedKeys();
-            while (resultKeys.next()) {
-                id = resultKeys.getInt(1);
-            }
-
-            return id;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (addAccountStatement != null) {
-                    addAccountStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            return i == null ? -1 : i;
         }
 
         return -1;
@@ -747,34 +536,14 @@ public class Database {
      * @param accountID ID of the account.
      */
     public static void removeAccount(Token token, int accountID) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement removeAccountStatement = null;
-        try {
-            removeAccountStatement = connection.prepareStatement(
-                    """
-                       DELETE FROM accounts
-                       WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeUpdate(
+                """
+                    DELETE FROM accounts
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(accountID)
             );
-            removeAccountStatement.setInt(1, accountID);
-            removeAccountStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (removeAccountStatement != null) {
-                    removeAccountStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
@@ -785,35 +554,14 @@ public class Database {
      *              for authentication purposes.
      */
     public static void clearAllAccounts(Token token) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement clearUserStatement = null;
-        try {
-            clearUserStatement = connection.prepareStatement(
-                    """
-                        DELETE FROM accounts
-                        WHERE user_id = ?
-                       """
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeUpdate(
+                """
+                    DELETE FROM accounts
+                    WHERE user_id = ?
+                    """,
+                    new IntegerSetter(((CustomToken) token).ID)
             );
-            int id = ((CustomToken) token).ID;
-            clearUserStatement.setInt(1, id);
-            clearUserStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (clearUserStatement != null) {
-                    clearUserStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
@@ -828,43 +576,15 @@ public class Database {
     public static List<Code> getCodes(Token token, int accountID) {
         List<Code> codes = new ArrayList<>();
 
-        if (invalidToken(token)) {
-            return codes;
-        }
-
-        if (connection == null) {
-            return codes;
-        }
-
-        PreparedStatement getCodesStatement = null;
-        try {
-            getCodesStatement = connection.prepareStatement(
-                    """
-                        SELECT id, code FROM codes
-                        WHERE account_id = ?
-                       """
+        if (safetyChecks(token)) {
+            return sqLiteHelper.executeSelect(
+                """
+                    SELECT id, code FROM codes
+                    WHERE account_id = ?
+                    """,
+                    new IntegerSetter(accountID),
+                    new ListRetriever<>(codes, new CodeRetriever(""))
             );
-            getCodesStatement.setInt(1, accountID);
-
-            ResultSet results = getCodesStatement.executeQuery();
-
-            while (results.next()) {
-                int id = results.getInt("id");
-                String code = results.getString("code");
-                codes.add(
-                        new Code(id, code)
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (getCodesStatement != null) {
-                    getCodesStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
 
         return codes;
@@ -879,39 +599,15 @@ public class Database {
      * @return The code.
      */
     public static Code getCode(Token token, int codeID) {
-        if (invalidToken(token)) {
-            return null;
-        }
-
-        if (connection == null) {
-            return null;
-        }
-
-        PreparedStatement getCodeStatement = null;
-        try {
-            getCodeStatement = connection.prepareStatement(
-                    """
-                        SELECT id, code FROM codes
-                        WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            return sqLiteHelper.executeSelect(
+                """
+                    SELECT id, code FROM codes
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(codeID),
+                    new CodeRetriever("")
             );
-            getCodeStatement.setInt(1, codeID);
-            ResultSet codes = getCodeStatement.executeQuery();
-            if (codes.next()) {
-                int id = codes.getInt("id");
-                String code = codes.getString("code");
-                return new Code(id, code);
-            }
-
-            return null;
-        } catch (SQLException e) {
-            try {
-                if (getCodeStatement != null) {
-                    getCodeStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
 
         return null;
@@ -927,48 +623,20 @@ public class Database {
      * @return ID of the new code.
      */
     public static int addCode(Token token, int accountID, String code) {
-        if (invalidToken(token)) {
-            return -1;
-        }
-
-        if (connection == null) {
-            return -1;
-        }
-
-        PreparedStatement addCodeStatement = null;
-        try {
-            addCodeStatement = connection.prepareStatement(
-                    """
-                       INSERT INTO codes
-                       (account_id, code)
-                       VALUES
-                       (?, ?)
-                       """,
-                    Statement.RETURN_GENERATED_KEYS
+        if (safetyChecks(token)) {
+            Integer i = sqLiteHelper.executeUpdateWithKey(
+                """
+                    INSERT INTO codes
+                    (account_id, code)
+                    VALUES
+                    (?, ?)
+                    """,
+                    new IntegerSetter(accountID),
+                    new StringSetter(code)
             );
 
-            addCodeStatement.setInt(1, accountID);
-            addCodeStatement.setString(2, code);
-            addCodeStatement.executeUpdate();
-
-            ResultSet resultKeys = addCodeStatement.getGeneratedKeys();
-            int id = 0;
-            while (resultKeys.next()) {
-                id = resultKeys.getInt(1);
-            }
-
-            return id;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (addCodeStatement != null) {
-                    addCodeStatement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+            return i == null ? -1 : i;
+       }
 
         return -1;
     }
@@ -982,36 +650,16 @@ public class Database {
      * @param newCode Code to update to.
      */
     public static void updateCode(Token token, int codeID, String newCode) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement updateCodeStatement = null;
-        try {
-            updateCodeStatement = connection.prepareStatement(
-                    """
-                        UPDATE codes
-                        SET code = ?
-                        WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeUpdate(
+                """
+                    UPDATE codes
+                    SET code = ?
+                    WHERE id = ?
+                    """,
+                    new StringSetter(newCode),
+                    new IntegerSetter(codeID)
             );
-            updateCodeStatement.setString(1, newCode);
-            updateCodeStatement.setInt(2, codeID);
-            updateCodeStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (updateCodeStatement != null) {
-                    updateCodeStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
@@ -1023,34 +671,14 @@ public class Database {
      * @param codeID ID of the code to remove.
      */
     public static void removeCode(Token token, int codeID) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement removeCodeStatement = null;
-        try {
-            removeCodeStatement = connection.prepareStatement(
-                    """
-                        DELETE FROM codes
-                        WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeUpdate(
+                """
+                    DELETE FROM codes
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(codeID)
             );
-            removeCodeStatement.setInt(1, codeID);
-            removeCodeStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (removeCodeStatement != null) {
-                    removeCodeStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
@@ -1062,34 +690,14 @@ public class Database {
      * @param accountID ID of the account which contains the backup codes.
      */
     public static void clearAllCodes(Token token, int accountID) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement clearCodesStatement = null;
-        try {
-            clearCodesStatement = connection.prepareStatement(
-                    """
-                        DELETE FROM codes
-                        WHERE account_id = ?
-                       """
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeUpdate(
+                """
+                    DELETE FROM codes
+                    WHERE account_id = ?
+                    """,
+                    new IntegerSetter(accountID)
             );
-            clearCodesStatement.setInt(1, accountID);
-            clearCodesStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (clearCodesStatement != null) {
-                    clearCodesStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
@@ -1100,7 +708,7 @@ public class Database {
      * @return Name of the theme as a string.
      */
     private static String getThemeByID(int id) {
-        if (connection == null) {
+        if (sqLiteHelper.connectionFailure()) {
             return null;
         }
 
@@ -1108,30 +716,14 @@ public class Database {
             return null;
         }
 
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(
-                    """
-                        SELECT name FROM themes
-                        WHERE id = ?
-                       """
-            );
-            statement.setInt(1, id);
-            ResultSet themeResult = statement.executeQuery();
-            return themeResult.getString("name");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-        }
-
-        return null;
+        return sqLiteHelper.executeSelect(
+            """
+                SELECT name FROM themes
+                WHERE id = ?
+                """,
+                new IntegerSetter(id),
+                new StringRetriever("name")
+        );
     }
 
     /**
@@ -1142,37 +734,17 @@ public class Database {
      * @return The theme for the user.
      */
     public static String getTheme(Token token) {
-        if (invalidToken(token)) {
-            return null;
-        }
-
-        if (connection == null) {
-            return null;
-        }
-
-        PreparedStatement getThemeStatement = null;
-        try {
-            getThemeStatement = connection.prepareStatement(
-                    """
-                        SELECT theme_id FROM users
-                        WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            int id = sqLiteHelper.executeSelect(
+                """
+                    SELECT theme_id FROM users
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(((CustomToken) token).ID),
+                    new IntegerRetriever("theme_id")
             );
-            int id = ((CustomToken) token).ID;
-            getThemeStatement.setInt(1, id);
-            ResultSet results = getThemeStatement.executeQuery();
 
-            return getThemeByID(results.getInt("theme_id"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (getThemeStatement != null) {
-                    getThemeStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
+            return getThemeByID(id);
         }
 
         return null;
@@ -1186,55 +758,25 @@ public class Database {
      * @param newTheme The new theme to set for the user.
      */
     public static void updateTheme(Token token, String newTheme) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement updateThemeStatement = null;
-        PreparedStatement themeIDStatement = null;
-        try {
-            updateThemeStatement = connection.prepareStatement(
-                    """
-                        UPDATE users
-                        SET theme_id = ?
-                        WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            int id = sqLiteHelper.executeSelect(
+                """
+                    SELECT id FROM themes
+                    WHERE name = ?
+                    """,
+                    new StringSetter(newTheme),
+                    new IntegerRetriever("id")
             );
 
-            themeIDStatement = connection.prepareStatement(
-                    """
-                        SELECT id FROM themes
-                        WHERE name = ?
-                       """
+            sqLiteHelper.executeUpdate(
+                """
+                    UPDATE users
+                    SET theme_id = ?
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(id),
+                    new IntegerSetter(((CustomToken) token).ID)
             );
-            themeIDStatement.setString(1, newTheme);
-
-            ResultSet themeResults = themeIDStatement.executeQuery();
-
-            int themeID = themeResults.getInt("id");
-            int userID = ((CustomToken) token).ID;
-
-            updateThemeStatement.setInt(1, themeID);
-            updateThemeStatement.setInt(2, userID);
-            updateThemeStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (updateThemeStatement != null) {
-                    updateThemeStatement.close();
-                }
-
-                if (themeIDStatement != null) {
-                    themeIDStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
 
@@ -1248,39 +790,17 @@ public class Database {
      * @param status The new status.
      */
     private static void updateLoginStatus(Token token, boolean status) {
-        if (invalidToken(token)) {
-            return;
-        }
-
-        if (connection == null) {
-            return;
-        }
-
-        PreparedStatement logoutStatement = null;
-        try {
-            logoutStatement = connection.prepareStatement(
-                    """
-                        UPDATE users
-                        SET logged_in = ?
-                        WHERE id = ?
-                       """
+        if (safetyChecks(token)) {
+            sqLiteHelper.executeUpdate(
+                """
+                    UPDATE users
+                    SET logged_in = ?
+                    WHERE id = ?
+                    """,
+                    new IntegerSetter(status ? 1 : 0),
+                    new IntegerSetter(((CustomToken) token).ID)
             );
-
-            int result = status ? 1 : 0;
-            logoutStatement.setInt(1, result);
-            int id = ((CustomToken) token).ID;
-            logoutStatement.setInt(2, id);
-            logoutStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (logoutStatement != null) {
-                    logoutStatement.close();
-                }
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
         }
     }
+
 }

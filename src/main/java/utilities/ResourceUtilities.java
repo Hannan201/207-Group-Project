@@ -22,4 +22,20 @@ public class ResourceUtilities {
         );
     }
 
+    /**
+     * Return true if a string is an integer.
+     *
+     * @param s The string.
+     * @return True if it is a integer, false otherwise.
+     */
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NullPointerException | NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

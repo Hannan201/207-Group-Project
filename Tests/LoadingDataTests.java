@@ -51,11 +51,5 @@ public class LoadingDataTests {
 
         Database.logUserOut(token);
         Database.disconnect();
-
-        try {
-            Files.deleteIfExists(Path.of("./Tests/test.db"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

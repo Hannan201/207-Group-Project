@@ -6,6 +6,9 @@ import models.Account;
 import data.database.Database;
 import models.User;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -272,6 +275,11 @@ public class SaveAndLoadDataTests {
         assertNotNull(c);
         assertEquals(c.getCode(), "4EW C0D3");
 
+        id = Database.addCode(token, account.getID(), "123 456");
+        c = Database.getCode(token, id);
+        assertNotNull(c);
+        assertEquals(c.getCode(), "123 456");
+
         Database.logUserOut(token);
         Database.disconnect();
     }
@@ -470,5 +478,11 @@ public class SaveAndLoadDataTests {
 
         Database.logUserOut(token);
         Database.disconnect();
+
+        try {
+            Files.deleteIfExists(Path.of("./Tests/test.db"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
