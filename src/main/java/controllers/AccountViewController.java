@@ -1,6 +1,6 @@
 package controllers;
 
-import controllers.utilities.Debouncer;
+import utilities.Debouncer;
 import data.Storage;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;

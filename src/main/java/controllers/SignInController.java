@@ -1,6 +1,6 @@
 package controllers;
 
-import controllers.utilities.Utilities;
+import utilities.Utilities;
 import data.database.Database;
 import data.Storage;
 import data.security.Token;

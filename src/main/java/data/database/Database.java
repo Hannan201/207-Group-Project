@@ -7,7 +7,7 @@ import data.security.TokenGenerator;
 import models.Account;
 import models.Code;
 import models.User;
-import utilities.ResourceUtilities;
+import utilities.Utilities;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -161,7 +161,7 @@ public class Database {
         private static void initializeProperties() {
             FileInputStream applicationFile = null;
             try {
-                URL url = ResourceUtilities.loadFileByURL("application.properties");
+                URL url = Utilities.loadFileByURL("application.properties");
                 applicationFile = new FileInputStream(url.getPath());
 
                 Properties applicationProperties = new Properties();
@@ -188,7 +188,7 @@ public class Database {
         private static void initializeKeyStore() {
             FileInputStream stream = null;
             try {
-                URL url = ResourceUtilities.loadFileByURL("token.pfx");
+                URL url = Utilities.loadFileByURL("token.pfx");
                 stream = new FileInputStream(url.getPath());
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
@@ -229,7 +229,7 @@ public class Database {
                 KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secureKey);
                 KeyStore.ProtectionParameter keyStorePassword = new KeyStore.PasswordProtection(password);
                 storage.setEntry("token", secret, keyStorePassword);
-                URL url = ResourceUtilities.loadFileByURL("token.pfx");
+                URL url = Utilities.loadFileByURL("token.pfx");
                 storeOutput = new FileOutputStream(url.getPath());
                 storage.store(storeOutput, password);
             } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | KeyStoreException |

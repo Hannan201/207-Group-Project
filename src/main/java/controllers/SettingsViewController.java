@@ -5,7 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
-import controllers.utilities.Utilities;
+import utilities.Utilities;
 import data.Storage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,10 +1,9 @@
-import controllers.utilities.Utilities;
+import utilities.Utilities;
 import data.database.Database;
 import data.Storage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import utilities.ResourceUtilities;
 import views.*;
 
 import java.net.URI;
@@ -25,7 +24,7 @@ public class Launcher extends Application {
      */
     public static void main(String[] args) {
         try {
-            URI uri = ResourceUtilities.loadFileByURL("database/database.db").toURI();
+            URI uri = Utilities.loadFileByURL("database/database.db").toURI();
             String path = Paths.get(uri).toString();
             Database.setConnectionSource(path);
         } catch (URISyntaxException e) {
@@ -45,24 +44,25 @@ public class Launcher extends Application {
         ((AccountView) AccountView.getInstance()).getAccountViewController()
                 .configureStage(stage);
 
-        View view = Storage.getToken() == null
-                ? HomePageView.getInstance() : AccountView.getInstance();
+        View view = initialize();
         Scene scene = new Scene(view.getRoot());
-        adjustTheme();
         scene.getStylesheets().add(view.getCurrentThemePath());
         stage.setScene(scene);
         stage.show();
     }
 
     /**
-     * Adjust the theme of the application based on the user's setting
-     * before they quit the application without logging out.
+     * Initialize user settings and data if the user closed the
+     * application without logging out to load the correct view.
      */
-    private static void adjustTheme() {
+    private static View initialize() {
         if (Storage.getToken() != null) {
             Utilities.adjustTheme();
             Utilities.loadAccounts();
+            return AccountView.getInstance();
         }
+
+        return HomePageView.getInstance();
     }
 
 }

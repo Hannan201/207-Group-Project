@@ -1,8 +1,7 @@
 package data;
 
-
 import javafx.util.Callback;
-import utilities.ResourceUtilities;
+import utilities.Utilities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +30,7 @@ public class IntegerRetriever extends Retriever implements Callback<ResultSet, I
     @Override
     public Integer call(ResultSet resultSet) {
         try {
-            if (ResourceUtilities.isInteger(key)) {
+            if (Utilities.isInteger(key)) {
                 return resultSet.getInt(Integer.parseInt(key));
             }
 

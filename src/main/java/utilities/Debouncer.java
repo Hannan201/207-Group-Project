@@ -1,4 +1,4 @@
-package controllers.utilities;
+package utilities;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  execute the function with the new input and remove the old version of that
  function with the old input. Useful for when searching through a data structure
  based on input given by key-presses.
+
  Credits to: https://stackoverflow.com/a/58404365.
  */
 public class Debouncer {
