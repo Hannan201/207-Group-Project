@@ -15,11 +15,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
-import data.Database;
+import data.database.Database;
 import models.Account;
 import views.*;
 import views.interfaces.Reversible;
-import models.Code;
+import code.Code;
 import views.utilities.CodeViewUtilities.CodeCellFactory;
 
 import java.io.File;

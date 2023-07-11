@@ -27,8 +27,6 @@ public class SignInView extends View {
     public static View getInstance() {
         if (firstInstance == null) {
             firstInstance = new SignInView();
-            SignInController.addView(firstInstance);
-            SignInController.addView(SettingsView.getInstance());
         }
 
         return firstInstance;

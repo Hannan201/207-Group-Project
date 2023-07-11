@@ -1,12 +1,9 @@
 package controllers;
 
-import commands.Command;
-import commands.SwitchToDarkMode;
-import commands.SwitchToHighContrastMode;
-import commands.managers.ThemeSwitcher;
-import data.Database;
+import utilities.Utilities;
+import data.database.Database;
 import data.Storage;
-import data.Token;
+import data.security.Token;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -27,8 +24,6 @@ import net.synedra.validatorfx.Validator;
 import views.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -70,9 +65,6 @@ public class SignInController implements Initializable {
     @FXML
     private Button signInButton;
 
-    // To store all the views.
-    private static List<View> views;
-
     @FXML
     private Region aboveTitle;
 
@@ -93,10 +85,6 @@ public class SignInController implements Initializable {
                 }));
             }
         }));
-
-        views = new ArrayList<>(List.of(HomePageView.getInstance(), SignUpView.getInstance(),
-                    AccountView.getInstance(), AddAccountView.getInstance(),
-                    CodeView.getInstance()));
 
         aboveTitle.prefHeightProperty().bind(
                 background.heightProperty()
@@ -179,9 +167,9 @@ public class SignInController implements Initializable {
      * TextFields
      */
     private void signInOnAction(ActionEvent actionEvent) {
-        transferData();
+        Utilities.loadAccounts();
         View.closeWindow(actionEvent);
-        loadTheme();
+        Utilities.adjustTheme();
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
         clearFields();
     }
@@ -195,9 +183,9 @@ public class SignInController implements Initializable {
      */
     private void signInFromEnterKey(KeyEvent e) {
         if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
-            transferData();
+            Utilities.loadAccounts();
             View.closeWindow(e);
-            loadTheme();
+            Utilities.adjustTheme();
             View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
             clearFields();
         }
@@ -210,42 +198,5 @@ public class SignInController implements Initializable {
     private void clearFields() {
         unameInput.clear();
         passInput.clear();
-    }
-
-    /**
-     * To load in all the accounts inside the Account View
-     * for the user that just signed in.
-     */
-    private void transferData() {
-        ((AccountView) AccountView.getInstance()).getAccountViewController()
-                .addAccounts(Database.getAccounts(Storage.getToken()));
-    }
-
-    /**
-     * Load theme for the user that just signed
-     * in.
-     */
-    private void loadTheme() {
-        String theme = Database.getTheme(Storage.getToken());
-        if (theme != null && !theme.equals("light mode")) {
-            if (theme.equals("high contrast mode")) {
-                Command command = new SwitchToHighContrastMode(views);
-                ThemeSwitcher switcher = new ThemeSwitcher(command);
-                switcher.switchTheme();
-            } else if (theme.equals("dark mode")) {
-                Command command = new SwitchToDarkMode(views);
-                ThemeSwitcher switcher = new ThemeSwitcher(command);
-                switcher.switchTheme();
-            }
-        }
-    }
-
-    /**
-     * Add a view into the list of views.
-     *
-     * @param view The new view to be added.
-     */
-    public static void addView(View view) {
-        views.add(view);
     }
 }

@@ -1,6 +1,6 @@
 package controllers;
 
-import data.Database;
+import data.database.Database;
 import data.Storage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -162,14 +162,9 @@ public class CreateAccountController implements Initializable{
      *             un-editable.
      */
     public void toggle(String text) {
-        if (platform.isEditable()) {
-            platform.setText(text);
-            platform.setEditable(false);
-        }
-        else {
-            platform.setText("");
-            platform.setEditable(true);
-        }
+        boolean result = platform.isEditable();
+        platform.setText(result ? text : "");
+        platform.setEditable(!result);
     }
 
     /**

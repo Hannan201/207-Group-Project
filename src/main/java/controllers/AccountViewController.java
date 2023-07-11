@@ -1,6 +1,6 @@
 package controllers;
 
-import controllers.utilities.Debouncer;
+import utilities.Debouncer;
 import data.Storage;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -10,13 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Account;
-import data.Database;
+import data.database.Database;
 import views.*;
 import views.interfaces.Reversible;
 import views.utilities.AccountCellFactory;
@@ -147,39 +146,28 @@ public class AccountViewController implements Initializable {
      * Handle method for when a key is released
      * on the text field to search for an
      * account.
-     *
-     * @param keyEvent The key event.
      */
     @FXML
-    private void handleSearchRelease(KeyEvent keyEvent) {
-        if (search.getText().isEmpty()) {
-            debounce.registerFunction(
-                    "DEFAULT",
-                    () -> {
-                        Platform.runLater(() -> {
-                            accounts.getItems().clear();
-                            accounts.getItems().addAll(Database.getAccounts(Storage.getToken()));
-                        });
-
-                        return null;
-                    },
-                    125
-            );
-            return;
-        }
+    private void handleSearchRelease() {
+        String result = search.getText();
+        String key = result.isEmpty() ? "DEFAULT" : result;
 
         debounce.registerFunction(
-                search.getText(),
+                key,
                 () -> {
                     Platform.runLater(() -> {
-                        List<Account> result = searchAccounts(
-                                Database.getAccounts(Storage.getToken()),
-                                search.getText()
-                        );
+                        List<Account> allAccounts = Database.getAccounts(Storage.getToken());
+
+                        if (!result.isEmpty()) {
+                            allAccounts = searchAccounts(
+                                    allAccounts, key
+                            );
+                        }
 
                         accounts.getItems().clear();
-                        accounts.getItems().addAll(result);
+                        accounts.getItems().addAll(allAccounts);
                     });
+
                     return null;
                 },
                 125

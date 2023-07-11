@@ -5,6 +5,7 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
+import utilities.Utilities;
 import data.Storage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
-import data.Database;
+import data.database.Database;
 import views.*;
 import views.interfaces.Reversible;
 
@@ -112,8 +113,7 @@ public class SettingsViewController implements Initializable {
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
 
-        ((AccountView) AccountView.getInstance()).getAccountViewController()
-                .addAccounts(Database.getAccounts(Storage.getToken()));
+        Utilities.loadAccounts();
     }
 
     /**
@@ -146,44 +146,20 @@ public class SettingsViewController implements Initializable {
     public void handleLinkClick(ActionEvent e) throws IOException, URISyntaxException {
         Hyperlink link = (Hyperlink) e.getSource();
         final String str = link == null ? "" : link.getText();
+        String url = "";
         switch (str) {
-            case "Icons8" -> {
-                String url = "https://icons8.com";
-                Desktop.getDesktop().browse(new URL(url).toURI());
-            }
-            case "app" -> {
-                String app = "https://icons8.com/icon/4SBCvFZBi2Rc/app";
-                Desktop.getDesktop().browse(new URL(app).toURI());
-            }
-            case "Google" -> {
-                String google = "https://icons8.com/icon/60984/google";
-                Desktop.getDesktop().browse(new URL(google).toURI());
-            }
-            case "Discord" -> {
-                String discord = "https://icons8.com/icon/30888/discord";
-                Desktop.getDesktop().browse(new URL(discord).toURI());
-            }
-            case "Shopify" -> {
-                String shopify = "https://icons8.com/icon/SZ0VDlOvY5zB/shopify";
-                Desktop.getDesktop().browse(new URL(shopify).toURI());
-            }
-            case "Github" -> {
-                String github = "https://icons8.com/icon/62856/github";
-                Desktop.getDesktop().browse(new URL(github).toURI());
-            }
-            case "Settings" -> {
-                String settings = "https://icons8.com/icon/H6C79JoP90DH/settings";
-                Desktop.getDesktop().browse(new URL(settings).toURI());
-            }
-            case "Back Arrow" -> {
-                String log_out = "https://icons8.com/icon/26194/back-arrow";
-                Desktop.getDesktop().browse(new URL(log_out).toURI());
-            }
-            case "Log Out" -> {
-                String back_arrow = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
-                Desktop.getDesktop().browse(new URL(back_arrow).toURI());
-            }
+            case "Icons8" -> url = "https://icons8.com";
+            case "app" -> url = "https://icons8.com/icon/4SBCvFZBi2Rc/app";
+            case "Google" -> url = "https://icons8.com/icon/60984/google";
+            case "Discord" -> url = "https://icons8.com/icon/30888/discord";
+            case "Shopify" -> url = "https://icons8.com/icon/SZ0VDlOvY5zB/shopify";
+            case "Github" -> url = "https://icons8.com/icon/62856/github";
+            case "Settings" -> url = "https://icons8.com/icon/H6C79JoP90DH/settings";
+            case "Back Arrow" -> url = "https://icons8.com/icon/26194/back-arrow";
+            case "Log Out" -> url = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
         }
+
+        Desktop.getDesktop().browse(new URL(url).toURI());
     }
 
     /**
@@ -191,7 +167,6 @@ public class SettingsViewController implements Initializable {
      */
     public void handleDeleteAccounts() {
         Database.clearAllAccounts(Storage.getToken());
-        ((AccountView) AccountView.getInstance()).getAccountViewController()
-                .addAccounts(Database.getAccounts(Storage.getToken()));
+        Utilities.loadAccounts();
     }
 }

@@ -1,4 +1,4 @@
-package models;
+package code;
 
 public class Code {
 
