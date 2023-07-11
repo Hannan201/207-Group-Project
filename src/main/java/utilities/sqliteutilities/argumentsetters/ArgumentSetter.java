@@ -1,4 +1,4 @@
-package data;
+package utilities.sqliteutilities.argumentsetters;
 
 import java.sql.PreparedStatement;
 

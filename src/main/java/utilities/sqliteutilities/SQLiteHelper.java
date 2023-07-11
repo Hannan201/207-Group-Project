@@ -1,8 +1,8 @@
-package data.database;
+package utilities.sqliteutilities;
 
-import data.ArgumentSetter;
-import data.IntegerRetriever;
-import data.StringSetter;
+import utilities.sqliteutilities.argumentsetters.ArgumentSetter;
+import utilities.sqliteutilities.retrievers.IntegerRetriever;
+import utilities.sqliteutilities.argumentsetters.StringSetter;
 import javafx.util.Callback;
 import org.sqlite.SQLiteConfig;
 

@@ -1,26 +1,26 @@
-package data;
+package utilities.sqliteutilities.argumentsetters;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
  * This class allows to set the argument of a SQLite prepared statement to
- * be an integer.
+ * be a String.
  */
-public class IntegerSetter extends ArgumentSetter<Integer> {
+public class StringSetter extends ArgumentSetter<String> {
 
     /**
-     * Create a new integer setter.
+     * Create a new String setter.
      *
-     * @param value The integer value to be set.
+     * @param value The String value to be set.
      */
-    public IntegerSetter(Integer value) {
+    public StringSetter(String value) {
         super(value);
     }
 
     /**
      * Set the argument of a prepared statement at a specific index to
-     * be an integer.
+     * be a string.
      *
      * @param statement The prepared statement.
      * @param index The index at which the argument needs to be set.
@@ -28,7 +28,7 @@ public class IntegerSetter extends ArgumentSetter<Integer> {
     @Override
     public void setArgument(PreparedStatement statement, int index) {
         try {
-            statement.setInt(index, value);
+            statement.setString(index, value);
         } catch (SQLException e) {
             e.printStackTrace();
         }

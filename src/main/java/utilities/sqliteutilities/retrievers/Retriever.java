@@ -1,4 +1,4 @@
-package data;
+package utilities.sqliteutilities.retrievers;
 
 /**
  * This class helps on retrieving a single piece of data
