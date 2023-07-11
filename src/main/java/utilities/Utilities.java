@@ -70,7 +70,7 @@ public class Utilities {
      * Return true if a string is an integer.
      *
      * @param s The string.
-     * @return True if it is a integer, false otherwise.
+     * @return True if it is an integer, false otherwise.
      */
     public static boolean isInteger(String s) {
         try {
@@ -82,6 +82,25 @@ public class Utilities {
         return true;
     }
 
+    /**
+     * Update the path to the account icon based on the social
+     * media type by storing it in a Map where the key is the
+     * name of the platform and the value is the path.
+     *
+     * @param icons Map to store the social media platform name
+     *              as the key and path to the icon as the value.
+     * @param discord Path to the icon of the Discord social media platform
+     *                (relative to the resources folder).
+     * @param github Path to the icon of the GitHub social media platform
+     *               (relative to the resources folder).
+     * @param google Path to the icon of the Google social media platform
+     *               (relative to the resources folder).
+     * @param shopify Path to the icon of the Shopify social media platform
+     *                (relative to the resources folder).
+     * @param defaultIcon Path to the icon of the default
+     *                    social media platform (relative to the resources
+     *                    folder).
+     */
     public static void updateIcons(
             Map<String, String> icons,
             String discord, String github,
@@ -89,9 +108,9 @@ public class Utilities {
             String defaultIcon
     ) {
         icons.put("discord", loadFileByURL(discord).toExternalForm());
-        icons.put("github", loadFileByURL(discord).toExternalForm());
-        icons.put("google", loadFileByURL(discord).toExternalForm());
-        icons.put("shopify", loadFileByURL(discord).toExternalForm());
-        icons.put("default", loadFileByURL(discord).toExternalForm());
+        icons.put("github", loadFileByURL(github).toExternalForm());
+        icons.put("google", loadFileByURL(google).toExternalForm());
+        icons.put("shopify", loadFileByURL(shopify).toExternalForm());
+        icons.put("default", loadFileByURL(defaultIcon).toExternalForm());
     }
 }
