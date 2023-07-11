@@ -19,7 +19,7 @@ import data.database.Database;
 import models.Account;
 import views.*;
 import views.interfaces.Reversible;
-import models.Code;
+import code.readers.Code;
 import views.utilities.CodeViewUtilities.CodeCellFactory;
 
 import java.io.File;

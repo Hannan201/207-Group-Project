@@ -1,13 +1,10 @@
 import data.security.Token;
-import models.Code;
+import code.readers.Code;
 import org.junit.jupiter.api.Test;
 import models.Account;
 import data.database.Database;
 import models.User;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

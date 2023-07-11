@@ -4,7 +4,7 @@ import controllers.CodeViewControllers.CodeCellController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import models.Code;
+import code.readers.Code;
 
 import java.io.IOException;
 

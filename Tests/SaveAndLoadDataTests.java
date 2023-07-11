@@ -1,6 +1,6 @@
 import data.Storage;
 import data.security.Token;
-import models.Code;
+import code.readers.Code;
 import org.junit.jupiter.api.Test;
 import models.Account;
 import data.database.Database;

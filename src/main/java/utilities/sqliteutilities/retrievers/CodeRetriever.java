@@ -1,8 +1,7 @@
 package utilities.sqliteutilities.retrievers;
 
 import javafx.util.Callback;
-import models.Code;
-import utilities.sqliteutilities.retrievers.Retriever;
+import code.readers.Code;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
