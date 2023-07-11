@@ -2,6 +2,7 @@ package views;
 
 import controllers.AccountViewController;
 import javafx.fxml.FXMLLoader;
+import utilities.Utilities;
 import views.interfaces.Reversible;
 
 /**
@@ -49,7 +50,7 @@ public class AccountView extends View implements Reversible {
     protected void initUI() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/AccountsView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountsView.fxml"));
             this.setRoot(loader.load());
             this.controller = loader.getController();
 
