@@ -1,6 +1,7 @@
 package models;
 
-import java.net.URL;
+import utilities.Utilities;
+
 import java.util.*;
 
 /**
@@ -31,38 +32,14 @@ public class Account {
 
     static {
         icons = new HashMap<>();
-
-        URL url;
-
-        url = Account.class.getClassLoader().getResource("images/icons8-discord-100.png");
-        if (url != null) {
-            String discord = url.toExternalForm();
-            icons.put("discord", discord);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/icons8-github-100.png");
-        if (url != null) {
-            String github = url.toExternalForm();
-            icons.put("github", github);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/icons8-google-100.png");
-        if (url != null) {
-            String google = url.toExternalForm();
-            icons.put("google", google);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png");
-        if (url != null) {
-            String shopify = url.toExternalForm();
-            icons.put("shopify", shopify);
-        }
-
-        url  = Account.class.getClassLoader().getResource("images/icons8-app-100.png");
-        if (url != null) {
-            String defaultIcon = url.toExternalForm();
-            icons.put("default", defaultIcon);
-        }
+        Utilities.updateIcons(
+                icons,
+                "images/icons8-discord-100.png",
+                "images/icons8-github-100.png",
+                "images/icons8-google-100.png",
+                "images/icons8-shopify-100.png",
+                "images/icons8-app-100.png"
+        );
     }
 
     /**

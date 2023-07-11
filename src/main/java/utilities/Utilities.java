@@ -10,6 +10,7 @@ import views.*;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /*
@@ -79,5 +80,18 @@ public class Utilities {
         }
 
         return true;
+    }
+
+    public static void updateIcons(
+            Map<String, String> icons,
+            String discord, String github,
+            String google, String shopify,
+            String defaultIcon
+    ) {
+        icons.put("discord", loadFileByURL(discord).toExternalForm());
+        icons.put("github", loadFileByURL(discord).toExternalForm());
+        icons.put("google", loadFileByURL(discord).toExternalForm());
+        icons.put("shopify", loadFileByURL(discord).toExternalForm());
+        icons.put("default", loadFileByURL(discord).toExternalForm());
     }
 }

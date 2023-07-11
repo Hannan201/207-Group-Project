@@ -9,7 +9,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import code.readers.Code;
+import code.Code;
 
 public class CodeCellController {
     @FXML

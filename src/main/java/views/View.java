@@ -10,9 +10,10 @@ import javafx.stage.Stage;
 import models.Account;
 
 import javafx.scene.input.KeyEvent;
+import utilities.Utilities;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * This class is responsible for displaying a specific
@@ -69,38 +70,14 @@ public abstract class View {
     public void switchToLightMode() {
         this.currentThemePath = this.cssFilesPaths[0];
 
-        Map<String, String> icons = Account.getIcons();
-        URL url;
-
-        url = Account.class.getClassLoader().getResource("images/icons8-discord-100.png");
-        if (url != null) {
-            String discord = url.toExternalForm();
-            icons.put("discord", discord);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/icons8-github-100.png");
-        if (url != null) {
-            String github = url.toExternalForm();
-            icons.put("github", github);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/icons8-google-100.png");
-        if (url != null) {
-            String google = url.toExternalForm();
-            icons.put("google", google);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/icons8-shopify-100.png");
-        if (url != null) {
-            String shopify = url.toExternalForm();
-            icons.put("shopify", shopify);
-        }
-
-        url  = Account.class.getClassLoader().getResource("images/icons8-app-100.png");
-        if (url != null) {
-            String defaultIcon = url.toExternalForm();
-            icons.put("default", defaultIcon);
-        }
+        Utilities.updateIcons(
+                Account.getIcons(),
+                "images/icons8-discord-100.png",
+                "images/icons8-github-100.png",
+                "images/icons8-google-100.png",
+                "images/icons8-shopify-100.png",
+                "images/icons8-app-100.png"
+        );
     }
 
     /**
@@ -109,38 +86,14 @@ public abstract class View {
     public void switchToDarkMode() {
         this.currentThemePath = this.cssFilesPaths[1];
 
-        Map<String, String> icons = Account.getIcons();
-        URL url;
-
-        url = Account.class.getClassLoader().getResource("images/discord_darkmode.png");
-        if (url != null) {
-            String discord = url.toExternalForm();
-            icons.put("discord", discord);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/github_darkmode.png");
-        if (url != null) {
-            String github = url.toExternalForm();
-            icons.put("github", github);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/google_darkmode.png");
-        if (url != null) {
-            String google = url.toExternalForm();
-            icons.put("google", google);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/shopify_darkmode.png");
-        if (url != null) {
-            String shopify = url.toExternalForm();
-            icons.put("shopify", shopify);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/app_darkmode.png");
-        if (url != null) {
-            String defaultIcon = url.toExternalForm();
-            icons.put("default", defaultIcon);
-        }
+        Utilities.updateIcons(
+                Account.getIcons(),
+                "images/discord_darkmode.png",
+                "images/github_darkmode.png",
+                "images/google_darkmode.png",
+                "images/shopify_darkmode.png",
+                "images/app_darkmode.png"
+        );
     }
 
     /**
@@ -149,38 +102,14 @@ public abstract class View {
     public void switchToHighContrastMode() {
         this.currentThemePath = this.cssFilesPaths[2];
 
-        Map<String, String> icons = Account.getIcons();
-        URL url;
-
-        url = Account.class.getClassLoader().getResource("images/hc-discord.png");
-        if (url != null) {
-            String discord = url.toExternalForm();
-            icons.put("discord", discord);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/hc-github.png");
-        if (url != null) {
-            String github = url.toExternalForm();
-            icons.put("github", github);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/hc-google.png");
-        if (url != null) {
-            String google = url.toExternalForm();
-            icons.put("google", google);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/hc-shopify.png");
-        if (url != null) {
-            String shopify = url.toExternalForm();
-            icons.put("shopify", shopify);
-        }
-
-        url = Account.class.getClassLoader().getResource("images/hc-app.png");
-        if (url != null) {
-            String defaultIcon = url.toExternalForm();
-            icons.put("default", defaultIcon);
-        }
+        Utilities.updateIcons(
+                Account.getIcons(),
+                "images/hc-discord.png",
+                "images/hc-github.png",
+                "images/hc-google.png",
+                "images/hc-shopify.png",
+                "images/hc-app.png"
+        );
     }
 
     /**
@@ -217,10 +146,9 @@ public abstract class View {
      */
     protected void loadRoot(String fileName) {
         try {
-            URL url = this.getClass().getClassLoader().getResource("view/" + fileName);
-            if (url != null) {
-                this.root = FXMLLoader.load(url);
-            }
+            this.root = FXMLLoader.load(
+                    Utilities.loadFileByURL("view/" + fileName)
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }

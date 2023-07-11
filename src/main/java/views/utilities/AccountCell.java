@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import models.Account;
+import utilities.Utilities;
 import views.AccountView;
 import views.CodeView;
 import views.View;
@@ -41,7 +42,7 @@ public class AccountCell extends ListCell<Account> {
 
     private void loadFXML() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/AccountCell.fxml"));
+            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountCell.fxml"));
             loader.setController(this);
             loader.setRoot(this);
             loader.load();

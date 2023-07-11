@@ -5,7 +5,7 @@ import data.security.PasswordHasher;
 import data.security.Token;
 import data.security.TokenGenerator;
 import models.Account;
-import code.readers.Code;
+import code.Code;
 import models.User;
 import utilities.Utilities;
 import utilities.sqliteutilities.SQLiteHelper;
