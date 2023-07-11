@@ -37,7 +37,8 @@ public class Utilities {
                     SignUpView.getInstance(),
                     AccountView.getInstance(),
                     AddAccountView.getInstance(),
-                    CodeView.getInstance()
+                    CodeView.getInstance(),
+                    SettingsView.getInstance()
             );
 
             Command command = new SwitchToDarkMode(views);

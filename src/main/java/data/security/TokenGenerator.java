@@ -6,6 +6,7 @@ import java.util.Random;
 
 /*
  This class is responsible for generating tokens for authentication.
+
  Credits to: https://stackoverflow.com/a/41156.
  */
 public class TokenGenerator {
