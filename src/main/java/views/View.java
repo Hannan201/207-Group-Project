@@ -10,10 +10,11 @@ import javafx.stage.Stage;
 import models.Account;
 
 import javafx.scene.input.KeyEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * This class is responsible for displaying a specific
@@ -21,6 +22,8 @@ import java.net.URL;
  */
 
 public abstract class View {
+
+    private static final Logger logger = LoggerFactory.getLogger(View.class);
 
     // Parent root of this view, which is
     // the layout where all the components
@@ -150,6 +153,7 @@ public abstract class View {
                     Utilities.loadFileByURL("view/" + fileName)
             );
         } catch (IOException e) {
+            logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);
             e.printStackTrace();
         }
     }
@@ -160,35 +164,13 @@ public abstract class View {
      */
     protected void loadStylesheets() {
         for (int i = 0; i < this.cssFilesPaths.length; i++) {
-            this.setIndex(i, this.names[i]);
+            this.cssFilesPaths[i] = Utilities.loadFileByURL(
+                    "css/" + this.names[i]
+                    ).toExternalForm();
         }
 
         // Set the default theme to light mode.
         this.currentThemePath = this.cssFilesPaths[0];
-    }
-
-    /**
-     * Store the path of a file (in
-     * external form) in the resources/view
-     * folder in an array to store file paths
-     * at a specific index. if the file exists
-     * inside the resources/view folder,
-     * the path will be stored, otherwise
-     * an empty string. The resources folder
-     * is where the resources for this
-     * application are stored. This
-     * function also assumes there's
-     * already a view folder made
-     * inside the resource folder.
-     *
-     * @param index The index at which to
-     *              store the path inside
-     *              the array.
-     * @param element The name of the file.
-     */
-    private void setIndex(int index, String element) {
-        URL url = this.getClass().getClassLoader().getResource("css/" + element);
-        this.cssFilesPaths[index] = url == null ? "" : url.toExternalForm();
     }
 
     /**

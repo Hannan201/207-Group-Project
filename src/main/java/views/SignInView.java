@@ -1,7 +1,5 @@
 package views;
 
-import controllers.SignInController;
-
 /**
  * This class is responsible for displaying a view
  * to sign in.

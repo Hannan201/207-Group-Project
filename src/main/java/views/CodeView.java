@@ -2,6 +2,8 @@ package views;
 
 import controllers.CodeViewControllers.CodeViewController;
 import javafx.fxml.FXMLLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 import views.interfaces.Reversible;
 
@@ -12,6 +14,8 @@ import views.interfaces.Reversible;
  */
 
 public class CodeView extends View implements Reversible {
+
+    private static final Logger logger = LoggerFactory.getLogger(CodeView.class);
 
     // An instance for this code-viewer view.
     private static View firstInstance = null;
@@ -53,6 +57,7 @@ public class CodeView extends View implements Reversible {
             this.setRoot(loader.load());
             this.controller = loader.getController();
         } catch (Exception e) {
+            logger.error("Failed to load FXML file: CodeView.fxml. Cause: ", e);
             e.printStackTrace();
         }
 
