@@ -3,6 +3,9 @@ package behaviors;
 import behaviors.interfaces.ReadCodeBehavior;
 
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,8 @@ import java.util.List;
  */
 
 public class ManualInputReader implements ReadCodeBehavior {
+
+    private static final Logger logger = LoggerFactory.getLogger(ManualInputReader.class);
 
     // To store what the user types in.
     private final TextField code;
@@ -34,6 +39,7 @@ public class ManualInputReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> readCodes() {
+        logger.debug("Attempting to read from manual input source.");
         return new ArrayList<>(List.of(code.getText()));
     }
 }

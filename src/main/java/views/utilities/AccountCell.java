@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import models.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 import views.AccountView;
 import views.CodeView;
@@ -20,6 +22,8 @@ import views.View;
 import java.io.IOException;
 
 public class AccountCell extends ListCell<Account> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountView.class);
 
     @FXML
     private ImageView logo;
@@ -108,7 +112,9 @@ public class AccountCell extends ListCell<Account> {
 
             setOnMouseClicked(mouseClickedEvent -> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
+                    logger.trace("Switching from the AccountView to the CodeView.");
                     View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
+
                     ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes(item.getID());
                 }
             });

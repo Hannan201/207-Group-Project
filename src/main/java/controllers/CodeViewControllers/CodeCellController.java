@@ -10,8 +10,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import code.Code;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CodeCellController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CodeCellController.class);
+
     @FXML
     private Label code;
 
@@ -101,6 +106,8 @@ public class CodeCellController {
         // handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
         // Don't let the user enter an empty code.
         if (e.getCode() == KeyCode.ENTER && !userInput.getText().equals("")) {
+            logger.debug("Switching code from {} to {}.", currentCell.getCode(), userInput.getText());
+
             Database.updateCode(Storage.getToken(), currentCell.getID(), userInput.getText());
 
             code.setText((userInput.getText()));
