@@ -1,6 +1,8 @@
 package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.Scanner;
 
 public class DiscordReader extends CodeReader implements ReadCodeBehavior {
 
+    private static final Logger logger = LoggerFactory.getLogger(DiscordReader.class);
+
     /**
      * Extract the backup codes from a text file in the
      * structure given by Discord.
@@ -23,6 +27,7 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
+        logger.debug("Attempting to read codes from sourceL {}.", fileName);
 
         List<String> codes = new ArrayList<>();
         try {
@@ -36,6 +41,7 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
             }
         }
         catch (Exception e) {
+            logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
             System.out.println(e.getMessage());
         }
         return codes;

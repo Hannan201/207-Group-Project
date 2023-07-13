@@ -1,6 +1,8 @@
 package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,8 @@ import java.util.Scanner;
 
 public class GoogleReader extends CodeReader implements ReadCodeBehavior {
 
+    private static final Logger logger = LoggerFactory.getLogger(GoogleReader.class);
+
     /**
      * Extract the backup codes from a text file in the
      * structure given by Google.
@@ -24,6 +28,8 @@ public class GoogleReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
+        logger.debug("Attempting to read codes from sourceL {}.", fileName);
+
         // read all the information
         ArrayList<String> info = new ArrayList<>();
         File file = new File(fileName);
@@ -33,6 +39,7 @@ public class GoogleReader extends CodeReader implements ReadCodeBehavior {
                 info.add(sc.nextLine());
             }
         } catch (IOException e) {
+            logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
             e.printStackTrace();
         }
 

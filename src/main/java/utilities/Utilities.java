@@ -92,7 +92,7 @@ public class Utilities {
         try {
             Integer.parseInt(s);
         } catch (NullPointerException | NumberFormatException e) {
-            logger.debug("Cannot convert to integer. Cause: ", e);
+            logger.warn(String.format("Cannot convert %s to an integer. Cause: ", s), e);
             return false;
         }
 

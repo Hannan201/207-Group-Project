@@ -1,6 +1,8 @@
 package code.readers;
 
 import behaviors.interfaces.ReadCodeBehavior;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.io.*;
@@ -12,6 +14,8 @@ import java.io.*;
 
 public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
 
+    private static final Logger logger = LoggerFactory.getLogger(ShopifyReader.class);
+
     /**
      * Extract the backup codes from a text file in the
      * structure given by Shopify.
@@ -21,6 +25,8 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
      */
     @Override
     public List<String> extractCodes(String fileName) {
+        logger.debug("Attempting to read codes from sourceL {}.", fileName);
+
         List<String> codes = new ArrayList<>();
         try {
             File file = new File(fileName);
@@ -40,6 +46,7 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
 
             }
         } catch (IOException e) {
+            logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
             e.printStackTrace();
         }
         return codes;
