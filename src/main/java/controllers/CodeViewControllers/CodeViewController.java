@@ -17,6 +17,8 @@ import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
 import data.database.Database;
 import models.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import views.*;
 import views.interfaces.Reversible;
 import code.Code;
@@ -29,6 +31,8 @@ import java.util.*;
 
 
 public class CodeViewController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(CodeViewController.class);
 
     @FXML
     private BorderPane background;
@@ -175,20 +179,26 @@ public class CodeViewController implements Initializable {
         // 2) select a reader based on the corresponding account type
         CodeReader reader = CodeReaderFactory.makeCodeReader(AccountType);
 
+        if (reader == null) {
+            logger.warn("No reader of type {}. Aborting request.", AccountType);
+            return;
+        }
+
         // 3) open the file explorer
         FileChooser chooser = new FileChooser();
         File pathway = chooser.showOpenDialog(CodeView.getInstance().getRoot().getScene().getWindow());
 
-        // 4) get the path to the specified file
-        if (!(pathway == null)) {
-            if (reader != null) {
-                String filepath = pathway.getPath();
-
-                // 5) Read the file using the corresponding reader
-                reader.setFilePath(filepath);
-                addCodes((ReadCodeBehavior) reader);
-            }
+        if (pathway == null) {
+            logger.warn("No file was selected. Aborting request");
+            return;
         }
+
+        // 4) get the path to the specified file
+        String filepath = pathway.getPath();
+
+        // 5) Read the file using the corresponding reader
+        reader.setFilePath(filepath);
+        addCodes((ReadCodeBehavior) reader);
     }
 
     /**
@@ -254,10 +264,7 @@ public class CodeViewController implements Initializable {
             // if their account is supported.
             importCodes.setDisable(!Account.supportsImport(account.getSocialMediaType().toLowerCase()));
 
-            List<Code> codes = Database.getCodes(Storage.getToken(), ID);
-            for (Code c : codes) {
-                codeListView.getItems().add(c);
-            }
+            codeListView.getItems().addAll(Database.getCodes(Storage.getToken(), ID));
         }
     }
 
@@ -277,7 +284,10 @@ public class CodeViewController implements Initializable {
      */
     public void handleLogout() {
         Database.logUserOut(Storage.getToken());
+
+        logger.trace("Switching from the CodeView to the HomePageView.");
         View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
+
         Storage.setToken(null);
     }
 
@@ -285,7 +295,10 @@ public class CodeViewController implements Initializable {
      * Switches the scene to the SettingsView once the settings button is clicked.
      */
     public void handleSettings() {
+        logger.debug("Setting the previous scene for the SettingsView to the CodeView.");
         ((Reversible) SettingsView.getInstance()).setPreviousView(CodeView.getInstance());
+
+        logger.trace("Switching from the CodeView to the SettingsView.");
         View.switchSceneTo(CodeView.getInstance(), SettingsView.getInstance());
     }
 
@@ -293,6 +306,7 @@ public class CodeViewController implements Initializable {
      * Switches the scene to the Account-Viewer view once the back button is clicked.
      */
     public void handleGoBack() {
+        logger.trace("Switching from CodeView to AccountView.");
         View.switchSceneTo(CodeView.getInstance(), AccountView.getInstance());
     }
 }

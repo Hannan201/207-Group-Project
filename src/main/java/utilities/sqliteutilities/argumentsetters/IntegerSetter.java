@@ -1,5 +1,8 @@
 package utilities.sqliteutilities.argumentsetters;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -8,6 +11,8 @@ import java.sql.SQLException;
  * be an integer.
  */
 public class IntegerSetter extends ArgumentSetter<Integer> {
+
+    private static final Logger logger = LoggerFactory.getLogger(IntegerSetter.class);
 
     /**
      * Create a new integer setter.
@@ -30,6 +35,7 @@ public class IntegerSetter extends ArgumentSetter<Integer> {
         try {
             statement.setInt(index, value);
         } catch (SQLException e) {
+            logger.warn(String.format("Failed to set argument %d at index %d. Cause: ", value, index), e);
             e.printStackTrace();
         }
     }

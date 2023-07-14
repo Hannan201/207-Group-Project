@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import views.SignInView;
 import views.SignUpView;
 import views.View;
@@ -17,6 +19,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomePageController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(HomePageController.class);
 
     @FXML
     private Button signIn;
@@ -51,6 +55,7 @@ public class HomePageController implements Initializable {
      * user to sign-in.
      */
     public void handleSignIn() {
+        logger.trace("Engaging SignInView window.");
         View.loadNewWindow(SignInView.getInstance());
     }
 
@@ -59,6 +64,7 @@ public class HomePageController implements Initializable {
      * user to sign in.
      */
     public void handleSignUp() {
+        logger.trace("Engaging SignUpView window.");
         View.loadNewWindow(SignUpView.getInstance());
     }
 

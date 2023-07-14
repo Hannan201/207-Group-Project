@@ -5,6 +5,8 @@ import commands.SwitchToDarkMode;
 import commands.SwitchToHighContrastMode;
 import commands.SwitchToLightMode;
 import commands.managers.ThemeSwitcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 import data.Storage;
 import javafx.event.ActionEvent;
@@ -26,6 +28,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SettingsViewController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(SettingsViewController.class);
+
     private static List<View> views;
     private ThemeSwitcher switcher;
 
@@ -78,8 +83,10 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToHighContrastMode() {
-        Database.updateTheme(Storage.getToken(), "high contrast mode");
+        logger.info("Updating application look and feel to high contrast mode.");
         updateTheme(highContrastModeCommand);
+
+        Database.updateTheme(Storage.getToken(), "high contrast mode");
     }
 
     /**
@@ -87,8 +94,10 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToDarkMode() {
-        Database.updateTheme(Storage.getToken(), "dark mode");
+        logger.info("Updating application look and feel to dark mode.");
         updateTheme(darkModeCommand);
+
+        Database.updateTheme(Storage.getToken(), "dark mode");
     }
 
     /**
@@ -97,8 +106,10 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToLightMode() {
-        Database.updateTheme(Storage.getToken(), "light mode");
+        logger.info("Updating application look and feel to light mode.");
         updateTheme(lightModeCommand);
+
+        Database.updateTheme(Storage.getToken(), "light mode");
     }
 
     /**
@@ -131,7 +142,10 @@ public class SettingsViewController implements Initializable {
      */
     public void handleLogout() {
         Database.logUserOut(Storage.getToken());
+
+        logger.trace("Switching from the SettingsView to the HomePageView.");
         View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
+
         Storage.setToken(null);
     }
 
@@ -139,6 +153,7 @@ public class SettingsViewController implements Initializable {
      * Allow user to exit the Settings view.
      */
     public void handleGoBack() {
+        logger.trace("Switching to previous view.");
         View.switchSceneTo(SettingsView.getInstance(), ((Reversible) SettingsView.getInstance()).getPreviousView());
     }
 
@@ -159,6 +174,12 @@ public class SettingsViewController implements Initializable {
             case "Log Out" -> url = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
         }
 
+        if (url.isEmpty() || url.isBlank()) {
+            logger.warn("Link to icon is empty. Aborting request");
+            return;
+        }
+
+        logger.debug("Redirecting browser to url: {}.", url);
         Desktop.getDesktop().browse(new URL(url).toURI());
     }
 

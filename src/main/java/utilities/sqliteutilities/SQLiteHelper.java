@@ -1,5 +1,7 @@
 package utilities.sqliteutilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.sqliteutilities.argumentsetters.ArgumentSetter;
 import utilities.sqliteutilities.retrievers.IntegerRetriever;
 import utilities.sqliteutilities.argumentsetters.StringSetter;
@@ -15,6 +17,8 @@ import java.sql.*;
  to interact with a SQLite database.
  */
 public class SQLiteHelper {
+
+    private static final Logger logger = LoggerFactory.getLogger(SQLiteHelper.class);
 
     // Connection to the database.
     private Connection connection;
@@ -49,8 +53,11 @@ public class SQLiteHelper {
                 initializeTables();
             }
         } catch (SQLException e) {
+            logger.warn("Connection to database failed. No new changes will be saved. Cause: ", e);
             e.printStackTrace();
         }
+
+        logger.info("Database connected.");
     }
 
     /**
@@ -128,8 +135,13 @@ public class SQLiteHelper {
      */
     public boolean connectionFailure() {
         try {
-            return connection == null || connection.isClosed();
+            if (connection == null || connection.isClosed()) {
+                logger.warn("Database connection is down.");
+                return true;
+            }
+            return false;
         } catch (SQLException e) {
+            logger.warn("Failed to check connection status. No new changes will be saved. Cause: ", e);
             e.printStackTrace();
         }
 
@@ -143,8 +155,12 @@ public class SQLiteHelper {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("Failed to close connection to database. Cause: ", e);
             e.printStackTrace();
+            return;
         }
+
+        logger.info("Closed connection to database.");
     }
 
     /**
@@ -171,6 +187,7 @@ public class SQLiteHelper {
             statement = connection.createStatement();
             statement.execute(query);
         } catch (SQLException e) {
+            logger.warn("Failed to execute statement. Cause: ", e);
             e.printStackTrace();
         } finally {
             closeStatement(statement);
@@ -199,6 +216,7 @@ public class SQLiteHelper {
      */
     private <Q> Q execute(String query, int flag, Callback<ResultSet, Q> callback, ArgumentSetter<?> ... arguments) {
         if (noMatch(query, arguments.length)) {
+            logger.warn("Number of placeholders in statement does not match number of arguments provided. Aborting request.");
             return null;
         }
 
@@ -219,6 +237,7 @@ public class SQLiteHelper {
             statement.executeUpdate();
             return callback.call(statement.getGeneratedKeys());
         } catch (SQLException e) {
+            logger.warn(String.format("Failed to execute query: %s. Cause: ", query), e);
             e.printStackTrace();
         } finally {
             closeStatement(statement);
@@ -282,6 +301,7 @@ public class SQLiteHelper {
                 statement.close();
             }
         } catch (SQLException e) {
+            logger.warn("Failed to close statement. Cause: ", e);
             e.printStackTrace();
         }
     }

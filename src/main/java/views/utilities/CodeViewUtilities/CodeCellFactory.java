@@ -5,12 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import code.Code;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 
 import java.io.IOException;
 
 
 public class CodeCellFactory extends ListCell<Code> {
+
+    private static final Logger logger = LoggerFactory.getLogger(CodeCellFactory.class);
 
     private Parent graphic;
 
@@ -27,7 +31,11 @@ public class CodeCellFactory extends ListCell<Code> {
 
         try {
             graphic = loader.load();
-        } catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            logger.error("Failed to load FXML file: CodeCell.fxml. Cause: ", e);
+            e.printStackTrace();
+        }
+
 
         cellController = loader.getController();
 

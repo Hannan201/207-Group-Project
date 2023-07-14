@@ -1,5 +1,7 @@
 package controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 import data.database.Database;
 import data.Storage;
@@ -30,6 +32,8 @@ import java.util.ResourceBundle;
  * A controller for the Sign-in UI
  */
 public class SignInController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
     private final Validator validator = new Validator();
 
@@ -170,7 +174,10 @@ public class SignInController implements Initializable {
         Utilities.loadAccounts();
         View.closeWindow(actionEvent);
         Utilities.adjustTheme();
+
+        logger.trace("Switching from the HomePageView to the AccountsView.");
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+
         clearFields();
     }
 
@@ -186,7 +193,10 @@ public class SignInController implements Initializable {
             Utilities.loadAccounts();
             View.closeWindow(e);
             Utilities.adjustTheme();
+
+            logger.trace("Switching from the HomePageView to the AccountsView.");
             View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+
             clearFields();
         }
     }
@@ -196,6 +206,7 @@ public class SignInController implements Initializable {
      * once the user has signed in.
      */
     private void clearFields() {
+        logger.trace("Clearing fields.");
         unameInput.clear();
         passInput.clear();
     }

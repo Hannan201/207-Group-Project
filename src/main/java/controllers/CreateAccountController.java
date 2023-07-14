@@ -154,9 +154,9 @@ public class CreateAccountController implements Initializable{
     }
 
     /**
-     * Toggle the platform text field to make it un-editable
-     * if it's editable and attach text to it, and editable
-     * if it's un-editable which will clear the text.
+     * Toggle the platform so that:
+     * - if it's editable: make it un-editable and then attach text to it.
+     * - If it's un-editable: make it editable and then clear the text.
      *
      * @param text Message to display if the text field is
      *             un-editable.

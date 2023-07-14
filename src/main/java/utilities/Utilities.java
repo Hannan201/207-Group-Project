@@ -6,8 +6,13 @@ import commands.SwitchToHighContrastMode;
 import commands.managers.ThemeSwitcher;
 import data.Storage;
 import data.database.Database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import views.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +23,14 @@ import java.util.Objects;
  */
 public class Utilities {
 
+    private static final Logger logger = LoggerFactory.getLogger(Utilities.class);
+
     /**
      * Load all the accounts to the account view. Ideally called when
      * the scene is being switched to the account view.
      */
     public static void loadAccounts() {
+        logger.debug("Attempting to load all accounts for user.");
         ((AccountView) AccountView.getInstance()).getAccountViewController()
                 .addAccounts(Database.getAccounts(Storage.getToken()));
     }
@@ -32,25 +40,35 @@ public class Utilities {
      */
     public static void adjustTheme() {
         String theme = Database.getTheme(Storage.getToken());
-        if (theme != null && !theme.equals("light mode")) {
-            List<View> views = List.of(
-                    HomePageView.getInstance(),
-                    SignUpView.getInstance(),
-                    AccountView.getInstance(),
-                    AddAccountView.getInstance(),
-                    CodeView.getInstance(),
-                    SettingsView.getInstance()
-            );
 
-            Command command = new SwitchToDarkMode(views);
-
-            if (theme.equals("high contrast mode")) {
-                command = new SwitchToHighContrastMode(views);
-            }
-
-            ThemeSwitcher switcher = new ThemeSwitcher(command);
-            switcher.switchTheme();
+        if (theme == null) {
+            logger.debug("Cannot switch theme because it's null. Aborting request.");
+            return;
         }
+
+        if (theme.equals("light mode")) {
+            logger.debug("Theme already set to light mode. Aborting request.");
+            return;
+        }
+
+        logger.debug("Switching theme to {}.", theme);
+        List<View> views = List.of(
+                HomePageView.getInstance(),
+                SignUpView.getInstance(),
+                AccountView.getInstance(),
+                AddAccountView.getInstance(),
+                CodeView.getInstance(),
+                SettingsView.getInstance()
+        );
+
+        Command command = new SwitchToDarkMode(views);
+
+        if (theme.equals("high contrast mode")) {
+            command = new SwitchToHighContrastMode(views);
+        }
+
+        ThemeSwitcher switcher = new ThemeSwitcher(command);
+        switcher.switchTheme();
     }
 
     /**
@@ -60,10 +78,29 @@ public class Utilities {
      * @param path Path to the file relative to the resource folder.
      */
     public static URL loadFileByURL(String path) {
+        logger.debug("Attempting to load file from resource: " + path);
         return Objects.requireNonNull(
                 Utilities.class.getClassLoader()
                         .getResource(path)
         );
+    }
+
+    /**
+     * Load a file from the resource folder in the format of
+     * a InputStream.
+     *
+     * @param path Path to the file relative to the resource folder.
+     */
+    public static InputStream loadFileByInputStream(String path) {
+        InputStream stream = null;
+        try {
+            stream = new FileInputStream(loadFileByURL(path).getPath());
+        } catch (FileNotFoundException e) {
+            logger.warn(String.format("Unable to find resource: %s. Cause: ", path), e);
+            e.printStackTrace();
+        }
+
+        return stream;
     }
 
     /**
@@ -76,6 +113,7 @@ public class Utilities {
         try {
             Integer.parseInt(s);
         } catch (NullPointerException | NumberFormatException e) {
+            logger.warn(String.format("Cannot convert %s to an integer. Cause: ", s), e);
             return false;
         }
 
@@ -107,10 +145,19 @@ public class Utilities {
             String google, String shopify,
             String defaultIcon
     ) {
+        logger.trace("Updating icon for Discord from {} to {}.", icons.get("discord"), discord);
         icons.put("discord", loadFileByURL(discord).toExternalForm());
+
+        logger.trace("Updating icon for Github from {} to {}.", icons.get("github"), github);
         icons.put("github", loadFileByURL(github).toExternalForm());
+
+        logger.trace("Updating icon for Google from {} to {}.", icons.get("google"), google);
         icons.put("google", loadFileByURL(google).toExternalForm());
+
+        logger.trace("Updating icon for Shopify from {} to {}.", icons.get("shopify"), shopify);
         icons.put("shopify", loadFileByURL(shopify).toExternalForm());
+
+        logger.trace("Updating icon for default from {} to {}.", icons.get("default"), defaultIcon);
         icons.put("default", loadFileByURL(defaultIcon).toExternalForm());
     }
 }

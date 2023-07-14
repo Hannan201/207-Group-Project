@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import views.AccountView;
 import views.HomePageView;
 import views.View;
@@ -22,6 +24,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SignUpController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
+
 
     private final Validator validator = new Validator();
     @FXML
@@ -48,6 +53,7 @@ public class SignUpController implements Initializable {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                     if (oldWindow == null && newWindow != null) {
                         newWindow.setOnCloseRequest((windowEvent -> {
+                            logger.trace("Clearing all text fields.");
                             initialUsername.clear();
                             initialPassword.clear();
                             verifiedUsername.clear();
@@ -181,6 +187,7 @@ public class SignUpController implements Initializable {
 
         View.closeWindow(e);
 
+        logger.trace("Switching from the HomePageView to the AccountsView.");
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
 
         // Clear the attributes such that when the signs out
@@ -189,6 +196,7 @@ public class SignUpController implements Initializable {
         Token token = Database.registerUser(initialUsername.getText(), initialPassword.getText());
         Storage.setToken(token);
 
+        logger.trace("Clearing all text fields.");
         initialUsername.clear();
         initialPassword.clear();
         verifiedUsername.clear();

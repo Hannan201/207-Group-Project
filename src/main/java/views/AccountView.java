@@ -2,6 +2,8 @@ package views;
 
 import controllers.AccountViewController;
 import javafx.fxml.FXMLLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 import views.interfaces.Reversible;
 
@@ -12,6 +14,8 @@ import views.interfaces.Reversible;
  */
 
 public class AccountView extends View implements Reversible {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountView.class);
 
     // An instance for this account-viewer view.
     private static View firstInstance = null;
@@ -55,6 +59,7 @@ public class AccountView extends View implements Reversible {
             this.controller = loader.getController();
 
         } catch (Exception e) {
+            logger.error("Failed to load FXML file: AccountsView.fxml. Cause: ", e);
             e.printStackTrace();
         }
 

@@ -1,5 +1,8 @@
 package data.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +16,8 @@ This class is responsible for hashing passwords
 for users in this application.
  */
 public class PasswordHasher {
+
+    private static final Logger logger = LoggerFactory.getLogger(PasswordHasher.class);
 
     // Algorithm being used to hash passwords.
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
@@ -70,6 +75,7 @@ public class PasswordHasher {
         try {
             hash = algorithmGenerator.generateSecret(key).getEncoded();
         } catch (InvalidKeySpecException e) {
+            logger.warn("Failed to hash password, returning null. Cause: ", e);
             return null;
         }
 

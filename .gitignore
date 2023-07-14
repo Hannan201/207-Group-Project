@@ -2,7 +2,6 @@
 lib/
 .idea/
 out/
-*.xml
 *.iml
 *.log
 *.class

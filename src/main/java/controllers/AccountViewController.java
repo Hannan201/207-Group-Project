@@ -1,5 +1,7 @@
 package controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Debouncer;
 import data.Storage;
 import javafx.application.Platform;
@@ -26,6 +28,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AccountViewController implements Initializable {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountViewController.class);
 
     @FXML
     private BorderPane box;
@@ -152,6 +156,7 @@ public class AccountViewController implements Initializable {
         String result = search.getText();
         String key = result.isEmpty() ? "DEFAULT" : result;
 
+        logger.debug("Setting search query for account with name {}", key);
         debounce.registerFunction(
                 key,
                 () -> {
@@ -166,6 +171,8 @@ public class AccountViewController implements Initializable {
 
                         accounts.getItems().clear();
                         accounts.getItems().addAll(allAccounts);
+
+                        logger.debug("Finished search for account with name {}.", key);
                     });
 
                     return null;
@@ -189,6 +196,8 @@ public class AccountViewController implements Initializable {
      * @return List of accounts with usernames that match.
      */
     public static List<Account> searchAccounts(List<Account> accounts, String name) {
+        logger.debug("Starting search for account with name: {}.", name);
+
         return accounts.stream().filter(account -> account.getName()
                 .toLowerCase()
                 .contains(name.toLowerCase()))
@@ -209,7 +218,10 @@ public class AccountViewController implements Initializable {
      */
     public void handleLogout() {
         Database.logUserOut(Storage.getToken());
+
+        logger.trace("Switching from the AccountView to the HomePageView.");
         View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
+
         Storage.setToken(null);
         accounts.getItems().clear();
     }
@@ -218,7 +230,10 @@ public class AccountViewController implements Initializable {
      * A handle method for the settings button which changes the current view to the SettingsView.
      */
     public void handleSettings() {
+        logger.debug("Setting the previous scene for the SettingsView to the AccountView.");
         ((Reversible) SettingsView.getInstance()).setPreviousView(AccountView.getInstance());
+
+        logger.trace("Switching from the AccountView to the SettingsView.");
         View.switchSceneTo(AccountView.getInstance(), SettingsView.getInstance());
     }
 
@@ -229,6 +244,7 @@ public class AccountViewController implements Initializable {
      * create an account and have it reflected in the AccountView.
      */
     public void handleAddAccount() {
+        logger.trace("Engaging CreateAccountView window.");
         View.loadNewWindow(AddAccountView.getInstance());
     }
 

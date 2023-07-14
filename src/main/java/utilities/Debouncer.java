@@ -1,5 +1,8 @@
 package utilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
@@ -16,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  Credits to: https://stackoverflow.com/a/58404365.
  */
 public class Debouncer {
+
+    private static final Logger logger = LoggerFactory.getLogger(Debouncer.class);
 
     // To make sure the function executes after a certain amount of time.
     private final Timer timer;
@@ -44,9 +49,7 @@ public class Debouncer {
      */
     public void registerFunction(String key, Callable<Void> function, long interval) {
         // Safety checks.
-        if (key == null || key.isEmpty() || key.trim().length() < 1 || interval < 0) {
-            return;
-        }
+        if (safetyChecks(key, interval)) return;
 
         // Clear all.
         clearPreviousTasks();
@@ -57,6 +60,7 @@ public class Debouncer {
                 try {
                     function.call();
                 } catch (Exception e) {
+                    logger.warn("Failed execution. Cause: ", e);
                     e.printStackTrace();
                 }
                 clearPreviousTasks();
@@ -91,11 +95,10 @@ public class Debouncer {
      * @param interval How long to wait before the task is executed.
      */
     private void registerTask(String key, TimerTask task, long interval) {
-        if (key == null || key.isEmpty() || key.trim().length() < 1 || interval < 0) {
-            return;
-        }
+        if (safetyChecks(key, interval)) return;
 
         if (tasks.containsKey(key)) {
+            logger.warn("Function with key {} has already been registered.", key);
             return;
         }
 
@@ -104,9 +107,32 @@ public class Debouncer {
     }
 
     /**
+     * Perform a safety check for the key and interval before a function is
+     * registered to this debouncer.
+     *
+     * @param key Key for the function.
+     * @param interval Interval for the function.
+     * @return True if the interval is greater than or equal to 0 and
+     * the key's length is greater than 0 and is not blank, false otherwise.
+     */
+    private boolean safetyChecks(String key, long interval) {
+        if (interval < 0) {
+            logger.warn("Interval value {} must be greater than 0.", interval);
+            return true;
+        }
+
+        if (key == null || key.isEmpty() || key.trim().length() < 1) {
+            logger.warn("Bad key value {}.", key);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Turn off the debouncer.
      */
     public void tearDown() {
+        logger.debug("Shutting down debouncer.");
         clearPreviousTasks();
         timer.cancel();
     }
