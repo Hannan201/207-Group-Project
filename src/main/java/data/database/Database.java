@@ -7,6 +7,8 @@ import data.security.TokenGenerator;
 import models.Account;
 import code.Code;
 import models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utilities.Utilities;
 import utilities.sqliteutilities.SQLiteHelper;
 import utilities.sqliteutilities.argumentsetters.IntegerSetter;
@@ -34,12 +36,15 @@ import java.util.*;
 
 public class Database {
 
+    private static final Logger logger = LoggerFactory.getLogger(Database.class);
+
     // To hash passwords which the user enters.
     private static PasswordHasher passwordHasher;
 
     // To generate a token for the user.
     private static TokenGenerator generator;
 
+    // To help interface with the database.
     private static SQLiteHelper sqLiteHelper;
 
     /*
@@ -63,12 +68,15 @@ public class Database {
      * @param source Name of the database file.
      */
     public static void setConnectionSource(String source) {
-        if (!source.isEmpty() && !source.isBlank() && source.endsWith(".db")) {
-            TokenManager.initializeStorage();
-            passwordHasher = new PasswordHasher();
-            generator = new TokenGenerator(21);
-            sqLiteHelper = new SQLiteHelper(source);
+        if (source.isBlank() || !source.endsWith(".db")) {
+            logger.warn("Invalid path to database, connection failed. Aborting request.");
+            return;
         }
+
+        TokenManager.initializeStorage();
+        passwordHasher = new PasswordHasher();
+        generator = new TokenGenerator(21);
+        sqLiteHelper = new SQLiteHelper(source);
     }
 
     /**
@@ -92,12 +100,18 @@ public class Database {
     private static boolean validToken(Token token) {
         String[] result = Objects.requireNonNull(TokenManager.parseToken());
         if (result.length != 2) {
+            logger.warn("Authentication failure. Access denied.");
             return false;
         }
 
         CustomToken casted = (CustomToken) token;
-        return result[0].equals(casted.key)
-                && Integer.parseInt(result[1]) == casted.ID;
+
+        if (!result[0].equals(casted.key) || Integer.parseInt(result[1]) != casted.ID) {
+            logger.warn("Authentication failure. Access denied.");
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -108,11 +122,14 @@ public class Database {
      */
     public static boolean checkUsername(String username) {
         if (username.isEmpty() || username.isBlank()) {
+            logger.warn("Username cannot be empty.");
             return true;
         }
 
         if (!sqLiteHelper.connectionFailure()) {
-            return sqLiteHelper.executeSelect(
+            logger.trace("Attempt to check if username {} is taken.", username);
+
+            Boolean bool = sqLiteHelper.executeSelect(
                 """
                     SELECT (COUNT(*) > 0) AS 'contains' FROM users
                     WHERE username = ?
@@ -122,12 +139,20 @@ public class Database {
                         try {
                             return resultSet.getBoolean("contains");
                         } catch (SQLException e) {
+                            logger.warn("Failed to retrieve key contains. Cause: ", e);
                             e.printStackTrace();
                         }
 
                         return null;
                     }
             );
+
+            if (bool == null) {
+                logger.warn("Failed to check if username {} was taken. Returning true.", username);
+                return true;
+            }
+
+            return bool;
         }
 
         return true;
@@ -138,11 +163,29 @@ public class Database {
      to protect the database from unauthorised access.
      */
     private static class TokenManager {
+
+        private static final Logger tokenLogger = LoggerFactory.getLogger(TokenManager.class);
+
         // Connection to the keystore object.
         private static KeyStore storage;
 
         // Password for the keystore.
         private static char[] password;
+
+        // Password for the keystore, as a protection parameter.
+        private static KeyStore.ProtectionParameter keyStorePassword;
+
+        // Used to generate secrets.
+        private static SecretKeyFactory factory;
+
+        static {
+            try {
+                factory = SecretKeyFactory.getInstance("PBE");
+            } catch (NoSuchAlgorithmException e) {
+                logger.warn("Failed to initialize factory. Cause: ", e);
+                e.printStackTrace();
+            }
+        }
 
         /**
          * Load the token into storage, if there's any present.
@@ -151,9 +194,11 @@ public class Database {
             String[] result = Objects.requireNonNull(parseToken());
 
             if (result.length != 2) {
+                tokenLogger.warn("No token found, result must be of length 2, but is in fact of size {}. Aborting.", result.length);
                 return;
             }
 
+            tokenLogger.debug("Token found.");
             Storage.setToken(
                     new CustomToken(
                             result[0],
@@ -166,17 +211,18 @@ public class Database {
          * Load the properties file.
          */
         private static void initializeProperties() {
-            FileInputStream applicationFile = null;
+            InputStream applicationFile = null;
             try {
-                URL url = Utilities.loadFileByURL("application.properties");
-                applicationFile = new FileInputStream(url.getPath());
+                applicationFile = Utilities.loadFileByInputStream("application.properties");
 
                 Properties applicationProperties = new Properties();
                 applicationProperties.load(applicationFile);
                 password = Objects.requireNonNull(
                         applicationProperties.getProperty("password")
                 ).toCharArray();
+                keyStorePassword = new KeyStore.PasswordProtection(password);
             } catch (IOException e) {
+                tokenLogger.warn("Failed to read application.properties. Cause: ", e);
                 e.printStackTrace();
             } finally {
                 try {
@@ -184,6 +230,7 @@ public class Database {
                         applicationFile.close();
                     }
                 } catch (IOException e2) {
+                    tokenLogger.warn("Failed to close input stream for application.properties. Cause: ", e2);
                     e2.printStackTrace();
                 }
             }
@@ -193,21 +240,22 @@ public class Database {
          * Initialize the key store file.
          */
         private static void initializeKeyStore() {
-            FileInputStream stream = null;
+            InputStream stream = null;
             try {
-                URL url = Utilities.loadFileByURL("token.pfx");
-                stream = new FileInputStream(url.getPath());
+                stream = Utilities.loadFileByInputStream("token.pfx");
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
             } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+                tokenLogger.warn("Failed to extract token. Cause: ", e);
                 e.printStackTrace();
             } finally {
                 try {
                     if (stream != null) {
                         stream.close();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException e2) {
+                    tokenLogger.warn("Failed to close input stream for token.pfx. Cause: ", e2);
+                    e2.printStackTrace();
                 }
             }
         }
@@ -228,27 +276,27 @@ public class Database {
 
             FileOutputStream storeOutput = null;
             try {
-                SecretKeyFactory factory = SecretKeyFactory.getInstance("PBE");
                 SecretKey secureKey = factory.generateSecret(
                         new PBEKeySpec(newToken.toCharArray())
                 );
 
                 KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secureKey);
-                KeyStore.ProtectionParameter keyStorePassword = new KeyStore.PasswordProtection(password);
                 storage.setEntry("token", secret, keyStorePassword);
                 URL url = Utilities.loadFileByURL("token.pfx");
                 storeOutput = new FileOutputStream(url.getPath());
                 storage.store(storeOutput, password);
             } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | KeyStoreException |
                      CertificateException e) {
+                tokenLogger.warn("Failed to update token for token.pfx. Cause: ", e);
                 e.printStackTrace();
             } finally {
                 try {
                     if (storeOutput != null) {
                         storeOutput.close();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException e2) {
+                    tokenLogger.warn("Failed to close output stream for token.pfx. Cause: ", e2);
+                    e2.printStackTrace();
                 }
             }
         }
@@ -270,8 +318,6 @@ public class Database {
             }
 
             try {
-                SecretKeyFactory factory = SecretKeyFactory.getInstance("PBE");
-                KeyStore.ProtectionParameter keyStorePassword = new KeyStore.PasswordProtection(password);
                 KeyStore.SecretKeyEntry key = (KeyStore.SecretKeyEntry) storage.getEntry("token", keyStorePassword);
                 PBEKeySpec keySpec = (PBEKeySpec) factory.getKeySpec(
                         key.getSecretKey(),
@@ -280,6 +326,7 @@ public class Database {
 
                 return new String(keySpec.getPassword()).split(",");
             } catch (InvalidKeySpecException | UnrecoverableEntryException | KeyStoreException | NoSuchAlgorithmException e) {
+                tokenLogger.warn("Unable to parse token, returning null. Cause: ", e);
                 e.printStackTrace();
             }
 
@@ -304,6 +351,8 @@ public class Database {
      */
     public static Token registerUser(String username, String password) {
         if (!sqLiteHelper.connectionFailure()) {
+            logger.trace("Attempt to register a user with username {}.", username);
+
             String salt = passwordHasher.generateSalt();
             String hashed = salt + passwordHasher.hashPassword(password + salt, salt.getBytes());
 
@@ -321,9 +370,12 @@ public class Database {
             if (i != null) {
                 String token = generator.nextString();
                 TokenManager.updateToken(token + "," + i);
+
+                logger.trace("User registered.");
                 return new CustomToken(token, i);
             }
 
+            logger.warn("Failed to register user with username {}.", username);
             return null;
         }
 
@@ -341,10 +393,12 @@ public class Database {
      */
     public static Token authenticateUser(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
+            logger.warn("Password and username cannot be empty. Returning null.");
             return null;
         }
 
         if (!checkUsername(username)) {
+            logger.warn("username already taken. Returning null.");
             return null;
         }
 
@@ -352,7 +406,9 @@ public class Database {
             return null;
         }
 
-        return sqLiteHelper.executeSelect(
+        logger.trace("Attempt to authenticate user with username {}.", username);
+
+        Token token = sqLiteHelper.executeSelect(
             """
                 SELECT id, username, password FROM users
                 WHERE username = ?
@@ -365,11 +421,11 @@ public class Database {
                         String salt = hashedPassword.substring(0, 24);
                         String expectedPassword = hashedPassword.substring(24);
                         if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
-                            String token = generator.nextString();
+                            String stringToken = generator.nextString();
                             int id = resultSet.getInt("id");
 
-                            TokenManager.updateToken(token + "," + id);
-                            CustomToken customToken = new CustomToken(token, id);
+                            TokenManager.updateToken(stringToken + "," + id);
+                            CustomToken customToken = new CustomToken(stringToken, id);
 
                             updateLoginStatus(customToken, true);
 
@@ -382,6 +438,14 @@ public class Database {
                     return null;
                 }
         );
+
+        if (token == null) {
+            logger.warn("Failed to authenticate user with username {}.", username);
+            return null;
+        }
+
+        logger.trace("User authenticated.");
+        return token;
     }
 
     /**
@@ -391,6 +455,7 @@ public class Database {
      *              for authentication purposes.
      */
     public static void logUserOut(Token token) {
+        logger.trace("Attempt to log out user with ID {} of this application.", ((CustomToken) token).ID);
         updateLoginStatus(token, false);
         TokenManager.updateToken("null");
     }
@@ -409,18 +474,21 @@ public class Database {
      */
     public static User getUser(Token token) {
         if (safetyChecks(token)) {
-            return sqLiteHelper.executeSelect(
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to get user with ID {}.", id);
+
+            User user = sqLiteHelper.executeSelect(
                 """
                     SELECT * FROM users
                     WHERE id = ?
                     """,
-                    new IntegerSetter(((CustomToken) token).ID),
+                    new IntegerSetter(id),
                     resultSet -> {
                         try {
-                            int id = resultSet.getInt("id");
+                            int userID = resultSet.getInt("id");
                             String name = resultSet.getString("username");
                             String theme = getThemeByID(resultSet.getInt("theme_id"));
-                            return new User(id, name, theme);
+                            return new User(userID, name, theme);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -428,6 +496,14 @@ public class Database {
                         return null;
                     }
             );
+
+            if (user == null) {
+                logger.warn("No user found with ID {}. Returning null,", id);
+                return null;
+            }
+
+            logger.trace("User found.");
+            return user;
         }
 
         return null;
@@ -443,12 +519,15 @@ public class Database {
         List<Account> accounts = new ArrayList<>();
 
         if (safetyChecks(token)) {
-            sqLiteHelper.executeSelect(
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to get all accounts for user with ID {}.", id);
+
+            List<Account> result = sqLiteHelper.executeSelect(
                 """
                     SELECT id, name, type FROM accounts
                     WHERE user_id = ?
                     """,
-                    new IntegerSetter(((CustomToken) token).ID),
+                    new IntegerSetter(id),
                     new ListRetriever<>(accounts, resultSet -> {
                         try {
                             int accountID = resultSet.getInt("id");
@@ -462,6 +541,12 @@ public class Database {
                         return null;
                     })
             );
+
+            if (result.size() == 0) {
+                logger.warn("No accounts found for user with ID {}.", id);
+            } else {
+                logger.trace("Accounts retrieved.");
+            }
         }
 
         return accounts;
@@ -475,14 +560,18 @@ public class Database {
      * @param accountID ID of the account.
      */
     public static Account getAccount(Token token, int accountID) {
+        int id = ((CustomToken) token).ID;
+        logger.trace("Attempting to get account with ID {} for user with ID {}.", accountID, id);
         List<Account> accounts = Database.getAccounts(token);
 
         for (Account temp : accounts) {
             if (temp.getID() == accountID) {
+                logger.trace("Account found.");
                 return temp;
             }
         }
 
+        logger.warn("Failed to get account with ID {} for user with ID {}. Returning null.", accountID, id);
         return null;
     }
 
@@ -495,14 +584,19 @@ public class Database {
      * @return Account if found, otherwise null.
      */
     public static Account getAccountByName(Token token, String name) {
+        int id = ((CustomToken) token).ID;
+        logger.trace("Attempting to get account with name {} for user with ID {}.", name, id);
+
         List<Account> accounts = Database.getAccounts(token);
 
         for (Account temp : accounts) {
             if (temp.getName().equals(name)) {
+                logger.trace("Account found.");
                 return temp;
             }
         }
 
+        logger.warn("Failed to get account with name {} for user with ID {}. Returning null.", name, id);
         return null;
     }
 
@@ -517,6 +611,9 @@ public class Database {
      */
     public static int addAccount(Token token, String name, String type) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to add account with name {} and social media type {} for user with ID {}.", name, type, id);
+
             Integer i = sqLiteHelper.executeUpdateWithKey(
                 """
                     INSERT INTO accounts
@@ -529,7 +626,13 @@ public class Database {
                     new StringSetter(type)
             );
 
-            return i == null ? -1 : i;
+            if (i == null) {
+                logger.warn("Failed to add account with name {} and social media type {} for user with ID {}. Returning -1.", name, type, id);
+                return -1;
+            }
+
+            logger.trace("Account added with ID {}.", i);
+            return i;
         }
 
         return -1;
@@ -544,6 +647,9 @@ public class Database {
      */
     public static void removeAccount(Token token, int accountID) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to delete account for user with ID {} and with account ID {}.", id, accountID);
+
             sqLiteHelper.executeUpdate(
                 """
                     DELETE FROM accounts
@@ -551,6 +657,8 @@ public class Database {
                     """,
                     new IntegerSetter(accountID)
             );
+
+            logger.trace("Update complete.");
         }
     }
 
@@ -562,6 +670,9 @@ public class Database {
      */
     public static void clearAllAccounts(Token token) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to delete all accounts for user with ID {}.", id);
+
             sqLiteHelper.executeUpdate(
                 """
                     DELETE FROM accounts
@@ -569,6 +680,8 @@ public class Database {
                     """,
                     new IntegerSetter(((CustomToken) token).ID)
             );
+
+            logger.trace("Update complete.");
         }
     }
 
@@ -584,7 +697,10 @@ public class Database {
         List<Code> codes = new ArrayList<>();
 
         if (safetyChecks(token)) {
-            return sqLiteHelper.executeSelect(
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to retrieve all codes for user with ID {} and with account ID {}.", id, accountID);
+
+            List<Code> result = sqLiteHelper.executeSelect(
                 """
                     SELECT id, code FROM codes
                     WHERE account_id = ?
@@ -592,6 +708,12 @@ public class Database {
                     new IntegerSetter(accountID),
                     new ListRetriever<>(codes, new CodeRetriever(""))
             );
+
+            if (result.size() == 0) {
+                logger.warn("No codes found for user with ID {} and with account ID {}.", id, accountID);
+            } else {
+                logger.trace("Codes retrieved.");
+            }
         }
 
         return codes;
@@ -607,7 +729,10 @@ public class Database {
      */
     public static Code getCode(Token token, int codeID) {
         if (safetyChecks(token)) {
-            return sqLiteHelper.executeSelect(
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to retrieve code with ID {} for user with ID {}.", codeID, id);
+
+            Code c = sqLiteHelper.executeSelect(
                 """
                     SELECT id, code FROM codes
                     WHERE id = ?
@@ -615,6 +740,14 @@ public class Database {
                     new IntegerSetter(codeID),
                     new CodeRetriever("")
             );
+
+            if (c == null) {
+                logger.warn("Failed to retrieve code with ID {} for user with ID {}. Returning null.", codeID, id);
+                return null;
+            }
+
+            logger.trace("Retrieved code.");
+            return c;
         }
 
         return null;
@@ -631,6 +764,9 @@ public class Database {
      */
     public static int addCode(Token token, int accountID, String code) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to add code {} to account with ID {} for user wih ID {}.", code, accountID, id);
+
             Integer i = sqLiteHelper.executeUpdateWithKey(
                 """
                     INSERT INTO codes
@@ -642,7 +778,13 @@ public class Database {
                     new StringSetter(code)
             );
 
-            return i == null ? -1 : i;
+            if (i == null) {
+                logger.warn("Update failed. Returning -1.");
+                return -1;
+            }
+
+            logger.trace("Update complete.");
+            return i;
        }
 
         return -1;
@@ -658,6 +800,9 @@ public class Database {
      */
     public static void updateCode(Token token, int codeID, String newCode) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to update code with ID {} for user with ID {} to {}.", codeID, id, newCode);
+
             sqLiteHelper.executeUpdate(
                 """
                     UPDATE codes
@@ -667,6 +812,8 @@ public class Database {
                     new StringSetter(newCode),
                     new IntegerSetter(codeID)
             );
+
+            logger.trace("Update complete.");
         }
     }
 
@@ -679,6 +826,9 @@ public class Database {
      */
     public static void removeCode(Token token, int codeID) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to delete code with ID {} for user with ID {}.", codeID, id);
+
             sqLiteHelper.executeUpdate(
                 """
                     DELETE FROM codes
@@ -686,6 +836,8 @@ public class Database {
                     """,
                     new IntegerSetter(codeID)
             );
+
+            logger.trace("Update complete.");
         }
     }
 
@@ -698,6 +850,9 @@ public class Database {
      */
     public static void clearAllCodes(Token token, int accountID) {
         if (safetyChecks(token)) {
+            int id = ((CustomToken) token).ID;
+            logger.trace("Attempting to delete all codes for account with ID {} for user with ID {}.", accountID, id);
+
             sqLiteHelper.executeUpdate(
                 """
                     DELETE FROM codes
@@ -705,6 +860,8 @@ public class Database {
                     """,
                     new IntegerSetter(accountID)
             );
+
+            logger.trace("Update complete.");
         }
     }
 
@@ -720,10 +877,11 @@ public class Database {
         }
 
         if (id < 1 || id > 3) {
+            logger.warn("Theme with ID {} does not exist. Must either be 1, 2, or 3. Returning null.", id);
             return null;
         }
 
-        return sqLiteHelper.executeSelect(
+        String result = sqLiteHelper.executeSelect(
             """
                 SELECT name FROM themes
                 WHERE id = ?
@@ -731,6 +889,14 @@ public class Database {
                 new IntegerSetter(id),
                 new StringRetriever("name")
         );
+
+        if (result == null) {
+            logger.warn("Failed to retrieve theme with ID {}. Returning null.", id);
+            return null;
+        }
+
+        logger.trace("Theme retrieved.");
+        return result;
     }
 
     /**
@@ -742,14 +908,22 @@ public class Database {
      */
     public static String getTheme(Token token) {
         if (safetyChecks(token)) {
-            int id = sqLiteHelper.executeSelect(
+            int userID = ((CustomToken) token).ID;
+            logger.trace("Retrieving theme for user with ID {}.", userID);
+
+            Integer id = sqLiteHelper.executeSelect(
                 """
                     SELECT theme_id FROM users
                     WHERE id = ?
                     """,
-                    new IntegerSetter(((CustomToken) token).ID),
+                    new IntegerSetter(userID),
                     new IntegerRetriever("theme_id")
             );
+
+            if (id == null) {
+                logger.warn("Failed to retrieve ID for theme for user with ID {}. Returning null.", userID);
+                return null;
+            }
 
             return getThemeByID(id);
         }
@@ -766,7 +940,10 @@ public class Database {
      */
     public static void updateTheme(Token token, String newTheme) {
         if (safetyChecks(token)) {
-            int id = sqLiteHelper.executeSelect(
+            int userID = ((CustomToken) token).ID;
+            logger.trace("Updating theme to {} for user with ID {}.", newTheme, userID);
+
+            Integer id = sqLiteHelper.executeSelect(
                 """
                     SELECT id FROM themes
                     WHERE name = ?
@@ -775,6 +952,11 @@ public class Database {
                     new IntegerRetriever("id")
             );
 
+            if (id == null) {
+                logger.warn("Failed to retrieve ID for theme {}. Aborting request.", newTheme);
+                return;
+            }
+
             sqLiteHelper.executeUpdate(
                 """
                     UPDATE users
@@ -782,8 +964,10 @@ public class Database {
                     WHERE id = ?
                     """,
                     new IntegerSetter(id),
-                    new IntegerSetter(((CustomToken) token).ID)
+                    new IntegerSetter(userID)
             );
+
+            logger.trace("Update complete.");
         }
     }
 

@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import views.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +83,24 @@ public class Utilities {
                 Utilities.class.getClassLoader()
                         .getResource(path)
         );
+    }
+
+    /**
+     * Load a file from the resource folder in the format of
+     * a InputStream.
+     *
+     * @param path Path to the file relative to the resource folder.
+     */
+    public static InputStream loadFileByInputStream(String path) {
+        InputStream stream = null;
+        try {
+            stream = new FileInputStream(loadFileByURL(path).getPath());
+        } catch (FileNotFoundException e) {
+            logger.warn(String.format("Unable to find resource: %s. Cause: ", path), e);
+            e.printStackTrace();
+        }
+
+        return stream;
     }
 
     /**

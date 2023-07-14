@@ -2,6 +2,8 @@ package utilities.sqliteutilities.retrievers;
 
 import javafx.util.Callback;
 import code.Code;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +13,8 @@ import java.sql.SQLException;
  * result of a SQLite query.
  */
 public class CodeRetriever extends Retriever implements Callback<ResultSet, Code> {
+
+    private static final Logger logger = LoggerFactory.getLogger(CodeRetriever.class);
 
     /**
      * Create a new code retriever.
@@ -34,6 +38,7 @@ public class CodeRetriever extends Retriever implements Callback<ResultSet, Code
             String code = resultSet.getString("code");
             return new Code(id, code);
         } catch (SQLException e) {
+            logger.warn("Failed to retrieve Code, returning null. Cause: ", e);
             e.printStackTrace();
         }
 

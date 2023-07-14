@@ -1,6 +1,8 @@
 package utilities.sqliteutilities.retrievers;
 
 import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +12,8 @@ import java.sql.SQLException;
  * on the result of a SQLite query.
  */
 public class StringRetriever extends Retriever implements Callback<ResultSet, String> {
+
+    private static final Logger logger = LoggerFactory.getLogger(StringRetriever.class);
 
     /**
      * Create a new String retriever.
@@ -31,6 +35,7 @@ public class StringRetriever extends Retriever implements Callback<ResultSet, St
         try {
             return resultSet.getString(key);
         } catch (SQLException e) {
+            logger.warn(String.format("Failed to retrieve key %s, returning null. Cause: ", key), e);
             e.printStackTrace();
         }
 

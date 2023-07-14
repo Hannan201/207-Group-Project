@@ -1,7 +1,8 @@
 package utilities.sqliteutilities.retrievers;
 
 import javafx.util.Callback;
-import utilities.sqliteutilities.retrievers.Retriever;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +17,8 @@ import java.util.List;
  * @param <T> The type of data that will be stored in the list.
  */
 public class ListRetriever<T> extends Retriever implements Callback<ResultSet, List<T>> {
+
+    private static final Logger logger = LoggerFactory.getLogger(ListRetriever.class);
 
     // This callback will be used to retrieve a single value
     // from a column or columns, depending on the implementation.
@@ -51,6 +54,7 @@ public class ListRetriever<T> extends Retriever implements Callback<ResultSet, L
                 results.add(callback.call(resultSet));
             }
         } catch (SQLException e) {
+            logger.warn("Failed to populate list with results, aborting request. Cause: ", e);
             e.printStackTrace();
         }
 
