@@ -1,4 +1,4 @@
-package views;
+package cypher.enforcers.views;
 
 /**
  * This class is responsible for displaying a view

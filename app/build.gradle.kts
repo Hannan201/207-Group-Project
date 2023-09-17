@@ -42,6 +42,10 @@ application {
 }
 
 javafx {
+    // This is the equivalent of doing
+    // --module-path=path/to/javafx/lib/folder --add-modules=javafx.fxml,
+    // javafx.controls on the run configuration of intellij IDEA.
+
     version = "19"
     modules = listOf("javafx.controls", "javafx.fxml")
 }

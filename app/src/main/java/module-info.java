@@ -1,4 +1,7 @@
 module cypher.enforcers {
+    // Java Desktop (Used for launching the web browser).
+    requires java.desktop;
+
     // JavaFX.
     requires javafx.controls;
     requires javafx.fxml;
