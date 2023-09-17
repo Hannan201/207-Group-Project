@@ -23,7 +23,10 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
 
     // ValidatorFX.
-    implementation("net.synedra:validatorfx:0.4.2")
+    implementation("net.synedra:validatorfx:0.4.0")
+
+    // ControlsFX.
+    implementation("org.controlsfx:controlsfx:11.1.2")
 
     // Use JUnit test framework.
     testImplementation("junit:junit:4.13.2")
