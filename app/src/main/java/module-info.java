@@ -6,6 +6,9 @@ module cypher.enforcers {
     // Logging API.
     requires org.slf4j;
 
+    // ValidatorFX
+    requires net.synedra.validatorfx;
+
     opens cypher.enforcers to javafx.fxml;
     exports cypher.enforcers;
 }
