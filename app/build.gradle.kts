@@ -8,6 +8,9 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+
+    // Plugin to work with JavaFX
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 repositories {
@@ -16,6 +19,9 @@ repositories {
 }
 
 dependencies {
+    // Logging API.
+    implementation("org.slf4j:slf4j-api:2.0.9")
+
     // Use JUnit test framework.
     testImplementation("junit:junit:4.13.2")
 }
@@ -30,4 +36,9 @@ java {
 application {
     // Define the main class for the application.
     mainClass.set("cypher.enforcers.Launcher")
+}
+
+javafx {
+    version = "19"
+    modules = listOf("javafx.controls", "javafx.fxml")
 }
