@@ -22,6 +22,14 @@ dependencies {
     // Logging API.
     implementation("org.slf4j:slf4j-api:2.0.9")
 
+    // Logging implementation.
+    implementation("ch.qos.logback:logback-classic:1.3.6") {
+        // This is because logback brings in a transitive
+        // dependency to SLF4J, even though we have already
+        // imported it. No need for it to be imported twice.
+        exclude(group = "org.slf4j", module = "slf4j-api")
+    }
+
     // ValidatorFX.
     implementation("net.synedra:validatorfx:0.4.0")
 
