@@ -36,6 +36,9 @@ dependencies {
     // ControlsFX.
     implementation("org.controlsfx:controlsfx:11.1.2")
 
+    // SQLite support.
+    implementation("org.xerial:sqlite-jdbc:3.43.0.0")
+
     // Use JUnit test framework.
     testImplementation("junit:junit:4.13.2")
 }

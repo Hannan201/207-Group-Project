@@ -15,6 +15,9 @@ module cypher.enforcers {
     // ControlsFX.
     requires org.controlsfx.controls;
 
+    // SQL support.
+    requires java.sql;
+
     opens cypher.enforcers to javafx.fxml;
     exports cypher.enforcers;
 }
