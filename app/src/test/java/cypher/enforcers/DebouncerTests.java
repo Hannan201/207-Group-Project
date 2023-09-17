@@ -1,4 +1,4 @@
-import utilities.Debouncer;
+import cypher.enforcers.utilities.Debouncer;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

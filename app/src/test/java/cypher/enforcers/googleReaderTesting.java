@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.Test;
 
 
-import behaviors.interfaces.ReadCodeBehavior;
-import code.readers.CodeReaderFactory;
+import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
+import cypher.enforcers.code.readers.CodeReaderFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

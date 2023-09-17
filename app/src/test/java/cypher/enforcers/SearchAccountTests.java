@@ -1,6 +1,6 @@
-import controllers.AccountViewController;
-import models.Account;
-import models.User;
+import cypher.enforcers.controllers.AccountViewController;
+import cypher.enforcers.models.Account;
+import cypher.enforcers.models.User;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.AfterEach;

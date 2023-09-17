@@ -1,9 +1,9 @@
-import data.security.Token;
-import code.Code;
+import cypher.enforcers.data.security.Token;
+import cypher.enforcers.code.Code;
 import org.junit.jupiter.api.Test;
-import models.Account;
-import data.database.Database;
-import models.User;
+import cypher.enforcers.models.Account;
+import cypher.enforcers.data.database.Database;
+import cypher.enforcers.models.User;
 
 import java.util.List;
 

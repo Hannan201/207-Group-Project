@@ -1,7 +1,7 @@
-import data.security.Token;
+import cypher.enforcers.data.security.Token;
 import org.junit.jupiter.api.Test;
-import data.database.Database;
-import models.User;
+import cypher.enforcers.data.database.Database;
+import cypher.enforcers.models.User;
 
 import java.io.IOException;
 import java.nio.file.Files;

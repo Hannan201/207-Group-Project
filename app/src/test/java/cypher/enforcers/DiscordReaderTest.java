@@ -1,5 +1,5 @@
-import code.readers.CodeReaderFactory;
-import code.readers.DiscordReader;
+import cypher.enforcers.code.readers.CodeReaderFactory;
+import cypher.enforcers.code.readers.DiscordReader;
 
 import org.junit.jupiter.api.Test;
 

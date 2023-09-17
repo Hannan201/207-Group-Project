@@ -1,6 +1,6 @@
-package ShopifyReaderTests;
+package cypher.enforcers.ShopifyReaderTests;
 
-import code.readers.*;
+import cypher.enforcers.code.readers.*;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 

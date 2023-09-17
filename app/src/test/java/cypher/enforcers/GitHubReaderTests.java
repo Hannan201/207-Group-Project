@@ -1,5 +1,5 @@
-import code.readers.CodeReader;
-import code.readers.CodeReaderFactory;
+import cypher.enforcers.code.readers.CodeReader;
+import cypher.enforcers.code.readers.CodeReaderFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
