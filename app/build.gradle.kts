@@ -39,8 +39,16 @@ dependencies {
     // SQLite support.
     implementation("org.xerial:sqlite-jdbc:3.43.0.0")
 
-    // Use JUnit test framework.
-    testImplementation("junit:junit:4.13.2")
+    // Junit5 in our case needs two modules.
+    // Junit jupiter -> This is for the @Test annotations and the assertions
+    // such as asserTrue, assertEquals, etc.
+    // Junit platform -> This is what launches the testing framework on the
+    // JVM.
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+
+    // Using runtime only because this dependency is only needed
+    // when running the tests.
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
