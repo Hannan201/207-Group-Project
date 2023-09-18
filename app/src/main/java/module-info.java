@@ -17,6 +17,7 @@ module cypher.enforcers {
 
     // SQL support.
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
     opens cypher.enforcers to javafx.fxml;
     exports cypher.enforcers;
