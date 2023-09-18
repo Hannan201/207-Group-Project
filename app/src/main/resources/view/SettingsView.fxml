@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.HyperlinkLabel?>
 
-<VBox fx:id="mainLayout" alignment="CENTER" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SettingsViewController">
+<VBox fx:id="mainLayout" alignment="CENTER" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.SettingsViewController">
    <children>
       <Region maxHeight="-Infinity" prefHeight="24.0" prefWidth="149.0" />
       <Label fx:id="label" alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="149.0" text="Settings" textAlignment="CENTER">

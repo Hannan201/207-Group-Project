@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="background" alignment="CENTER" prefHeight="250.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignInController">
+<VBox fx:id="background" alignment="CENTER" prefHeight="250.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.SignInController">
     <children>
         <Region fx:id="aboveTitle" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
           <Label fx:id="Title" alignment="CENTER" prefHeight="37.0" text="Welcome Back!" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS" />

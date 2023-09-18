@@ -6,7 +6,7 @@
 
 <HBox fx:id="backgroundLayout" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="50.0" prefWidth="320.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CodeViewControllers.CodeCellController" onMouseClicked="#layoutOnEnter" >
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.CodeViewControllers.CodeCellController" onMouseClicked="#layoutOnEnter" >
    <children>
       <StackPane fx:id="stackpane" prefWidth="110.0">
          <Label fx:id="code" alignment="CENTER" prefHeight="40.0" prefWidth="100.0" />
