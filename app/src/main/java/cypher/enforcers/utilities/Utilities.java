@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -93,15 +94,11 @@ public class Utilities {
      * @param path Path to the file relative to the resource folder.
      */
     public static InputStream loadFileByInputStream(String path) {
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(loadFileByURL(path).toURI().getPath());
-        } catch (FileNotFoundException | URISyntaxException e) {
-            logger.warn(String.format("Unable to find resource: %s. Cause: ", path), e);
-            e.printStackTrace();
-        }
-
-        return stream;
+        logger.debug("Attempting to load file (as input stream) from resource: " + path);
+        return Objects.requireNonNull(
+                Utilities.class.getClassLoader()
+                        .getResourceAsStream(path)
+        );
     }
 
     /**

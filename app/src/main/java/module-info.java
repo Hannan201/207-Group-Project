@@ -19,6 +19,7 @@ module cypher.enforcers {
     requires java.sql;
     requires org.xerial.sqlitejdbc;
 
-    opens cypher.enforcers to javafx.fxml;
+    opens cypher.enforcers.controllers to javafx.fxml;
+    opens cypher.enforcers.controllers.CodeViewControllers to javafx.fxml;
     exports cypher.enforcers;
 }
