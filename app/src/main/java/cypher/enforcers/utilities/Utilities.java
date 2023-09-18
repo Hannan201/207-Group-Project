@@ -13,6 +13,7 @@ import cypher.enforcers.views.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -94,8 +95,8 @@ public class Utilities {
     public static InputStream loadFileByInputStream(String path) {
         InputStream stream = null;
         try {
-            stream = new FileInputStream(loadFileByURL(path).getPath());
-        } catch (FileNotFoundException e) {
+            stream = new FileInputStream(loadFileByURL(path).toURI().getPath());
+        } catch (FileNotFoundException | URISyntaxException e) {
             logger.warn(String.format("Unable to find resource: %s. Cause: ", path), e);
             e.printStackTrace();
         }
