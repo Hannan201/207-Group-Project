@@ -362,7 +362,9 @@ public class Database {
                     (username, password)
                     VALUES
                     (?, ?)
+                    RETURNING *
                     """,
+                    "id",
                     new StringSetter(username.toLowerCase()),
                     new StringSetter(hashed)
             );
@@ -620,7 +622,9 @@ public class Database {
                     (user_id, name, type)
                     VALUES
                     (?, ?, ?)
+                    RETURNING *
                     """,
+                    "id",
                     new IntegerSetter(((CustomToken) token).ID),
                     new StringSetter(name),
                     new StringSetter(type)
@@ -773,7 +777,9 @@ public class Database {
                     (account_id, code)
                     VALUES
                     (?, ?)
+                    RETURNING *
                     """,
+                    "id",
                     new IntegerSetter(accountID),
                     new StringSetter(code)
             );

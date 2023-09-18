@@ -37,17 +37,9 @@ public class IntegerRetriever extends Retriever implements Callback<ResultSet, I
     @Override
     public Integer call(ResultSet resultSet) {
         try {
-            if (Utilities.isInteger(key)) {
-                return resultSet.getInt(Integer.parseInt(key));
-            }
-
             return resultSet.getInt(key);
         } catch (SQLException e) {
-            if (Utilities.isInteger(key)) {
-                logger.warn(String.format("Failed to retrieve column %s, returning -1. Cause: ", key), e);
-            } else {
-                logger.warn(String.format("Failed to retrieve key %s, returning -1. Cause: ", key), e);
-            }
+            logger.warn(String.format("Failed to retrieve key %s, returning -1. Cause: ", key), e);
             e.printStackTrace();
         }
 

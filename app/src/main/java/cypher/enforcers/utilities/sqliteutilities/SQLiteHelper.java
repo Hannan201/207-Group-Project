@@ -234,8 +234,7 @@ public class SQLiteHelper {
                 return callback.call(statement.executeQuery());
             }
 
-            statement.executeUpdate();
-            return callback.call(statement.getGeneratedKeys());
+            return callback.call(statement.executeQuery());
         } catch (SQLException e) {
             logger.warn(String.format("Failed to execute query: %s. Cause: ", query), e);
             e.printStackTrace();
@@ -279,15 +278,17 @@ public class SQLiteHelper {
     /**
      * Execute a prepared SQL query with placeholders (arguments are added
      * from left to right) to make an update to the database but also
-     * return the first generated integer key in the first column.
+     * return a generated integer key that was created because of the
+     * statement.
      *
      * @param query The SQL query.
+     * @param key Name of key that was generated.
      * @param arguments Arguments to add (from left to right) to the SQL query
      *                  based on the data type of the argument.
      * @return The integer key if present, null otherwise.
      */
-    public Integer executeUpdateWithKey(String query, ArgumentSetter<?> ... arguments) {
-        return execute(query, Statement.RETURN_GENERATED_KEYS, new IntegerRetriever("1"), arguments);
+    public Integer executeUpdateWithKey(String query, String key, ArgumentSetter<?> ... arguments) {
+        return execute(query, Statement.RETURN_GENERATED_KEYS, new IntegerRetriever(key), arguments);
     }
 
     /**
