@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -102,20 +103,25 @@ public class Utilities {
     }
 
     /**
-     * Return true if a string is an integer.
+     * Get absolute path to parent directory that this application
+     * is being executed in.
      *
-     * @param s The string.
-     * @return True if it is an integer, false otherwise.
+     * @return The path as a string.
      */
-    public static boolean isInteger(String s) {
+    public static String getJarParentDirectory() {
         try {
-            Integer.parseInt(s);
-        } catch (NullPointerException | NumberFormatException e) {
-            logger.warn(String.format("Cannot convert %s to an integer. Cause: ", s), e);
-            return false;
+            return new File(
+                    Utilities.class.getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI()
+            ).getParent();
+        } catch (URISyntaxException e) {
+            logger.warn("Unable to find parent directory of jar. Cause: ", e);
+            e.printStackTrace();
         }
 
-        return true;
+        return null;
     }
 
     /**

@@ -22,7 +22,10 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
@@ -242,7 +245,22 @@ public class Database {
         private static void initializeKeyStore() {
             InputStream stream = null;
             try {
-                stream = Utilities.loadFileByInputStream("token.pfx");
+                String path = Objects.requireNonNull(
+                        Utilities.getJarParentDirectory()
+                );
+
+                File file = new File(
+                        path + File.separator + "token.pfx"
+                );
+
+                if (!file.exists()) {
+                    Files.copy(
+                            Utilities.loadFileByInputStream("token.pfx"),
+                            file.toPath()
+                    );
+                }
+
+                stream = new FileInputStream(file);
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
             } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
@@ -282,8 +300,8 @@ public class Database {
 
                 KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secureKey);
                 storage.setEntry("token", secret, keyStorePassword);
-                URL url = Utilities.loadFileByURL("token.pfx");
-                storeOutput = new FileOutputStream(url.getPath());
+                String path = Utilities.getJarParentDirectory() + File.separator + "token.pfx";
+                storeOutput = new FileOutputStream(path);
                 storage.store(storeOutput, password);
             } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | KeyStoreException |
                      CertificateException e) {
