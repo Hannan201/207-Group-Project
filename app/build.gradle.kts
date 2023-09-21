@@ -13,6 +13,9 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
+group = "cypher.enforcers"
+version = "1.0.0"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -59,6 +62,9 @@ java {
 }
 
 application {
+    // Define the main module for the application.
+    mainModule.set("cypher.enforcers")
+
     // Define the main class for the application.
     mainClass.set("cypher.enforcers.Launcher")
 }
