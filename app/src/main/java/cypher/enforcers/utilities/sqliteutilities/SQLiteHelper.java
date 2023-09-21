@@ -43,9 +43,8 @@ public class SQLiteHelper {
 
             SQLiteConfig configurations = new SQLiteConfig();
             configurations.enforceForeignKeys(true);
-
             connection = DriverManager.getConnection(
-                    "jdbc:sqlite:" + path,
+                    "jdbc:sqlite::resource:" + path,
                     configurations.toProperties()
             );
 

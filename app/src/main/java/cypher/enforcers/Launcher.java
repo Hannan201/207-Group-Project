@@ -10,10 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import cypher.enforcers.views.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
-
 /**
  * This class is responsible for launching the backup
  * code manager application.
@@ -25,7 +21,7 @@ public class Launcher extends Application {
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
     // Path to the database file (relative to the resources folder).
-    private static final String PATH_TO_DATABASE = "database/database.db";
+    private static final String PATH_TO_DATABASE = "/database/database.db";
 
     /**
      * Entry point for this application.
@@ -34,14 +30,8 @@ public class Launcher extends Application {
      */
     public static void main(String[] args) {
         logger.info("Starting application...");
-        try {
-            URI uri = Utilities.loadFileByURL(PATH_TO_DATABASE).toURI();
-            String path = Paths.get(uri).toString();
-            Database.setConnectionSource(path);
-        } catch (URISyntaxException e) {
-            logger.error("Connection to database failed. Application will function, but no new changes will be saved.", e);
-            e.printStackTrace();
-        }
+
+        Database.setConnectionSource(PATH_TO_DATABASE);
 
         logger.debug("Launching JavaFX application...");
         launch(args);

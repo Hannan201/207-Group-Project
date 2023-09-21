@@ -54,7 +54,7 @@ public class AccountView extends View implements Reversible {
     protected void initUI() {
 
         try {
-            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountsView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/view/AccountsView.fxml"));
             this.setRoot(loader.load());
             this.controller = loader.getController();
 

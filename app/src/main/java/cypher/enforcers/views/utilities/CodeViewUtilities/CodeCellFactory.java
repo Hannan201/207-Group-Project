@@ -25,7 +25,7 @@ public class CodeCellFactory extends ListCell<Code> {
     public CodeCellFactory(ListView<Code> parentListView) throws IOException {
 
         // Each cell only loads the FXML file once to speed up runtime
-        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/CodeViewFXML/CodeCell.fxml"));
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/view/CodeViewFXML/CodeCell.fxml"));
 
         CodeListView = parentListView;
 

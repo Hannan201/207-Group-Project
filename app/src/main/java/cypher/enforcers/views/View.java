@@ -150,7 +150,7 @@ public abstract class View {
     protected void loadRoot(String fileName) {
         try {
             this.root = FXMLLoader.load(
-                    Utilities.loadFileByURL("view/" + fileName)
+                    Utilities.loadFileByURL("/view/" + fileName)
             );
         } catch (IOException e) {
             logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);
@@ -165,7 +165,7 @@ public abstract class View {
     protected void loadStylesheets() {
         for (int i = 0; i < this.cssFilesPaths.length; i++) {
             this.cssFilesPaths[i] = Utilities.loadFileByURL(
-                    "css/" + this.names[i]
+                    "/css/" + this.names[i]
                     ).toExternalForm();
         }
 

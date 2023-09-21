@@ -83,8 +83,7 @@ public class Utilities {
     public static URL loadFileByURL(String path) {
         logger.debug("Attempting to load file from resource: " + path);
         return Objects.requireNonNull(
-                Utilities.class.getClassLoader()
-                        .getResource(path)
+                Utilities.class.getResource(path)
         );
     }
 
