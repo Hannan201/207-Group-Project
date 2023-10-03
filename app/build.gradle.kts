@@ -77,3 +77,7 @@ javafx {
     version = "19"
     modules = listOf("javafx.controls", "javafx.fxml")
 }
+
+tasks.named("clean").configure {
+    delete(layout.projectDirectory.file("logs.log"))
+}
