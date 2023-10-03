@@ -1,5 +1,7 @@
 package cypher.enforcers.utilities.sqliteutilities;
 
+import cypher.enforcers.utilities.Utilities;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetter;
@@ -8,6 +10,9 @@ import cypher.enforcers.utilities.sqliteutilities.argumentsetters.StringSetter;
 import javafx.util.Callback;
 import org.sqlite.SQLiteConfig;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -39,18 +44,19 @@ public class SQLiteHelper {
      */
     public void connect(String path) {
         try {
-            boolean tablesSet = Files.exists(Path.of(path));
+            Utilities.copyResourceFileIf(path);
 
             SQLiteConfig configurations = new SQLiteConfig();
             configurations.enforceForeignKeys(true);
             connection = DriverManager.getConnection(
-                    "jdbc:sqlite::resource:" + path,
+                    "jdbc:sqlite:" +
+                            Utilities.getJarParentDirectory() +
+                            File.separator +
+                            FilenameUtils.getName(
+                                    Utilities.loadFileByURL(path).getPath()
+                            ),
                     configurations.toProperties()
             );
-
-            if (!tablesSet) {
-                initializeTables();
-            }
         } catch (SQLException e) {
             logger.warn("Connection to database failed. No new changes will be saved. Cause: ", e);
             e.printStackTrace();

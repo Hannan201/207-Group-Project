@@ -3,7 +3,7 @@
 }
 
 #github {
-    -fx-background-image: url('/images/github_darkmode.png');
+    -fx-background-image: url('../images/github_darkmode.png');
     -fx-background-size: 50px;
     -fx-background-color: #161618;
     -fx-background-repeat: no-repeat;
@@ -15,7 +15,7 @@
 }
 
 #google {
-    -fx-background-image: url('/images/google_darkmode.png');
+    -fx-background-image: url('../images/google_darkmode.png');
     -fx-background-size: 50px;
     -fx-background-color: #161618;
     -fx-background-repeat: no-repeat;
@@ -27,7 +27,7 @@
 }
 
 #shopify {
-    -fx-background-image: url('/images/shopify_darkmode.png');
+    -fx-background-image: url('../images/shopify_darkmode.png');
     -fx-background-size: 50px;
     -fx-background-color: #161618;
     -fx-background-repeat: no-repeat;
@@ -39,7 +39,7 @@
 }
 
 #discord {
-    -fx-background-image: url('/images/discord_darkmode.png');
+    -fx-background-image: url('../images/discord_darkmode.png');
     -fx-background-size: 50px;
     -fx-background-color: #161618;
     -fx-background-repeat: no-repeat;

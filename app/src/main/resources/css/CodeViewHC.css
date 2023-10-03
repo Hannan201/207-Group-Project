@@ -124,7 +124,7 @@
 
 
 #logout{
-    -fx-background-image: url('/images/hc-logout.png');
+    -fx-background-image: url('../images/hc-logout.png');
     -fx-border-color: transparent;
     -fx-background-size: 35px;
     -fx-background-color: transparent;
@@ -133,7 +133,7 @@
 }
 
 #logout:hover{
-    -fx-background-image: url('/images/hc-logout-onselect.png');
+    -fx-background-image: url('../images/hc-logout-onselect.png');
     -fx-background-size: 35px;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
@@ -142,7 +142,7 @@
 }
 
 #settings{
-    -fx-background-image: url('/images/hc-settings.png');
+    -fx-background-image: url('../images/hc-settings.png');
     -fx-background-size: 35px;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
@@ -151,7 +151,7 @@
 }
 
 #settings:hover{
-    -fx-background-image: url('/images/hc-settings-onselect.png');
+    -fx-background-image: url('../images/hc-settings-onselect.png');
     -fx-background-size: 35px;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
@@ -160,7 +160,7 @@
 }
 
 #back{
-    -fx-background-image: url('/images/hc-back.png');
+    -fx-background-image: url('../images/hc-back.png');
     -fx-background-size: 35px;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
@@ -169,7 +169,7 @@
 }
 
 #back:hover{
-    -fx-background-image: url('/images/hc-back-onselect.png');
+    -fx-background-image: url('../images/hc-back-onselect.png');
     -fx-background-size: 35px;
     -fx-border-color: transparent;
     -fx-background-color: transparent;

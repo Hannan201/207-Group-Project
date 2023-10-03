@@ -3,7 +3,7 @@
 }
 
 #github{
-    -fx-background-image: url('/images/hc-github.png');
+    -fx-background-image: url('../images/hc-github.png');
     -fx-background-size: 50px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -11,7 +11,7 @@
 }
 
 #google{
-    -fx-background-image: url('/images/hc-google.png');
+    -fx-background-image: url('../images/hc-google.png');
     -fx-background-size: 50px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -19,7 +19,7 @@
 }
 
 #shopify{
-    -fx-background-image: url('/images/hc-shopify.png');
+    -fx-background-image: url('../images/hc-shopify.png');
     -fx-background-size: 50px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -27,7 +27,7 @@
 }
 
 #discord{
-    -fx-background-image: url('/images/hc-discord.png');
+    -fx-background-image: url('../images/hc-discord.png');
     -fx-background-size: 50px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;

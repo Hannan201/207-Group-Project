@@ -159,7 +159,7 @@
 }
 
 #logout {
-    -fx-background-image: url('/images/logout_darkmode.png');
+    -fx-background-image: url('../images/logout_darkmode.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -167,7 +167,7 @@
 }
 
 #settings {
-    -fx-background-image: url('/images/settings_darkmode.png');
+    -fx-background-image: url('../images/settings_darkmode.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -175,7 +175,7 @@
 }
 
 #back {
-    -fx-background-image: url('/images/back_darkmode.png');
+    -fx-background-image: url('../images/back_darkmode.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;

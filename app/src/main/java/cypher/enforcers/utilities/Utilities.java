@@ -6,16 +6,17 @@ import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.database.Database;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -96,8 +97,7 @@ public class Utilities {
     public static InputStream loadFileByInputStream(String path) {
         logger.debug("Attempting to load file (as input stream) from resource: " + path);
         return Objects.requireNonNull(
-                Utilities.class.getClassLoader()
-                        .getResourceAsStream(path)
+                Utilities.class.getResourceAsStream(path)
         );
     }
 
@@ -121,6 +121,53 @@ public class Utilities {
         }
 
         return null;
+    }
+
+    /**
+     * Create and copy a file from the resources folder if it doesn't
+     * exist in the same directory in which this application is running.
+     *
+     * @param file Path of file (relative to the resources folder).
+     */
+    public static void copyResourceFileIf(String file) {
+        /*
+        The file variable only contains the path relative to the resources
+        folder, but we just need the name. So we first load the file
+        from resources, then use a utility method to extract the name from
+        a URL.
+         */
+
+        // Needed for logging.
+        URL url = null;
+
+        InputStream inputStream = null;
+        try {
+            url = loadFileByURL(file);
+
+            File fileToCreate = new File(
+                    Objects.requireNonNull(getJarParentDirectory()) +
+                    File.separator +
+                    FilenameUtils.getName(url.getPath())
+            );
+
+            inputStream = loadFileByInputStream(file);
+
+            if (!fileToCreate.exists()) {
+                Files.copy(inputStream, fileToCreate.toPath());
+            }
+        } catch (IOException e) {
+            logger.warn("Failed to move file {} from resources. Cause: {}", url, e.toString());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException inputStreamException) {
+                logger.warn("Failed to close input stream for {}. Cause: {}", url, inputStreamException.toString());
+                inputStreamException.printStackTrace();
+            }
+        }
     }
 
     /**

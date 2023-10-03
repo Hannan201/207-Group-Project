@@ -1,5 +1,5 @@
 #back{
-    -fx-background-image: url('/images/hc-back.png');
+    -fx-background-image: url('../images/hc-back.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -7,7 +7,7 @@
 }
 
 #back:hover{
-    -fx-background-image: url('/images/hc-back-onselect.png');
+    -fx-background-image: url('../images/hc-back-onselect.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -15,7 +15,7 @@
 }
 
 #logout{
-    -fx-background-image: url('/images/hc-logout.png');
+    -fx-background-image: url('../images/hc-logout.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;
@@ -23,7 +23,7 @@
 }
 
 #logout:hover{
-    -fx-background-image: url('/images/hc-logout-onselect.png');
+    -fx-background-image: url('../images/hc-logout-onselect.png');
     -fx-background-size: 35px;
     -fx-background-color: transparent;
     -fx-background-repeat: no-repeat;

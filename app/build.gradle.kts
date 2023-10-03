@@ -52,6 +52,9 @@ dependencies {
     // Using runtime only because this dependency is only needed
     // when running the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Used to extract filename from a url.
+    implementation("commons-io:commons-io:2.14.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

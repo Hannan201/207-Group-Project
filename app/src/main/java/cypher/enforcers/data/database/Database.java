@@ -216,7 +216,7 @@ public class Database {
         private static void initializeProperties() {
             InputStream applicationFile = null;
             try {
-                applicationFile = Utilities.loadFileByInputStream("application.properties");
+                applicationFile = Utilities.loadFileByInputStream("/application.properties");
 
                 Properties applicationProperties = new Properties();
                 applicationProperties.load(applicationFile);
@@ -245,22 +245,9 @@ public class Database {
         private static void initializeKeyStore() {
             InputStream stream = null;
             try {
-                String path = Objects.requireNonNull(
-                        Utilities.getJarParentDirectory()
-                );
+                Utilities.copyResourceFileIf("/token.pfx");
 
-                File file = new File(
-                        path + File.separator + "token.pfx"
-                );
-
-                if (!file.exists()) {
-                    Files.copy(
-                            Utilities.loadFileByInputStream("token.pfx"),
-                            file.toPath()
-                    );
-                }
-
-                stream = new FileInputStream(file);
+                stream = new FileInputStream(Utilities.getJarParentDirectory() + File.separator + "token.pfx");
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
             } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {

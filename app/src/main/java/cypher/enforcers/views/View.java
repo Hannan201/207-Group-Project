@@ -75,11 +75,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 Account.getIcons(),
-                "images/icons8-discord-100.png",
-                "images/icons8-github-100.png",
-                "images/icons8-google-100.png",
-                "images/icons8-shopify-100.png",
-                "images/icons8-app-100.png"
+                "/images/icons8-discord-100.png",
+                "/images/icons8-github-100.png",
+                "/images/icons8-google-100.png",
+                "/images/icons8-shopify-100.png",
+                "/images/icons8-app-100.png"
         );
     }
 
@@ -91,11 +91,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 Account.getIcons(),
-                "images/discord_darkmode.png",
-                "images/github_darkmode.png",
-                "images/google_darkmode.png",
-                "images/shopify_darkmode.png",
-                "images/app_darkmode.png"
+                "/images/discord_darkmode.png",
+                "/images/github_darkmode.png",
+                "/images/google_darkmode.png",
+                "/images/shopify_darkmode.png",
+                "/images/app_darkmode.png"
         );
     }
 
@@ -107,11 +107,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 Account.getIcons(),
-                "images/hc-discord.png",
-                "images/hc-github.png",
-                "images/hc-google.png",
-                "images/hc-shopify.png",
-                "images/hc-app.png"
+                "/images/hc-discord.png",
+                "/images/hc-github.png",
+                "/images/hc-google.png",
+                "/images/hc-shopify.png",
+                "/images/hc-app.png"
         );
     }
 

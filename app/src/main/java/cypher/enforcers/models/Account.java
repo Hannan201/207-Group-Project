@@ -34,11 +34,11 @@ public class Account {
         icons = new HashMap<>();
         Utilities.updateIcons(
                 icons,
-                "images/icons8-discord-100.png",
-                "images/icons8-github-100.png",
-                "images/icons8-google-100.png",
-                "images/icons8-shopify-100.png",
-                "images/icons8-app-100.png"
+                "/images/icons8-discord-100.png",
+                "/images/icons8-github-100.png",
+                "/images/icons8-google-100.png",
+                "/images/icons8-shopify-100.png",
+                "/images/icons8-app-100.png"
         );
     }
 

@@ -1,4 +1,4 @@
-package cypher.enforcers.views.utilities.CodeViewUtilities;
+package cypher.enforcers.views.utilities.codeViewUtilities;
 
 import cypher.enforcers.controllers.CodeViewControllers.CodeCellController;
 import javafx.fxml.FXMLLoader;
