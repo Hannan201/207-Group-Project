@@ -69,15 +69,21 @@ application {
     mainClass.set("cypher.enforcers.Launcher")
 }
 
+tasks.named<Test>("test") {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
 javafx {
     // This is the equivalent of doing
     // --module-path=path/to/javafx/lib/folder --add-modules=javafx.fxml,
-    // javafx.controls on the run configuration of intellij IDEA.
+    // javafx.controls in the run configuration of Intellij IDEA.
 
     version = "19"
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
-tasks.named("clean").configure {
+tasks.named<Delete>("clean") {
+    // This is to remove log file.
     delete(layout.projectDirectory.file("logs.log"))
 }
