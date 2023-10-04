@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoadingDataTests {
     @Test
     void userLoginLoaded() {
-        Database.setConnectionSource("/cypher/enforcers/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_with_two_users.db");
 
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -27,7 +27,7 @@ public class LoadingDataTests {
 
     @Test
     void userAccountLoaded() {
-        Database.setConnectionSource("/cypher/enforcers/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_with_two_users.db");
 
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
