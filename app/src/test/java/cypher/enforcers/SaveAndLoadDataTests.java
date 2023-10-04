@@ -8,9 +8,6 @@ import cypher.enforcers.models.Account;
 import cypher.enforcers.data.database.Database;
 import cypher.enforcers.models.User;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -405,13 +402,18 @@ public class SaveAndLoadDataTests {
 
     @Test
     void loadUserDataWhenNotLoggedOut() {
-        Database.setConnectionSource("/cypher/enforcers/database_for_load_reload.db");
+        Database.setConnectionSource(
+                "/cypher/enforcers/database_for_load_reload.db",
+                "cypher/enforcers/test_token.pfx"
+        );
 
         Token token = Storage.getToken();
         assertNotNull(token);
 
         User user = Database.getUser(token);
         assertNotNull(user);
+
+        assertEquals(user.getUsername(), "hannan");
 
         Database.logUserOut(token);
         Database.disconnect();

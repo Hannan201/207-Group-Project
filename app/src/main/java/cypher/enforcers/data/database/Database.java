@@ -7,6 +7,7 @@ import cypher.enforcers.data.security.TokenGenerator;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.models.User;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
@@ -66,20 +67,31 @@ public class Database {
     }
 
     /**
-     * The SQLite file this database needs to connect to.
+     * The SQLite file this database needs to connect to along
+     * with the name of the token file used for authentication.
      *
      * @param source Name of the database file.
+     * @param tokenFile Name of the token file for authentication.
      */
-    public static void setConnectionSource(String source) {
+    public static void setConnectionSource(String source, String tokenFile) {
         if (source.isBlank() || !source.endsWith(".db")) {
             logger.warn("Invalid path to database, connection failed. Aborting request.");
             return;
         }
 
-        TokenManager.initializeStorage();
+        TokenManager.initializeStorage(tokenFile);
         passwordHasher = new PasswordHasher();
         generator = new TokenGenerator(21);
         sqLiteHelper = new SQLiteHelper(source);
+    }
+
+    /**
+     * The SQLite file this database needs to connect to.
+     *
+     * @param source Name of the database file.
+     */
+    public static void setConnectionSource(String source) {
+        Database.setConnectionSource(source, "token.pfx");
     }
 
     /**
@@ -87,6 +99,7 @@ public class Database {
      */
     public static void disconnect() {
         sqLiteHelper.disconnect();
+        TokenManager.destroy();
     }
 
     /*
@@ -181,6 +194,9 @@ public class Database {
         // Used to generate secrets.
         private static SecretKeyFactory factory;
 
+        // Name of token file.
+        private static String name;
+
         static {
             try {
                 factory = SecretKeyFactory.getInstance("PBE");
@@ -193,7 +209,9 @@ public class Database {
         /**
          * Load the token into storage, if there's any present.
          */
-        private static void initializeStorage() {
+        private static void initializeStorage(String tokenFile) {
+            name = tokenFile;
+
             String[] result = Objects.requireNonNull(parseToken());
 
             if (result.length != 2) {
@@ -245,9 +263,9 @@ public class Database {
         private static void initializeKeyStore() {
             InputStream stream = null;
             try {
-                Utilities.copyResourceFileIf("/token.pfx");
+                Utilities.copyResourceFileIf("/" + name);
 
-                stream = new FileInputStream(Utilities.getJarParentDirectory() + File.separator + "token.pfx");
+                stream = new FileInputStream(Utilities.getJarParentDirectory() + File.separator + FilenameUtils.getName(name));
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
             } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
@@ -287,7 +305,7 @@ public class Database {
 
                 KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secureKey);
                 storage.setEntry("token", secret, keyStorePassword);
-                String path = Utilities.getJarParentDirectory() + File.separator + "token.pfx";
+                String path = Utilities.getJarParentDirectory() + File.separator + FilenameUtils.getName(name);
                 storeOutput = new FileOutputStream(path);
                 storage.store(storeOutput, password);
             } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | KeyStoreException |
@@ -336,6 +354,14 @@ public class Database {
             }
 
             return null;
+        }
+
+        /**
+         * Destroy the keystore. Usually called when the application is
+         * shutting down.
+         */
+        public static void destroy() {
+            storage = null;
         }
     }
 
