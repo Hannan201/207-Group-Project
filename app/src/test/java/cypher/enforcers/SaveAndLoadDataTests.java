@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SaveAndLoadDataTests {
     @Test
     void saveDataWithExistingUser() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/empty_database.db");
 
         Token token = Database.registerUser("Test", "hellobro");
         assertNotNull(token);
@@ -86,7 +86,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void loadDataWithExistingUser() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_with_one_user.db");
 
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -192,7 +192,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void testWhenUserDeletesAccount() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_account_removal.db");
 
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -208,7 +208,7 @@ public class SaveAndLoadDataTests {
         Database.logUserOut(token);
         Database.disconnect();
 
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_account_removal.db");
 
         token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -225,7 +225,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void testWhenDeleteAllCodes() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_codes_removal.db");
 
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -244,7 +244,7 @@ public class SaveAndLoadDataTests {
         Database.logUserOut(token);
         Database.disconnect();
 
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_codes_removal.db");
 
         token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -253,7 +253,7 @@ public class SaveAndLoadDataTests {
         assertNotNull(user);
 
         codes = Database.getCodes(token, account.getID());
-        assertEquals(codes.size(), 0);
+        assertTrue(codes.isEmpty());
 
         Database.logUserOut(token);
         Database.disconnect();
@@ -261,7 +261,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void testWhenGetCode() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_single_code.db");
 
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -288,7 +288,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void testWhenDeleteCode() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_single_code_delete.db");
 
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -323,7 +323,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void testWhenUpdateCode() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_single_code_update.db");
 
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
@@ -351,7 +351,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void saveDataWhenUserMakesChanges() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_account_code_added.db");
 
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -372,7 +372,7 @@ public class SaveAndLoadDataTests {
         Database.logUserOut(token);
         Database.disconnect();
 
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_account_code_added.db");
 
         token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -392,7 +392,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void saveUserDataWhenNotLoggedOut() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_save_reload.db");
 
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -405,7 +405,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void loadUserDataWhenNotLoggedOut() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_load_reload.db");
 
         Token token = Storage.getToken();
         assertNotNull(token);
@@ -419,7 +419,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void loadCorrectTheme() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_theme.db");
 
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -434,7 +434,7 @@ public class SaveAndLoadDataTests {
         Database.logUserOut(token);
         Database.disconnect();
 
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_for_theme.db");
 
         token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -451,7 +451,7 @@ public class SaveAndLoadDataTests {
 
     @Test
     void testClearUserData() {
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_to_clean.db");
 
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -467,7 +467,7 @@ public class SaveAndLoadDataTests {
         Database.logUserOut(token);
         Database.disconnect();
 
-        Database.setConnectionSource("./Tests/test.db");
+        Database.setConnectionSource("/cypher/enforcers/database_to_clean.db");
 
         token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
@@ -480,11 +480,5 @@ public class SaveAndLoadDataTests {
 
         Database.logUserOut(token);
         Database.disconnect();
-
-        try {
-            Files.deleteIfExists(Path.of("./Tests/test.db"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
