@@ -1,17 +1,12 @@
+package cypher.enforcers;
+
 import cypher.enforcers.controllers.AccountViewController;
 import cypher.enforcers.models.Account;
-import cypher.enforcers.models.User;
 import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class SearchAccountTests {

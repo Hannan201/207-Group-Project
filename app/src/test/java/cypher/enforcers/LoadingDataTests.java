@@ -1,3 +1,5 @@
+package cypher.enforcers;
+
 import cypher.enforcers.data.security.Token;
 import cypher.enforcers.code.Code;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,7 @@
+package cypher.enforcers;
+
 import cypher.enforcers.data.security.Token;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import cypher.enforcers.data.database.Database;
 import cypher.enforcers.models.User;
@@ -10,17 +13,17 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SavingDataTests {
-    @Test
-    void testSaveUserData() {
+
+    @BeforeAll
+    static void creatDatabaseFile() throws IOException {
         Path path = Path.of("./Tests/test.db");
         if (Files.exists(path)) {
-            try {
-                Files.deleteIfExists(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Files.deleteIfExists(path);
         }
+    }
 
+    @Test
+    void testSaveUserData() {
         Database.setConnectionSource("./Tests/test.db");
 
         Token token = Database.registerUser("Joe", "1234");

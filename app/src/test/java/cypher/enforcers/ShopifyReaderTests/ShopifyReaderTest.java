@@ -7,13 +7,13 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ShopifyReaderTEST {
+public class ShopifyReaderTest {
 
     // ------------------------------------- extractCodes() Tests -----------------------------------------------------
 
     @Test
     public void extractCodesBasic() {
-        String filename = "/Users/kedidiaba/CSC207/Group Project/Sample Text Files/shopify_sample_codes.txt";
+        String filename = "../Sample Text Files/shopify_sample_codes.txt";
         ShopifyReader reader = new ShopifyReader();
 
         List<String> result = reader.extractCodes(filename);

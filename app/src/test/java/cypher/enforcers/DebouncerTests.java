@@ -1,3 +1,5 @@
+package cypher.enforcers;
+
 import cypher.enforcers.utilities.Debouncer;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +17,7 @@ public class DebouncerTests {
      * Test that the debouncer returns the expected result.
      */
     @Test
-    void debouncerReturnsResult() {
+    void debouncerReturnsResult() throws InterruptedException {
         debounce = new Debouncer();
         List<String> names = Collections.synchronizedList(
                 new ArrayList<>(
@@ -32,11 +34,8 @@ public class DebouncerTests {
         );
 
         assertEquals("hello", names.get(0));
-        try {
-            Thread.sleep(2000); // Wait for 2 seconds to pass.
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        Thread.sleep(2000); // Wait for 2 seconds to pass.
 
         assertEquals("HELLO", names.get(0));
     }
@@ -47,7 +46,7 @@ public class DebouncerTests {
      * new function is added before the first function is executed.
      */
     @Test
-    void debouncerClearsOldResult() {
+    void debouncerClearsOldResult() throws InterruptedException {
         debounce = new Debouncer();
         List<Integer> number = Collections.synchronizedList(
                 new ArrayList<>(
@@ -78,15 +77,9 @@ public class DebouncerTests {
         // Nothing should have happened here.
         assertEquals(number.get(0), 3);
 
-        try {
-            Thread.sleep(2000); // Wait for 2 second.
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(2000); // Wait for 2 second.
 
         // Squared should be ignored.
         assertEquals(number.get(0), 27);
     }
-
-
 }

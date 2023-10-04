@@ -1,3 +1,5 @@
+package cypher.enforcers;
+
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.security.Token;
 import cypher.enforcers.code.Code;
@@ -458,7 +460,7 @@ public class SaveAndLoadDataTests {
         assertNotNull(user);
 
         List<Account> accounts = Database.getAccounts(token);
-        assertTrue(accounts.size() > 0);
+        assertFalse(accounts.isEmpty());
 
         Database.clearAllAccounts(token);
 
