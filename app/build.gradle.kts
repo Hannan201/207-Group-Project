@@ -72,9 +72,27 @@ application {
     mainClass.set("cypher.enforcers.Launcher")
 }
 
+val cleanUpTask: TaskProvider<Delete> = tasks.register<Delete>("cleanUpTestFiles") {
+    // This is to remove files that were copied from resources.
+    // These files are modified after the tests are complete, so they
+    // need to be copied again to return to their original state.
+    delete(fileTree(layout.buildDirectory.dir("classes/java")) {
+        include("*.db")
+        include("*.pfx")
+    })
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+
+    // clean up old files.
+    dependsOn(cleanUpTask)
+
+    // Show tests that failed and passed.
+    testLogging {
+        events("passed", "failed")
+    }
 }
 
 javafx {
