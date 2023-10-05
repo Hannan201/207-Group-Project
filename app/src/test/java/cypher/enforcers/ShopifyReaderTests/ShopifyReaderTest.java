@@ -1,5 +1,6 @@
 package cypher.enforcers.ShopifyReaderTests;
 
+import cypher.enforcers.Samples;
 import cypher.enforcers.code.readers.*;
 import org.junit.jupiter.api.Test;
 import java.util.*;
@@ -13,7 +14,7 @@ public class ShopifyReaderTest {
 
     @Test
     public void extractCodesBasic() {
-        String filename = "../Sample Text Files/shopify_sample_codes.txt";
+        String filename = Samples.SHOPIFY.getPath();
         ShopifyReader reader = new ShopifyReader();
 
         List<String> result = reader.extractCodes(filename);

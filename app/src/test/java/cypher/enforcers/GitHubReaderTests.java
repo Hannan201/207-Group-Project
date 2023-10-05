@@ -2,6 +2,7 @@ package cypher.enforcers;
 
 import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class GitHubReaderTests {
     void readsValidGithubFile() {
         CodeReader reader = CodeReaderFactory.makeCodeReader("github");
         assertNotNull(reader);
-        List<String> codes = reader.extractCodes("../Sample Text Files/github_codes_sample.txt");
+        List<String> codes = reader.extractCodes(Samples.GITHUB.getPath());
         String[] expectedCodes = {"ggee1-d6a61",
                                   "814n1-8c8vh",
                                   "17eb1-74268",
