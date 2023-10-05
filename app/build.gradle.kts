@@ -11,6 +11,9 @@ plugins {
 
     // Plugin to work with JavaFX
     id("org.openjfx.javafxplugin") version "0.1.0"
+
+    // Plugin to work with Intellij IDEA.
+    idea
 }
 
 group = "cypher.enforcers"
