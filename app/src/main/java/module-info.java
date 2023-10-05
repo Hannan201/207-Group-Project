@@ -9,6 +9,10 @@ module cypher.enforcers {
     // Logging API.
     requires org.slf4j;
 
+    // Configure logging implementation (logback).
+    requires ch.qos.logback.classic;
+    requires ch.qos.logback.core;
+
     // ValidatorFX.
     requires net.synedra.validatorfx;
 

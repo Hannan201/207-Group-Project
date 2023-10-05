@@ -1,5 +1,8 @@
 package cypher.enforcers;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
@@ -9,6 +12,9 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import cypher.enforcers.views.*;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This class is responsible for launching the backup
@@ -23,12 +29,16 @@ public class Launcher extends Application {
     // Path to the database file (relative to the resources folder).
     private static final String PATH_TO_DATABASE = "/cypher/enforcers/database/database.db";
 
+    // Path to the logback configuration file (relative o the resources folder).
+    private static final String PATH_TO_LOGBACK_CONFIG = "/cypher/enforcers/logback.xml";
+
     /**
      * Entry point for this application.
      *
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
+        configureLogger();
         logger.info("Starting application...");
 
         Database.setConnectionSource(PATH_TO_DATABASE);
@@ -61,7 +71,7 @@ public class Launcher extends Application {
      * Initialize user settings and data if the user closed the
      * application without logging out to load the correct view.
      */
-    private static View initialize() {
+    private View initialize() {
         if (Storage.getToken() != null) {
             logger.debug("Logged in user found, retrieving data.");
             Utilities.adjustTheme();
@@ -71,6 +81,29 @@ public class Launcher extends Application {
 
         logger.debug("No logged in user found, displaying home page view.");
         return HomePageView.getInstance();
+    }
+
+    /**
+     * Configure logger to use configuration file.
+     */
+    private static void configureLogger() {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        loggerContext.reset();
+        JoranConfigurator configurator = new JoranConfigurator();
+        InputStream configStream = Utilities.loadFileByInputStream(PATH_TO_LOGBACK_CONFIG);
+        configurator.setContext(loggerContext);
+        try {
+            configurator.doConfigure(configStream); // loads logback file
+        } catch (JoranException e) {
+            logger.warn("Failed to configure logback file. Cause: ", e);
+            e.printStackTrace();
+        }
+        try {
+            configStream.close();
+        } catch (IOException closeException) {
+            logger.warn("Failed to close stream for logback file. Cause: ", closeException);
+            closeException.printStackTrace();
+        }
     }
 
 }
