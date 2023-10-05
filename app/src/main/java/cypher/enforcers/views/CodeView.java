@@ -53,7 +53,7 @@ public class CodeView extends View implements Reversible {
     @Override
     protected void initUI() {
         try {
-            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/view/CodeViewFXML/CodeView.fxml"));
+            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/CodeViewFXML/CodeView.fxml"));
             this.setRoot(loader.load());
             this.controller = loader.getController();
         } catch (Exception e) {

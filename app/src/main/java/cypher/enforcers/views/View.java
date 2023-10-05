@@ -75,11 +75,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 Account.getIcons(),
-                "/images/icons8-discord-100.png",
-                "/images/icons8-github-100.png",
-                "/images/icons8-google-100.png",
-                "/images/icons8-shopify-100.png",
-                "/images/icons8-app-100.png"
+                "/cypher/enforcers/images/icons8-discord-100.png",
+                "/cypher/enforcers/images/icons8-github-100.png",
+                "/cypher/enforcers/images/icons8-google-100.png",
+                "/cypher/enforcers/images/icons8-shopify-100.png",
+                "/cypher/enforcers/images/icons8-app-100.png"
         );
     }
 
@@ -91,11 +91,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 Account.getIcons(),
-                "/images/discord_darkmode.png",
-                "/images/github_darkmode.png",
-                "/images/google_darkmode.png",
-                "/images/shopify_darkmode.png",
-                "/images/app_darkmode.png"
+                "/cypher/enforcers/images/discord_darkmode.png",
+                "/cypher/enforcers/images/github_darkmode.png",
+                "/cypher/enforcers/images/google_darkmode.png",
+                "/cypher/enforcers/images/shopify_darkmode.png",
+                "/cypher/enforcers/images/app_darkmode.png"
         );
     }
 
@@ -107,11 +107,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 Account.getIcons(),
-                "/images/hc-discord.png",
-                "/images/hc-github.png",
-                "/images/hc-google.png",
-                "/images/hc-shopify.png",
-                "/images/hc-app.png"
+                "/cypher/enforcers/images/hc-discord.png",
+                "/cypher/enforcers/images/hc-github.png",
+                "/cypher/enforcers/images/hc-google.png",
+                "/cypher/enforcers/images/hc-shopify.png",
+                "/cypher/enforcers/images/hc-app.png"
         );
     }
 
@@ -150,7 +150,7 @@ public abstract class View {
     protected void loadRoot(String fileName) {
         try {
             this.root = FXMLLoader.load(
-                    Utilities.loadFileByURL("/view/" + fileName)
+                    Utilities.loadFileByURL("/cypher/enforcers/view/" + fileName)
             );
         } catch (IOException e) {
             logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);
@@ -165,7 +165,7 @@ public abstract class View {
     protected void loadStylesheets() {
         for (int i = 0; i < this.cssFilesPaths.length; i++) {
             this.cssFilesPaths[i] = Utilities.loadFileByURL(
-                    "/css/" + this.names[i]
+                    "/cypher/enforcers/css/" + this.names[i]
                     ).toExternalForm();
         }
 

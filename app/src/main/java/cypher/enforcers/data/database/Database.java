@@ -23,10 +23,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
@@ -91,7 +87,7 @@ public class Database {
      * @param source Name of the database file.
      */
     public static void setConnectionSource(String source) {
-        Database.setConnectionSource(source, "token.pfx");
+        Database.setConnectionSource(source, "cypher/enforcers/token.pfx");
     }
 
     /**
@@ -234,7 +230,7 @@ public class Database {
         private static void initializeProperties() {
             InputStream applicationFile = null;
             try {
-                applicationFile = Utilities.loadFileByInputStream("/application.properties");
+                applicationFile = Utilities.loadFileByInputStream("/cypher/enforcers/application.properties");
 
                 Properties applicationProperties = new Properties();
                 applicationProperties.load(applicationFile);

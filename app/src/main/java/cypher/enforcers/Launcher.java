@@ -21,7 +21,7 @@ public class Launcher extends Application {
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
     // Path to the database file (relative to the resources folder).
-    private static final String PATH_TO_DATABASE = "/database/database.db";
+    private static final String PATH_TO_DATABASE = "/cypher/enforcers/database/database.db";
 
     /**
      * Entry point for this application.
