@@ -105,6 +105,6 @@ javafx {
 }
 
 tasks.named<Delete>("clean") {
-    // This is to remove log file.
+    // This is to remove the log file.
     delete(layout.projectDirectory.file("logs.log"))
 }

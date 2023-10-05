@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
- The purpose of this class is to prevent from making necessary calls by
+ The purpose of this class is to prevent from making unnecessary calls by
  making sure a function only executes after a certain amount of time
  give an input, if the function executes before that time we need to only
  execute the function with the new input and remove the old version of that
