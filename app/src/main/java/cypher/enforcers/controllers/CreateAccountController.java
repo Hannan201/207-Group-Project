@@ -103,7 +103,7 @@ public class CreateAccountController implements Initializable{
                     List<Account> accounts = Database.getAccounts(Storage.getToken());
                     Account account = new Account(-1, username.getText(), platform.getText());
                     boolean duplicate = accounts.contains(account);
-                    if (duplicate && !(username.getText().equals("") || platform.getText().equals(""))){
+                    if (duplicate && !(username.getText().isEmpty() || platform.getText().isEmpty())) {
                         c.error("This account already exists, please try again!");
                     }
                 })
@@ -111,36 +111,33 @@ public class CreateAccountController implements Initializable{
                 .dependsOn("platform", platform.textProperty())
                 .decorates(username)
                 .decorates(platform)
-                .immediate()
-        ;
+                .immediate();
 
         // Renders a button un-clickable and adds a hover message over the button
         // if the text in the username TextField is empty
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (username.getText().equals("")){
+                    if (username.getText().isEmpty()) {
                         c.error("Empty username/email.");
                     }
                 })
                 .dependsOn("username", username.textProperty())
                 .decorates(username)
-                .immediate()
-        ;
+                .immediate();
 
         // Renders a button un-clickable and adds a hover message over the button
         // if the text in the platform TextField is empty
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (platform.getText().equals("")){
+                    if (platform.getText().isEmpty()) {
                         c.error("Empty platform.");
                     }
                 })
                 .dependsOn("platform", platform.textProperty())
                 .decorates(platform)
-                .immediate()
-        ;
+                .immediate();
 
         icons.spacingProperty().bind(spacing);
 

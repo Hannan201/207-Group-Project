@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 
 public class SettingsViewController implements Initializable {
 
+    // Logger for the settings controller.
     private static final Logger logger = LoggerFactory.getLogger(SettingsViewController.class);
 
     private static List<View> views;
@@ -47,7 +48,6 @@ public class SettingsViewController implements Initializable {
     private HyperlinkLabel copyright;
 
     private static final String COPYRIGHT =
-
             "Special thanks to [Icons8] for the following icons: " +
             "[app] icon, [Google] icon, [Discord]icon, [Shopify] icon, " +
             "[Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon.";
@@ -65,9 +65,17 @@ public class SettingsViewController implements Initializable {
 
         copyright.setText(COPYRIGHT);
 
-        views = new ArrayList<>(List.of(SignUpView.getInstance(), AccountView.getInstance(),
-                AddAccountView.getInstance(), CodeView.getInstance(), HomePageView.getInstance(),
-                SignInView.getInstance()));
+        views = new ArrayList<>(
+                List.of(
+                        SignUpView.getInstance(),
+                        AccountView.getInstance(),
+                        AddAccountView.getInstance(),
+                        CodeView.getInstance(),
+                        HomePageView.getInstance(),
+                        SignInView.getInstance()
+                )
+        );
+
         lightModeCommand = new SwitchToLightMode(views);
         darkModeCommand = new SwitchToDarkMode(views);
         highContrastModeCommand = new SwitchToHighContrastMode(views);
@@ -79,7 +87,6 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Switch all the view's theme to HighContrastMode
-     *
      */
     @FXML
     private void switchToHighContrastMode() {

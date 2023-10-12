@@ -32,6 +32,7 @@ import java.util.*;
 
 public class CodeViewController implements Initializable {
 
+    // Logger for the code view controller.
     private static final Logger logger = LoggerFactory.getLogger(CodeViewController.class);
 
     @FXML
@@ -60,9 +61,6 @@ public class CodeViewController implements Initializable {
 
     @FXML
     private Button importCodes;
-
-    @FXML
-    private Button deleteAll;
 
     @FXML
     public Button addCode;

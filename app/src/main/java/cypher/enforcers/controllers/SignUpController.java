@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 public class SignUpController implements Initializable {
 
+    // Logger for the sign-up controller.
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
 
@@ -79,33 +80,31 @@ public class SignUpController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (initialUsername.getText().equals("")){
+                    if (initialUsername.getText().isEmpty()) {
                         c.error("Please add your username!");
                     }
                 })
                 .dependsOn("initialUsername", initialUsername.textProperty())
                 .decorates(initialUsername)
-                .immediate()
-        ;
+                .immediate();
 
         // tells the user to add their verified username
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (verifiedUsername.getText().equals("") && !initialUsername.getText().equals("")){
+                    if (verifiedUsername.getText().isEmpty() && !initialUsername.getText().isEmpty()) {
                         c.error("Please verify your username!");
                     }
                 })
                 .dependsOn("verifiedUsername", verifiedUsername.textProperty())
                 .decorates(verifiedUsername)
-                .immediate()
-        ;
+                .immediate();
 
         // checks if both usernames are the same
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (!initialUsername.getText().equals(verifiedUsername.getText())){
+                    if (!initialUsername.getText().equals(verifiedUsername.getText())) {
                         c.error("Your usernames do not match, please try again.");
                     }
                 })
@@ -113,28 +112,26 @@ public class SignUpController implements Initializable {
                 .dependsOn("verifiedUsername", verifiedUsername.textProperty())
                 .decorates(initialUsername)
                 .decorates(verifiedUsername)
-                .immediate()
-        ;
+                .immediate();
 
         // checks if the password was inputted
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (initialPassword.getText().equals("")){
+                    if (initialPassword.getText().isEmpty()) {
                         c.error("Please add your password!");
                     }
                 })
                 .dependsOn("initialPassword", initialPassword.textProperty())
                 .decorates(initialPassword)
-                .immediate()
-        ;
+                .immediate();
 
         // checks if the verified password was inputted
         // after the user puts their normal password
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (verifiedPassword.getText().equals("") && !initialPassword.getText().equals("")){
+                    if (verifiedPassword.getText().isEmpty() && !initialPassword.getText().isEmpty()) {
                         c.error("Please verify your password!");
                     }
                 })
@@ -146,7 +143,7 @@ public class SignUpController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (! initialPassword.getText().equals(verifiedPassword.getText())){
+                    if (! initialPassword.getText().equals(verifiedPassword.getText())) {
                         c.error("Your passwords do not match, please try again.");
                     }
                 })
@@ -160,7 +157,7 @@ public class SignUpController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (Database.checkUsername(initialUsername.getText())){
+                    if (Database.checkUsername(initialUsername.getText())) {
                         c.error("This account is already registered.");
                     }
                 })

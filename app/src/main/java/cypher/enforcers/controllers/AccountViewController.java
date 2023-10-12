@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 
 public class AccountViewController implements Initializable {
 
+    // Logger for the account view.
     private static final Logger logger = LoggerFactory.getLogger(AccountViewController.class);
 
     @FXML

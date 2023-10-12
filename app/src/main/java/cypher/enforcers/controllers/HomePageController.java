@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class HomePageController implements Initializable {
 
+    // Logger for the home page view.
     private static final Logger logger = LoggerFactory.getLogger(HomePageController.class);
 
     @FXML

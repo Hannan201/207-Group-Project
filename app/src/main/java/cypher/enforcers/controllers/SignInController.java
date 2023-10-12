@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
  */
 public class SignInController implements Initializable {
 
+    // Logger for the sign-in controller.
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
     private final Validator validator = new Validator();
@@ -49,7 +50,7 @@ public class SignInController implements Initializable {
      * Title of the scene
      */
     @FXML
-    private Label Title;
+    private Label title;
 
     /**
      * TextField for the user to type their username
@@ -140,17 +141,17 @@ public class SignInController implements Initializable {
                 .immediate();
 
         background.widthProperty().addListener((observableValue, number, t1) -> {
-            if (t1.doubleValue() < Title.getWidth()) {
-                delta.set(Title.getWidth() - t1.doubleValue());
+            if (t1.doubleValue() < title.getWidth()) {
+                delta.set(title.getWidth() - t1.doubleValue());
                 if (!isBelow[0]) {
-                    Title.setMaxHeight(Title.getPrefHeight() * 2);
+                    title.setMaxHeight(title.getPrefHeight() * 2);
                     aboveTitle.prefHeightProperty().bind(aboveTitle.heightProperty().subtract(delta));
                     belowButton.prefHeightProperty().bind(belowButton.heightProperty().subtract(delta));
                     isBelow[0] = true;
                 }
             } else {
                 if (isBelow[0]) {
-                    Title.setMaxHeight(Title.getPrefHeight());
+                    title.setMaxHeight(title.getPrefHeight());
                     aboveTitle.prefHeightProperty().bind(
                             background.heightProperty()
                                     .multiply(27.0 / 250.0)
