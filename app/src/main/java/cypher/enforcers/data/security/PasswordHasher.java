@@ -10,6 +10,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
+import java.util.Objects;
 
 /*
 This class is responsible for hashing passwords
@@ -17,6 +18,7 @@ for users in this application.
  */
 public class PasswordHasher {
 
+    // Logger for the password hasher.
     private static final Logger logger = LoggerFactory.getLogger(PasswordHasher.class);
 
     // Algorithm being used to hash passwords.
@@ -33,14 +35,29 @@ public class PasswordHasher {
 
     // Object to get the object which gives the object to apply
     // the algorithm.
-    private final SecretKeyFactory algorithmGenerator;
+    private SecretKeyFactory algorithmGenerator;
 
+    /**
+     * Create a new password-hasher.
+     */
     public PasswordHasher() {
         this.saltGenerator = new SecureRandom();
+        createFactory();
+    }
+
+    /**
+     * Create the SecretKeyFactory if it does not already exist.
+     *
+     * @return True if the factory already exists, false otherwise.
+     */
+    private boolean createFactory() {
         try {
             this.algorithmGenerator = SecretKeyFactory.getInstance(ALGORITHM);
+            return true;
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            logger.warn("Unable to create SecretKeyFactory. Cause: ", e);
+            algorithmGenerator = null;
+            return false;
         }
     }
 
@@ -64,6 +81,10 @@ public class PasswordHasher {
      * @return String version of the hashed password in Base 64
      */
     public String hashPassword(String s, byte[] salt) {
+        if (Objects.isNull(algorithmGenerator) && !createFactory()) {
+            return "";
+        }
+
         if (salt.length < 16) {
             return "";
         }

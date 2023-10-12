@@ -7,6 +7,7 @@ import cypher.enforcers.data.security.TokenGenerator;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.models.User;
+import javafx.util.Callback;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ import java.util.*;
 
 public class Database {
 
+    // Logger for the database.
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
 
     // To hash passwords which the user enters.
@@ -70,6 +72,10 @@ public class Database {
      * @param tokenFile Name of the token file for authentication.
      */
     public static void setConnectionSource(String source, String tokenFile) {
+        if (!Objects.isNull(sqLiteHelper)) {
+            sqLiteHelper.disconnect();
+        }
+
         if (source.isBlank() || !source.endsWith(".db")) {
             logger.warn("Invalid path to database, connection failed. Aborting request.");
             return;
@@ -99,7 +105,7 @@ public class Database {
     }
 
     /*
-     These methods are for signing-up, signing-in, and signing-out.
+     These methods are for signing-up, signing in, and signing out.
      */
 
     /**
@@ -151,15 +157,14 @@ public class Database {
                         try {
                             return resultSet.getBoolean("contains");
                         } catch (SQLException e) {
-                            logger.warn("Failed to retrieve key contains. Cause: ", e);
-                            e.printStackTrace();
+                            logger.warn("Failed to retrieve key: contains. Cause: ", e);
                         }
 
                         return null;
                     }
             );
 
-            if (bool == null) {
+            if (Objects.isNull(bool)) {
                 logger.warn("Failed to check if username {} was taken. Returning true.", username);
                 return true;
             }
@@ -176,6 +181,7 @@ public class Database {
      */
     private static class TokenManager {
 
+        // Logger for the token manager.
         private static final Logger tokenLogger = LoggerFactory.getLogger(TokenManager.class);
 
         // Connection to the keystore object.
@@ -194,11 +200,22 @@ public class Database {
         private static String name;
 
         static {
+            createFactory();
+        }
+
+        /**
+         * Create the SecretKeyFactory if it does not already exist.
+         *
+         * @return True if the factory already exists, false otherwise.
+         */
+        private static boolean createFactory() {
             try {
                 factory = SecretKeyFactory.getInstance("PBE");
+                return true;
             } catch (NoSuchAlgorithmException e) {
                 logger.warn("Failed to initialize factory. Cause: ", e);
-                e.printStackTrace();
+                factory = null;
+                return false;
             }
         }
 
@@ -228,10 +245,7 @@ public class Database {
          * Load the properties file.
          */
         private static void initializeProperties() {
-            InputStream applicationFile = null;
-            try {
-                applicationFile = Utilities.loadFileByInputStream("/cypher/enforcers/application.properties");
-
+            try (InputStream applicationFile = Utilities.loadFileByInputStream("/cypher/enforcers/application.properties")) {
                 Properties applicationProperties = new Properties();
                 applicationProperties.load(applicationFile);
                 password = Objects.requireNonNull(
@@ -240,16 +254,6 @@ public class Database {
                 keyStorePassword = new KeyStore.PasswordProtection(password);
             } catch (IOException e) {
                 tokenLogger.warn("Failed to read application.properties. Cause: ", e);
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (applicationFile != null) {
-                        applicationFile.close();
-                    }
-                } catch (IOException e2) {
-                    tokenLogger.warn("Failed to close input stream for application.properties. Cause: ", e2);
-                    e2.printStackTrace();
-                }
             }
         }
 
@@ -257,25 +261,16 @@ public class Database {
          * Initialize the key store file.
          */
         private static void initializeKeyStore() {
-            InputStream stream = null;
-            try {
-                Utilities.copyResourceFileIf("/" + name);
-
-                stream = new FileInputStream(Utilities.getJarParentDirectory() + File.separator + FilenameUtils.getName(name));
+            Utilities.copyResourceFileIf("/" + name);
+            try (InputStream stream = new FileInputStream(
+                    Utilities.getJarParentDirectory() +
+                        File.separator +
+                        FilenameUtils.getName(name)
+            )) {
                 storage = KeyStore.getInstance(KeyStore.getDefaultType());
                 storage.load(stream, password);
             } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
-                tokenLogger.warn("Failed to extract token. Cause: ", e);
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (stream != null) {
-                        stream.close();
-                    }
-                } catch (IOException e2) {
-                    tokenLogger.warn("Failed to close input stream for token.pfx. Cause: ", e2);
-                    e2.printStackTrace();
-                }
+                tokenLogger.warn("Failed to load KeyStore. Cause: ", e);
             }
         }
 
@@ -285,38 +280,33 @@ public class Database {
          * @param newToken The new token.
          */
         private static void updateToken(String newToken) {
-            if (password == null) {
+            if (Objects.isNull(factory) && !createFactory()) {
+                return;
+            }
+
+            if (Objects.isNull(password)) {
                 initializeProperties();
             }
 
-            if (storage == null) {
+            if (Objects.isNull(storage)) {
                 initializeKeyStore();
             }
 
-            FileOutputStream storeOutput = null;
-            try {
+            try (OutputStream storeOutput = new FileOutputStream(
+                    Utilities.getJarParentDirectory() +
+                        File.separator +
+                        FilenameUtils.getName(name)
+            )) {
                 SecretKey secureKey = factory.generateSecret(
                         new PBEKeySpec(newToken.toCharArray())
                 );
 
                 KeyStore.SecretKeyEntry secret = new KeyStore.SecretKeyEntry(secureKey);
                 storage.setEntry("token", secret, keyStorePassword);
-                String path = Utilities.getJarParentDirectory() + File.separator + FilenameUtils.getName(name);
-                storeOutput = new FileOutputStream(path);
                 storage.store(storeOutput, password);
             } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException | KeyStoreException |
                      CertificateException e) {
                 tokenLogger.warn("Failed to update token for token.pfx. Cause: ", e);
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (storeOutput != null) {
-                        storeOutput.close();
-                    }
-                } catch (IOException e2) {
-                    tokenLogger.warn("Failed to close output stream for token.pfx. Cause: ", e2);
-                    e2.printStackTrace();
-                }
             }
         }
 
@@ -328,6 +318,10 @@ public class Database {
          * the id it belongs to, otherwise null.
          */
         public static String[] parseToken() {
+            if (Objects.isNull(factory) && !createFactory()) {
+                return null;
+            }
+
             if (password == null) {
                 initializeProperties();
             }
@@ -346,7 +340,6 @@ public class Database {
                 return new String(keySpec.getPassword()).split(",");
             } catch (InvalidKeySpecException | UnrecoverableEntryException | KeyStoreException | NoSuchAlgorithmException e) {
                 tokenLogger.warn("Unable to parse token, returning null. Cause: ", e);
-                e.printStackTrace();
             }
 
             return null;
@@ -396,7 +389,7 @@ public class Database {
                     new StringSetter(hashed)
             );
 
-            if (i != null) {
+            if (!Objects.isNull(i)) {
                 String token = generator.nextString();
                 TokenManager.updateToken(token + "," + i);
 
@@ -443,32 +436,35 @@ public class Database {
                 WHERE username = ?
                 """,
                 new StringSetter(username.toLowerCase()),
-                resultSet -> {
-                    try {
-                        String hashedPassword = resultSet.getString("password");
+                new Callback<>() {
+                    @Override
+                    public Token call(ResultSet resultSet) {
+                        try {
+                            String hashedPassword = resultSet.getString("password");
 
-                        String salt = hashedPassword.substring(0, 24);
-                        String expectedPassword = hashedPassword.substring(24);
-                        if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
-                            String stringToken = generator.nextString();
-                            int id = resultSet.getInt("id");
+                            String salt = hashedPassword.substring(0, 24);
+                            String expectedPassword = hashedPassword.substring(24);
+                            if (passwordHasher.verifyPassword(expectedPassword, password + salt, salt)) {
+                                String stringToken = generator.nextString();
+                                int id = resultSet.getInt("id");
 
-                            TokenManager.updateToken(stringToken + "," + id);
-                            CustomToken customToken = new CustomToken(stringToken, id);
+                                TokenManager.updateToken(stringToken + "," + id);
+                                CustomToken customToken = new CustomToken(stringToken, id);
 
-                            updateLoginStatus(customToken, true);
+                                updateLoginStatus(customToken, true);
 
-                            return customToken;
+                                return customToken;
+                            }
+                        } catch (SQLException e) {
+                            LoggerFactory.getLogger(getClass()).warn("Unable to authenticate user. Cause: ", e);
                         }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
 
-                    return null;
+                        return null;
+                    }
                 }
         );
 
-        if (token == null) {
+        if (Objects.isNull(token)) {
             logger.warn("Failed to authenticate user with username {}.", username);
             return null;
         }
@@ -507,26 +503,29 @@ public class Database {
             logger.trace("Attempting to get user with ID {}.", id);
 
             User user = sqLiteHelper.executeSelect(
-                """
-                    SELECT * FROM users
-                    WHERE id = ?
-                    """,
+                    """
+                            SELECT * FROM users
+                            WHERE id = ?
+                            """,
                     new IntegerSetter(id),
-                    resultSet -> {
-                        try {
-                            int userID = resultSet.getInt("id");
-                            String name = resultSet.getString("username");
-                            String theme = getThemeByID(resultSet.getInt("theme_id"));
-                            return new User(userID, name, theme);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                    new Callback<>() {
+                        @Override
+                        public User call(ResultSet resultSet) {
+                            try {
+                                int userID = resultSet.getInt("id");
+                                String name = resultSet.getString("username");
+                                String theme = getThemeByID(resultSet.getInt("theme_id"));
+                                return new User(userID, name, theme);
+                            } catch (SQLException e) {
+                                LoggerFactory.getLogger(getClass()).warn("Unable to create user. Cause: ", e);
+                            }
 
-                        return null;
+                            return null;
+                        }
                     }
             );
 
-            if (user == null) {
+            if (Objects.isNull(user)) {
                 logger.warn("No user found with ID {}. Returning null,", id);
                 return null;
             }
@@ -557,21 +556,24 @@ public class Database {
                     WHERE user_id = ?
                     """,
                     new IntegerSetter(id),
-                    new ListRetriever<>(accounts, resultSet -> {
-                        try {
-                            int accountID = resultSet.getInt("id");
-                            String name = resultSet.getString("name");
-                            String type = resultSet.getString("type");
-                            return new Account(accountID, name, type);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                    new ListRetriever<>(accounts, new Callback<>() {
+                        @Override
+                        public Account call(ResultSet resultSet) {
+                            try {
+                                int accountID = resultSet.getInt("id");
+                                String name = resultSet.getString("name");
+                                String type = resultSet.getString("type");
+                                return new Account(accountID, name, type);
+                            } catch (SQLException e) {
+                                LoggerFactory.getLogger(getClass()).warn("Unable to retrieve user. Cause: ", e);
+                            }
 
-                        return null;
+                            return null;
+                        }
                     })
             );
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 logger.warn("No accounts found for user with ID {}.", id);
             } else {
                 logger.trace("Accounts retrieved.");
@@ -657,7 +659,7 @@ public class Database {
                     new StringSetter(type)
             );
 
-            if (i == null) {
+            if (Objects.isNull(i)) {
                 logger.warn("Failed to add account with name {} and social media type {} for user with ID {}. Returning -1.", name, type, id);
                 return -1;
             }
@@ -740,7 +742,7 @@ public class Database {
                     new ListRetriever<>(codes, new CodeRetriever(""))
             );
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 logger.warn("No codes found for user with ID {} and with account ID {}.", id, accountID);
             } else {
                 logger.trace("Codes retrieved.");
@@ -772,7 +774,7 @@ public class Database {
                     new CodeRetriever("")
             );
 
-            if (c == null) {
+            if (Objects.isNull(c)) {
                 logger.warn("Failed to retrieve code with ID {} for user with ID {}. Returning null.", codeID, id);
                 return null;
             }
@@ -811,7 +813,7 @@ public class Database {
                     new StringSetter(code)
             );
 
-            if (i == null) {
+            if (Objects.isNull(i)) {
                 logger.warn("Update failed. Returning -1.");
                 return -1;
             }
@@ -923,7 +925,7 @@ public class Database {
                 new StringRetriever("name")
         );
 
-        if (result == null) {
+        if (Objects.isNull(result)) {
             logger.warn("Failed to retrieve theme with ID {}. Returning null.", id);
             return null;
         }
@@ -953,7 +955,7 @@ public class Database {
                     new IntegerRetriever("theme_id")
             );
 
-            if (id == null) {
+            if (Objects.isNull(id)) {
                 logger.warn("Failed to retrieve ID for theme for user with ID {}. Returning null.", userID);
                 return null;
             }
@@ -985,7 +987,7 @@ public class Database {
                     new IntegerRetriever("id")
             );
 
-            if (id == null) {
+            if (Objects.isNull(id)) {
                 logger.warn("Failed to retrieve ID for theme {}. Aborting request.", newTheme);
                 return;
             }
@@ -1026,5 +1028,4 @@ public class Database {
             );
         }
     }
-
 }
