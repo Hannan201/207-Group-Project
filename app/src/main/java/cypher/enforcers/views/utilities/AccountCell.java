@@ -48,7 +48,6 @@ public class AccountCell extends ListCell<Account> {
     private void loadFXML() {
         try {
             FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountCell.fxml"));
-            loader.setController(this);
             loader.setRoot(this);
             loader.load();
         }
