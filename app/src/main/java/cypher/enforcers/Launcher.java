@@ -90,19 +90,13 @@ public class Launcher extends Application {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         loggerContext.reset();
         JoranConfigurator configurator = new JoranConfigurator();
-        InputStream configStream = Utilities.loadFileByInputStream(PATH_TO_LOGBACK_CONFIG);
         configurator.setContext(loggerContext);
-        try {
+        try (InputStream configStream = Utilities.loadFileByInputStream(PATH_TO_LOGBACK_CONFIG)) {
             configurator.doConfigure(configStream); // loads logback file
         } catch (JoranException e) {
-            logger.warn("Failed to configure logback file. Cause: ", e);
-            e.printStackTrace();
-        }
-        try {
-            configStream.close();
-        } catch (IOException closeException) {
-            logger.warn("Failed to close stream for logback file. Cause: ", closeException);
-            closeException.printStackTrace();
+            logger.error(String.format("Failed to configure logback file: %s. Cause: ", PATH_TO_LOGBACK_CONFIG), e);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load logback file: %s. Cause: ", PATH_TO_LOGBACK_CONFIG), ioException);
         }
     }
 
