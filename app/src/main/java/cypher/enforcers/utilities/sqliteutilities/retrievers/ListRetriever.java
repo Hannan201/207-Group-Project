@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class ListRetriever<T> extends Retriever implements Callback<ResultSet, List<T>> {
 
+    // Logger for the list retriever.
     private static final Logger logger = LoggerFactory.getLogger(ListRetriever.class);
 
     // This callback will be used to retrieve a single value
@@ -55,7 +57,7 @@ public class ListRetriever<T> extends Retriever implements Callback<ResultSet, L
             }
         } catch (SQLException e) {
             logger.warn("Failed to populate list with results, aborting request. Cause: ", e);
-            e.printStackTrace();
+            return new ArrayList<>();
         }
 
         return results;

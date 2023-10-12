@@ -12,12 +12,9 @@ import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +24,7 @@ import java.util.Objects;
  */
 public class Utilities {
 
+    // Logger for the utility class.
     private static final Logger logger = LoggerFactory.getLogger(Utilities.class);
 
     /**
@@ -56,6 +54,18 @@ public class Utilities {
         }
 
         logger.debug("Switching theme to {}.", theme);
+        ThemeSwitcher switcher = getThemeSwitcher(theme);
+        switcher.switchTheme();
+    }
+
+    /**
+     * Create and return a ThemeSwitcher based on the theme provided.
+     * Usually called when the theme of the application is being changed.
+     *
+     * @param theme Name of the theme.
+     * @return The ThemeSwitcher ready to change all the themes.
+     */
+    private static ThemeSwitcher getThemeSwitcher(String theme) {
         List<View> views = List.of(
                 HomePageView.getInstance(),
                 SignUpView.getInstance(),
@@ -71,8 +81,7 @@ public class Utilities {
             command = new SwitchToHighContrastMode(views);
         }
 
-        ThemeSwitcher switcher = new ThemeSwitcher(command);
-        switcher.switchTheme();
+        return new ThemeSwitcher(command);
     }
 
     /**
@@ -117,7 +126,6 @@ public class Utilities {
             ).getParent();
         } catch (URISyntaxException e) {
             logger.warn("Unable to find parent directory of jar. Cause: ", e);
-            e.printStackTrace();
         }
 
         return null;
@@ -140,8 +148,7 @@ public class Utilities {
         // Needed for logging.
         URL url = null;
 
-        InputStream inputStream = null;
-        try {
+        try (InputStream inputStream = loadFileByInputStream(file)) {
             url = loadFileByURL(file);
 
             File fileToCreate = new File(
@@ -149,24 +156,11 @@ public class Utilities {
                     File.separator +
                     FilenameUtils.getName(url.getPath())
             );
-
-            inputStream = loadFileByInputStream(file);
-
             if (!fileToCreate.exists()) {
                 Files.copy(inputStream, fileToCreate.toPath());
             }
         } catch (IOException e) {
             logger.warn("Failed to move file {} from resources. Cause: {}", url, e.toString());
-            e.printStackTrace();
-        } finally {
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException inputStreamException) {
-                logger.warn("Failed to close input stream for {}. Cause: {}", url, inputStreamException.toString());
-                inputStreamException.printStackTrace();
-            }
         }
     }
 

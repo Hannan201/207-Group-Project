@@ -13,6 +13,7 @@ import java.sql.SQLException;
  */
 public class StringRetriever extends Retriever implements Callback<ResultSet, String> {
 
+    // Logger for retrieving a string.
     private static final Logger logger = LoggerFactory.getLogger(StringRetriever.class);
 
     /**
@@ -36,7 +37,6 @@ public class StringRetriever extends Retriever implements Callback<ResultSet, St
             return resultSet.getString(key);
         } catch (SQLException e) {
             logger.warn(String.format("Failed to retrieve key %s, returning null. Cause: ", key), e);
-            e.printStackTrace();
         }
 
         return null;

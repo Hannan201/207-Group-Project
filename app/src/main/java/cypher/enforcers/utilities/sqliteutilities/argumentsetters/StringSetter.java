@@ -12,6 +12,7 @@ import java.sql.SQLException;
  */
 public class StringSetter extends ArgumentSetter<String> {
 
+    // Logger for setting a string.
     private static final Logger logger = LoggerFactory.getLogger(StringSetter.class);
 
     /**
@@ -36,7 +37,6 @@ public class StringSetter extends ArgumentSetter<String> {
             statement.setString(index, value);
         } catch (SQLException e) {
             logger.warn(String.format("Failed to set argument %s at index %d. Cause: ", value, index), e);
-            e.printStackTrace();
         }
     }
 }

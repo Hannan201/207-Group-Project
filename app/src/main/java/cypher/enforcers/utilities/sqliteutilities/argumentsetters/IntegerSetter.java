@@ -12,6 +12,7 @@ import java.sql.SQLException;
  */
 public class IntegerSetter extends ArgumentSetter<Integer> {
 
+    // Logger for setting an integer.
     private static final Logger logger = LoggerFactory.getLogger(IntegerSetter.class);
 
     /**
@@ -36,7 +37,6 @@ public class IntegerSetter extends ArgumentSetter<Integer> {
             statement.setInt(index, value);
         } catch (SQLException e) {
             logger.warn(String.format("Failed to set argument %d at index %d. Cause: ", value, index), e);
-            e.printStackTrace();
         }
     }
 }

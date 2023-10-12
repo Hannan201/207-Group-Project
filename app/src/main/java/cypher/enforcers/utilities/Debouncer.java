@@ -61,7 +61,6 @@ public class Debouncer {
                     function.call();
                 } catch (Exception e) {
                     logger.warn("Failed execution. Cause: ", e);
-                    e.printStackTrace();
                 }
                 clearPreviousTasks();
                 tasks.clear();
@@ -121,7 +120,7 @@ public class Debouncer {
             return true;
         }
 
-        if (key == null || key.isEmpty() || key.trim().length() < 1) {
+        if (key == null || key.isEmpty() || key.trim().isEmpty()) {
             logger.warn("Bad key value {}.", key);
             return true;
         }

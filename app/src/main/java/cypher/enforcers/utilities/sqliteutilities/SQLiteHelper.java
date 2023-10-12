@@ -6,15 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetter;
 import cypher.enforcers.utilities.sqliteutilities.retrievers.IntegerRetriever;
-import cypher.enforcers.utilities.sqliteutilities.argumentsetters.StringSetter;
 import javafx.util.Callback;
 import org.sqlite.SQLiteConfig;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.*;
 
 /*
@@ -59,78 +54,10 @@ public class SQLiteHelper {
             );
         } catch (SQLException e) {
             logger.warn("Connection to database failed. No new changes will be saved. Cause: ", e);
-            e.printStackTrace();
+            return;
         }
 
         logger.info("Database connected.");
-    }
-
-    /**
-     * Initialize the tables for the database. This is assuming
-     * a database file is being created for the first time and
-     * one does not already exist.
-     */
-    private void initializeTables() {
-        // Table for themes.
-        this.execute(
-                """
-                    CREATE TABLE themes(
-                        id INTEGER PRIMARY KEY,
-                        name TEXT NOT NULL UNIQUE
-                    );
-                   """
-        );
-
-        // Add in the themes.
-        this.executeUpdate(
-                """
-                   INSERT INTO themes (name)
-                   VALUES (?), (?), (?);
-                   """
-                ,
-                new StringSetter("light mode"),
-                new StringSetter( "dark mode"),
-                new StringSetter("high contrast mode")
-        );
-
-        // Table for users.
-        this.execute(
-                """
-                    CREATE TABLE users(
-                        id INTEGER PRIMARY KEY,
-                        username TEXT NOT NULL UNIQUE CHECK ( length(username) > 0 ),
-                        password TEXT NOT NULL CHECK ( length(password) > 0 ),
-                        theme_id INT NOT NULL DEFAULT 1 CHECK ( theme_id = 1 OR theme_id = 2 OR theme_id = 3 ),
-                        logged_in INT NOT NULL DEFAULT 1 CHECK ( logged_in = 0 OR logged_in = 1 ),
-                        FOREIGN KEY(theme_id) REFERENCES themes(id)
-                    );
-                   """
-        );
-
-        // Table for accounts.
-        this.execute(
-                """
-                    CREATE TABLE accounts(
-                        id INTEGER PRIMARY KEY,
-                        user_id INT NOT NULL,
-                        name TEXT NOT NULL CHECK ( length(name) > 0 ),
-                        type TEXT NOT NULL CHECK ( length(type) > 0 ),
-                        FOREIGN KEY(user_id) REFERENCES users(id)
-                    );
-                   """
-        );
-
-        // Table for codes.
-        this.execute(
-                """
-                    CREATE TABLE codes(
-                        id INTEGER PRIMARY KEY,
-                        account_id INT NOT NULL,
-                        code TEXT NOT NULL CHECK ( length(code) > 0 ),
-                        FOREIGN KEY(account_id) REFERENCES accounts(id) ON DELETE CASCADE
-                    );
-                   """
-        );
     }
 
     /**
@@ -147,7 +74,6 @@ public class SQLiteHelper {
             return false;
         } catch (SQLException e) {
             logger.warn("Failed to check connection status. No new changes will be saved. Cause: ", e);
-            e.printStackTrace();
         }
 
         return true;
@@ -161,7 +87,6 @@ public class SQLiteHelper {
             connection.close();
         } catch (SQLException e) {
             logger.error("Failed to close connection to database. Cause: ", e);
-            e.printStackTrace();
             return;
         }
 
@@ -179,24 +104,6 @@ public class SQLiteHelper {
      */
     private boolean noMatch(String query, int count) {
         return (query.length() - query.replace("?", "").length()) != count;
-    }
-
-    /**
-     * Execute a basic SQL query.
-     *
-     * @param query the query.
-     */
-    public void execute(String query) {
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            statement.execute(query);
-        } catch (SQLException e) {
-            logger.warn("Failed to execute statement. Cause: ", e);
-            e.printStackTrace();
-        } finally {
-            closeStatement(statement);
-        }
     }
 
     /**
@@ -225,9 +132,9 @@ public class SQLiteHelper {
             return null;
         }
 
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(query, flag);
+        try (PreparedStatement statement = connection.prepareStatement(
+                query, flag
+        )) {
             for (int i = 0; i < arguments.length; i++) {
                 arguments[i].setArgument(statement, i + 1);
             }
@@ -242,9 +149,6 @@ public class SQLiteHelper {
             return callback.call(statement.executeQuery());
         } catch (SQLException e) {
             logger.warn(String.format("Failed to execute query: %s. Cause: ", query), e);
-            e.printStackTrace();
-        } finally {
-            closeStatement(statement);
         }
 
         return null;
@@ -295,21 +199,4 @@ public class SQLiteHelper {
     public Integer executeUpdateWithKey(String query, String key, ArgumentSetter<?> ... arguments) {
         return execute(query, Statement.RETURN_GENERATED_KEYS, new IntegerRetriever(key), arguments);
     }
-
-    /**
-     * Attempt to close a SQL statement.
-     *
-     * @param statement The statement.
-     */
-    public void closeStatement(Statement statement) {
-        try {
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            logger.warn("Failed to close statement. Cause: ", e);
-            e.printStackTrace();
-        }
-    }
-
 }

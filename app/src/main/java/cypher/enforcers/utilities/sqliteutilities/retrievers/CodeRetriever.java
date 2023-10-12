@@ -14,6 +14,7 @@ import java.sql.SQLException;
  */
 public class CodeRetriever extends Retriever implements Callback<ResultSet, Code> {
 
+    // Logger for the code retriever.
     private static final Logger logger = LoggerFactory.getLogger(CodeRetriever.class);
 
     /**
@@ -39,7 +40,6 @@ public class CodeRetriever extends Retriever implements Callback<ResultSet, Code
             return new Code(id, code);
         } catch (SQLException e) {
             logger.warn("Failed to retrieve Code, returning null. Cause: ", e);
-            e.printStackTrace();
         }
 
         return null;
