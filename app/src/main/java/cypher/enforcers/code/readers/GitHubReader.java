@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class GitHubReader extends CodeReader implements ReadCodeBehavior {
 
+    // Logger for github reader.
     private static final Logger logger = LoggerFactory.getLogger(GitHubReader.class);
 
     /**
@@ -33,11 +35,9 @@ public class GitHubReader extends CodeReader implements ReadCodeBehavior {
         // To store the codes.
         ArrayList<String> backupCodes = new ArrayList<>();
 
-        try {
-            // Make the objects needed to process the file.
-            File file = new File(fileName);
-            FileReader readFile = new FileReader(file);
-            BufferedReader in = new BufferedReader(readFile);
+        File file = new File(fileName);
+        try (FileReader readFile = new FileReader(file);
+            BufferedReader in = new BufferedReader(readFile)) {
 
             // To store each line of the file.
             String line;
@@ -50,13 +50,9 @@ public class GitHubReader extends CodeReader implements ReadCodeBehavior {
                 // and add it.
                 backupCodes.add(line.strip());
             }
-
-            // Close the streams.
-            in.close();
-            readFile.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
-            e.printStackTrace();
+            return new ArrayList<>();
         }
 
         // Return the codes.

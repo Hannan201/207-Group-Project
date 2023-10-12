@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 public class GoogleReader extends CodeReader implements ReadCodeBehavior {
 
+    // Logger for google reader.
     private static final Logger logger = LoggerFactory.getLogger(GoogleReader.class);
 
     /**
@@ -33,14 +34,13 @@ public class GoogleReader extends CodeReader implements ReadCodeBehavior {
         // read all the information
         ArrayList<String> info = new ArrayList<>();
         File file = new File(fileName);
-        try {
-            Scanner sc = new Scanner(file);
+        try (Scanner sc = new Scanner(file)) {
             while (sc.hasNextLine()) {
                 info.add(sc.nextLine());
             }
         } catch (IOException e) {
             logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
-            e.printStackTrace();
+            return new ArrayList<>();
         }
 
 

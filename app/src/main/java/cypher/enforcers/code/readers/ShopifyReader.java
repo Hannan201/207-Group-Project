@@ -14,6 +14,7 @@ import java.io.*;
 
 public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
 
+    // Logger for shopify reader.
     private static final Logger logger = LoggerFactory.getLogger(ShopifyReader.class);
 
     /**
@@ -28,10 +29,8 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
         logger.debug("Attempting to read codes from sourceL {}.", fileName);
 
         List<String> codes = new ArrayList<>();
-        try {
-            File file = new File(fileName);
-            Scanner shopifyReader = new Scanner(file);
-
+        File file = new File(fileName);
+        try (Scanner shopifyReader = new Scanner(file)) {
             // Skip past the first 8 lines of the txt file. This should make the next line to be read a line with a code
             for (int i = 0; i < 8; i++) {
                 shopifyReader.nextLine();
@@ -40,15 +39,16 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
             // Read each code in the file and add it to the list
             while (shopifyReader.hasNextLine()) {
                 String currCode = shopifyReader.nextLine().strip();
-                if (!currCode.equals("")){
+                if (!currCode.isEmpty()) {
                     codes.add(currCode);
                 }
-
             }
+
         } catch (IOException e) {
             logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
-            e.printStackTrace();
+            return new ArrayList<>();
         }
+
         return codes;
     }
 

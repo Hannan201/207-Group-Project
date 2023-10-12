@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ import java.util.Scanner;
 
 public class DiscordReader extends CodeReader implements ReadCodeBehavior {
 
+    // Logger for discord reader.
     private static final Logger logger = LoggerFactory.getLogger(DiscordReader.class);
 
     /**
@@ -30,8 +32,7 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
         logger.debug("Attempting to read codes from sourceL {}.", fileName);
 
         List<String> codes = new ArrayList<>();
-        try {
-            Scanner read = new Scanner(new File(fileName));
+        try (Scanner read = new Scanner(new File(fileName))) {
             read.nextLine(); // skips the message in the .txt file
             read.nextLine(); // skips the blank line
             while (read.hasNextLine()) {
@@ -39,11 +40,11 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
                 code = code.substring(2, 6) + code.substring(7);
                 codes.add(code.strip());
             }
-        }
-        catch (Exception e) {
+        } catch (FileNotFoundException e) {
             logger.warn(String.format("Failed to read codes from %s. Cause: ", fileName), e);
-            System.out.println(e.getMessage());
+            return new ArrayList<>();
         }
+
         return codes;
     }
 
