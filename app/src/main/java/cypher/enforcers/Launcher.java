@@ -29,7 +29,7 @@ public class Launcher extends Application {
     // Path to the database file (relative to the resources folder).
     private static final String PATH_TO_DATABASE = "/cypher/enforcers/database/database.db";
 
-    // Path to the logback configuration file (relative o the resources folder).
+    // Path to the logback configuration file (relative to the resources folder).
     private static final String PATH_TO_LOGBACK_CONFIG = "/cypher/enforcers/logback.xml";
 
     /**
