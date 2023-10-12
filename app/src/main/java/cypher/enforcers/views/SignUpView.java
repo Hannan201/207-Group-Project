@@ -36,12 +36,12 @@ public class SignUpView extends View {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"SignUpView.css",
-                                  "SignUpViewDM.css",
-                                  "SignUpViewHC.css"};
-
-        this.loadStylesheets();
-
         this.loadRoot("SignUpView.fxml");
+
+        this.loadStylesheets(
+                "SignUpView.css",
+                "SignUpViewDM.css",
+                "SignUpViewHC.css"
+        );
     }
 }

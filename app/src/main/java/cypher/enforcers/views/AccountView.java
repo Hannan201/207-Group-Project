@@ -62,11 +62,11 @@ public class AccountView extends View implements Reversible {
             return;
         }
 
-        this.names = new String[]{"AccountsView.css",
-                                  "AccountsViewDM.css",
-                                  "AccountsViewHC.css"};
-
-        this.loadStylesheets();
+        this.loadStylesheets(
+                "AccountsView.css",
+                "AccountsViewDM.css",
+                "AccountsViewHC.css"
+        );
     }
 
     /**

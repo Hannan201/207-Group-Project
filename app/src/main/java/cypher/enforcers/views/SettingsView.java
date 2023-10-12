@@ -44,13 +44,13 @@ public class SettingsView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"SettingsView.css",
-                                  "SettingsViewDM.css",
-                                  "SettingsViewHC.css"};
-
-        this.loadStylesheets();
-
         this.loadRoot("SettingsView.fxml");
+
+        this.loadStylesheets(
+                "SettingsView.css",
+                "SettingsViewDM.css",
+                "SettingsViewHC.css"
+        );
     }
 
     /**

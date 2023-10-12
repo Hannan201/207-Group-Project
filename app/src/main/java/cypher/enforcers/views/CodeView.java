@@ -62,11 +62,11 @@ public class CodeView extends View implements Reversible {
             return;
         }
 
-        this.names = new String[]{"CodeView.css",
-                                  "CodeViewDM.css",
-                                  "CodeViewHC.css"};
-
-        this.loadStylesheets();
+        this.loadStylesheets(
+                "CodeView.css",
+                "CodeViewDM.css",
+                "CodeViewHC.css"
+        );
     }
 
     /**

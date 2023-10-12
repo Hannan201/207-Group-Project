@@ -1,5 +1,6 @@
 package cypher.enforcers.views;
 
+import cypher.enforcers.views.themes.Theme;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,6 +24,7 @@ import java.io.IOException;
 
 public abstract class View {
 
+    // Logger for the view class.
     private static final Logger logger = LoggerFactory.getLogger(View.class);
 
     // Parent root of this view, which is
@@ -41,14 +43,7 @@ public abstract class View {
     // Index 0: Path to the CSS file for light mode.
     // Index 1: Path to the CSS file for dark mode.
     // Index 2: Path to the CSS file for high contrast mode.
-    protected String[] cssFilesPaths = new String[3];
-
-    // Stores the names of the CSS files in the
-    // Following order:
-    // Index 0: Name of the CSS file for light mode.
-    // Index 1: Name of the CSS file for dark mode.
-    // Index 2: Name of the CSS file for high contrast mode.
-    protected String[] names;
+    protected String[] cssFilesPaths = new String[Theme.values().length];
 
     /**
      * Initialise the UI elements for this view.
@@ -154,7 +149,6 @@ public abstract class View {
             );
         } catch (IOException e) {
             logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);
-            e.printStackTrace();
         }
     }
 
@@ -162,10 +156,10 @@ public abstract class View {
      * Load the stylesheets (CSS files) for this
      * view.
      */
-    protected void loadStylesheets() {
-        for (int i = 0; i < this.cssFilesPaths.length; i++) {
+    protected void loadStylesheets(String ... files) {
+        for (int i = 0; i < files.length; i++) {
             this.cssFilesPaths[i] = Utilities.loadFileByURL(
-                    "/cypher/enforcers/css/" + this.names[i]
+                    "/cypher/enforcers/css/" + files[i]
                     ).toExternalForm();
         }
 

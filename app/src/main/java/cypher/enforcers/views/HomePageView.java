@@ -36,12 +36,12 @@ public class HomePageView extends View {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"HomePageView.css",
-                                  "HomePageViewDM.css",
-                                  "HomePageViewHC.css"};
-
-        this.loadStylesheets();
-
         this.loadRoot("HomePageView.fxml");
+
+        this.loadStylesheets(
+                "HomePageView.css",
+                "HomePageViewDM.css",
+                "HomePageViewHC.css"
+        );
     }
 }

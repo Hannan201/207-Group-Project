@@ -36,12 +36,12 @@ public class AddAccountView extends View {
      */
     @Override
     protected void initUI() {
-        this.names = new String[]{"CreateAccountView.css",
-                                  "CreateAccountViewDM.css",
-                                  "CreateAccountViewHC.css"};
-
-        this.loadStylesheets();
-
         this.loadRoot("CreateAccountView.fxml");
+
+        this.loadStylesheets(
+                "CreateAccountView.css",
+                "CreateAccountViewDM.css",
+                "CreateAccountViewHC.css"
+        );
     }
 }
