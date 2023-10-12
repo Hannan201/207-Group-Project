@@ -23,6 +23,7 @@ import java.io.IOException;
 
 public class AccountCell extends ListCell<Account> {
 
+    // Logger for the account cell.
     private static final Logger logger = LoggerFactory.getLogger(AccountView.class);
 
     @FXML
@@ -52,7 +53,7 @@ public class AccountCell extends ListCell<Account> {
             loader.load();
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/AccountCell.fxml. Cause: ", e);
         }
     }
 

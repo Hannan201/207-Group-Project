@@ -14,13 +14,14 @@ import java.io.IOException;
 
 public class CodeCellFactory extends ListCell<Code> {
 
+    // Logger for the factory that creates code cells.
     private static final Logger logger = LoggerFactory.getLogger(CodeCellFactory.class);
 
     private Parent graphic;
 
     ListView<Code> CodeListView;
 
-    private final CodeCellController cellController;
+    private CodeCellController cellController;
 
     public CodeCellFactory(ListView<Code> parentListView) throws IOException {
 
@@ -32,13 +33,11 @@ public class CodeCellFactory extends ListCell<Code> {
         try {
             graphic = loader.load();
         } catch (IOException e) {
-            logger.error("Failed to load FXML file: CodeCell.fxml. Cause: ", e);
-            e.printStackTrace();
+            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/CodeViewFXML/CodeCell.fxml. Cause: ", e);
+            return;
         }
 
-
         cellController = loader.getController();
-
     }
 
 

@@ -15,6 +15,7 @@ import cypher.enforcers.views.interfaces.Reversible;
 
 public class CodeView extends View implements Reversible {
 
+    // Logger for the code view.
     private static final Logger logger = LoggerFactory.getLogger(CodeView.class);
 
     // An instance for this code-viewer view.
@@ -57,8 +58,8 @@ public class CodeView extends View implements Reversible {
             this.setRoot(loader.load());
             this.controller = loader.getController();
         } catch (Exception e) {
-            logger.error("Failed to load FXML file: CodeView.fxml. Cause: ", e);
-            e.printStackTrace();
+            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/CodeViewFXML/CodeView.fxml. Cause: ", e);
+            return;
         }
 
         this.names = new String[]{"CodeView.css",

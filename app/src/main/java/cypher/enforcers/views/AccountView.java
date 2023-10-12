@@ -15,6 +15,7 @@ import cypher.enforcers.views.interfaces.Reversible;
 
 public class AccountView extends View implements Reversible {
 
+    // Logger for the account view.
     private static final Logger logger = LoggerFactory.getLogger(AccountView.class);
 
     // An instance for this account-viewer view.
@@ -52,15 +53,13 @@ public class AccountView extends View implements Reversible {
      */
     @Override
     protected void initUI() {
-
         try {
             FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountsView.fxml"));
             this.setRoot(loader.load());
             this.controller = loader.getController();
-
         } catch (Exception e) {
-            logger.error("Failed to load FXML file: AccountsView.fxml. Cause: ", e);
-            e.printStackTrace();
+            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/AccountsView.fxml. Cause: ", e);
+            return;
         }
 
         this.names = new String[]{"AccountsView.css",
