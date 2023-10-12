@@ -1,5 +1,7 @@
 package cypher.enforcers.models;
 
+import cypher.enforcers.views.themes.Theme;
+
 /**
  * This class is responsible for storing data
  * related to a user of this application.
@@ -14,7 +16,7 @@ public class User {
     private final String username;
 
     // Theme for this user.
-    private final String theme;
+    private final Theme theme;
 
     /**
      * Create a new user for this application with the
@@ -24,7 +26,7 @@ public class User {
      * @param name The username for this user.
      * @param theme The theme for this user.
      */
-    public User(int ID, String name, String theme) {
+    public User(int ID, String name, Theme theme) {
         this.ID = ID;
         this.username = name;
         this.theme = theme;
@@ -53,7 +55,7 @@ public class User {
      *
      * @return Theme for this user.
      */
-    public String getTheme() {
+    public Theme getTheme() {
         return this.theme;
     }
 }

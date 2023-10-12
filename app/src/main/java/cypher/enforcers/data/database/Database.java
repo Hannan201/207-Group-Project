@@ -7,6 +7,8 @@ import cypher.enforcers.data.security.TokenGenerator;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.models.User;
+import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetter;
+import cypher.enforcers.views.themes.Theme;
 import javafx.util.Callback;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -18,7 +20,6 @@ import cypher.enforcers.utilities.sqliteutilities.argumentsetters.StringSetter;
 import cypher.enforcers.utilities.sqliteutilities.retrievers.CodeRetriever;
 import cypher.enforcers.utilities.sqliteutilities.retrievers.IntegerRetriever;
 import cypher.enforcers.utilities.sqliteutilities.retrievers.ListRetriever;
-import cypher.enforcers.utilities.sqliteutilities.retrievers.StringRetriever;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -514,7 +515,7 @@ public class Database {
                             try {
                                 int userID = resultSet.getInt("id");
                                 String name = resultSet.getString("username");
-                                String theme = getThemeByID(resultSet.getInt("theme_id"));
+                                Theme theme = getThemeByID(resultSet.getInt("theme_id"));
                                 return new User(userID, name, theme);
                             } catch (SQLException e) {
                                 LoggerFactory.getLogger(getClass()).warn("Unable to create user. Cause: ", e);
@@ -906,7 +907,7 @@ public class Database {
      * @param id ID of the theme.
      * @return Name of the theme as a string.
      */
-    private static String getThemeByID(int id) {
+    private static Theme getThemeByID(int id) {
         if (sqLiteHelper.connectionFailure()) {
             return null;
         }
@@ -916,13 +917,34 @@ public class Database {
             return null;
         }
 
-        String result = sqLiteHelper.executeSelect(
-            """
-                SELECT name FROM themes
-                WHERE id = ?
-                """,
+        Theme result = sqLiteHelper.executeSelect(
+                """
+                        SELECT theme FROM themes
+                        WHERE id = ?
+                        """,
                 new IntegerSetter(id),
-                new StringRetriever("name")
+                new Callback<>() {
+                    @Override
+                    public Theme call(ResultSet resultSet) {
+                        try (ByteArrayInputStream bytesInput = new ByteArrayInputStream(
+                                resultSet.getBytes("theme")
+                            );
+                             ObjectInputStream objectInput = new ObjectInputStream(
+                                     bytesInput
+                             )
+                        ) {
+                            return (Theme) objectInput.readObject();
+                        } catch (SQLException e) {
+                            LoggerFactory.getLogger(getClass()).warn("Failed to retrieve theme, returning null. Cause: ", e);
+                        } catch (IOException ioException) {
+                            LoggerFactory.getLogger(getClass()).warn("Failed to convert theme to object. Cause: ", ioException);
+                        } catch (ClassNotFoundException classException) {
+                            LoggerFactory.getLogger(getClass()).warn(String.format("Failed to find class: %s. Cause: ", Theme.class), classException);
+                        }
+
+                        return null;
+                    }
+                }
         );
 
         if (Objects.isNull(result)) {
@@ -941,7 +963,7 @@ public class Database {
      *              for authentication purposes.
      * @return The theme for the user.
      */
-    public static String getTheme(Token token) {
+    public static Theme getTheme(Token token) {
         if (safetyChecks(token)) {
             int userID = ((CustomToken) token).ID;
             logger.trace("Retrieving theme for user with ID {}.", userID);
@@ -973,17 +995,31 @@ public class Database {
      *              for authentication purposes.
      * @param newTheme The new theme to set for the user.
      */
-    public static void updateTheme(Token token, String newTheme) {
+    public static void updateTheme(Token token, Theme newTheme) {
         if (safetyChecks(token)) {
             int userID = ((CustomToken) token).ID;
             logger.trace("Updating theme to {} for user with ID {}.", newTheme, userID);
 
             Integer id = sqLiteHelper.executeSelect(
-                """
-                    SELECT id FROM themes
-                    WHERE name = ?
-                    """,
-                    new StringSetter(newTheme),
+                    """
+                            SELECT id FROM themes
+                            WHERE theme = ?
+                            """,
+                    new ArgumentSetter<>(newTheme) {
+                        @Override
+                        public void setArgument(PreparedStatement statement, int index) {
+                            try (ByteArrayOutputStream bytesOutput = new ByteArrayOutputStream();
+                                 ObjectOutputStream objectOutput = new ObjectOutputStream(bytesOutput)
+                            ) {
+                                objectOutput.writeObject(value);
+                                statement.setBytes(index, bytesOutput.toByteArray());
+                            } catch (SQLException e) {
+                                LoggerFactory.getLogger(getClass()).warn(String.format("Failed to set argument %s at index %d. Cause: ", value, index), e);
+                            } catch (IOException ioException) {
+                                LoggerFactory.getLogger(getClass()).warn(String.format("Failed to convert value %s to an object. Cause: ", value), ioException);
+                            }
+                        }
+                    },
                     new IntegerRetriever("id")
             );
 

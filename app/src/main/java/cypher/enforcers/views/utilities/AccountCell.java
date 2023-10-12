@@ -24,7 +24,7 @@ import java.io.IOException;
 public class AccountCell extends ListCell<Account> {
 
     // Logger for the account cell.
-    private static final Logger logger = LoggerFactory.getLogger(AccountView.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccountCell.class);
 
     @FXML
     private ImageView logo;
@@ -48,6 +48,7 @@ public class AccountCell extends ListCell<Account> {
     private void loadFXML() {
         try {
             FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountCell.fxml"));
+            loader.setController(this);
             loader.setRoot(this);
             loader.load();
         }

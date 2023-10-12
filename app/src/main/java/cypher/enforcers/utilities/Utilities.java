@@ -6,6 +6,7 @@ import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.database.Database;
+import cypher.enforcers.views.themes.Theme;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,14 +42,14 @@ public class Utilities {
      * Adjust the theme for a user.
      */
     public static void adjustTheme() {
-        String theme = Database.getTheme(Storage.getToken());
+        Theme theme = Database.getTheme(Storage.getToken());
 
         if (theme == null) {
             logger.debug("Cannot switch theme because it's null. Aborting request.");
             return;
         }
 
-        if (theme.equals("light mode")) {
+        if (theme.equals(Theme.LIGHT)) {
             logger.debug("Theme already set to light mode. Aborting request.");
             return;
         }
@@ -65,7 +66,7 @@ public class Utilities {
      * @param theme Name of the theme.
      * @return The ThemeSwitcher ready to change all the themes.
      */
-    private static ThemeSwitcher getThemeSwitcher(String theme) {
+    private static ThemeSwitcher getThemeSwitcher(Theme theme) {
         List<View> views = List.of(
                 HomePageView.getInstance(),
                 SignUpView.getInstance(),
@@ -77,7 +78,7 @@ public class Utilities {
 
         Command command = new SwitchToDarkMode(views);
 
-        if (theme.equals("high contrast mode")) {
+        if (theme.equals(Theme.HIGH_CONTRAST)) {
             command = new SwitchToHighContrastMode(views);
         }
 

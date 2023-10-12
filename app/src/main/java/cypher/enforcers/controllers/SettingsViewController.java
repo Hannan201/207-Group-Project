@@ -5,6 +5,7 @@ import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
+import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
@@ -93,7 +94,7 @@ public class SettingsViewController implements Initializable {
         logger.info("Updating application look and feel to high contrast mode.");
         updateTheme(highContrastModeCommand);
 
-        Database.updateTheme(Storage.getToken(), "high contrast mode");
+        Database.updateTheme(Storage.getToken(), Theme.HIGH_CONTRAST);
     }
 
     /**
@@ -104,7 +105,7 @@ public class SettingsViewController implements Initializable {
         logger.info("Updating application look and feel to dark mode.");
         updateTheme(darkModeCommand);
 
-        Database.updateTheme(Storage.getToken(), "dark mode");
+        Database.updateTheme(Storage.getToken(), Theme.DARK);
     }
 
     /**
@@ -116,7 +117,7 @@ public class SettingsViewController implements Initializable {
         logger.info("Updating application look and feel to light mode.");
         updateTheme(lightModeCommand);
 
-        Database.updateTheme(Storage.getToken(), "light mode");
+        Database.updateTheme(Storage.getToken(), Theme.LIGHT);
     }
 
     /**
