@@ -3,6 +3,7 @@ package cypher.enforcers.utilities;
 import cypher.enforcers.commands.Command;
 import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
+import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.database.Database;
@@ -49,11 +50,6 @@ public class Utilities {
             return;
         }
 
-        if (theme.equals(Theme.LIGHT)) {
-            logger.debug("Theme already set to light mode. Aborting request.");
-            return;
-        }
-
         logger.debug("Switching theme to {}.", theme);
         ThemeSwitcher switcher = getThemeSwitcher(theme);
         switcher.switchTheme();
@@ -70,16 +66,19 @@ public class Utilities {
         List<View> views = List.of(
                 HomePageView.getInstance(),
                 SignUpView.getInstance(),
+                SignInView.getInstance(),
                 AccountView.getInstance(),
                 AddAccountView.getInstance(),
                 CodeView.getInstance(),
                 SettingsView.getInstance()
         );
 
-        Command command = new SwitchToDarkMode(views);
+        Command command;
 
-        if (theme.equals(Theme.HIGH_CONTRAST)) {
-            command = new SwitchToHighContrastMode(views);
+        switch (theme) {
+            case HIGH_CONTRAST -> command = new SwitchToHighContrastMode(views);
+            case DARK -> command = new SwitchToDarkMode(views);
+            default -> command = new SwitchToLightMode(views);
         }
 
         return new ThemeSwitcher(command);
