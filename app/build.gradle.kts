@@ -29,7 +29,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
 
     // Logging implementation.
-    implementation("ch.qos.logback:logback-classic:1.3.6") {
+    implementation("ch.qos.logback:logback-classic:1.3.7") {
         // This is because logback brings in a transitive
         // dependency to SLF4J, even though we have already
         // imported it. No need for it to be imported twice.
@@ -37,24 +37,27 @@ dependencies {
     }
 
     // ValidatorFX.
-    implementation("net.synedra:validatorfx:0.4.0")
+    implementation("net.synedra:validatorfx:0.4.2")
 
     // ControlsFX.
     implementation("org.controlsfx:controlsfx:11.1.2")
 
     // SQLite support.
-    implementation("org.xerial:sqlite-jdbc:3.43.0.0")
+    implementation("org.xerial:sqlite-jdbc:3.43.2.0")
 
     // Junit5 in our case needs two modules.
     // Junit jupiter -> This is for the @Test annotations and the assertions
     // such as asserTrue, assertEquals, etc.
     // Junit platform -> This is what launches the testing framework on the
     // JVM.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 
     // Using runtime only because this dependency is only needed
     // when running the tests.
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
+        because("Only needed to run tests in a version of IntelliJ IDEA that bundles older versions")
+    }
 
     // Used to extract filename from a url.
     implementation("commons-io:commons-io:2.14.0")
