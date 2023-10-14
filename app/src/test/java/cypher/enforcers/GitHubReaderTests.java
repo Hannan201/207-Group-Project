@@ -2,7 +2,6 @@ package cypher.enforcers;
 
 import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
-import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -36,5 +35,4 @@ public class GitHubReaderTests {
         String[] codesAsArray = codes.toArray(new String[0]);
         assertArrayEquals(codesAsArray, expectedCodes);
     }
-
 }

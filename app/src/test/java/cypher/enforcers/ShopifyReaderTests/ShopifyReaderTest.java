@@ -33,16 +33,4 @@ public class ShopifyReaderTest {
 
         assertEquals(expected, result);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

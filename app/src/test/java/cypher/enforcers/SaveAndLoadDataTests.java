@@ -3,6 +3,7 @@ package cypher.enforcers;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.security.Token;
 import cypher.enforcers.code.Code;
+import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.data.database.Database;
@@ -429,10 +430,10 @@ public class SaveAndLoadDataTests {
         User user = Database.getUser(token);
         assertNotNull(user);
 
-        assertEquals(Database.getTheme(token), "light mode");
-        assertEquals(user.getTheme(), "light mode");
+        assertEquals(Database.getTheme(token), Theme.LIGHT);
+        assertEquals(user.getTheme(), Theme.LIGHT);
 
-        Database.updateTheme(token, "high contrast mode");
+        Database.updateTheme(token, Theme.HIGH_CONTRAST);
         Database.logUserOut(token);
         Database.disconnect();
 
@@ -444,8 +445,8 @@ public class SaveAndLoadDataTests {
         user = Database.getUser(token);
         assertNotNull(user);
 
-        assertEquals(Database.getTheme(token), "high contrast mode");
-        assertEquals(user.getTheme(), "high contrast mode");
+        assertEquals(Database.getTheme(token), Theme.HIGH_CONTRAST);
+        assertEquals(user.getTheme(), Theme.HIGH_CONTRAST);
 
         Database.logUserOut(token);
         Database.disconnect();
