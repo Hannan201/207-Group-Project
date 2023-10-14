@@ -22,7 +22,7 @@ import cypher.enforcers.views.interfaces.Reversible;
 
 import java.awt.*;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +166,7 @@ public class SettingsViewController implements Initializable {
     }
 
 
-    public void handleLinkClick(ActionEvent e) throws IOException, URISyntaxException {
+    public void handleLinkClick(ActionEvent e) throws IOException {
         Hyperlink link = (Hyperlink) e.getSource();
         final String str = link == null ? "" : link.getText();
         String url = "";
@@ -188,7 +188,7 @@ public class SettingsViewController implements Initializable {
         }
 
         logger.debug("Redirecting browser to url: {}.", url);
-        Desktop.getDesktop().browse(new URL(url).toURI());
+        Desktop.getDesktop().browse(URI.create(url));
     }
 
     /**
