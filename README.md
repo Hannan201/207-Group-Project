@@ -25,6 +25,7 @@ Junit 5 version 5.10.0 or greater: [link](https://junit.org/junit5/)
 
 # Details
 Entry point to application is `Launcher.java`
+
 Dependencies are managed by Gradle.
 
 # Acknowledgements
