@@ -4,6 +4,7 @@ import cypher.enforcers.behaviors.ManualInputReader;
 import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
 import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
+import cypher.enforcers.code.readers.types.ReaderType;
 import cypher.enforcers.data.Storage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -175,7 +176,7 @@ public class CodeViewController implements Initializable {
         String AccountType = account.getSocialMediaType().toLowerCase();
 
         // 2) select a reader based on the corresponding account type
-        CodeReader reader = CodeReaderFactory.makeCodeReader(AccountType);
+        CodeReader reader = CodeReaderFactory.makeCodeReader(ReaderType.valueOf(AccountType.toUpperCase()));
 
         if (reader == null) {
             logger.warn("No reader of type {}. Aborting request.", AccountType);

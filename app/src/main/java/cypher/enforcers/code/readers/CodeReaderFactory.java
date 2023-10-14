@@ -1,5 +1,7 @@
 package cypher.enforcers.code.readers;
 
+import cypher.enforcers.code.readers.types.ReaderType;
+
 /**
  * This class is responsible for returning a CodeReader
  * needed for a specific user.
@@ -20,23 +22,18 @@ public class CodeReaderFactory {
      * from that structure of a text file depending on the
      * reader type parameter.
      */
-    public static CodeReader makeCodeReader(String readerType) {
-        //Clean input.
-        readerType = readerType.strip();
-
-        // Give correct reader based on the type.
-        if (readerType.equalsIgnoreCase("github")) {
-            return new GitHubReader();
-        } else if (readerType.equalsIgnoreCase("google")) {
-            return new GoogleReader();
-        } else if (readerType.equalsIgnoreCase("discord")) {
-            return new DiscordReader();
-        } else if (readerType.equalsIgnoreCase("shopify")) {
-            return new ShopifyReader();
+    public static CodeReader makeCodeReader(ReaderType readerType) {
+        if (readerType == null) {
+            return null;
         }
 
-        // Not a valid type.
-        return null;
+        // Give correct reader based on the type.
+        return switch (readerType) {
+            case DISCORD -> new DiscordReader();
+            case GITHUB -> new GitHubReader();
+            case GOOGLE -> new GoogleReader();
+            case SHOPIFY -> new ShopifyReader();
+        };
     }
 
 }
