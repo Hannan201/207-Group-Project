@@ -1,0 +1,96 @@
+
+#title {
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 20;
+}
+#usernameTitle{
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 15;
+}
+
+#codesTitle{
+    -fx-font-size: 15;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: Black;
+    -fx-font-weight: 600;
+}
+
+#placeholderText{
+    -fx-font-family: "Montserrat SemiBold";
+    -fx-font-size: 18;
+    -fx-text-fill: #676767;
+}
+.list-cell:hover{
+    -fx-background-color: #0080ff;
+}
+
+.list-cell .button{
+    -fx-font-size: 12;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: Black;
+    -fx-font-weight: bold;
+    -fx-border-color: Transparent;
+    -fx-background-color: #eaeaea;
+    -fx-border-radius: 4;
+}
+.list-cell #copy:hover{
+    -fx-background-color: #067c06;
+    -fx-text-fill: White;
+}
+.list-cell #delete:hover{
+    -fx-background-color: #be0b0b;
+    -fx-text-fill: White;
+}
+.list-cell #edit:hover{
+    -fx-background-color: #a29a0e;
+    -fx-text-fill: White;
+}
+
+#addCode:hover{
+    -fx-background-color: #0e7ba2;
+    -fx-text-fill: White;
+}
+
+.button{
+    -fx-font-size: 14;
+    -fx-font-weight: 500;
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: Black;
+    -fx-border-color: Transparent;
+    -fx-background-color: #eaeaea;
+}
+.button:hover{
+    -fx-text-fill: #235480;
+}
+
+.text-field:hover{
+    -fx-border-color: #235480;
+}
+
+.list-view:hover {
+    -fx-border-color: #235480;
+}
+
+#logout{
+    -fx-background-image: url('../images/logout_lightmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#settings{
+    -fx-background-image: url('../images/settings_lightmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#back{
+    -fx-background-image: url('../images/back_lightmode.png');
+    -fx-background-size: 35px;
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}

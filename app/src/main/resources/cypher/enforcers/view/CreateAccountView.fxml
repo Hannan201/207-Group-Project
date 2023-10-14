@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="box" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="233.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.CreateAccountController">
+   <children>
+      <HBox fx:id="icons" alignment="TOP_CENTER" prefHeight="58.0" prefWidth="380.0" spacing="10.0">
+         <children>
+            <fx:define>
+               <ToggleGroup fx:id="group" />
+            </fx:define>
+            <ToggleButton fx:id="github" mnemonicParsing="false" onAction="#handleGithub" prefHeight="50.0" prefWidth="50.0">
+               <toggleGroup>
+                  <ToggleGroup fx:id="group" />
+               </toggleGroup></ToggleButton>
+            <ToggleButton fx:id="google" mnemonicParsing="false" onAction="#handleGoogle" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" />
+            <ToggleButton fx:id="shopify" mnemonicParsing="false" onAction="#handleShopify" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" />
+            <ToggleButton fx:id="discord" mnemonicParsing="false" onAction="#handleDiscord" prefHeight="50.0" prefWidth="50.0" toggleGroup="$group" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="380.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Platform" />
+            <TextField fx:id="platform" prefHeight="25.0" prefWidth="157.0" />
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" prefHeight="6.0" prefWidth="380.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="145.0" text="Username/Email" />
+            <TextField fx:id="username" prefHeight="25.0" prefWidth="157.0" />
+         </children>
+      </HBox>
+      <Region prefHeight="21.0" prefWidth="380.0" />
+   </children>
+</VBox>

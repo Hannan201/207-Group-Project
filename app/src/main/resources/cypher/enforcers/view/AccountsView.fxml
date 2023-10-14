@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="box" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.AccountViewController">
+   <center>
+      <GridPane maxWidth="528.0" prefHeight="620.0" prefWidth="375.0" BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="72.2611509" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="27.7358491" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <VBox fx:id="left" prefHeight="450.0" prefWidth="399.0" GridPane.halignment="CENTER">
+               <children>
+                  <TextField fx:id="search" focusTraversable="false" onKeyReleased="#handleSearchRelease" prefHeight="32.0" prefWidth="383.0" promptText="Search for your username..." />
+                  <Region fx:id="space" minHeight="-Infinity" prefHeight="9.0" prefWidth="383.0" />
+                  <ListView fx:id="accounts" maxHeight="1.7976931348623157E308" prefHeight="417.0" prefWidth="383.0" VBox.vgrow="ALWAYS">
+                     <placeholder>
+                        <Label fx:id="default" maxHeight="1.7976931348623157E308" text="Please add an account!" wrapText="true" />
+                     </placeholder>
+                  </ListView>
+                  <Region fx:id="bottomListView" maxHeight="-Infinity" prefHeight="40.0" prefWidth="383.0" VBox.vgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="603.0" prefWidth="134.0" GridPane.columnIndex="1">
+               <children>
+                  <Region fx:id="top" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="39.0" prefWidth="118.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="select" mnemonicParsing="false" onAction="#handleSelectAccount" prefHeight="90.0" prefWidth="90.0" text="Select All &#10;Accounts" textAlignment="CENTER" />
+                  <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="add" mnemonicParsing="false" onAction="#handleAddAccount" prefHeight="90.0" prefWidth="90.0" text="Add &#10;Account" textAlignment="CENTER" />
+                  <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="pin" mnemonicParsing="false" onAction="#handlePinAccount" prefHeight="90.0" prefWidth="90.0" text="Pin &#10;Accounts" textAlignment="CENTER" />
+                  <Region prefHeight="18.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="delete" mnemonicParsing="false" onAction="#handleDeleteAccount" prefHeight="90.0" prefWidth="90.0" text="Delete&#10;Accounts" textAlignment="CENTER" />
+                  <Region fx:id="bottomButtons" maxHeight="-Infinity" prefHeight="38.0" prefWidth="118.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </center>
+   <top>
+      <Label fx:id="title" alignment="BOTTOM_CENTER" prefHeight="25.0" prefWidth="179.0" text="Accounts" BorderPane.alignment="BASELINE_CENTER" />
+   </top>
+   <padding>
+      <Insets left="5.0" right="5.0" top="40.0" />
+   </padding>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="59.0" prefWidth="530.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="back" mnemonicParsing="false" onAction="#handleLogout" prefHeight="0.0" prefWidth="39.0">
+               <padding>
+                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+               </padding></Button>
+            <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="35.0" prefWidth="35.0">
+               <padding>
+                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+               </padding></Button>
+            <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="settings" mnemonicParsing="false" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0">
+               <padding>
+                  <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+               </padding></Button>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

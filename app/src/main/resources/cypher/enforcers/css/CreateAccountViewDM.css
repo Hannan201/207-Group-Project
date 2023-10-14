@@ -1,0 +1,71 @@
+#box {
+    -fx-background-color: #222426;
+}
+
+#github {
+    -fx-background-image: url('../images/github_darkmode.png');
+    -fx-background-size: 50px;
+    -fx-background-color: #161618;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#github:focused {
+    -fx-border-color: #696972;
+}
+
+#google {
+    -fx-background-image: url('../images/google_darkmode.png');
+    -fx-background-size: 50px;
+    -fx-background-color: #161618;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#google:focused {
+    -fx-border-color: #696972;
+}
+
+#shopify {
+    -fx-background-image: url('../images/shopify_darkmode.png');
+    -fx-background-size: 50px;
+    -fx-background-color: #161618;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#shopify:focused {
+    -fx-border-color: #696972;
+}
+
+#discord {
+    -fx-background-image: url('../images/discord_darkmode.png');
+    -fx-background-size: 50px;
+    -fx-background-color: #161618;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#discord:focused {
+    -fx-border-color: #696972;
+}
+
+.label {
+    -fx-text-fill: #979594;
+    -fx-font-family: "Montserrat";
+}
+
+.button {
+    -fx-font-family: "Montserrat";
+    -fx-text-fill: #c9cbc1;
+    -fx-background-color: #161618;
+}
+
+.button:hover {
+    -fx-background-color: #0c0c0d;
+}
+
+.text-field{
+    -fx-background-color: #2d3133;
+    -fx-text-fill: white;
+}

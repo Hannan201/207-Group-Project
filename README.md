@@ -2,19 +2,31 @@
 A JavaFX application to display the backup codes that a user has for each social media platform they use. The application allows for importing `.txt` files if their social media account is one of the following: Discord, Google, Shopify or GitHub. This application also saves user data as well as support accessibility features.
 
 # Prerequisites
-Java JDK version 18.0.2 or greater.
+Java JDK version 21.0 or greater.
 
 # Dependencies
-JavaFX version 19 or greater: [link](https://openjfx.io/)
+SLF4J version 2.0.9 or greater: [link](https://www.slf4j.org/)
+
+Logback version 1.3.7 or greater: [link](https://logback.qos.ch/)
+
+JavaFX version 21.0 or greater: [link](https://openjfx.io/)
 
 ControlsFX version 11.1.2 or greater: [link](https://controlsfx.github.io/)
 
-ValidatorFX version 0.4.0 or greater: [link](https://github.com/effad/ValidatorFX)
+ValidatorFX version 0.4.2 or greater: [link](https://github.com/effad/ValidatorFX)
+
+SQLite JDBC Driver version 3.43.2.0 or greater: [link](https://www.sqlitetutorial.net/sqlite-java/)
+
+Apache Commons IO version 2.14.0 or greater: [link](https://commons.apache.org/proper/commons-io/)
+
+FOR TESTING:
+
+Junit 5 version 5.10.0 or greater: [link](https://junit.org/junit5/)
 
 # Details
-Entry point to application is `Launcher.java`  
-JavaFX can be downloaded locally then added to project configurations.  
-ControlsFX and ValidatorFX are managed by Maven, or Gradle if preferred.
+Entry point to application is `Launcher.java`
+
+Dependencies are managed by Gradle.
 
 # Acknowledgements
 Special thanks to [Icons8](https://icons8.com/) for the following icons:
@@ -212,7 +224,7 @@ The user can log out of the application in two ways. One way is to click the arr
 
 The user can also log out of the application by clicking the button with the door icon (at the bottom center). 
 
-Either way, the social media accounts, backup codes, as well as the UI (High Contrast, Dark, or Light) are saved so the next time the user signs-in, everything is preloaded.
+Either way, the social media accounts, backup codes, as well as the UI (High Contrast, Dark, or Light) are saved so the next time the user signs in, everything is preloaded.
 
 Once the user signs out, the user will be brought to the home-page where the user will have to sign-up/sign-in again:
 
