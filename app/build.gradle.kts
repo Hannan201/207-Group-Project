@@ -59,7 +59,7 @@ dependencies {
         because("Only needed to run tests in a version of IntelliJ IDEA that bundles older versions")
     }
 
-    // Used to extract filename from a url.
+    // Used to extract filename from an url.
     implementation("commons-io:commons-io:2.14.0")
 }
 
