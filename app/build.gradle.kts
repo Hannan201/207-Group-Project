@@ -63,7 +63,8 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(19))
+        languageVersion.set(JavaLanguageVersion.of(21))
+        vendor.set(JvmVendorSpec.ADOPTIUM) // To use OpenJDK.
     }
 }
 
@@ -103,7 +104,7 @@ javafx {
     // --module-path=path/to/javafx/lib/folder --add-modules=javafx.fxml,
     // javafx.controls in the run configuration of Intellij IDEA.
 
-    version = "19"
+    version = "21"
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
