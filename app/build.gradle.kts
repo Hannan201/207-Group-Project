@@ -161,6 +161,13 @@ extraJavaModuleInfo {
     automaticModule("net.bytebuddy:byte-buddy", "net.bytebuddy")
 }
 
+// To work with projects inside Intellij IDEA.
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+
 tasks.named<JavaExec>("run") {
     /*
      * The reason these modules needed to be added manually is because
