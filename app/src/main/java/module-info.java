@@ -19,12 +19,15 @@ module cypher.enforcers {
     // ControlsFX.
     requires org.controlsfx.controls;
 
-    // SQL support.
-    requires java.sql;
+    // SQLite support.
     requires org.xerial.sqlitejdbc;
 
-    // Adds utility functions to work with URL's.
+    // Adds utility functions to work with URLs.
     requires org.apache.commons.io;
+
+    // To work with hibernate.
+    requires jakarta.persistence;
+    requires org.hibernate.orm.core;
 
     // JavaFX requires access to the controllers and any other
     // methods from other packages used inside the controllers.
