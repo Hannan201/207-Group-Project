@@ -37,7 +37,7 @@ public interface AccountRepository {
     Optional<Account> readByID(long accountID);
 
     /**
-     * Read an account by name (case-sensitive).
+     * Read an account by name (case-insensitive).
      *
      * @param name Name of the account.
      * @return An Optional containing the account. Null otherwise.

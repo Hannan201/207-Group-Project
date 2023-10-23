@@ -25,7 +25,7 @@ public class UserModel {
         setCurrentUser(userRepository.read().orElse(null));
     }
 
-    // Property to store the current logged in user.
+    // Property to store the current logged-in user.
     private final ObjectProperty<User> currentUserProperty = new SimpleObjectProperty<>();
 
     /**
@@ -49,7 +49,7 @@ public class UserModel {
     /**
      * Set the current logged-in user.
      *
-     * @param user The new user to be set.
+     * @param user The new User to be set.
      */
     public void setCurrentUser(User user) {
         currentUserProperty.set(user);

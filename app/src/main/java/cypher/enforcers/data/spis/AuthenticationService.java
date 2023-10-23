@@ -25,4 +25,11 @@ public interface AuthenticationService {
       */
      boolean logUserOut();
 
+     /**
+      * Get ID of the user currently logged in.
+      *
+      * @return ID of the current user.
+      */
+     long getLoggedInUser();
+
 }

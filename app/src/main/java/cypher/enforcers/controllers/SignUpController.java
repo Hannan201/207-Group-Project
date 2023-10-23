@@ -25,6 +25,9 @@ import cypher.enforcers.views.View;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * A controller for the Sign-up UI.
+ */
 public class SignUpController implements Initializable {
 
     // Logger for the sign-up controller.
