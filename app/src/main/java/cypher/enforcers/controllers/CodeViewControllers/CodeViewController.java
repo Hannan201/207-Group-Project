@@ -6,6 +6,7 @@ import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
 import cypher.enforcers.code.readers.types.ReaderType;
 import cypher.enforcers.data.Storage;
+import cypher.enforcers.models.CodeModel;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -30,69 +31,138 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-
+/**
+ * Controller for the code view.
+ */
 public class CodeViewController implements Initializable {
 
     // Logger for the code view controller.
     private static final Logger logger = LoggerFactory.getLogger(CodeViewController.class);
 
+    // Contains all content to be displayed for this view.
     @FXML
     private BorderPane background;
 
+    // Contains the account name and social media type to be
+    // displayed vertically on top of each other.
     @FXML
     private VBox titleSection;
 
+    // Contains the list-view and text field to be displayed on top
+    // of each other.
     @FXML
     private VBox left;
 
+    // Contains the buttons to be displayed on top of each other.
     @FXML
     private VBox right;
 
+    // Controls the spacing above the list-view.
     @FXML
     private Region aboveListView;
 
+    // Displays all the codes.
     @FXML
     private ListView<Code> codeListView;
 
+    // Label that says code.
     @FXML
     private Label codesTitle;
 
+    // Controls the spacing above the buttons.
+    // (This ensures the spacing is exactly the same as when the
+    // project was first submitted, didn't want to make any
+    // changes to the UI on my own).
     @FXML
     private Region aboveButtons;
 
+    // Button that says Import Codes.
     @FXML
     private Button importCodes;
 
+    // Button that says Add Code.
     @FXML
     public Button addCode;
 
+    // Main title for this view.
     @FXML
     private Label title;
 
+    // Title for the name of the account.
     @FXML
     private Label usernameTitle;
 
+    // Controls the spacing on the left side of the text field, so that
+    // it's aligned with the list-view.
     @FXML
     private Region beforeCodeInput;
 
+    // Text field to add a code.
     @FXML
     private TextField addCodeInput;
 
+    // Controls the spacing between the text field and Add Code button
+    // so that they have enough gap which makes the button and text field
+    // stay inline with the list-view.
     @FXML
     private Region spaceBetween;
 
+    // Current account to display.
     private Account account;
 
+    // This property is used to control the padding on the left side
+    // of the list view so that the content can fit when the screen
+    // gets too small.
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
+
+    // This property controls the padding on the right and left side
+    // of the buttons so the content can fit when the screen gets too
+    // small.
     private final ObjectProperty<Insets> rightSidePadding = new SimpleObjectProperty<>(new Insets(0, 12, 0, 10));
+
+    // This property is used to control the padding of the main container
+    // so that the contents can fit when the screen gets to small.
     private final ObjectProperty<Insets> windowPadding = new SimpleObjectProperty<>(new Insets(5, 5, 5, 5));
 
+    // To interact with the user's codes.
+    private CodeModel codeModel;
+
+    /**
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resourceBundle
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         background.paddingProperty().bind(windowPadding);
         left.paddingProperty().bind(padding);
         right.paddingProperty().bind(rightSidePadding);
 
+        /*
+        This view would break down if the screen went too large or
+        small. I'm not good at UI thus I didn't know how to make it look,
+        so for now I just made it look "functional" when the screen
+        sizes change. if screen size is the default width and height, then
+        I did my best to maintain the spacings that were there when
+        this project was submitted, since I didn't want to tamper the UI.
+        You are fully free to change these bindings.
+         */
+
+        /*
+        The text field, add code button, and the space between them
+        each get a certain amount of width. By trial and error I
+        figured out the values so that each element gets a certain
+        percentage of the total width, and the total space is based on the
+        width of the list-view. This allows for the proportions to be
+        maintained even when the screen size is changed.
+         */
         addCodeInput.prefWidthProperty().bind(
                 codeListView.widthProperty()
                         .multiply(246.0 / 374.0)
@@ -108,20 +178,35 @@ public class CodeViewController implements Initializable {
                         .multiply(32.0 / 374.0)
         );
 
+        // Allows the Import Codes button to be in-line with the
+        // list view to where it was for when this project was
+        // submitted.
         aboveButtons.prefHeightProperty().bind(
                 codesTitle.heightProperty()
                         .add(aboveListView.heightProperty())
                         .add(34)
         );
 
+        /*
+        There are multiple breakpoints I found from trial and error
+        and if the width gets smaller than those breakpoints, then
+        paddings will adjust so there's more room for the content.
+         */
+
         background.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
-            if (newHeight.doubleValue() < 318) {
-                double newPadding = Math.max(0, 5 - (318 - newHeight.doubleValue()));
-                windowPadding.set(new Insets(newPadding, 5, newPadding, 5));
-                BorderPane.setMargin(titleSection, new Insets(Math.max(0, 10 - (318 - newHeight.doubleValue())), 0, 0, 0));
+            if (newHeight.doubleValue() < 395) {
+                aboveListView.setMinHeight(Region.USE_COMPUTED_SIZE);
+
+                if (newHeight.doubleValue() < 318) {
+                    double newPadding = Math.max(0, 5 - (318 - newHeight.doubleValue()));
+                    windowPadding.set(new Insets(newPadding, 5, newPadding, 5));
+                    BorderPane.setMargin(titleSection, new Insets(Math.max(0, 10 - (318 - newHeight.doubleValue())), 0, 0, 0));
+                } else {
+                    windowPadding.set(new Insets(5, 5, 5, 5));
+                    BorderPane.setMargin(titleSection, new Insets(10, 0, 0, 0));
+                }
             } else {
-                windowPadding.set(new Insets(5, 5, 5, 5));
-                BorderPane.setMargin(titleSection, new Insets(10, 0, 0, 0));
+                aboveListView.setMinHeight(aboveListView.getPrefHeight());
             }
         }));
 

@@ -15,7 +15,7 @@ public interface AccountRepository {
      * Create a new account.
      *
      * @param account Account to create.
-     * @return ID of the account, otherwise -1.
+     * @return True if the account was added, false otherwise.
      */
     boolean create(Account account);
 

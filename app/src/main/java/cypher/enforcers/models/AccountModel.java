@@ -34,7 +34,7 @@ public class AccountModel {
     /**
      * Get the list of accounts property.
      *
-     * @return An ObservableList of accounts.
+     * @return Property with an ObservableList of accounts.
      */
     public ObjectProperty<ObservableList<Account>> accountsProperty() {
         return accountsProperty;
@@ -82,14 +82,30 @@ public class AccountModel {
 
 
     /**
-     * Delete an account for this user.
+     * Delete accounts for this user.
      *
-     * @param accountToDelete Account to delete.
-     *
+     * @param accountsToDelete Accounts to delete.
      * @return True if successfully deleted, false otherwise.
      */
-    public boolean deleteAccounts(Account accountToDelete) {
-        return accountRepository.delete(accountToDelete);
+    public boolean deleteAccounts(Account ... accountsToDelete) {
+        if (accountsToDelete.length == accounts.size()) {
+            if (accountRepository.deleteAll()) {
+                accounts.clear();
+                return true;
+            }
+
+            return false;
+        }
+
+        for (Account a : accountsToDelete) {
+            if (!accountRepository.delete(a)) {
+                return false;
+            }
+
+            accounts.remove(a);
+        }
+
+        return true;
     }
 
     /**

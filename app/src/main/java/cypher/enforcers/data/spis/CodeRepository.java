@@ -15,12 +15,10 @@ public interface CodeRepository {
     /**
      * Create a new code.
      *
-     * @param accountID ID of the account to which this code should be
-     *                  added to.
      * @param code The code to add.
-     * @return ID of the code, otherwise -1.
+     * @return True if the code was added, otherwise false.
      */
-    long create(long accountID, String code);
+    boolean create(Code code);
 
     /**
      * Read all codes for an account.
