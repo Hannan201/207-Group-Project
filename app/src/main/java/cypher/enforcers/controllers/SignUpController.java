@@ -3,6 +3,7 @@ package cypher.enforcers.controllers;
 import cypher.enforcers.data.database.Database;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.security.Token;
+import cypher.enforcers.models.UserModel;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,27 +30,42 @@ public class SignUpController implements Initializable {
     // Logger for the sign-up controller.
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
-
+    // Used for validation based on what the user types.
     private final Validator validator = new Validator();
-    @FXML
-    public Button signUp;
 
+    // Contains all the content to be displayed vertically
+    // in the center.
     @FXML
     public VBox box;
 
+    // Button that says sign-up.
     @FXML
-    public PasswordField initialPassword;
+    public Button signUp;
 
-    @FXML
-    public PasswordField verifiedPassword;
-
+    // Text field for the initial username.
     @FXML
     public TextField initialUsername;
 
+    // Text field for the verified username.
     @FXML
     public TextField verifiedUsername;
 
+    // Text field for the initial password.
+    @FXML
+    public PasswordField initialPassword;
+
+    // Text field for the verified password.
+    @FXML
+    public PasswordField verifiedPassword;
+
+    // To interact with the user data.
+    private UserModel userModel;
+
+
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Clear all the text fields when this window closes. Since
+        // we're using singleton pattern, only one view instance will be
+        // created.
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
@@ -67,15 +83,17 @@ public class SignUpController implements Initializable {
         }));
 
         signUp = new Button("Sign Up");
-        signUp.setPrefHeight(25);
-        signUp.setPrefWidth(130);
+        signUp.setPrefSize(130, 25);
+
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signUp,
                 validator.containsErrorsProperty(),
                 Bindings.concat("Cannot sign up:\n", validator.createStringBinding()));
-        signUp.setOnAction(this::handleSignUp);
         box.getChildren().add(createAccountWrapper);
+
+        signUp.setOnAction(this::handleSignUp);
+
 
         // checks if the username field is empty
 
@@ -189,15 +207,9 @@ public class SignUpController implements Initializable {
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
 
         // Clear the attributes such that when the signs out
-        // they do not have access to the credentials
+        // they do not have access to the credentials <-- Now done in the initialize method.
 
         Token token = Database.registerUser(initialUsername.getText(), initialPassword.getText());
         Storage.setToken(token);
-
-        logger.trace("Clearing all text fields.");
-        initialUsername.clear();
-        initialPassword.clear();
-        verifiedUsername.clear();
-        verifiedPassword.clear();
     }
 }

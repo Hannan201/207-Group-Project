@@ -8,15 +8,6 @@ package cypher.enforcers.data.spis;
 public interface AuthenticationService {
 
      /**
-      * Register a new user into this application.
-      *
-      * @param username Username for the user.
-      * @param password Password for the user.
-      * @return True if the user was registered successfully, false otherwise.
-      */
-     boolean registerUser(String username, String password);
-
-     /**
       * Authenticate an existing user into this application.
       *
       * @param username Username for the user.

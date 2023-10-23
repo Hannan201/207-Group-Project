@@ -62,8 +62,9 @@ public class UserModel {
      * @param password Password for the user.
      * @return True if successfully logged in, false otherwise.
      */
-    public boolean attemptLogin(String username, String password) {
+    public boolean loginUser(String username, String password) {
         boolean result = authSerivce.authenticateUser(username, password);
+
         if (result) {
             Optional<User> userOptional = userRepository.read();
             userOptional.ifPresentOrElse(
@@ -73,6 +74,41 @@ public class UserModel {
                     }
             );
         }
+
+        return result;
+    }
+
+    /**
+     * Check to see if a username is already taken. The search
+     * is case-insensitive.
+     *
+     * @param username Username to check for.
+     * @return True if it is taken, false otherwise.
+     */
+    public boolean isUsernameTaken(String username) {
+        return userRepository.checkUsername(username);
+    }
+
+    /**
+     * Register a new user.
+     *
+     * @param username Username for the new user.
+     * @param password Password for the new user.
+     * @return True if successfully registered, false otherwise.
+     */
+    public boolean registerUser(String username, String password) {
+        boolean result = userRepository.create(username, password);
+
+        if (result) {
+            Optional<User> userOptional = userRepository.read();
+            userOptional.ifPresentOrElse(
+                    this::setCurrentUser,
+                    () -> {
+                        throw new RuntimeException("User should not be null here.");
+                    }
+            );
+        }
+
         return result;
     }
 

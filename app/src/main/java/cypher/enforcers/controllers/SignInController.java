@@ -1,6 +1,5 @@
 package cypher.enforcers.controllers;
 
-import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.models.UserModel;
 import javafx.scene.Node;
 import org.slf4j.Logger;
@@ -90,6 +89,7 @@ public class SignInController implements Initializable {
     @FXML
     private final DoubleProperty delta = new SimpleDoubleProperty();
 
+    // To interact with the user data.
     private UserModel userModel;
 
     @Override

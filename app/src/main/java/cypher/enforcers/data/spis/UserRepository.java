@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository {
 
     /**
-     * Create a new user.
+     * Create a new user. Usernames are case-insensitive.
      *
      * @param username username of the user.
      * @param password password of the user.
@@ -44,7 +44,7 @@ public interface UserRepository {
 
     /**
      * Check if a given username is taken. The search is
-     * case-sensitive.
+     * case-insensitive.
      *
      * @param username The username to search for.
      * @return True if the user is taken, false otherwise.
