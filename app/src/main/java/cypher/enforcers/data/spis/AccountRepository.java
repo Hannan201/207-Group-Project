@@ -14,11 +14,10 @@ public interface AccountRepository {
     /**
      * Create a new account.
      *
-     * @param name Name of the account.
-     * @param type Social Media type of the account.
+     * @param account Account to create.
      * @return ID of the account, otherwise -1.
      */
-    long create(String name, String type);
+    boolean create(Account account);
 
     /**
      * Read all accounts.

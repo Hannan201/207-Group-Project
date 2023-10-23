@@ -103,5 +103,20 @@ public class AccountModel {
         return accountRepository.readByName(name);
     }
 
-    
+    /**
+     * Add a new account.
+     *
+     * @param name Name of the account.
+     * @param type Social Media type of the account.
+     * @return True if the account was created, false otherwise.
+     */
+    public boolean addAccount(String name, String type) {
+        Account account = new Account(-1, name, type);
+        boolean result = accountRepository.create(account);
+        if (result) {
+            accounts.add(account);
+        }
+
+        return result;
+    }
 }

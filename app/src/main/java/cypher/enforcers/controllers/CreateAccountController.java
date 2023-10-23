@@ -2,11 +2,15 @@ package cypher.enforcers.controllers;
 
 import cypher.enforcers.data.database.Database;
 import cypher.enforcers.data.Storage;
+import cypher.enforcers.models.AccountModel;
+import cypher.enforcers.models.UserModel;
+import cypher.enforcers.views.View;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TextField;
@@ -26,38 +30,48 @@ import java.util.ResourceBundle;
 
 public class CreateAccountController implements Initializable{
 
+    // Used for validation based on what the user types.
     private final Validator validator = new Validator();
 
-    public Button createAccount;
-
-    @FXML
-    private HBox icons;
-
-    @FXML
-    public ToggleButton github;
-
-    @FXML
-    public ToggleButton google;
-
-    @FXML
-    public ToggleButton shopify;
-
-    @FXML
-    public ToggleButton discord;
-
-    @FXML
-    public TextField platform;
-
-    @FXML
-    public TextField username;
-
+    // Contains all content to be displayed for this application.
     @FXML
     public VBox box;
 
-    private final DoubleProperty spacing = new SimpleDoubleProperty(10);
+    // Button that says create account.
+    public Button createAccount;
+
+    // Button for the GitHub icon.
+    @FXML
+    public ToggleButton github;
+
+    // Button for the Google icon.
+    @FXML
+    public ToggleButton google;
+
+    // Button for the Shopify icon.
+    @FXML
+    public ToggleButton shopify;
+
+    // Button for the Discord icon.
+    @FXML
+    public ToggleButton discord;
+
+    // Text field for the Social Media type.
+    @FXML
+    public TextField platform;
+
+    // Text field for the name of the account.
+    @FXML
+    public TextField username;
+
+    // To interact with the user's accounts.
+    private AccountModel accountModel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Clear all the text fields when this window closes. Since
+        // we're using singleton pattern, only one view instance will be
+        // created.
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
@@ -72,9 +86,8 @@ public class CreateAccountController implements Initializable{
         }));
 
         createAccount = new Button("Create Account");
+        createAccount.setPrefSize(155, 32);
         createAccount.setContentDisplay(ContentDisplay.CENTER);
-        createAccount.setPrefHeight(32);
-        createAccount.setPrefWidth(155);
 
         // creates the decorated button
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
@@ -88,10 +101,7 @@ public class CreateAccountController implements Initializable{
             int id = Database.addAccount(Storage.getToken(), username.getText(), platform.getText());
             ((AccountView) AccountView.getInstance()).getAccountViewController().addAccount(id);
 
-            Stage stage = (Stage) AddAccountView.getInstance().getRoot().getScene().getWindow();
-            stage.close();
-            username.clear();
-            platform.clear();
+            View.closeWindow((Node) c.getSource());
         });
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox
@@ -138,16 +148,6 @@ public class CreateAccountController implements Initializable{
                 .dependsOn("platform", platform.textProperty())
                 .decorates(platform)
                 .immediate();
-
-        icons.spacingProperty().bind(spacing);
-
-        box.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
-            if (newWidth.doubleValue() < 285) {
-                spacing.set(Math.max(0, (10 - (285 - newWidth.doubleValue()))));
-            } else {
-                spacing.set(10);
-            }
-        }));
     }
 
     /**
