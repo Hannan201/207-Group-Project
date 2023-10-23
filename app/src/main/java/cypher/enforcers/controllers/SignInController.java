@@ -1,5 +1,8 @@
 package cypher.enforcers.controllers;
 
+import cypher.enforcers.data.spis.AuthenticationService;
+import cypher.enforcers.models.UserModel;
+import javafx.scene.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
@@ -36,16 +39,15 @@ public class SignInController implements Initializable {
     // Logger for the sign-in controller.
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
+    // Used for validation based on what the user types.
     private final Validator validator = new Validator();
-
-    @FXML
-    private HBox box;
 
     /**
      * Background of the scene
      */
     @FXML
     private VBox background;
+
     /**
      * Title of the scene
      */
@@ -64,89 +66,102 @@ public class SignInController implements Initializable {
     @FXML
     private TextField passInput;
 
+    // Container to hold the sign-in button.
+    @FXML
+    private HBox box;
+
     /**
      * Sign in button that triggers the sign in event
      */
     @FXML
     private Button signInButton;
 
+    // Allows the spacing above the title to be controlled.
     @FXML
     private Region aboveTitle;
 
+    // Allows the spacing below the title to be controlled.
     @FXML
     private Region belowButton;
 
+    // If the window's width is less than the width of the title's,
+    // then this property is used to store the difference between the
+    // two values.
     @FXML
     private final DoubleProperty delta = new SimpleDoubleProperty();
 
+    private UserModel userModel;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Clear all the text fields when this window closes. Since
+        // we're using singleton pattern, only one view instance will be
+        // created.
         aboveTitle.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                     if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnCloseRequest((windowEvent -> clearFields()));
+                        newWindow.setOnCloseRequest(windowEvent -> {
+                            logger.trace("Clearing fields.");
+                            unameInput.clear();
+                            passInput.clear();
+                        });
                     }
                 }));
             }
         }));
 
+        // The spacings above and below the title were not equal when
+        // this project was first submitted. Since I wasn't
+        // responsible for the UI and didn't want to tamper with to
+        // too much, I made it so the original spacings were maintained.
+        // You can change them if you wish - by Hannan201.
+
         aboveTitle.prefHeightProperty().bind(
                 background.heightProperty()
-                        .multiply(27.0 / 250.0)
+                        .multiply(27.0 / 250.0) // Random value found from trial and
+                                                     // error to maintain original spacing
+                                                     // for when this project was first
+                                                     // submitted.
         );
 
         belowButton.prefHeightProperty().bind(
                 aboveTitle.prefHeightProperty()
-                        .multiply(37.0 / 27.0)
+                        .multiply(37.0 / 27.0) // Random value found from trial and
+                                                    // error to maintain original spacing
+                                                    // for when this project was first
+                                                    // submitted.
         );
 
+        // This is used to track if the window's current width is
+        // less than the title's width. Java doesn't allow
+        // using boolean variables inside a lambda function, so I had
+        // to make it an array.
         boolean[] isBelow = {false};
 
-        signInButton = new Button("Sign In");
-        signInButton.setPrefHeight(25);
-        signInButton.setPrefWidth(100);
-        signInButton.setAlignment(Pos.CENTER);
-
-        TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
-                signInButton,
-                validator.containsErrorsProperty(),
-                Bindings.concat("Cannot sign in:\n", validator.createStringBinding()));
-        signInButton.setOnAction(this::signInOnAction);
-
-
-        // Handles the event where the enter key is pressed while the
-        // unameInput TextField is selected
-        unameInput.setOnKeyPressed(this::signInFromEnterKey);
-
-
-        // Handles the event where the enter key is pressed while the
-        // passInput TextField is selected
-        passInput.setOnKeyPressed(this::signInFromEnterKey);
-        box.getChildren().add(createAccountWrapper);
-
-        validator.createCheck()
-                .withMethod(c -> {
-                    Token token = Database.authenticateUser(unameInput.getText(), passInput.getText());
-                    if (token == null) {
-                        c.error("Wrong username or password, please try again.");
-                    } else {
-                        Storage.setToken(token);
-                    }
-                })
-                .dependsOn("uNameInput", unameInput.textProperty())
-                .dependsOn("passInput", passInput.textProperty())
-                .decorates(unameInput)
-                .decorates(passInput)
-                .immediate();
-
         background.widthProperty().addListener((observableValue, number, t1) -> {
+            /*
+               When the window's width is less than the width of the
+               title's, then the spacing above and below the title wil
+               shrink, and the max height of the tittle will increase.
+               This gives the title more room to expand its height and
+               thus be able to wrap the text.
+
+               The boolean is used to control if the window's width is
+               smaller or not, this avoids repeating the bindings to adjust
+               the spacing above and below.
+             */
+
             if (t1.doubleValue() < title.getWidth()) {
                 delta.set(title.getWidth() - t1.doubleValue());
                 if (!isBelow[0]) {
                     title.setMaxHeight(title.getPrefHeight() * 2);
-                    aboveTitle.prefHeightProperty().bind(aboveTitle.heightProperty().subtract(delta));
-                    belowButton.prefHeightProperty().bind(belowButton.heightProperty().subtract(delta));
+                    aboveTitle.prefHeightProperty().bind(
+                            aboveTitle.heightProperty().subtract(delta)
+                    );
+                    belowButton.prefHeightProperty().bind(
+                            belowButton.heightProperty().subtract(delta)
+                    );
                     isBelow[0] = true;
                 }
             } else {
@@ -164,6 +179,76 @@ public class SignInController implements Initializable {
                 }
             }
         });
+
+        signInButton = new Button("Sign In");
+        signInButton.setPrefSize(100, 25);
+        signInButton.setAlignment(Pos.CENTER);
+        signInButton.setOnAction(this::signInOnAction);
+
+        TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
+                signInButton,
+                validator.containsErrorsProperty(),
+                Bindings.concat("Cannot sign in:\n", validator.createStringBinding()));
+        box.getChildren().add(createAccountWrapper);
+
+        // Handles the event where the enter key is pressed while the
+        // unameInput TextField is selected
+        unameInput.setOnKeyPressed(this::signInFromEnterKey);
+
+        // Handles the event where the enter key is pressed while the
+        // passInput TextField is selected
+        passInput.setOnKeyPressed(this::signInFromEnterKey);
+
+        // No use to send a query to the database if the username or password
+        // is empty. The database does have checks to ensure the data is
+        // not empty, however this would then trigger a log message. Might
+        // as well alert the user here, so they can see it.
+        validator.createCheck()
+                .withMethod(c -> {
+                    if (unameInput.getText().isEmpty()) {
+                        c.error("Empty username.");
+                    }
+                })
+                .dependsOn("uNameInput", unameInput.textProperty())
+                .decorates(unameInput)
+                .immediate();
+
+        validator.createCheck()
+                .withMethod(c -> {
+                    if (passInput.getText().isEmpty()) {
+                        c.error("Empty password.");
+                    }
+                })
+                .dependsOn("passInput", passInput.textProperty())
+                .decorates(passInput)
+                .immediate();
+
+        validator.createCheck()
+                .withMethod(c -> {
+                    // This alert should only be shown if the
+                    // username and password are not empty. Since
+                    // Validator FX would override the previous alerts
+                    // with this alert if inputs were empty, and empty
+                    // inputs would trigger a log message from the database
+                    // which the user won't see unless they check the console
+                    // or file. Easier to alter the user here.
+                    if (unameInput.getText().isEmpty() ||
+                        passInput.getText().isEmpty()) {
+                        return;
+                    }
+
+                    Token token = Database.authenticateUser(unameInput.getText(), passInput.getText());
+                    if (token == null) {
+                        c.error("Wrong username or password, please try again.");
+                    } else {
+                        Storage.setToken(token);
+                    }
+                })
+                .dependsOn("uNameInput", unameInput.textProperty())
+                .dependsOn("passInput", passInput.textProperty())
+                .decorates(unameInput)
+                .decorates(passInput)
+                .immediate();
     }
 
     /**
@@ -172,14 +257,7 @@ public class SignInController implements Initializable {
      * TextFields
      */
     private void signInOnAction(ActionEvent actionEvent) {
-        Utilities.loadAccounts();
-        View.closeWindow(actionEvent);
-        Utilities.adjustTheme();
-
-        logger.trace("Switching from the HomePageView to the AccountsView.");
-        View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-
-        clearFields();
+        loadAccountView((Node) actionEvent.getSource());
     }
 
     /**
@@ -191,24 +269,21 @@ public class SignInController implements Initializable {
      */
     private void signInFromEnterKey(KeyEvent e) {
         if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
-            Utilities.loadAccounts();
-            View.closeWindow(e);
-            Utilities.adjustTheme();
-
-            logger.trace("Switching from the HomePageView to the AccountsView.");
-            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-
-            clearFields();
+            loadAccountView((Node) e.getSource());
         }
     }
 
     /**
-     * Clear the TextFields for the username and password
-     * once the user has signed in.
+     * Load the account view and retrieve user's stored data.
+     *
+     * @param node The node that triggered the event.
      */
-    private void clearFields() {
-        logger.trace("Clearing fields.");
-        unameInput.clear();
-        passInput.clear();
+    private void loadAccountView(Node node) {
+        Utilities.loadAccounts();
+        View.closeWindow(node);
+        Utilities.adjustTheme();
+
+        logger.trace("Switching from the HomePageView to the AccountsView.");
+        View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
     }
 }

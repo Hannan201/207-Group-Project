@@ -7,6 +7,7 @@ import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -182,7 +183,7 @@ public class SignUpController implements Initializable {
 
         // open pop up
 
-        View.closeWindow(e);
+        View.closeWindow((Node) e.getSource());
 
         logger.trace("Switching from the HomePageView to the AccountsView.");
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());

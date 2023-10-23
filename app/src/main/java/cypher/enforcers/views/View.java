@@ -212,25 +212,12 @@ public abstract class View {
     }
 
     /**
-     * A utility method to close a window based
-     * the ActionEvent that occurs.
+     * A utility method to close a window that belongs
+     * to a given node.
      *
-     * @param e The ActionEvent that occurred.
+     * @param node the node to close the scene for.
      */
-    public static void closeWindow(ActionEvent e) {
-        Node node = (Node) e.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        stage.close();
-    }
-
-    /**
-     * A utility method to close a window based
-     * the KeyEvent that occurs.
-     *
-     * @param e The KeyEvent that occurred.
-     */
-    public static void closeWindow(KeyEvent e) {
-        Node node = (Node) e.getSource();
+    public static void closeWindow(Node node) {
         Stage stage = (Stage) node.getScene().getWindow();
         stage.close();
     }
