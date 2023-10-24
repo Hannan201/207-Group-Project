@@ -5,6 +5,10 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import cypher.enforcers.models.Account;
 
+
+/**
+ * Factory to create an account cell.
+ */
 public class AccountCellFactory implements Callback<ListView<Account>, ListCell<Account>> {
 
     /**

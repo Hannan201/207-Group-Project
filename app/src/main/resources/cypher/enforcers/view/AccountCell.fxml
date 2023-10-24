@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root type="javafx.scene.control.ListCell" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="javafx.scene.control.ListCell" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <graphic>
-        <HBox fx:id="cell">
+        <HBox fx:id="cell" spacing="10.0">
             <children>
-                <ImageView fx:id="logo" HBox.hgrow="NEVER" />
+                <ImageView fx:id="logo" fitHeight="50.0" fitWidth="50.0" HBox.hgrow="NEVER" />
                 <VBox fx:id="textBox" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label fx:id="platformName" />
+                        <Label fx:id="platformName" maxWidth="200.0" />
                         <Label fx:id="username" />
                     </children>
                 </VBox>

@@ -21,50 +21,58 @@ import cypher.enforcers.views.View;
 
 import java.io.IOException;
 
+/**
+ * Class to represent a account cell.
+ */
 public class AccountCell extends ListCell<Account> {
 
     // Logger for the account cell.
     private static final Logger logger = LoggerFactory.getLogger(AccountCell.class);
 
-    @FXML
-    private ImageView logo;
-
-    @FXML
-    private Label platformName;
-
-    @FXML
-    private Label username;
-
+    // Contains the contents of this cell.
     @FXML
     private HBox cell;
 
+    // Holds the image for the social media type.
+    @FXML
+    private ImageView logo;
+
+    // Label for the social media type.
+    @FXML
+    private Label platformName;
+
+    // Label for the name of the account.
+    @FXML
+    private Label username;
+
+    // Contains the social media type and account name to be displayed
+    // vertically.
     @FXML
     private VBox textBox;
 
+    /**
+     * Create a new account cell.
+     */
     public AccountCell() {
-        loadFXML();
-    }
-
-    private void loadFXML() {
         try {
-            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountCell.fxml"));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        }
-        catch (IOException e) {
-            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/AccountCell.fxml. Cause: ", e);
+            loadFXML();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     * Creates an AccountCell which represents an account visually
-     * within the listView.
+     * Load the FXML file for the account cell.
      *
-     * @param item the account that is being passed in.
-     * @param empty Whether it should add to the list view
-     *              or not.
+     * @throws IOException If the file could not be loaded correctly.
      */
+    private void loadFXML() throws IOException {
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountCell.fxml"));
+        loader.setController(this);
+        loader.setRoot(this);
+        loader.load();
+    }
+
     @Override
     protected void updateItem(Account item, boolean empty) {
         super.updateItem(item, empty);
@@ -79,34 +87,24 @@ public class AccountCell extends ListCell<Account> {
 
             // checks if the account's platform is either Google, Discord, Shopify, or GitHub
             // and if so, adds a custom icon to the account
-
             String path;
             if (Account.supportsImport(item.getSocialMediaType().toLowerCase())) {
                 path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
-                Image image = new Image(path);
-                logo.setImage(image);
-
-            // Adds a default logo for the account if it is not Discord, Google,
-            // GitHub, or Shopify
-
             } else {
+                // Adds a default logo for the account if it is not Discord, Google,
+                // GitHub, or Shopify
                 path = Account.getIcons().get("default");
-                Image image = new Image(path);
-                logo.setImage(image);
             }
 
-            logo.setFitWidth(50);
-            logo.setFitHeight(50);
+            Image image = new Image(path);
+            logo.setImage(image);
+
             cell.getChildren();
             HBox.setHgrow(cell, Priority.NEVER);
             setWrapText(true); // wraps the text in the ListCell to avoid long text
 
             platformName.setText(item.getSocialMediaType());
-            platformName.setMaxWidth(200); // limits the amount of space that a username can take in the AccountCell
             username.setText(item.getName());
-            platformName.setMaxWidth(200); // limits the amount of space that a platform can take in the AccountCell
-            HBox.setHgrow(textBox, Priority.ALWAYS);
-            cell.setSpacing(10);
 
             // If the AccountCell is double-clicked, then this handle method will transition
             // the view from the AccountsView to the CodeView
