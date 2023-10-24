@@ -1,6 +1,6 @@
 package cypher.enforcers.views;
 
-import cypher.enforcers.controllers.CodeViewControllers.CodeViewController;
+import cypher.enforcers.controllers.codeViewControllers.CodeViewController;
 import javafx.fxml.FXMLLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

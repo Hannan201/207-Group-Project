@@ -1,7 +1,8 @@
-package cypher.enforcers.controllers.CodeViewControllers;
+package cypher.enforcers.controllers.codeViewControllers;
 
 import cypher.enforcers.data.database.Database;
 import cypher.enforcers.data.Storage;
+import cypher.enforcers.models.CodeModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
@@ -12,31 +13,45 @@ import cypher.enforcers.code.Code;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Controller for the code cell.
+ */
 public class CodeCellController {
 
     // Logger for the code cell controller.
     private static final Logger logger = LoggerFactory.getLogger(CodeCellController.class);
 
+    // Label that displays the code.
     @FXML
     private Label code;
 
+    // Text field used to update the code.
     @FXML
     private TextField userInput;
 
+    // Button that says Copy.
     @FXML
     private Button copy;
 
+    // Button that says Delete.
     @FXML
     private Button delete;
 
+    // Button that says Edit.
     @FXML
     private Button edit;
 
+    // Reference to the current code associated with this cell.
     private Code currentCell;
 
+    // Reference to the parent list view.
     private ListView<Code> currentListView;
 
+    // If this code is selected or not.
     private boolean selected;
+
+    // Used to interact with the account's codes.
+    private CodeModel codeModel;
 
     /**
      * Stores the data of the current code, the code factory, and its corresponding listview.
@@ -137,13 +152,5 @@ public class CodeCellController {
         // handle the event when delete button is clicked
         currentListView.getItems().remove(currentCell);
         Database.removeCode(Storage.getToken(), currentCell.getID());
-    }
-
-    /**
-     * Setter for the code attribute.
-     * @param codeInput the code to be set.
-     */
-    public void setCode(String codeInput) {
-        this.code.setText(codeInput);
     }
 }

@@ -32,7 +32,7 @@ module cypher.enforcers {
     // JavaFX requires access to the controllers and any other
     // methods from other packages used inside the controllers.
     opens cypher.enforcers.controllers to javafx.fxml;
-    opens cypher.enforcers.controllers.CodeViewControllers to javafx.fxml;
+    opens cypher.enforcers.controllers.codeViewControllers to javafx.fxml;
     opens cypher.enforcers.views to javafx.fxml;
     opens cypher.enforcers.views.utilities to javafx.fxml;
     opens cypher.enforcers.views.utilities.codeViewUtilities to javafx.fxml;

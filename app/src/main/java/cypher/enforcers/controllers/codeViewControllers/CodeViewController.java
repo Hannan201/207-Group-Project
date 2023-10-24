@@ -1,4 +1,4 @@
-package cypher.enforcers.controllers.CodeViewControllers;
+package cypher.enforcers.controllers.codeViewControllers;
 
 import cypher.enforcers.behaviors.ManualInputReader;
 import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
@@ -124,7 +124,7 @@ public class CodeViewController implements Initializable {
     // so that the contents can fit when the screen gets to small.
     private final ObjectProperty<Insets> windowPadding = new SimpleObjectProperty<>(new Insets(5, 5, 5, 5));
 
-    // To interact with the user's codes.
+    // To interact with the account's codes.
     private CodeModel codeModel;
 
     /**

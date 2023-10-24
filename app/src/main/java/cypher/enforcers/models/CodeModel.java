@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used to model a code in our application.
@@ -110,5 +111,37 @@ public class CodeModel {
         }
 
         return result;
+    }
+
+    /**
+     * Attempt to delete the current selected code.
+     *
+     * @return True if deleted, false otherwise.
+     */
+    public boolean deleteCode() {
+        Code code = Objects.requireNonNull(getCurrentCode());
+        boolean result = codeRepository.delete(code.getID());
+        if (result) {
+            codes.remove(code);
+        }
+
+        return result;
+    }
+
+    /**
+     * Attempt to update the code.
+     *
+     * @param newCode The new code to update to.
+     * @return True if the code was updated, or if the code
+     * hasn't changed from the current code. False otherwise.
+     */
+    public boolean updateCode(String newCode) {
+        Code code = Objects.requireNonNull(getCurrentCode());
+        if (code.getCode().equals(newCode)) {
+            return true;
+        }
+
+        // Call setter method.
+        return true;
     }
 }

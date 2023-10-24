@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="background" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.CodeViewControllers.CodeViewController">
+<BorderPane fx:id="background" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="620.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cypher.enforcers.controllers.codeViewControllers.CodeViewController">
    <center>
       <GridPane alignment="CENTER" maxWidth="530.0" prefHeight="620.0" prefWidth="375.0" BorderPane.alignment="CENTER">
          <columnConstraints>
