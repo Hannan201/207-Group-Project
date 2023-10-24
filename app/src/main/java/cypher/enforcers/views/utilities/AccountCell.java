@@ -108,6 +108,9 @@ public class AccountCell extends ListCell<Account> {
                 path = Account.getIcons().get("default");
             }
 
+            // There were some configurations here that I moved into
+            // the FXML file instead, makes it easier.
+
             Image image = new Image(path);
             logo.setImage(image);
 
