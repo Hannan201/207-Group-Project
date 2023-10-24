@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 import cypher.enforcers.code.Code;
-import cypher.enforcers.views.utilities.codeViewUtilities.CodeCellFactory;
+import cypher.enforcers.views.utilities.codeViewUtilities.CodeCell;
 
 import java.io.File;
 import java.io.IOException;
@@ -243,7 +243,7 @@ public class CodeViewController implements Initializable {
 
         codeListView.setCellFactory(test -> {
             try {
-                return new CodeCellFactory(codeListView);
+                return new CodeCell(codeListView);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

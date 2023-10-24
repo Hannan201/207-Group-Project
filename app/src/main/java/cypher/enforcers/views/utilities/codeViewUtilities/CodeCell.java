@@ -5,37 +5,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import cypher.enforcers.code.Code;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
 
+/**
+ * Class to represent a code cell.
+ */
+public class CodeCell extends ListCell<Code> {
 
-public class CodeCellFactory extends ListCell<Code> {
+    // Container for the cell data.
+    private final Parent graphic;
 
-    // Logger for the factory that creates code cells.
-    private static final Logger logger = LoggerFactory.getLogger(CodeCellFactory.class);
+    // The list view.
+    private final ListView<Code> CodeListView;
 
-    private Parent graphic;
+    // Controller for the cell.
+    private final CodeCellController cellController;
 
-    ListView<Code> CodeListView;
-
-    private CodeCellController cellController;
-
-    public CodeCellFactory(ListView<Code> parentListView) throws IOException {
-
+    public CodeCell(ListView<Code> parentListView) throws IOException {
         // Each cell only loads the FXML file once to speed up runtime
         FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/CodeViewFXML/CodeCell.fxml"));
 
         CodeListView = parentListView;
 
-        try {
-            graphic = loader.load();
-        } catch (IOException e) {
-            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/CodeViewFXML/CodeCell.fxml. Cause: ", e);
-            return;
-        }
+        graphic = loader.load();
 
         cellController = loader.getController();
     }
