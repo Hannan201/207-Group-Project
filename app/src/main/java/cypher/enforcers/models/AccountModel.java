@@ -135,4 +135,18 @@ public class AccountModel {
 
         return result;
     }
+
+    /**
+     * Clear all accounts.
+     *
+     * @return True if accounts are deleted successfully, false otherwise.
+     */
+    public boolean clearAllAccounts() {
+        boolean result = accountRepository.deleteAll();
+        if (result) {
+            accounts.clear();
+        }
+
+        return result;
+    }
 }

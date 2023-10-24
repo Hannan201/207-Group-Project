@@ -2,6 +2,7 @@ package cypher.enforcers.models;
 
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.views.themes.Theme;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -62,7 +63,7 @@ public class UserModel {
      * @param password Password for the user.
      * @return True if successfully logged in, false otherwise.
      */
-    public boolean loginUser(String username, String password) {
+    public boolean logInUser(String username, String password) {
         boolean result = authSerivce.authenticateUser(username, password);
 
         if (result) {
@@ -76,6 +77,16 @@ public class UserModel {
         }
 
         return result;
+    }
+
+    /**
+     * Attempt to log out the current user.
+     *
+     * @return True if the user is logged our, or if no user is logged in.
+     * False otherwise.
+     */
+    public boolean logOutUser() {
+        return authSerivce.logUserOut();
     }
 
     /**
@@ -112,4 +123,17 @@ public class UserModel {
         return result;
     }
 
+    /**
+     * Attempt to update the theme for the current user.
+     *
+     * @param theme Theme for the new user.
+     * @return True if successfully deleted, false otherwise.
+     */
+    public boolean updateTheme(Theme theme) {
+        if (theme == null) {
+            return false;
+        }
+
+        return userRepository.update(theme);
+    }
 }

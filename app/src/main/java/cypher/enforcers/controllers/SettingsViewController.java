@@ -5,6 +5,8 @@ import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
+import cypher.enforcers.models.AccountModel;
+import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,33 +30,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the settings view.
+ */
 public class SettingsViewController implements Initializable {
 
     // Logger for the settings controller.
     private static final Logger logger = LoggerFactory.getLogger(SettingsViewController.class);
 
+    // Used to update the theme of the views.
     private static List<View> views;
-    private ThemeSwitcher switcher;
 
-    private Command lightModeCommand;
-
-    private Command darkModeCommand;
-
-    private Command highContrastModeCommand;
-
+    // Contains all the content for the view.
     @FXML
     private VBox mainLayout;
 
+    // Contains the label to hold the copyright text.
     @FXML
     private HyperlinkLabel copyright;
 
+    // Used to cache the commands and theme switcher to avoid
+    // creating them again.
+    private ThemeSwitcher switcher;
+
+    // Command for light mode.
+    private Command lightModeCommand;
+
+    // Command for dark mode.
+    private Command darkModeCommand;
+
+    // Command for high contrast mode.
+    private Command highContrastModeCommand;
+
+    // The copyright text to display.
     private static final String COPYRIGHT =
             "Special thanks to [Icons8] for the following icons: " +
             "[app] icon, [Google] icon, [Discord]icon, [Shopify] icon, " +
             "[Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon.";
 
+    // Used to interact with the accounts.
+    private AccountModel accountModel;
+
+    // Used to interact with the users.
+    private UserModel userModel;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        /*
+        The copyright label for some reason would overflow when the
+        screen gets to small, and the text would appear on the buttons.
+        After trial and error, I pretty much found a break point where
+        I increase the minimum height of the label so there's more
+        room to prevent overflow.
+         */
         mainLayout.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
             if (newWidth.doubleValue() < 363) {
                 double delta = (363 - newWidth.doubleValue()) / 1.4;
