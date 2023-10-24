@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import cypher.enforcers.models.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +44,6 @@ public class AccountCell extends ListCell<Account> {
     @FXML
     private Label username;
 
-    // Contains the social media type and account name to be displayed
-    // vertically.
-    @FXML
-    private VBox textBox;
-
     /**
      * Create a new account cell.
      */
@@ -68,7 +62,25 @@ public class AccountCell extends ListCell<Account> {
      */
     private void loadFXML() throws IOException {
         FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountCell.fxml"));
-        loader.setController(this);
+
+        /*
+        The previous line of:
+
+                loader.setController(this);
+
+        worked just fine. The only reason I added this here was so that
+        IntelliJ IDEA would stop showing warnings. This is to avoid
+        JavaFX from creating a new instance and to instead use the current
+        instance for the controller.
+         */
+        loader.setControllerFactory(param -> {
+            if (param == AccountCell.class) {
+                return this;
+            }
+
+            throw new RuntimeException("Could not find correct controller class for the AccountCell.");
+        });
+
         loader.setRoot(this);
         loader.load();
     }
