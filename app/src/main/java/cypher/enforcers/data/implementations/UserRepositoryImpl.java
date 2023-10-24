@@ -1,5 +1,6 @@
 package cypher.enforcers.data.implementations;
 
+import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,10 @@ public class UserRepositoryImpl implements UserRepository {
     @SimpleService
     private UserDAOImpl userDAO;
 
+    // Used to hash password.
+    @SimpleService
+    private PasswordHasher passwordHasher;
+
     /**
      * Create a new user. Usernames are case-insensitive.
      *
@@ -39,6 +44,8 @@ public class UserRepositoryImpl implements UserRepository {
             logger.warn("Username or password cannot be empty.");
             return false;
         }
+
+        hashPassword(user);
 
         boolean result = userDAO.registerUser(user);
 
@@ -120,6 +127,17 @@ public class UserRepositoryImpl implements UserRepository {
      The methods below are internal methods hidden from the interface.
      Use them carefully.
      */
+
+    /**
+     * Hash password for the user.
+     *
+     * @param user The user.
+     */
+    private void hashPassword(User user) {
+        String salt = passwordHasher.generateSalt();
+        String hashed = salt + passwordHasher.hashPassword(user.getPassword() + salt, salt.getBytes());
+        user.setPassword(hashed);
+    }
 
     public Map<String, String> read(String username) {
         logger.trace("Fetching user data for user with username {}.", username);
