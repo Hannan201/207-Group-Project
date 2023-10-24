@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.models.User;
+import cypher.enforcers.data.entities.User;
 import cypher.enforcers.views.themes.Theme;
 
 import java.util.Optional;
@@ -22,11 +22,10 @@ public interface UserDAO {
     /**
      * Register a new user.
      *
-     * @param username Username of the user.
-     * @param password Password of the user.
+     * @param user The user to register.
      * @return True if the user was registered successfully, false otherwise.
      */
-    boolean registerUser(String username, String password);
+    boolean registerUser(User user);
 
     /**
      * Get the current logged-in user.
