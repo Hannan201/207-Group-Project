@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.data.entities.User;
+import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
 import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.DatabaseService;
@@ -47,11 +47,12 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Register a new user.
      *
-     * @param user The user to register.
+     * @param username The new username for this user.
+     * @param password The new password for this user.
      * @return True if the user was registered successfully, false otherwise.
      */
     @Override
-    public boolean registerUser(User user) {
+    public boolean registerUser(String username, String password) {
         if (userID == null || userID >= 1) {
             logger.error("Cannot create new user when there's a user currently logged in.");
             return false;
@@ -60,15 +61,12 @@ public class UserDAOImpl implements UserDAO {
         logger.trace("Now making update to the users table.");
 
         try {
-            databaseService.inTransaction(entityManager ->
-                    entityManager.persist(user)
-            );
+
         } catch (Exception e) {
             logger.debug("Failed update query. Cause: ", e);
             return false;
         }
 
-        userID = user.getID();
         return true;
     }
 
@@ -89,6 +87,7 @@ public class UserDAOImpl implements UserDAO {
         } else {
             // Try to find the user and return it.
         }
+        userID = -1L;
         System.out.println("Getting user with id = " + userID);
         return Optional.empty();
     }
@@ -161,7 +160,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Get the password and ID of a user given their username. The
-     * search is case-sensitive.
+     * search is case-insensitive.
      *
      * @param username Username to search for.
      * @return A Map containing the following key-value pairs:

@@ -65,29 +65,6 @@ dependencies {
 
     // Used to extract filename from an url.
     implementation("commons-io:commons-io:2.14.0")
-
-    implementation(platform("org.hibernate.orm:hibernate-platform:6.3.1.Final"))
-    // Use the version provided by the platform.
-    implementation("org.hibernate.orm:hibernate-core") {
-        // JaxB Core requires Jakarta Activation version 2.1.1, whereas
-        // Jakarta XML Bind requires Jakarta Activation version 2.1.0.
-        // Gradle automatically then resolves it to Jakarta Activation
-        // version 2.1.1. To avoid Gradle having to do work, I just excluded
-        // it and brought in Jakarta Activation version 2.1.1 myself.
-        // You can totally remove line 40 (the line right below this one)
-        // and it will work fine.
-        exclude("jakarta.activation", "jakarta.activation-api")
-    }
-    implementation("org.hibernate.orm:hibernate-community-dialects") {
-        // Hibernate core already brings these two dependencies, so I
-        // excluded them since we already have them.
-        exclude("org.hibernate.orm", "hibernate-core")
-        exclude("org.jboss.logging", "jboss-logging")
-    }
-    // Jakarta Transaction is a modularised project, and thus requires
-    // Jakarta CDI. This is why I have to bring it in manually.
-    runtimeOnly("jakarta.enterprise:jakarta.enterprise.cdi-api:3.0.1")
-    runtimeOnly("jakarta.activation:jakarta.activation-api:2.1.1")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -143,92 +120,9 @@ tasks.named<Delete>("clean") {
     delete(layout.projectDirectory.file("logs.log"))
 }
 
-extraJavaModuleInfo {
-    // The Byte Buddy does not come with an automatic module name, and
-    // because it's a transitive dependency for Hibernate, there's no
-    // reliable way to add it to the module path.
-
-    // I could've just added byte-buddy to the classpath and be done with
-    // it, but that would require work to locate it, which can be
-    // different depending on the user's computer. Additionally,
-    // If the main class you're running is inside a module,
-    // Gradle adds all dependencies to the module path, even if
-    // they don't have a module-info.java file or an automatic module name.
-
-    // So for now, I just gave it the name net.bytebuddy,
-    // until the dependency maintainers give it an automatic
-    // module name or modularise the dependency.
-    automaticModule("net.bytebuddy:byte-buddy", "net.bytebuddy")
-}
-
 // To work with projects inside Intellij IDEA.
 idea {
     module {
         inheritOutputDirs = true
     }
-}
-
-tasks.named<JavaExec>("run") {
-    /*
-     * The reason these modules needed to be added manually is because
-     * Hibernate right now is not modular, whereas our application (module
-     * cypher enforcers) is.
-     *
-     * I made cypher enforcers a modular project because it makes it easier
-     * to bundle and deploy our application as a native one (For example,
-     * for Windows native would be .exe) for different operating systems.
-     * Using a modular application also does extra optimisations when
-     * deploying them.
-     *
-     * Our module is a real module (since it has a module-info.java)
-     * whereas Hibernate is an automatic module (Hibernate provided a name
-     * for this automatic module, and does not have a module-info.java
-     * provided). Even though the modules below appear on the module path,
-     * an automatic module cannot read them unless a real module requires
-     * them. The cypher enforcers module, or any other real module our
-     * application uses (such as JavaFX, ControlsFX, etc.) does not need them,
-     * so the modules below are not loaded. Automatic modules can however,
-     * read these modules if they are added to the unnamed module. The
-     * unnamed module is where any JAR files go if they added to the
-     * classpath and not the module path. So here are two ways to bring
-     * these modules to the unnamed module.
-     *
-     *     - One is by using the class path option (-class-path) and
-     *       provided the paths to all JAR files.
-     *
-     *     - Second is by first putting the JAR files on the module path
-     *       (--module-path), and then listing the names of the modules
-     *       you'd like on the unnamed module using (-add-modules).
-     *
-     *       NOTE: If you decide to add a JAR file without a
-     *       module-info.java or an automatic module name provided,
-     *       then Java will make the module name the name of the jar file.
-     *       It removes the .jar extension as well as the version from the
-     *       name. This can be unreliable at times, so be careful.
-     *
-     *       There are Gradle plugins that allow you to add a
-     *       module-info.java file or an automatic-module name to JAR files,
-     *       so that might be worth looking into. However, to be able to
-     *       add a module-info.java with the plugin, you'd need to
-     *       know which packages it requires and exports, as well
-     *       as any services it provides or uses. Hibernate is a very
-     *       complex project, and I couldn't figure out which packages
-     *       they wanted to export or keep internal.
-     *
-     * I went with the --add-modules because the directories to the
-     * JAR files will be store at different locations depending
-     * on which computer is running this application, also because
-     * more work would be required to find the file locations since they
-     * can be different for everyone, and lastly Gradle automatically
-     * adds these modules to the module path anyway, so it would be
-     * redundant to specify the path again and just give the module names
-     * instead.
-     */
-    val requiredModules: String = "org.jboss.logging," +
-            "jakarta.transaction," +
-            "org.hibernate.commons.annotations," +
-            "com.fasterxml.classmate," +
-            "jakarta.xml.bind," +
-            "net.bytebuddy"
-    jvmArgs("--add-modules", requiredModules)
 }

@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.data.entities.User;
+import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
 
 import java.util.Optional;
@@ -14,11 +14,12 @@ public interface UserRepository {
     /**
      * Create a new user. Usernames are case-insensitive.
      *
-     * @param user The user to create.
+     * @param username The new username for this user.
+     * @param password The new password for this user.
      * @return True if the user was successfully created, false
      * otherwise.
      */
-    boolean create(User user);
+    boolean create(String username, String password);
 
     /**
      * Read the current user logged in.

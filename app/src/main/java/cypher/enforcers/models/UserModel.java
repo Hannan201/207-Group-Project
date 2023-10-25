@@ -3,7 +3,6 @@ package cypher.enforcers.models;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.views.themes.Theme;
-import cypher.enforcers.data.entities.User;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -109,10 +108,7 @@ public class UserModel {
      * @return True if successfully registered, false otherwise.
      */
     public boolean registerUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        boolean result = userRepository.create(user);
+        boolean result = userRepository.create(username, password);
 
         if (result) {
             Optional<User> userOptional = userRepository.read();

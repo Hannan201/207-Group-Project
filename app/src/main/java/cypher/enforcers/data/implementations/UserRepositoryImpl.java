@@ -2,11 +2,11 @@ package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.themes.Theme;
 import cypher.enforcers.annotations.SimpleService;
-import cypher.enforcers.data.entities.User;
 
 import java.util.Map;
 import java.util.Optional;
@@ -31,28 +31,29 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * Create a new user. Usernames are case-insensitive.
      *
-     * @param user The user to create.
+     * @param username The new username for this user.
+     * @param password The new password for this user.
      * @return True if the user was successfully created, false
      * otherwise.
      */
     @Override
-    public boolean create(User user) {
-        logger.trace("Attempting to create user with username {}.", user.getUsername());
+    public boolean create(String username, String password) {
+        logger.trace("Attempting to create user with username {}.", username);
 
-        if (user.getUsername().isBlank() || user.getUsername().isEmpty()
-            || user.getPassword().isBlank() || user.getPassword().isEmpty()) {
+        if (username.isBlank() || username.isEmpty()
+            || password.isBlank() || password.isEmpty()) {
             logger.warn("Username or password cannot be empty.");
             return false;
         }
 
-        hashPassword(user);
+        password = hashPassword(password);
 
-        boolean result = userDAO.registerUser(user);
+        boolean result = userDAO.registerUser(username, password);
 
         if (result) {
             logger.trace("User created.");
         } else {
-            logger.warn("Failed to create user with username {}.", user.getUsername());
+            logger.warn("Failed to create user with username {}.", username);
         }
 
         return result;
@@ -131,12 +132,11 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * Hash password for the user.
      *
-     * @param user The user.
+     * @param password The password to hash.
      */
-    private void hashPassword(User user) {
+    private String hashPassword(String password) {
         String salt = passwordHasher.generateSalt();
-        String hashed = salt + passwordHasher.hashPassword(user.getPassword() + salt, salt.getBytes());
-        user.setPassword(hashed);
+        return salt + passwordHasher.hashPassword(password + salt, salt.getBytes());
     }
 
     public Map<String, String> read(String username) {
