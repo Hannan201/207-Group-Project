@@ -15,21 +15,25 @@ public class User {
     // The user's username.
     private String username;
 
+    // The user's password.
+    private String password;
+
     // Theme for this user.
-    private Theme theme;
+    private Theme theme = Theme.LIGHT;
+
+    // Login status for this user.
+    // 0 = false = logged out.
+    // 1 = true = logged in.
+    // By default, only time a new user object should be created is
+    // when registering, in which case the user should automatically
+    // be signed in.
+    private short loggedIn = 1;
 
     /**
-     * Create a new user for this application with the
-     * username and password passed in as a parameter.
-     *
-     * @param id The ID for this user.
-     * @param name The username for this user.
-     * @param theme The theme for this user.
+     * Creates a user.
      */
-    public User(long id, String name, Theme theme) {
-        this.id = id;
-        this.username = name;
-        this.theme = theme;
+    public User() {
+
     }
 
     /**
@@ -69,6 +73,24 @@ public class User {
     }
 
     /**
+     * Set the password for this user.
+     *
+     * @param newPassword The new password for this user.
+     */
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    /**
+     * Get the password for this user.
+     *
+     * @return The password for this user.
+     */
+    public String getPassword() {
+        return this.password;
+    }
+
+    /**
      * Get the theme for this user.
      *
      * @return Theme for this user.
@@ -88,6 +110,24 @@ public class User {
         }
 
         this.theme = newTheme;
+    }
+
+    /**
+     * Set the login status for the user.
+     *
+     * @param status True if logged in, false otherwise.
+     */
+    public void setLoggedIn(boolean status) {
+        this.loggedIn = (short) (status ? 1 : 0);
+    }
+
+    /**
+     * Get the login status for this user.
+     *
+     * @return True if this user is logged in, false otherwise.
+     */
+    public boolean getLoggedIn() {
+        return loggedIn == 1;
     }
 
 }

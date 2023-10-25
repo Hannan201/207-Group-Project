@@ -1,19 +1,17 @@
 package cypher.enforcers;
 
-import cypher.enforcers.data.implementations.DatabaseServiceImpl;
+import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
 import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.User;
-import cypher.enforcers.utilities.Utilities;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -28,14 +26,10 @@ public class UserSavingTests {
 
     @BeforeAll
     public static void injectServices() {
-        Utilities.copyResourceFileIf("/cypher/enforcers/empty_database.db");
-        String path = Utilities.getJarParentDirectory() + File.separator
-                + "empty_database.db";
-
         injector = new Injector();
 
-        DatabaseService dbService = new DatabaseServiceImpl();
-        dbService.connect("jdbc:sqlite:" + path);
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/empty_database.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
@@ -67,6 +61,7 @@ public class UserSavingTests {
         );
 
         assertTrue(userRepository.create("Joe", "1234"));
+        assertEquals(userRepository.getLoggedInUser(), 1, "Only one user should be present in database.");
     }
 
 }

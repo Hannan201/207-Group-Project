@@ -8,6 +8,7 @@ import cypher.enforcers.data.spis.UserDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +18,8 @@ import java.util.Optional;
  * to the database and make changes to any information related to the users.
  */
 public class UserDAOImpl implements UserDAO {
+
+    private static final String ADD_USER_QUERY = "INSERT INTO USERS (username, password) VALUES (?, ?) RETURNING id";
 
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -61,8 +64,14 @@ public class UserDAOImpl implements UserDAO {
         logger.trace("Now making update to the users table.");
 
         try {
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
 
-        } catch (Exception e) {
+            databaseService.executeUpdate(ADD_USER_QUERY, user);
+
+            userID = user.getID();
+        } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return false;
         }

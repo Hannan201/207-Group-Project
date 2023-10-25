@@ -516,7 +516,10 @@ public class Database {
                                 int userID = resultSet.getInt("id");
                                 String name = resultSet.getString("username");
                                 Theme theme = getThemeByID(resultSet.getInt("theme_id"));
-                                return new User(userID, name, theme);
+                                User createdUser = new User();
+                                createdUser.setUsername(name);
+                                createdUser.setTheme(theme);
+                                createdUser.setID(userID);
                             } catch (SQLException e) {
                                 LoggerFactory.getLogger(getClass()).warn("Unable to create user. Cause: ", e);
                             }
