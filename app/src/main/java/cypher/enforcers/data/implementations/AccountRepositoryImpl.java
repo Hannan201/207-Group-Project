@@ -37,6 +37,13 @@ public class AccountRepositoryImpl implements AccountRepository {
      */
     @Override
     public boolean create(Account account) {
+        long id = authService.getLoggedInUser();
+
+        if (id == -1) {
+            logger.warn("No use currently logged-in");
+            return false;
+        }
+
         logger.trace("Attempting to create account with name {} and social media type {}.", account.getName(), account.getSocialMediaType());
 
         boolean result = accountDAO.addAccount(account);
@@ -86,6 +93,13 @@ public class AccountRepositoryImpl implements AccountRepository {
      */
     @Override
     public Optional<Account> readByID(long accountID) {
+        long id = authService.getLoggedInUser();
+
+        if (id == -1) {
+            logger.warn("No use currently logged-in");
+            return Optional.empty();
+        }
+
         logger.trace("Attempting to get account with ID {}.", accountID);
 
         Optional<Account> account = accountDAO.getAccount(accountID);
@@ -135,6 +149,13 @@ public class AccountRepositoryImpl implements AccountRepository {
      */
     @Override
     public boolean delete(Account account) {
+        long id = authService.getLoggedInUser();
+
+        if (id == -1) {
+            logger.warn("No use currently logged-in");
+            return false;
+        }
+
         logger.trace("Attempting to delete account with ID {}.", account.getID());
 
         boolean result = accountDAO.removeAccount(account.getID());

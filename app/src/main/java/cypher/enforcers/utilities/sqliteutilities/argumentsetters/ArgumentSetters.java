@@ -1,5 +1,6 @@
 package cypher.enforcers.utilities.sqliteutilities.argumentsetters;
 
+import cypher.enforcers.models.Account;
 import cypher.enforcers.models.User;
 
 import java.sql.PreparedStatement;
@@ -25,6 +26,28 @@ public class ArgumentSetters {
             ResultSet results = statement.getResultSet();
 
             user.setID(results.getLong("id"));
+            statement.close();
+        } catch (SQLException e) {
+            try {
+                statement.close();
+            } catch (SQLException onClose) {
+                throw new RuntimeException(onClose);
+            }
+
+            throw new RuntimeException(e);
+        }
+    };
+
+    // How an account should be added to the database.
+    private static final BiConsumer<PreparedStatement, Account> FOR_ACCOUNT = (statement, account) -> {
+        try {
+            statement.setLong(1, account.getUserId());
+            statement.setString(2, account.getName());
+            statement.setString(3, account.getSocialMediaType());
+
+            ResultSet results = statement.executeQuery();
+
+            account.setId(results.getLong("id"));
             statement.close();
         } catch (SQLException e) {
             try {
@@ -79,6 +102,7 @@ public class ArgumentSetters {
     private static final Map<Class<?>, BiConsumer<PreparedStatement, ?>> OBJECT_TYPE_TO_SETTER =
             Map.ofEntries(
                     Map.entry(User.class, FOR_USER),
+                    Map.entry(Account.class, FOR_ACCOUNT),
                     Map.entry(Long.class, FOR_ONE_LONG)
             );
 

@@ -126,7 +126,9 @@ public class CreateAccountController implements Initializable{
         validator.createCheck()
                 .withMethod(c -> {
                     List<Account> accounts = Database.getAccounts(Storage.getToken());
-                    Account account = new Account(-1, username.getText(), platform.getText());
+                    Account account = new Account();
+                    account.setName(username.getText());
+                    account.setSocialMediaType(platform.getText());
                     boolean duplicate = accounts.contains(account);
                     if (duplicate && !(username.getText().isEmpty() || platform.getText().isEmpty())) {
                         c.error("This account already exists, please try again!");

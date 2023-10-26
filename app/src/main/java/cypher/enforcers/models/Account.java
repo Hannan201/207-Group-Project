@@ -17,14 +17,17 @@ public class Account {
             = Set.copyOf(List.of("shopify", "discord", "google", "github"));
 
     // ID for this account.
-    private final int ID;
+    private long id;
+
+    // ID of the user this account belongs to.
+    private long userId;
 
     // Name for this account (email/username/handle
     // or some sort of identifier).
-    private final String name;
+    private String name;
 
     // Social media type for this account.
-    private final String socialMediaType;
+    private String socialMediaType;
 
     // To load icons for each type of social
     // media account in this application.
@@ -43,22 +46,46 @@ public class Account {
     }
 
     /**
-     * Create a new Social Media Account with
-     * a name and of a specific social media
-     * type.
-     *
-     * @param ID ID for this account.
-     * @param name Name of social media account.
-     * @param type Type of social media.
+     * Create an account.
      */
-    public Account(int ID, String name, String type) {
-        this.ID = ID;
-        this.name = name;
-        this.socialMediaType = type;
+    public Account() {
+
     }
 
-    public int getID() {
-        return this.ID;
+    /**
+     * Get the ID of this account.
+     *
+     * @return The ID of this account.
+     */
+    public long getID() {
+        return this.id;
+    }
+
+    /**
+     * Set the ID for this account.
+     *
+     * @param id ID of this account.
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * Get the ID of the user this account belongs to.
+     *
+     * @return The ID of the user.
+     */
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     * Set the ID of the user this account belongs to.
+     *
+     * @param userId The new ID.
+     */
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     /**
@@ -71,12 +98,30 @@ public class Account {
     }
 
     /**
+     * Set the name for this account.
+     *
+     * @param newName The new name.
+     */
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    /**
      * Return what social media this account belongs to.
      *
      * @return The social media type for this application.
      */
     public String getSocialMediaType() {
         return socialMediaType;
+    }
+
+    /**
+     * Set the Social Media Type of this account.
+     *
+     * @param socialMediaType The new social media type.
+     */
+    public void setSocialMediaType(String socialMediaType) {
+        this.socialMediaType = socialMediaType;
     }
 
     /**

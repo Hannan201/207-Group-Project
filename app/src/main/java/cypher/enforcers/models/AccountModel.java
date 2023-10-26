@@ -127,7 +127,9 @@ public class AccountModel {
      * @return True if the account was created, false otherwise.
      */
     public boolean addAccount(String name, String type) {
-        Account account = new Account(-1, name, type);
+        Account account = new Account();
+        account.setName(name);
+        account.setSocialMediaType(type);
         boolean result = accountRepository.create(account);
         if (result) {
             accounts.add(account);

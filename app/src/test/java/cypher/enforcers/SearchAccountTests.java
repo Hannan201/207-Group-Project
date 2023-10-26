@@ -12,14 +12,26 @@ import java.util.ArrayList;
 public class SearchAccountTests {
 
     private List<Account> createAccounts() {
-        return new ArrayList<>(
-                List.of(
-                        new Account(1, "Joe", "Reddit"),
-                        new Account(2, "Random", "Slack"),
-                        new Account(3, "Oof", "Google"),
-                        new Account(4, "Razor", "Origin")
-                )
-        );
+        Account one = new Account();
+        one.setId(1);
+        one.setName("Joe");
+        one.setSocialMediaType("Reddit");
+
+        Account two = new Account();
+        two.setId(2);
+        two.setName("Random");
+        two.setSocialMediaType("Slack");
+
+        Account three = new Account();
+        three.setId(3);
+        three.setName("Oof");
+        three.setSocialMediaType("Google");
+
+        Account four = new Account();
+        four.setId(4);
+        four.setName("Razor");
+        four.setSocialMediaType("Origin");
+        return List.of(one, two, three, four);
     }
 
     /**

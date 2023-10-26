@@ -567,7 +567,11 @@ public class Database {
                                 int accountID = resultSet.getInt("id");
                                 String name = resultSet.getString("name");
                                 String type = resultSet.getString("type");
-                                return new Account(accountID, name, type);
+                                Account account = new Account();
+                                account.setId(accountID);
+                                account.setName(name);
+                                account.setSocialMediaType(type);
+                                return account;
                             } catch (SQLException e) {
                                 LoggerFactory.getLogger(getClass()).warn("Unable to retrieve user. Cause: ", e);
                             }

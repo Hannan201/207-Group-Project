@@ -42,7 +42,7 @@ public class LoadingDataTests {
         assertEquals(account.getName(), "Joe");
         assertEquals(account.getSocialMediaType(), "1234");
 
-        List<Code> codes = Database.getCodes(token, account.getID());
+        List<Code> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 3);
         for (Code c : codes) {
             assertEquals(c.getCode(), "1234");

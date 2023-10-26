@@ -4,7 +4,10 @@ import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.models.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +16,11 @@ import java.util.Optional;
  the database and make changes to any information related to the accounts.
  */
 public class AccountDAOImpl implements AccountDAO {
+
+    private static final String ADD_USER = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?) RETURNING id";
+
+    // Logger for the account data access object.
+    private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
 
     // Service to communicate to the database.
     @SimpleService
@@ -67,8 +75,14 @@ public class AccountDAOImpl implements AccountDAO {
      */
     @Override
     public boolean addAccount(Account account) {
-        System.out.println("Adding account for user");
-        return false;
+        try {
+            databaseService.executeUpdate(ADD_USER, account);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+
+        return true;
     }
 
     /**

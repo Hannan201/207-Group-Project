@@ -129,7 +129,7 @@ public class AccountCell extends ListCell<Account> {
                     logger.trace("Switching from the AccountView to the CodeView.");
                     View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
 
-                    ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes(item.getID());
+                    ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes((int) item.getID());
                 }
             });
 

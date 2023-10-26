@@ -354,7 +354,7 @@ public class AccountViewController implements Initializable {
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
         accounts.getItems().removeAll(selectedItemsCopy);
         for (Account account : selectedItemsCopy) {
-            Database.removeAccount(Storage.getToken(), account.getID());
+            Database.removeAccount(Storage.getToken(), (int) account.getID());
         }
     }
 }

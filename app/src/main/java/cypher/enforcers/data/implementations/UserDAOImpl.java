@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 public class UserDAOImpl implements UserDAO {
 
-    private static final String ADD_USER = "INSERT INTO USERS (username, password) VALUES (?, ?) RETURNING id";
+    private static final String ADD_USER = "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id";
 
     private static final String UPDATE_THEME = "UPDATE users SET theme_value = ? WHERE id = ?";
 

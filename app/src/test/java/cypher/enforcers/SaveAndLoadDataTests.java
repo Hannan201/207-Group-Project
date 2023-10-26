@@ -100,7 +100,7 @@ public class SaveAndLoadDataTests {
         assertEquals(account.getName(), "One");
         assertEquals(account.getSocialMediaType(), "Discord");
 
-        List<Code> codes = Database.getCodes(token, account.getID());
+        List<Code> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 16);
 
         String[] expectedCodes = new String[]{"yuyk-775x",
@@ -129,7 +129,7 @@ public class SaveAndLoadDataTests {
         assertEquals(account.getName(), "Two");
         assertEquals(account.getSocialMediaType(), "GitHub");
 
-        codes = Database.getCodes(token, account.getID());
+        codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 16);
 
         expectedCodes = new String[]{"8a4rv-hi4qt",
@@ -158,7 +158,7 @@ public class SaveAndLoadDataTests {
         assertEquals(account.getName(), "Three");
         assertEquals(account.getSocialMediaType(), "Google");
 
-        codes = Database.getCodes(token, account.getID());
+        codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 16);
 
         expectedCodes = new String[]{"7294 8105",
@@ -201,7 +201,7 @@ public class SaveAndLoadDataTests {
         Account account = Database.getAccountByName(token, "One");
         assertNotNull(account);
 
-        Database.removeAccount(token, account.getID());
+        Database.removeAccount(token, (int) account.getID());
 
         Database.logUserOut(token);
         Database.disconnect();
@@ -214,7 +214,7 @@ public class SaveAndLoadDataTests {
         user = Database.getUser(token);
         assertNotNull(user);
 
-        account = Database.getAccount(token, account.getID());
+        account = Database.getAccount(token, (int) account.getID());
         assertNull(account);
 
         Database.logUserOut(token);
@@ -234,10 +234,10 @@ public class SaveAndLoadDataTests {
         Account account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        List<Code> codes = Database.getCodes(token, account.getID());
+        List<Code> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 16);
 
-        Database.clearAllCodes(token, account.getID());
+        Database.clearAllCodes(token, (int) account.getID());
 
         Database.logUserOut(token);
         Database.disconnect();
@@ -250,7 +250,7 @@ public class SaveAndLoadDataTests {
         user = Database.getUser(token);
         assertNotNull(user);
 
-        codes = Database.getCodes(token, account.getID());
+        codes = Database.getCodes(token, (int) account.getID());
         assertTrue(codes.isEmpty());
 
         Database.logUserOut(token);
@@ -270,12 +270,12 @@ public class SaveAndLoadDataTests {
         Account account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        int id = Database.addCode(token, account.getID(), "4EW C0D3");
+        int id = Database.addCode(token, (int) account.getID(), "4EW C0D3");
         Code c = Database.getCode(token, id);
         assertNotNull(c);
         assertEquals(c.getCode(), "4EW C0D3");
 
-        id = Database.addCode(token, account.getID(), "123 456");
+        id = Database.addCode(token, (int) account.getID(), "123 456");
         c = Database.getCode(token, id);
         assertNotNull(c);
         assertEquals(c.getCode(), "123 456");
@@ -297,7 +297,7 @@ public class SaveAndLoadDataTests {
         Account account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        List<Code> codes = Database.getCodes(token, account.getID());
+        List<Code> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 2);
 
         int id = -1;
@@ -310,7 +310,7 @@ public class SaveAndLoadDataTests {
 
         Database.removeCode(token, id);
 
-        codes = Database.getCodes(token, account.getID());
+        codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 1);
 
         assertEquals(codes.get(0).getCode(), "4EW C0D3");
@@ -332,7 +332,7 @@ public class SaveAndLoadDataTests {
         Account account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        List<Code> code = Database.getCodes(token, account.getID());
+        List<Code> code = Database.getCodes(token, (int) account.getID());
         assertEquals(code.size(), 1);
         Code c = code.get(0);
         int id = c.getID();
@@ -360,11 +360,11 @@ public class SaveAndLoadDataTests {
         Account account = Database.getAccountByName(token, "Joe");
         assertNotNull(account);
 
-        List<Code> codes = Database.getCodes(token, account.getID());
+        List<Code> codes = Database.getCodes(token, (int) account.getID());
         int before = codes.size();
 
         for (int i = 0; i < 5; i++) {
-            Database.addCode(token, account.getID(), "EEEEEEEEEEE");
+            Database.addCode(token, (int) account.getID(), "EEEEEEEEEEE");
         }
 
         Database.logUserOut(token);
@@ -381,7 +381,7 @@ public class SaveAndLoadDataTests {
         account = Database.getAccountByName(token, "Joe");
         assertNotNull(account);
 
-        codes = Database.getCodes(token, account.getID());
+        codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), before + 5);
 
         Database.logUserOut(token);

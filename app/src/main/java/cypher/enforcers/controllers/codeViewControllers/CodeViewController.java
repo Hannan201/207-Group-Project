@@ -291,7 +291,7 @@ public class CodeViewController implements Initializable {
      */
     public void deleteAllOnAction() {
         codeListView.getItems().clear();
-        Database.clearAllCodes(Storage.getToken(), account.getID());
+        Database.clearAllCodes(Storage.getToken(), (int) account.getID());
     }
 
     /**
@@ -322,7 +322,7 @@ public class CodeViewController implements Initializable {
         for (String s : returned) {
             // Don't want to add empty codes.
             if (!s.isEmpty()) {
-                int id = Database.addCode(Storage.getToken(), account.getID(), s);
+                int id = Database.addCode(Storage.getToken(), (int) account.getID(), s);
                 codeListView.getItems().add(Database.getCode(Storage.getToken(), id));
                 addCodeInput.setText("");
             }
