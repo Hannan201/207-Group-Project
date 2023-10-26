@@ -1,6 +1,7 @@
 package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.models.User;
+import cypher.enforcers.utilities.sqliteutilities.retrievers.Retrievers;
 import cypher.enforcers.views.themes.Theme;
 import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.DatabaseService;
@@ -22,6 +23,8 @@ public class UserDAOImpl implements UserDAO {
     private static final String ADD_USER_QUERY = "INSERT INTO USERS (username, password) VALUES (?, ?) RETURNING id";
 
     private static final String UPDATE_THEME = "UPDATE users SET theme_value = ? WHERE id = ?";
+
+    private static final String CHECK_USERNAME = "SELECT ( COUNT(*) > 0 ) AS 'contains' FROM users WHERE username = ?";
 
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -45,8 +48,22 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public boolean checkUsername(String username) {
-        System.out.println("Checking if username is taken.");
-        return false;
+        try {
+            Boolean bool = databaseService.executeSelect(
+                    CHECK_USERNAME,
+                    Retrievers.ofBoolean("contains"),
+                    username.toLowerCase()
+            );
+
+            if (bool == null || !bool) {
+                return false;
+            }
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+            return false;
+        }
+
+        return true;
     }
 
     /**

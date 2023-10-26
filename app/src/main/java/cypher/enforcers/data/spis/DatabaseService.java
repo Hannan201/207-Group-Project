@@ -5,8 +5,10 @@ import cypher.enforcers.utilities.sqliteutilities.argumentsetters.TriConsumer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /*
  Interface for the database service. This service acts as a way to
@@ -86,6 +88,31 @@ public interface DatabaseService {
             getConnection().commit();
         } catch (SQLException e) {
             getConnection().rollback();
+        }
+    }
+
+    /**
+     * Execute a select statement and obtain the result.
+     *
+     * @param query The query to execute.
+     * @param retriever Retriever which has the implementation of how
+     *                  the data should be obtained from the result set.
+     * @param objects The arguments that need to be set for the placeholder.
+     * @param <T> The type of value that should be returned.
+     * @return The value, if any errors occur null will be returned.
+     * @throws SQLException If anything goes wrong.
+     */
+    default <T> T executeSelect(String query, Function<ResultSet, T> retriever, Object ... objects) throws SQLException {
+        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
+            for (int i = 0; i < objects.length; i++) {
+                TriConsumer<PreparedStatement, Integer, Object> setter
+                        = ArgumentSetters.getSetter(objects[i].getClass());
+                setter.accept(statement, i + 1, objects[i]);
+            }
+
+            statement.execute();
+
+            return retriever.apply(statement.getResultSet());
         }
     }
 

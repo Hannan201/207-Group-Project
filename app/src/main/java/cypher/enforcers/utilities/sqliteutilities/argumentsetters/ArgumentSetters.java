@@ -55,6 +55,15 @@ public class ArgumentSetters {
         }
     };
 
+    // How a string should be added to the database.
+    private static final TriConsumer<PreparedStatement, Integer, Object> FOR_STRING = (statement, index, value) -> {
+        try {
+            statement.setString(index, (String) value);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
     // Maps the type of object to how it should be set for the
     // placeholders.
     private static final Map<Class<?>, BiConsumer<PreparedStatement, ?>> OBJECT_TYPE_TO_SETTER =
@@ -67,7 +76,8 @@ public class ArgumentSetters {
     private static final Map<Class<?>, TriConsumer<PreparedStatement, Integer, Object>> SINGLE_TYPE_TO_SETTER =
             Map.ofEntries(
                     Map.entry(Integer.class, FOR_INTEGER),
-                    Map.entry(Long.class, FOR_LONG)
+                    Map.entry(Long.class, FOR_LONG),
+                    Map.entry(String.class, FOR_STRING)
             );
 
     /**
