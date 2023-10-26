@@ -30,6 +30,8 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 
+    private static final String GET_THEME = "SELECT theme_value FROM users WHERE id = ?";
+
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
@@ -160,7 +162,20 @@ public class UserDAOImpl implements UserDAO {
             return Optional.empty();
         }
 
-        System.out.println("Getting theme");
+        try {
+            Theme theme = databaseService.executeSelect(
+                    GET_THEME,
+                    Theme.class,
+                    userID
+            );
+
+            if (theme != null) {
+                return Optional.of(theme);
+            }
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+        }
+
         return Optional.empty();
     }
 

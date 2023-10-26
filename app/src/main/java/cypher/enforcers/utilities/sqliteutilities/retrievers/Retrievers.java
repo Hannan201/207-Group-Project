@@ -52,10 +52,20 @@ public class Retrievers {
         return user;
     };
 
+    // How to retrieve a theme from the result set.
+    private static final Function<ResultSet, Theme> FOR_THEME = resultSet -> {
+        try {
+            return Theme.values()[resultSet.getInt("theme_value")];
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
     // Maps the type of object to how it should be retrieved.
     private static final Map<Class<?>, Function<ResultSet, ?>> OBJECT_TYPE_TO_RETRIEVER =
             Map.ofEntries(
-                    Map.entry(User.class, FOR_USER)
+                    Map.entry(User.class, FOR_USER),
+                    Map.entry(Theme.class, FOR_THEME)
             );
 
     /**

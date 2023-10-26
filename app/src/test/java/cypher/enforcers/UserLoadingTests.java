@@ -92,4 +92,30 @@ public class UserLoadingTests {
         dbService.disconnect();
     }
 
+    @Test
+    public void loadLoggedInUserTheme() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/database_with_logged_in_user.db");
+
+        UserDAOImpl userDAO = new UserDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        userRepository.read();
+
+        Optional<Theme> themeOptional = userRepository.readTheme();
+        assertTrue(themeOptional.isPresent(), "Theme should not be null.");
+        assertEquals(themeOptional.get(), Theme.DARK, "Theme should be dark mode.");
+        
+        dbService.disconnect();
+    }
+
 }
