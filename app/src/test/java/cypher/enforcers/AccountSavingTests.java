@@ -102,6 +102,58 @@ public class AccountSavingTests {
         dbService.disconnect();
     }
 
+    @Test
+    public void clearAllAccounts() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/database_to_clean.db");
 
-    
+        AccountDAOImpl accountDAO = new AccountDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        UserDAOImpl userDAO = new UserDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        PasswordHasher hasher = new PasswordHasher();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, hasher)),
+                "Could not inject Password hashing service."
+        );
+
+        AuthenticationServiceImpl authService = new AuthenticationServiceImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
+                "Could not inject Repository service."
+        );
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(accountRepository, authService)),
+                "Could not inject Authentication service."
+        );
+
+        assertTrue(authService.authenticateUser("Hannan", "12345"), "User can not log in.");
+
+        assertTrue(accountRepository.deleteAll(), "Accounts were not deleted.");
+
+        dbService.disconnect();
+    }
+
+
 }

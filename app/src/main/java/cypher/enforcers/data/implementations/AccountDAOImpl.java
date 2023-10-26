@@ -19,6 +19,8 @@ public class AccountDAOImpl implements AccountDAO {
 
     private static final String ADD_USER = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?) RETURNING id";
 
+    private static final String DELETE_ACCOUNTS = "DELETE FROM accounts WHERE user_id = ?";
+
     // Logger for the account data access object.
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
 
@@ -106,7 +108,13 @@ public class AccountDAOImpl implements AccountDAO {
      */
     @Override
     public boolean clearAllAccounts(long userID) {
-        System.out.println("Removing all accounts for user");
-        return false;
+        try {
+            databaseService.executeUpdate(DELETE_ACCOUNTS, userID);
+        } catch (SQLException e) {
+            logger.debug("Failed delete query. Cause: ", e);
+            return false;
+        }
+
+        return true;
     }
 }
