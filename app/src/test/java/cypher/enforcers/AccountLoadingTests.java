@@ -159,14 +159,87 @@ public class AccountLoadingTests {
         assertEquals(account.getUserId(), 2, "First account's user ID does not match.");
 
         accountOptional = accountRepository.readByID(5);
-        assertTrue(accountOptional.isPresent(), "Second is empty.");
+        assertTrue(accountOptional.isPresent(), "Second account is empty.");
         account = accountOptional.get();
 
         assertEquals(account.getID(), 5, "Second account's ID does not match.");
         assertEquals(account.getName(), "ACTwo", "Second account's name does not match.");
         assertEquals(account.getSocialMediaType(), "Slack", "Second account's social media type does not match.");
         assertEquals(account.getUserId(), 2, "Second account's user ID does not match.");
-        
+
+        dbService.disconnect();
+    }
+
+    @Test
+    public void loadingWithName() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/database_for_accounts.db");
+
+        AccountDAOImpl accountDAO = new AccountDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        AccountRepositoryImpl accountRepository = new AccountRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        UserDAOImpl userDAO = new UserDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        PasswordHasher hasher = new PasswordHasher();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, hasher)),
+                "Could not inject Password hashing service."
+        );
+
+        AuthenticationServiceImpl authService = new AuthenticationServiceImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
+                "Could not inject Repository service."
+        );
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(accountRepository, authService)),
+                "Could not inject Authentication service."
+        );
+
+        assertTrue(authService.authenticateUser("Joe", "1234"), "User can not log in.");
+
+        Optional<Account> accountOptional = accountRepository.readByName("Joe");
+        assertTrue(accountOptional.isPresent(), "First account is empty.");
+        Account account = accountOptional.get();
+
+        assertEquals(account.getID(), 2, "First account's ID does not match.");
+        assertEquals(account.getName(), "Joe", "First account's name does not match.");
+        assertEquals(account.getSocialMediaType(), "GitHub", "First account's social media type does not match.");
+        assertEquals(account.getUserId(), 2, "First account's user ID does not match.");
+
+        assertTrue(authService.logUserOut());
+
+        assertTrue(authService.authenticateUser("Hannan", "12345"), "User can not log in");
+
+        accountOptional = accountRepository.readByName("Joe");
+        assertTrue(accountOptional.isPresent(), "Second account is empty.");
+        account = accountOptional.get();
+
+        assertEquals(account.getID(), 1, "Second account's ID does not match.");
+        assertEquals(account.getName(), "Joe", "Second account's name does not match.");
+        assertEquals(account.getSocialMediaType(), "1234", "Second account's social media type does not match.");
+        assertEquals(account.getUserId(), 1, "Second account's user ID does not match.");
+
         dbService.disconnect();
     }
 }
