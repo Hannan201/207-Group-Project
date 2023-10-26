@@ -97,6 +97,10 @@ public class Retrievers {
     // How to retrieve an account from the result set.
     private static final Function<ResultSet, Account> FOR_ACCOUNT = resultSet -> {
         try {
+            if (resultSet.getRow() == 0 && !resultSet.isBeforeFirst()) {
+                return null;
+            }
+
             Account account = new Account();
             account.setId(resultSet.getLong("id"));
             account.setName(resultSet.getString("name"));

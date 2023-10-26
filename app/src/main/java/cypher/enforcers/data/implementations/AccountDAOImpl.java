@@ -25,6 +25,8 @@ public class AccountDAOImpl implements AccountDAO {
 
     private static final String GET_ACCOUNTS = "SELECT * FROM accounts WHERE user_id = ?";
 
+    private static final String GET_ACCOUNT = "SELECT * FROM accounts WHERE id = ?";
+
     // Logger for the account data access object.
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
 
@@ -58,7 +60,22 @@ public class AccountDAOImpl implements AccountDAO {
      */
     @Override
     public Optional<Account> getAccount(long accountID) {
-        System.out.println("Getting account for user");
+        try {
+            Account account = databaseService.executeSelect(
+                    GET_ACCOUNT,
+                    Account.class,
+                    accountID
+            );
+
+            if (account == null) {
+                return Optional.empty();
+            }
+
+            return Optional.of(account);
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+        }
+
         return Optional.empty();
     }
 
