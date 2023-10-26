@@ -43,11 +43,10 @@ public interface AccountDAO {
     /**
      * Add an account.
      *
-     * @param name Name of the account.
-     * @param type Social media type of the account.
-     * @return ID of the account. Returns -1 if account was not added.
+     * @param account Account to add.
+     * @return True if added, false otherwise.
      */
-    long addAccount(String name, String type);
+    boolean addAccount(Account account);
 
     /**
      * Remove an account.
