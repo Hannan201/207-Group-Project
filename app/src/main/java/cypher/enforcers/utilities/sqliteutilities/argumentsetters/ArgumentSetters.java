@@ -55,6 +55,16 @@ public class ArgumentSetters {
         }
     };
 
+    // How a long should be added to the database, if it's the only
+    // argument being passed in.
+    private static final BiConsumer<PreparedStatement, Long> FOR_ONE_LONG = (statement, value) -> {
+        try {
+            statement.setLong(1, value);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
     // How a string should be added to the database.
     private static final TriConsumer<PreparedStatement, Integer, Object> FOR_STRING = (statement, index, value) -> {
         try {
@@ -68,7 +78,8 @@ public class ArgumentSetters {
     // placeholders.
     private static final Map<Class<?>, BiConsumer<PreparedStatement, ?>> OBJECT_TYPE_TO_SETTER =
             Map.ofEntries(
-                    Map.entry(User.class, FOR_USER)
+                    Map.entry(User.class, FOR_USER),
+                    Map.entry(Long.class, FOR_ONE_LONG)
             );
 
     // Maps the type of object to which index it should be added. Since

@@ -48,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         password = hashPassword(password);
 
-        boolean result = userDAO.registerUser(username, password);
+        boolean result = userDAO.registerUser(username.toLowerCase(), password);
 
         if (result) {
             logger.trace("User created.");
@@ -59,6 +59,11 @@ public class UserRepositoryImpl implements UserRepository {
         return result;
     }
 
+    /**
+     * Read the current user logged in.
+     *
+     * @return An Optional containing the user. Null otherwise.
+     */
     @Override
     public Optional<User> read() {
         logger.trace("Attempting to get the current logged in user.");
@@ -74,6 +79,11 @@ public class UserRepositoryImpl implements UserRepository {
         return result;
     }
 
+    /**
+     * Read the theme for the user logged in.
+     *
+     * @return An Optional containing the theme. Null otherwise.
+     */
     @Override
     public Optional<Theme> readTheme() {
         logger.trace("Attempting to get theme for the current logged in user.");
@@ -89,6 +99,11 @@ public class UserRepositoryImpl implements UserRepository {
         return result;
     }
 
+    /**
+     * Update the theme for the user logged in.
+     *
+     * @return True if the theme was updated, false otherwise.
+     */
     @Override
     public boolean update(Theme newTheme) {
         logger.trace("Attempting to update theme to {} for the current logged in user.", newTheme);
@@ -104,6 +119,13 @@ public class UserRepositoryImpl implements UserRepository {
         return result;
     }
 
+    /**
+     * Check if a given username is taken. The search is
+     * case-insensitive.
+     *
+     * @param username The username to search for.
+     * @return True if the user is taken, false otherwise.
+     */
     @Override
     public boolean checkUsername(String username) {
         logger.trace("Attempting to check if username {} is taken.", username);
@@ -113,7 +135,7 @@ public class UserRepositoryImpl implements UserRepository {
             return true;
         }
 
-        boolean result = userDAO.checkUsername(username);
+        boolean result = userDAO.checkUsername(username.toLowerCase());
 
         if (result) {
             logger.trace("Username taken.");
@@ -154,7 +176,7 @@ public class UserRepositoryImpl implements UserRepository {
     public Map<String, String> read(String username) {
         logger.trace("Fetching user data for user with username {}.", username);
 
-        Map<String, String> result = userDAO.getUserData(username);
+        Map<String, String> result = userDAO.getUserData(username.toLowerCase());
 
         if (result == null) {
             logger.trace("Unable to find user data for user with username {}.", username);
@@ -194,5 +216,14 @@ public class UserRepositoryImpl implements UserRepository {
      */
     public long getLoggedInUser() {
         return userDAO.getUserID();
+    }
+
+    /**
+     * Get the object used for hashing passwords.
+     *
+     * @return The object that hashes passwords.
+     */
+    public PasswordHasher getPasswordHasher() {
+        return this.passwordHasher;
     }
 }

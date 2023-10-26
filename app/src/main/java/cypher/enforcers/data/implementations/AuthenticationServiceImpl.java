@@ -33,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean authenticateUser(String username, String password) {
         logger.trace("Attempting to authenticate user with username {}.", username);
 
-        if (userRepository.checkUsername(username)) {
+        if (!userRepository.checkUsername(username)) {
             return false;
         }
 
@@ -48,7 +48,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String salt = hashedPassword.substring(0, 24);
         String expectedPassword = hashedPassword.substring(24);
 
-        boolean loggedIn = password.equals(expectedPassword);
+        boolean loggedIn = userRepository.getPasswordHasher()
+                .verifyPassword(
+                        expectedPassword,
+                        password + salt,
+                        salt
+                );
 
         if (loggedIn && userRepository.loginUser(
                 Long.parseLong(data.get("id"))

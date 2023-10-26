@@ -35,6 +35,10 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String GET_USER_DATA = "SELECT id, password FROM users WHERE username = ?";
 
+    private static final String LOGIN_USER = "UPDATE users SET logged_in = 1 WHERE id = ?";
+
+    private static final String LOGOUT_USER = "UPDATE users SET logged_in = 0 WHERE id = ?";
+
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
@@ -61,7 +65,7 @@ public class UserDAOImpl implements UserDAO {
             Boolean bool = databaseService.executeSelect(
                     CHECK_USERNAME,
                     Retrievers.ofBoolean("contains"),
-                    username.toLowerCase()
+                    username
             );
 
             if (bool == null || !bool) {
@@ -214,12 +218,15 @@ public class UserDAOImpl implements UserDAO {
      * @return True if the status was updated, false otherwise.
      */
     public boolean loginUser(long userID) {
-        if (userID <= 0) {
+        try {
+            databaseService.executeUpdate(LOGIN_USER, userID);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
             return false;
         }
 
-        System.out.println("Updating login status");
-        return false;
+        this.userID = userID;
+        return true;
     }
 
     /**
@@ -234,8 +241,18 @@ public class UserDAOImpl implements UserDAO {
             return true;
         }
 
-        System.out.println("Updating login status");
-        return false;
+        try {
+            databaseService.executeUpdate(
+                    LOGOUT_USER,
+                    userID
+            );
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+
+        userID = -1L;
+        return true;
     }
 
     /**
@@ -255,7 +272,7 @@ public class UserDAOImpl implements UserDAO {
             List<Object> results = databaseService.executeSelect(
                     GET_USER_DATA,
                     Retrievers.ofList("password", "id"),
-                    username.toLowerCase()
+                    username
             );
 
             if (results != null && results.size() == 2) {

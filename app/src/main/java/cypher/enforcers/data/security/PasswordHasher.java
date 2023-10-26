@@ -105,7 +105,7 @@ public class PasswordHasher {
 
     /**
      * Verify a password after applying the hashing algorithm
-     * on the salt and the password the user types in.
+     * with the salt based on the password the user types in.
      *
      * @param expectedPassword The expected password after applying
      *                         the algorithm.
