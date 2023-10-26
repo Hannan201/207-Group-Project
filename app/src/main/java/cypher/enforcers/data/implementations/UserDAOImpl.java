@@ -21,6 +21,8 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String ADD_USER_QUERY = "INSERT INTO USERS (username, password) VALUES (?, ?) RETURNING id";
 
+    private static final String UPDATE_THEME = "UPDATE users SET theme_value = ? WHERE id = ?";
+
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
@@ -128,8 +130,13 @@ public class UserDAOImpl implements UserDAO {
             return false;
         }
 
-        System.out.println("Updating user");
-        return false;
+        try {
+            databaseService.executeUpdate(UPDATE_THEME, newTheme.ordinal(), userID);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+        return true;
     }
 
     /*

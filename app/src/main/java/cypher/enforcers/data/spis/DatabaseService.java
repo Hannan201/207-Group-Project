@@ -1,6 +1,7 @@
 package cypher.enforcers.data.spis;
 
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetters;
+import cypher.enforcers.utilities.sqliteutilities.argumentsetters.TriConsumer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,7 +47,7 @@ public interface DatabaseService {
      * case the table will be rolled back.
      */
     @SuppressWarnings("unchecked")
-    default  <T> void executeUpdate(String query, T object) throws SQLException {
+    default <T> void executeUpdate(String query, T object) throws SQLException {
         try (PreparedStatement statement = getConnection().prepareStatement(query)) {
             getConnection().setAutoCommit(false);
             BiConsumer<PreparedStatement, T> consumer = (BiConsumer<PreparedStatement, T>) ArgumentSetters.getObjectSetter(object.getClass());
@@ -58,6 +59,32 @@ public interface DatabaseService {
 
             getConnection().commit();
         } catch (SQLException e)  {
+            getConnection().rollback();
+        }
+    }
+
+    /**
+     * Execute an update statement where all place holders might not all
+     * be related to one object.
+     *
+     * @param query The query.
+     * @param objects The values to be used as placeholders.
+     * @throws SQLException If anything goes wrong. In which the the table
+     * will be rolled back.
+     */
+    default void executeUpdate(String query, Object ... objects) throws SQLException {
+        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
+            getConnection().setAutoCommit(false);
+
+            for (int i = 0; i < objects.length; i++) {
+                TriConsumer<PreparedStatement, Integer, Object> setter
+                        = ArgumentSetters.getSetter(objects[i].getClass());
+                setter.accept(statement, i + 1, objects[i]);
+            }
+
+            statement.executeUpdate();
+            getConnection().commit();
+        } catch (SQLException e) {
             getConnection().rollback();
         }
     }

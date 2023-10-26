@@ -7,6 +7,8 @@ import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.User;
+import cypher.enforcers.views.themes.Theme;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -19,15 +21,24 @@ import java.util.Optional;
  * Tests for using the user-data-related services.
  */
 public class UserSavingTests {
-
-    private static UserRepositoryImpl userRepository;
-
     private static Injector injector;
 
-    @BeforeAll
-    public static void injectServices() {
-        injector = new Injector();
+    private static PasswordHasher hasher;
 
+    @BeforeAll
+    public static void create() {
+        injector = new Injector();
+        hasher = new PasswordHasher();
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        injector = null;
+        hasher = null;
+    }
+
+    @Test
+    public void saveUserTest() {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/empty_database.db");
 
@@ -37,22 +48,17 @@ public class UserSavingTests {
                 "Could not inject database service."
         );
 
-
-        userRepository = new UserRepositoryImpl();
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
         assertDoesNotThrow(
                 () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
                 "Could not inject Data Access Service."
         );
 
-        PasswordHasher hash = new PasswordHasher();
         assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, hash)),
+                () -> assertTrue(injector.injectServicesInto(userRepository, hasher)),
                 "Could not inject Password Hashing service"
         );
-    }
 
-    @Test
-    public void saveUserTest() {
         // No user should be logged in.
         Optional<User> optionalUser = userRepository.read();
         assertThrows(
@@ -62,6 +68,42 @@ public class UserSavingTests {
 
         assertTrue(userRepository.create("Joe", "1234"));
         assertEquals(userRepository.getLoggedInUser(), 1, "Only one user should be present in database.");
+        dbService.disconnect();
+    }
+
+    @Test
+    public void saveUserThemeTest() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/second_empty_database.db");
+
+        UserDAOImpl userDAO = new UserDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, hasher)),
+                "Could not inject Password Hashing service"
+        );
+
+        // No user should be logged in.
+        Optional<User> optionalUser = userRepository.read();
+        assertThrows(
+                NoSuchElementException.class,
+                optionalUser::get
+        );
+
+        assertTrue(userRepository.create("Joe", "1234"));
+        assertEquals(userRepository.getLoggedInUser(), 1, "Only one user should be present in database.");
+        assertTrue(userRepository.update(Theme.DARK));
+        dbService.disconnect();
     }
 
 }

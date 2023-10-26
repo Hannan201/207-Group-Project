@@ -38,9 +38,18 @@ public class ArgumentSetters {
     };
 
     // How an integer should be added to the database.
-    private static final TriConsumer<PreparedStatement, Integer, Integer> FOR_INTEGER = (statement, index, value) -> {
+    private static final TriConsumer<PreparedStatement, Integer, Object> FOR_INTEGER = (statement, index, value) -> {
         try {
-            statement.setInt(index, value);
+            statement.setInt(index, (Integer) value);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
+    // How a long should be added to the database.
+    private static final TriConsumer<PreparedStatement, Integer, Object> FOR_LONG = (statement, index, value) -> {
+        try {
+            statement.setLong(index, (Long) value);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -55,9 +64,10 @@ public class ArgumentSetters {
 
     // Maps the type of object to which index it should be added. Since
     // the data being added might not all belong to one class.
-    private static final Map<Class<?>, TriConsumer<PreparedStatement, Integer, ?>> SINGLE_TYPE_TO_SETTER =
+    private static final Map<Class<?>, TriConsumer<PreparedStatement, Integer, Object>> SINGLE_TYPE_TO_SETTER =
             Map.ofEntries(
-                    Map.entry(Integer.class, FOR_INTEGER)
+                    Map.entry(Integer.class, FOR_INTEGER),
+                    Map.entry(Long.class, FOR_LONG)
             );
 
     /**
@@ -80,7 +90,7 @@ public class ArgumentSetters {
      * @return A TriConsumer that knows how to add the argument to the
      * placeholder with the index being specified.
      */
-    public static TriConsumer<PreparedStatement, Integer, ?> getSetter(Class<?> clazz) {
+    public static TriConsumer<PreparedStatement, Integer, Object> getSetter(Class<?> clazz) {
         return SINGLE_TYPE_TO_SETTER.get(clazz);
     }
 }
