@@ -1,5 +1,6 @@
 package cypher.enforcers.utilities.sqliteutilities.retrievers;
 
+import cypher.enforcers.models.Account;
 import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
 
@@ -93,11 +94,26 @@ public class Retrievers {
         }
     };
 
+    // How to retrieve an account from the result set.
+    private static final Function<ResultSet, Account> FOR_ACCOUNT = resultSet -> {
+        try {
+            Account account = new Account();
+            account.setId(resultSet.getLong("id"));
+            account.setName(resultSet.getString("name"));
+            account.setSocialMediaType(resultSet.getString("type"));
+            account.setUserId(resultSet.getLong("user_id"));
+            return account;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
     // Maps the type of object to how it should be retrieved.
     private static final Map<Class<?>, Function<ResultSet, ?>> OBJECT_TYPE_TO_RETRIEVER =
             Map.ofEntries(
                     Map.entry(User.class, FOR_USER),
-                    Map.entry(Theme.class, FOR_THEME)
+                    Map.entry(Theme.class, FOR_THEME),
+                    Map.entry(Account.class, FOR_ACCOUNT)
             );
 
     /**

@@ -23,6 +23,8 @@ public class AccountDAOImpl implements AccountDAO {
 
     private static final String DELETE_ACCOUNT = "DELETE FROM accounts WHERE id = ?";
 
+    private static final String GET_ACCOUNTS = "SELECT * FROM accounts WHERE user_id = ?";
+
     // Logger for the account data access object.
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
 
@@ -39,7 +41,12 @@ public class AccountDAOImpl implements AccountDAO {
      */
     @Override
     public List<Account> getAccounts(long userID) {
-        System.out.println("Getting accounts for user");
+        try {
+            return databaseService.executeMultiSelect(GET_ACCOUNTS, Account.class, userID);
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+        }
+
         return null;
     }
 

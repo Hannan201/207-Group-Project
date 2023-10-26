@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -115,7 +117,7 @@ public interface DatabaseService {
      * Execute a select statement to obtain the result.
      *
      * @param query The query to execute.
-     * @param type The type of object to retrieve.
+     * @param type The class type of the object to retrieve.
      * @param objects The arguments that need to be set for the placeholder.
      * @param <T> The type of value that should be returned.
      * @return The value, if any errors occur null will be returned.
@@ -130,6 +132,36 @@ public interface DatabaseService {
             }
 
             return Retrievers.get(type).apply(statement.executeQuery());
+        }
+    }
+
+    /**
+     * Execute a select statement to obtain multiple results in a list.
+     *
+     * @param query The query to execute.
+     * @param type The class type of the object that should be in the list.
+     * @param objects The arguments that need to be set for the placeholder.
+     * @param <T> The type of value that should be in the list.
+     * @return The list of values, if any errors occur null will be returned.
+     * @throws SQLException If anything goes wrong.
+     */
+    default <T> List<T> executeMultiSelect(String query, Class<T> type, Object ... objects) throws SQLException {
+        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
+            for (int i = 0; i < objects.length; i++) {
+                TriConsumer<PreparedStatement, Integer, Object> setter
+                        = ArgumentSetters.getSetter(objects[i].getClass());
+                setter.accept(statement, i + 1, objects[i]);
+            }
+
+            List<T> results = new ArrayList<>();
+            Function<ResultSet, T> function = Retrievers.get(type);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                results.add(function.apply(resultSet));
+            }
+
+            return results;
         }
     }
 
