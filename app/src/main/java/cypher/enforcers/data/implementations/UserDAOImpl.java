@@ -20,11 +20,15 @@ import java.util.Optional;
  */
 public class UserDAOImpl implements UserDAO {
 
-    private static final String ADD_USER_QUERY = "INSERT INTO USERS (username, password) VALUES (?, ?) RETURNING id";
+    private static final String ADD_USER = "INSERT INTO USERS (username, password) VALUES (?, ?) RETURNING id";
 
     private static final String UPDATE_THEME = "UPDATE users SET theme_value = ? WHERE id = ?";
 
     private static final String CHECK_USERNAME = "SELECT ( COUNT(*) > 0 ) AS 'contains' FROM users WHERE username = ?";
+
+    private static final String CHECK_USER_LOGGED_IN = "SELECT * FROM users WHERE logged_in = 1";
+
+    private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -87,7 +91,7 @@ public class UserDAOImpl implements UserDAO {
             user.setUsername(username);
             user.setPassword(password);
 
-            databaseService.executeUpdate(ADD_USER_QUERY, user);
+            databaseService.executeUpdate(ADD_USER, user);
 
             userID = user.getID();
         } catch (SQLException e) {
@@ -106,17 +110,42 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Optional<User> getUser() {
         if (userID == null) {
-            // Check if there is any user even logged in.
-            // If there is, set the ID and return the object.
-            // Otherwise, set the ID to -1 and return an empty
-            // optional.
-        } else if (userID == -1) {
-            return Optional.empty();
-        } else {
-            // Try to find the user and return it.
+            User user;
+            try {
+                user = databaseService.executeSelect(
+                        CHECK_USER_LOGGED_IN,
+                        User.class
+                );
+
+            } catch (SQLException e) {
+                logger.debug("Failed select query. Cause: ", e);
+                return Optional.empty();
+            }
+
+            if (user != null) {
+                userID = user.getID();
+                return Optional.of(user);
+            }
+
+        } else if (userID >= 1) {
+            User user;
+            try {
+                user = databaseService.executeSelect(
+                        GET_USER_BY_ID,
+                        User.class,
+                        userID
+                );
+            } catch (SQLException e) {
+                logger.debug("Failed select query. Cause: ", e);
+                return Optional.empty();
+            }
+
+            if (user != null) {
+                return Optional.of(user);
+            }
         }
+
         userID = -1L;
-        System.out.println("Getting user with id = " + userID);
         return Optional.empty();
     }
 
@@ -215,4 +244,6 @@ public class UserDAOImpl implements UserDAO {
     public long getUserID() {
         return userID == null ? -1L : userID;
     }
+
+
 }

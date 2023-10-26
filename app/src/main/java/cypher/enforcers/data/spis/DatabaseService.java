@@ -2,6 +2,7 @@ package cypher.enforcers.data.spis;
 
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetters;
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.TriConsumer;
+import cypher.enforcers.utilities.sqliteutilities.retrievers.Retrievers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,9 +38,7 @@ public interface DatabaseService {
     Connection getConnection();
 
     /**
-     * Execute an update query with placeholders for an object. The corresponding
-     * ArgumentSetter implementation will be used to set the placeholder
-     * values.
+     * Execute an update query with placeholders for an object.
      *
      * @param query The query to execute.
      * @param object The object data being updated.
@@ -66,12 +65,11 @@ public interface DatabaseService {
     }
 
     /**
-     * Execute an update statement where all place holders might not all
-     * be related to one object.
+     * Execute an update statement with multiple placeholders.
      *
      * @param query The query.
      * @param objects The values to be used as placeholders.
-     * @throws SQLException If anything goes wrong. In which the the table
+     * @throws SQLException If anything goes wrong. In which the table
      * will be rolled back.
      */
     default void executeUpdate(String query, Object ... objects) throws SQLException {
@@ -109,10 +107,29 @@ public interface DatabaseService {
                         = ArgumentSetters.getSetter(objects[i].getClass());
                 setter.accept(statement, i + 1, objects[i]);
             }
+            return retriever.apply(statement.executeQuery());
+        }
+    }
 
-            statement.execute();
+    /**
+     * Execute a select statement to obtain the result.
+     *
+     * @param query The query to execute.
+     * @param type The type of object to retrieve.
+     * @param objects The arguments that need to be set for the placeholder.
+     * @param <T> The type of value that should be returned.
+     * @return The value, if any errors occur null will be returned.
+     * @throws SQLException If anything goes wrong.
+     */
+    default <T> T executeSelect(String query, Class<T> type, Object ... objects) throws SQLException {
+        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
+            for (int i = 0; i < objects.length; i++) {
+                TriConsumer<PreparedStatement, Integer, Object> setter
+                        = ArgumentSetters.getSetter(objects[i].getClass());
+                setter.accept(statement, i + 1, objects[i]);
+            }
 
-            return retriever.apply(statement.getResultSet());
+            return Retrievers.get(type).apply(statement.executeQuery());
         }
     }
 
