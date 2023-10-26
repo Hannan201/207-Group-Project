@@ -5,6 +5,8 @@ import cypher.enforcers.views.themes.Theme;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -27,6 +29,36 @@ public class Retrievers {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        };
+    }
+
+    /**
+     * A retriever that returns multiple values based on the key names
+     * provided.
+     *
+     * @param keys The names of the keys to return.
+     * @return A list that contains the found results in order the
+     * key names were specified. Example: if the keys are: first, second
+     * then at index 0 will contain the value from column first, and the
+     * value and index 1 will contain the value from column second. If no
+     * results are found, null is returned.
+     */
+    public static Function<ResultSet, List<Object>> ofList(String ... keys) {
+        return resultSet -> {
+            List<Object> objects = new ArrayList<>();
+            try {
+                if (!resultSet.isBeforeFirst()) {
+                    return null;
+                }
+
+                for (String key : keys) {
+                    objects.add(resultSet.getObject(key));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            return objects;
         };
     }
 

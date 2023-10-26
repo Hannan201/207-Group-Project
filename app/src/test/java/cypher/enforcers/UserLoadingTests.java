@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -115,6 +116,45 @@ public class UserLoadingTests {
         assertTrue(themeOptional.isPresent(), "Theme should not be null.");
         assertEquals(themeOptional.get(), Theme.DARK, "Theme should be dark mode.");
         
+        dbService.disconnect();
+    }
+
+    @Test
+    public void loadsDataForAuthentication() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/database_with_two_users.db");
+
+        UserDAOImpl userDAO = new UserDAOImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
+                "Could not inject Data Access Service."
+        );
+
+        Map<String, String> data = userRepository.read("hannan");
+
+        assertNotNull(data);
+        assertEquals(data.keySet().size(), 2, "Should return two pairs.");
+        assertTrue(data.containsKey("password"), "Missing key: password.");
+        assertTrue(data.containsKey("id"), "Missing key: id.");
+
+        assertEquals(data.get("id"), "1", "Id for first user not equal.");
+        assertTrue(data.get("password").contains("RoQRUJ"));
+
+        data = userRepository.read("joe");
+
+        assertEquals(data.size(), 2, "Should return two pairs.");
+        assertTrue(data.containsKey("password"), "Missing key: password.");
+        assertTrue(data.containsKey("id"), "Missing key: id.");
+
+        assertTrue(data.get("password").contains("Oy+eiw"));
+        assertEquals(data.get("id"), "2", "Id for first user not equal.");
+
         dbService.disconnect();
     }
 

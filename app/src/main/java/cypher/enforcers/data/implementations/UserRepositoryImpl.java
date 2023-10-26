@@ -139,6 +139,18 @@ public class UserRepositoryImpl implements UserRepository {
         return salt + passwordHasher.hashPassword(password + salt, salt.getBytes());
     }
 
+    /**
+     * Get the password and ID of a user given their username. The
+     * search is case-insensitive. This method is usually called when
+     * trying to authenticate a user.
+     *
+     * @param username Username to search for.
+     * @return A Map containing the following key-value pairs:
+     *          "password" : password of the user as a string
+     *          "id" : id of the user as a string
+     * If no user is found, an empty map is returned instead. Lastly, if
+     * any issues come along the way, null will be returned.
+     */
     public Map<String, String> read(String username) {
         logger.trace("Fetching user data for user with username {}.", username);
 

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ public class UserDAOImpl implements UserDAO {
     private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 
     private static final String GET_THEME = "SELECT theme_value FROM users WHERE id = ?";
+
+    private static final String GET_USER_DATA = "SELECT id, password FROM users WHERE username = ?";
 
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -237,7 +240,8 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Get the password and ID of a user given their username. The
-     * search is case-insensitive.
+     * search is case-insensitive. This method is usually called when
+     * trying to authenticate a user.
      *
      * @param username Username to search for.
      * @return A Map containing the following key-value pairs:
@@ -247,7 +251,23 @@ public class UserDAOImpl implements UserDAO {
      * any issues come along the way, null will be returned.
      */
     public Map<String, String> getUserData(String username) {
-        System.out.println("Getting user data");
+        try {
+            List<Object> results = databaseService.executeSelect(
+                    GET_USER_DATA,
+                    Retrievers.ofList("password", "id"),
+                    username.toLowerCase()
+            );
+
+            if (results != null && results.size() == 2) {
+                return Map.of(
+                        "password", (String) results.get(0),
+                        "id", String.valueOf(results.get(1))
+                );
+            }
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+        }
+
         return Collections.emptyMap();
     }
 
