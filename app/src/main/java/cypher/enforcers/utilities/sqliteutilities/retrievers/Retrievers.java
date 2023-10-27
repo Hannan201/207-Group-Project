@@ -1,5 +1,6 @@
 package cypher.enforcers.utilities.sqliteutilities.retrievers;
 
+import cypher.enforcers.code.Code;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
@@ -112,12 +113,30 @@ public class Retrievers {
         }
     };
 
+    // How to retrieve a code from the result set.
+    private static final Function<ResultSet, Code> FOR_CODE = resultSet -> {
+        try {
+            if (resultSet.getRow() == 0 && !resultSet.isBeforeFirst()) {
+                return null;
+            }
+
+            Code code = new Code();
+            code.setId(resultSet.getLong("id"));
+            code.setCode(resultSet.getString("code"));
+            code.setAccountID(resultSet.getLong("account_id"));
+            return code;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+
     // Maps the type of object to how it should be retrieved.
     private static final Map<Class<?>, Function<ResultSet, ?>> OBJECT_TYPE_TO_RETRIEVER =
             Map.ofEntries(
                     Map.entry(User.class, FOR_USER),
                     Map.entry(Theme.class, FOR_THEME),
-                    Map.entry(Account.class, FOR_ACCOUNT)
+                    Map.entry(Account.class, FOR_ACCOUNT),
+                    Map.entry(Code.class, FOR_CODE)
             );
 
     /**

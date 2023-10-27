@@ -25,6 +25,8 @@ public class CodeDAOImpl implements CodeDAO {
 
     private static final String UPDATE_CODE = "UPDATE codes SET code = ? WHERE id = ?";
 
+    private static final String GET_CODES = "SELECT * FROM codes WHERE account_id = ?";
+
     // Logger for the code data access object.
     private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
 
@@ -41,7 +43,12 @@ public class CodeDAOImpl implements CodeDAO {
      */
     @Override
     public List<Code> getCodes(long accountID) {
-        System.out.println("Getting codes for user");
+        try {
+            return databaseService.executeMultiSelect(GET_CODES, Code.class, accountID);
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+        }
+
         return null;
     }
 
