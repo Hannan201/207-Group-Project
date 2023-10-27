@@ -23,6 +23,8 @@ public class CodeDAOImpl implements CodeDAO {
 
     private static final String DELETE_CODES = "DELETE FROM codes WHERE account_id = ?";
 
+    private static final String UPDATE_CODE = "UPDATE codes SET code = ? WHERE id = ?";
+
     // Logger for the code data access object.
     private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
 
@@ -74,15 +76,32 @@ public class CodeDAOImpl implements CodeDAO {
     }
 
     /**
+     * Update a code.
+     *
+     * @param code The code to update.
+     * @return True if update successfully, false otherwise.
+     */
+    public boolean updateCode(Code code) {
+        try {
+            databaseService.executeUpdate(UPDATE_CODE, code.getCode(), code.getId());
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Remove a code.
      *
-     * @param codeID ID of the code.
+     * @param code Code to remove.
      * @return True if code was removed successfully, false otherwise.
      */
     @Override
-    public boolean removeCode(long codeID) {
+    public boolean removeCode(Code code) {
         try {
-            databaseService.executeUpdate(DELETE_CODE, codeID);
+            databaseService.executeUpdate(DELETE_CODE, code.getId());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return false;

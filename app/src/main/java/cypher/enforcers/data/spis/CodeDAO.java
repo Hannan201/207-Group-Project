@@ -37,12 +37,20 @@ public interface CodeDAO {
     boolean addCode(Code code);
 
     /**
+     * Update a code.
+     *
+     * @param code The code to update.
+     * @return True if update successfully, false otherwise.
+     */
+    boolean updateCode(Code code);
+
+    /**
      * Remove a code.
      *
-     * @param codeID ID of the code.
+     * @param code Code to remove.
      * @return True if code was removed successfully, false otherwise.
      */
-    boolean removeCode(long codeID);
+    boolean removeCode(Code code);
 
     /**
      * Remove all codes for an account.

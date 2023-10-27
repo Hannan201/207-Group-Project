@@ -90,21 +90,42 @@ public class CodeRepositoryImpl implements CodeRepository {
     }
 
     /**
+     * Update a code.
+     *
+     * @param code The code to update.
+     * @return True if successfully updated, false otherwise.
+     */
+    @Override
+    public boolean update(Code code) {
+        logger.trace("Attempting to update code with ID {} to {}.", code.getId(), code.getCode());
+
+        boolean result = codeDAO.updateCode(code);
+
+        if (result) {
+            logger.trace("Update code successfully.");
+        } else {
+            logger.warn("Failed to update code with ID {} to {}.", code.getId(), code.getCode());
+        }
+
+        return result;
+    }
+
+    /**
      * Delete a code.
      *
-     * @param codeID ID of code to delete.
+     * @param code The code to delete.
      * @return True if the code was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long codeID) {
-        logger.trace("Attempting to delete account with ID {}.", codeID);
+    public boolean delete(Code code) {
+        logger.trace("Attempting to delete code with ID {}.", code.getId());
 
-        boolean result = codeDAO.removeCode(codeID);
+        boolean result = codeDAO.removeCode(code);
 
         if (result) {
             logger.trace("Deleted code successfully.");
         } else {
-            logger.warn("Failed to delete code with ID {}.", codeID);
+            logger.warn("Failed to delete code with ID {}.", code.getId());
         }
 
         return result;

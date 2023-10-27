@@ -118,8 +118,13 @@ public class CodeModel {
      * @return True if deleted, false otherwise.
      */
     public boolean deleteCode() {
-        Code code = Objects.requireNonNull(getCurrentCode());
-        boolean result = codeRepository.delete(code.getId());
+        Code code = getCurrentCode();
+
+        if (code == null) {
+            return false;
+        }
+
+        boolean result = codeRepository.delete(code);
         if (result) {
             codes.remove(code);
         }

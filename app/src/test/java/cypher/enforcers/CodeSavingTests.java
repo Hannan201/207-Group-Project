@@ -58,6 +58,33 @@ public class CodeSavingTests {
     }
 
     @Test
+    public void updateCode() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/code_update_database.db");
+
+        CodeDAO codeDAO = new CodeDAOImpl();
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        CodeRepository codeRepository = new CodeRepositoryImpl();
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
+                "Could not inject data access service."
+        );
+
+        Code code = new Code();
+        code.setCode("4EW C0D3");
+        code.setId(33);
+        assertTrue(codeRepository.update(code), "User cannot update code.");
+
+        dbService.disconnect();
+    }
+
+    @Test
     public void removeCode() {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_delete_database.db");
@@ -76,7 +103,9 @@ public class CodeSavingTests {
                 "Could not inject data access service."
         );
 
-        assertTrue(codeRepository.delete(1), "User cannot delete code.");
+        Code code = new Code();
+        code.setId(1);
+        assertTrue(codeRepository.delete(code), "User cannot delete code.");
 
         dbService.disconnect();
     }

@@ -38,12 +38,20 @@ public interface CodeRepository {
     Optional<Code> read(long codeID);
 
     /**
+     * Update a code.
+     *
+     * @param code The code to update.
+     * @return True if successfully updated, false otherwise.
+     */
+    boolean update(Code code);
+
+    /**
      * Delete a code.
      *
-     * @param codeID ID of code to delete.
+     * @param code The code to delete.
      * @return True if the code was deleted successfully, false otherwise.
      */
-    boolean delete(long codeID);
+    boolean delete(Code code);
 
     /**
      * Delete all codes.
