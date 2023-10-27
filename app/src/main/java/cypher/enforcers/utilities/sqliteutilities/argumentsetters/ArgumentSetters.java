@@ -1,5 +1,6 @@
 package cypher.enforcers.utilities.sqliteutilities.argumentsetters;
 
+import cypher.enforcers.code.Code;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.models.User;
 
@@ -60,6 +61,27 @@ public class ArgumentSetters {
         }
     };
 
+    // How a code should be added to the database.
+    private static final BiConsumer<PreparedStatement, Code> FOR_CODE = (statement, code) -> {
+        try {
+            statement.setLong(1, code.getAccountID());
+            statement.setString(2, code.getCode());
+
+            ResultSet results = statement.executeQuery();
+
+            code.setId(results.getLong("id"));
+            statement.close();
+        } catch (SQLException e) {
+            try {
+                statement.close();
+            } catch (SQLException onClose) {
+                throw new RuntimeException(onClose);
+            }
+
+            throw new RuntimeException(e);
+        }
+    };
+
     // How an integer should be added to the database.
     private static final TriConsumer<PreparedStatement, Integer, Object> FOR_INTEGER = (statement, index, value) -> {
         try {
@@ -103,7 +125,8 @@ public class ArgumentSetters {
             Map.ofEntries(
                     Map.entry(User.class, FOR_USER),
                     Map.entry(Account.class, FOR_ACCOUNT),
-                    Map.entry(Long.class, FOR_ONE_LONG)
+                    Map.entry(Long.class, FOR_ONE_LONG),
+                    Map.entry(Code.class, FOR_CODE)
             );
 
     // Maps the type of object to which index it should be added. Since

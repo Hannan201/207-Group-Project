@@ -31,10 +31,10 @@ public interface CodeDAO {
     /**
      * Add a code.
      *
-     * @param code The code as a string.
+     * @param code The code to add.
      * @return True if the code was added, false otherwise.
      */
-    boolean addCode(long accountID, String code);
+    boolean addCode(Code code);
 
     /**
      * Remove a code.

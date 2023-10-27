@@ -4,7 +4,10 @@ import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.CodeDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +16,11 @@ import java.util.Optional;
  database and make changes to any information related to the accounts.
  */
 public class CodeDAOImpl implements CodeDAO {
+
+    private static final String ADD_CODE = "INSERT INTO codes (account_id, code) VALUES (?, ?) RETURNING id";
+
+    // Logger for the code data access object.
+    private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
 
     // Service to communicate to the database.
     @SimpleService
@@ -46,13 +54,19 @@ public class CodeDAOImpl implements CodeDAO {
     /**
      * Add a code.
      *
-     * @param code The code as a string.
+     * @param code The code to add.
      * @return True if the code was added, false otherwise.
      */
     @Override
-    public boolean addCode(long accountID, String code) {
-        System.out.println("Adding code for user");
-        return false;
+    public boolean addCode(Code code) {
+        try {
+            databaseService.executeUpdate(ADD_CODE, code);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -35,7 +35,7 @@ public class CodeRepositoryImpl implements CodeRepository {
     public boolean create(Code code) {
         logger.trace("Attempting to create code {} for account with ID {}.", code.getCode(), code.getAccountID());
 
-        boolean result = codeDAO.addCode(code.getAccountID(), code.getCode());
+        boolean result = codeDAO.addCode(code);
 
         if (result) {
             logger.trace("Code {} created for account with ID {}", code.getCode(), code.getAccountID());
