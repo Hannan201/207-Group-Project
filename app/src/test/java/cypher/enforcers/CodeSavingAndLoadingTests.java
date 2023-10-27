@@ -121,7 +121,7 @@ public class CodeSavingAndLoadingTests {
     @Test
     public void codeAlteration() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/");
+        dbService.connect("/cypher/enforcers/code_update_r.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
@@ -136,6 +136,28 @@ public class CodeSavingAndLoadingTests {
                 () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
                 "Could not inject data access service."
         );
+
+        Optional<Code> codeOptional = codeRepository.read(33);
+        assertTrue(codeOptional.isPresent(), "Code is not present.");
+        Code c = codeOptional.get();
+
+        assertEquals(c.getId(), 33, "ID does not match.");
+        assertEquals(c.getCode(), "7294 8105", "Code value does not match.");
+        assertEquals(c.getAccountID(), 3, "Account ID that this code belongs to does not match.");
+
+        c.setCode("ABCD EFGH");
+        assertTrue(codeRepository.update(c), "Failed to update code.");
+
+        dbService.disconnect();
+        dbService.connect("/cypher/enforcers/code_update_r.db");
+
+        codeOptional = codeRepository.read(33);
+        assertTrue(codeOptional.isPresent(), "Code is not present.");
+        c = codeOptional.get();
+
+        assertEquals(c.getId(), 33, "ID does not match.");
+        assertEquals(c.getCode(), "ABCD EFGH", "Code value does not match.");
+        assertEquals(c.getAccountID(), 3, "Account ID that this code belongs to does not match.");
 
         dbService.disconnect();
     }
