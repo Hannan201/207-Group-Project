@@ -21,6 +21,8 @@ public class CodeDAOImpl implements CodeDAO {
 
     private static final String DELETE_CODE = "DELETE FROM codes WHERE id = ?";
 
+    private static final String DELETE_CODES = "DELETE FROM codes WHERE account_id = ?";
+
     // Logger for the code data access object.
     private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
 
@@ -98,7 +100,13 @@ public class CodeDAOImpl implements CodeDAO {
      */
     @Override
     public boolean clearAllCodes(long accountID) {
-        System.out.println("Clearing all codes for user");
-        return false;
+        try {
+            databaseService.executeUpdate(DELETE_CODES, accountID);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+
+        return true;
     }
 }

@@ -8,6 +8,7 @@ import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.injectors.Injector;
+import cypher.enforcers.models.Account;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -76,6 +77,32 @@ public class CodeSavingTests {
         );
 
         assertTrue(codeRepository.delete(1), "User cannot delete code.");
+
+        dbService.disconnect();
+    }
+
+    @Test
+    public void removeAllCodes() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/code_clean_database.db");
+
+        CodeDAO codeDAO = new CodeDAOImpl();
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        CodeRepository codeRepository = new CodeRepositoryImpl();
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
+                "Could not inject data access service."
+        );
+
+        Account account = new Account();
+        account.setId(2);
+        assertTrue(codeRepository.deleteAll(account.getID()), "User cannot delete code.");
 
         dbService.disconnect();
     }
