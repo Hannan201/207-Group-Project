@@ -4,6 +4,7 @@ import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.CodeDAO;
+import cypher.enforcers.models.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,8 @@ public class CodeDAOImpl implements CodeDAO {
     private static final String UPDATE_CODE = "UPDATE codes SET code = ? WHERE id = ?";
 
     private static final String GET_CODES = "SELECT * FROM codes WHERE account_id = ?";
+
+    private static final String GET_CODE = "SELECT * FROM codes WHERE id = ?";
 
     // Logger for the code data access object.
     private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
@@ -60,7 +63,18 @@ public class CodeDAOImpl implements CodeDAO {
      */
     @Override
     public Optional<Code> getCode(long codeID) {
-        System.out.println("Getting code for user");
+        try {
+            Code code = databaseService.executeSelect(GET_CODE, Code.class, codeID);
+
+            if (code == null) {
+                return Optional.empty();
+            }
+
+            return Optional.of(code);
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
+        }
+
         return Optional.empty();
     }
 
@@ -120,14 +134,14 @@ public class CodeDAOImpl implements CodeDAO {
     /**
      * Remove all codes for an account.
      *
-     * @param accountID ID of the account.
+     * @param account The account to delete the codes for.
      * @return True if the codes was removed successfully,
      * false otherwise.
      */
     @Override
-    public boolean clearAllCodes(long accountID) {
+    public boolean clearAllCodes(Account account) {
         try {
-            databaseService.executeUpdate(DELETE_CODES, accountID);
+            databaseService.executeUpdate(DELETE_CODES, account.getID());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return false;

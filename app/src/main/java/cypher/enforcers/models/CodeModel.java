@@ -83,11 +83,11 @@ public class CodeModel {
     /**
      * Delete all codes.
      *
-     * @param accountID The ID of the account to delete the codes for.
+     * @param account The account to delete the codes for.
      * @return True if the codes were deleted, false otherwise.
      */
-    public boolean deleteAllCodes(long accountID) {
-        boolean result = codeRepository.deleteAll(accountID);
+    public boolean deleteAllCodes(Account account) {
+        boolean result = codeRepository.deleteAll(account);
         if (result) {
             codes.clear();
         }
@@ -140,7 +140,12 @@ public class CodeModel {
      * hasn't changed from the current code. False otherwise.
      */
     public boolean updateCode(String newCode) {
-        Code code = Objects.requireNonNull(getCurrentCode());
+        Code code = getCurrentCode();
+
+        if (code == null) {
+            return false;
+        }
+
         if (code.getCode().equals(newCode)) {
             return true;
         }

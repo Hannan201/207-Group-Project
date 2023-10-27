@@ -132,21 +132,22 @@ public class CodeRepositoryImpl implements CodeRepository {
     }
 
     /**
-     * Delete all codes.
+     * Delete all codes for an account.
      *
+     * @param account The accounts to delete the codes for.
      * @return True if all codes were deleted successfully, false
      * otherwise.
      */
     @Override
-    public boolean deleteAll(long accountID) {
-        logger.trace("Attempting to delete all codes for account with ID {}.", accountID);
+    public boolean deleteAll(Account account) {
+        logger.trace("Attempting to delete all codes for account with ID {}.", account.getID());
 
-        boolean result = codeDAO.clearAllCodes(accountID);
+        boolean result = codeDAO.clearAllCodes(account);
 
         if (result) {
             logger.trace("Deleted all codes successfully.");
         } else {
-            logger.warn("Failed to delete all codes for account with ID {}.", accountID);
+            logger.warn("Failed to delete all codes for account with ID {}.", account.getID());
         }
 
         return result;

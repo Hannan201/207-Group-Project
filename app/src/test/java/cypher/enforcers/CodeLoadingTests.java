@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -103,6 +104,14 @@ public class CodeLoadingTests {
                 () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
                 "Could not inject data access service."
         );
+
+        Optional<Code> codeOptional = codeRepository.read(49);
+        assertTrue(codeOptional.isPresent(), "Code is null.");
+        Code c = codeOptional.get();
+
+        assertEquals(c.getId(), 49, "ID should be 49.");
+        assertEquals(c.getCode(), "EEE EEE", "Codes do not match.");
+        assertEquals(c.getAccountID(), 4, "Code does not belong to correct account.");
 
         dbService.disconnect();
     }

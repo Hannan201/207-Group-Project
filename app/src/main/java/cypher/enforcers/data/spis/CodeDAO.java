@@ -1,6 +1,7 @@
 package cypher.enforcers.data.spis;
 
 import cypher.enforcers.code.Code;
+import cypher.enforcers.models.Account;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,10 +56,10 @@ public interface CodeDAO {
     /**
      * Remove all codes for an account.
      *
-     * @param accountID ID of the account.
+     * @param account The account to delete the codes for.
      * @return True if the codes was removed successfully,
      * false otherwise.
      */
-    boolean clearAllCodes(long accountID);
+    boolean clearAllCodes(Account account);
 
 }

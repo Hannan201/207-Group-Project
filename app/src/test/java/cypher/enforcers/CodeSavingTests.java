@@ -131,7 +131,7 @@ public class CodeSavingTests {
 
         Account account = new Account();
         account.setId(2);
-        assertTrue(codeRepository.deleteAll(account.getID()), "User cannot delete code.");
+        assertTrue(codeRepository.deleteAll(account), "User cannot delete code.");
 
         dbService.disconnect();
     }

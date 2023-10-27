@@ -56,9 +56,10 @@ public interface CodeRepository {
     /**
      * Delete all codes.
      *
+     * @param account The accounts to delete the codes for.
      * @return True if all codes were deleted successfully, false
      * otherwise.
      */
-    boolean deleteAll(long accountID);
+    boolean deleteAll(Account account);
 
 }
