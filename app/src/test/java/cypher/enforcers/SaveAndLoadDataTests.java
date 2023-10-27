@@ -303,7 +303,7 @@ public class SaveAndLoadDataTests {
         int id = -1;
         for (Code c : codes) {
             if (c.getCode().equals("123 456")) {
-                id = c.getID();
+                id = (int) c.getId();
                 break;
             }
         }
@@ -335,9 +335,9 @@ public class SaveAndLoadDataTests {
         List<Code> code = Database.getCodes(token, (int) account.getID());
         assertEquals(code.size(), 1);
         Code c = code.get(0);
-        int id = c.getID();
+        int id = (int) c.getId();
 
-        Database.updateCode(token, c.getID(), "U9D47ED");
+        Database.updateCode(token, (int) c.getId(), "U9D47ED");
 
         c = Database.getCode(token, id);
         assertNotNull(c);

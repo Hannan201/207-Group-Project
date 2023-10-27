@@ -32,9 +32,9 @@ public interface CodeDAO {
      * Add a code.
      *
      * @param code The code as a string.
-     * @return ID of the code. Returns -1 if code was not added.
+     * @return True if the code was added, false otherwise.
      */
-    long addCode(long accountID, String code);
+    boolean addCode(long accountID, String code);
 
     /**
      * Remove a code.

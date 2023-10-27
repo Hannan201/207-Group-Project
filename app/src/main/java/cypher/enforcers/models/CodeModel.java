@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -120,7 +119,7 @@ public class CodeModel {
      */
     public boolean deleteCode() {
         Code code = Objects.requireNonNull(getCurrentCode());
-        boolean result = codeRepository.delete(code.getID());
+        boolean result = codeRepository.delete(code.getId());
         if (result) {
             codes.remove(code);
         }

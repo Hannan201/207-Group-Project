@@ -120,10 +120,10 @@ public class CodeCellController {
         if (e.getCode() == KeyCode.ENTER && !userInput.getText().isEmpty()) {
             logger.debug("Switching code from {} to {}.", currentCell.getCode(), userInput.getText());
 
-            Database.updateCode(Storage.getToken(), currentCell.getID(), userInput.getText());
+            Database.updateCode(Storage.getToken(), (int) currentCell.getId(), userInput.getText());
 
             code.setText((userInput.getText()));
-            currentCell = Database.getCode(Storage.getToken(), currentCell.getID());
+            currentCell = Database.getCode(Storage.getToken(), (int) currentCell.getId());
 
             userInput.setVisible(false);
             code.setVisible(true);
@@ -151,6 +151,6 @@ public class CodeCellController {
     public void deleteOnAction() {
         // handle the event when delete button is clicked
         currentListView.getItems().remove(currentCell);
-        Database.removeCode(Storage.getToken(), currentCell.getID());
+        Database.removeCode(Storage.getToken(), (int) currentCell.getId());
     }
 }

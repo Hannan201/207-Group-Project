@@ -3,12 +3,15 @@ package cypher.enforcers.code;
 public class Code {
 
     // ID for this code.
-    private final int ID;
+    private long id;
+
+    // ID of the account this code belongs to.
+    private long accountID;
 
     /**
      * A String that represents the current code
      */
-    private final String code;
+    private String code;
 
     /**
      * Create a Code object with the given name, codeName
@@ -17,8 +20,15 @@ public class Code {
      * @param codeName Name of the code
      */
     public Code(int ID, String codeName) {
-        this.ID = ID;
+        this.id = ID;
         this.code = codeName;
+    }
+
+    /**
+     * Create a code.
+     */
+    public Code() {
+
     }
 
     /**
@@ -26,8 +36,35 @@ public class Code {
      *
      * @return ID of this code.
      */
-    public int getID() {
-        return this.ID;
+    public long getId() {
+        return this.id;
+    }
+
+    /**
+     * Set the ID of this code.
+     *
+     * @param id The new id.
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * Get the ID that this account belongs to.
+     *
+     * @return The ID of the account.
+     */
+    public long getAccountID() {
+        return accountID;
+    }
+
+    /**
+     * Set the ID of the account that this code belongs to.
+     *
+     * @param accountID The new ID.
+     */
+    public void setAccountID(long accountID) {
+        this.accountID = accountID;
     }
 
     /**
@@ -38,4 +75,12 @@ public class Code {
         return code;
     }
 
+    /**
+     * Set the code for this account.
+     *
+     * @param code The new code.
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
 }
