@@ -56,4 +56,28 @@ public class CodeSavingTests {
         dbService.disconnect();
     }
 
+    @Test
+    public void removeCode() {
+        DatabaseService dbService = new SqliteHelper();
+        dbService.connect("/cypher/enforcers/code_delete_database.db");
+
+        CodeDAO codeDAO = new CodeDAOImpl();
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
+                "Could not inject database service."
+        );
+
+        CodeRepository codeRepository = new CodeRepositoryImpl();
+
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
+                "Could not inject data access service."
+        );
+
+        assertTrue(codeRepository.delete(1), "User cannot delete code.");
+
+        dbService.disconnect();
+    }
+
 }

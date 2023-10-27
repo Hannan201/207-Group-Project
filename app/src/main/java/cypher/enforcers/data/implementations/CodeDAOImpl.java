@@ -19,6 +19,8 @@ public class CodeDAOImpl implements CodeDAO {
 
     private static final String ADD_CODE = "INSERT INTO codes (account_id, code) VALUES (?, ?) RETURNING id";
 
+    private static final String DELETE_CODE = "DELETE FROM codes WHERE id = ?";
+
     // Logger for the code data access object.
     private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
 
@@ -77,8 +79,14 @@ public class CodeDAOImpl implements CodeDAO {
      */
     @Override
     public boolean removeCode(long codeID) {
-        System.out.println("Removing code for user");
-        return false;
+        try {
+            databaseService.executeUpdate(DELETE_CODE, codeID);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
+            return false;
+        }
+
+        return true;
     }
 
     /**
