@@ -61,7 +61,7 @@ public class CodeSavingAndLoadingTests {
 
         Optional<Code> codeOptional = codeRepository.read(1);
 
-        assertThrows(NoSuchElementException.class, codeOptional::get);
+        assertThrows(NoSuchElementException.class, codeOptional::get, "Code is not empty.");
 
         Code previous = new Code();
         previous.setCode("123 456");
@@ -85,7 +85,7 @@ public class CodeSavingAndLoadingTests {
     @Test
     public void codeDestruction() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/");
+        dbService.connect("/cypher/enforcers/code_delete_r.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
@@ -100,6 +100,20 @@ public class CodeSavingAndLoadingTests {
                 () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
                 "Could not inject data access service."
         );
+
+        Optional<Code> codeOptional = codeRepository.read(50);
+        assertTrue(codeOptional.isPresent(), "Code is not present.");
+        Code c = codeOptional.get();
+
+        assertEquals(c.getId(), 50, "ID does not match.");
+        assertEquals(c.getCode(), "123 456", "Code value does not match.");
+        assertEquals(c.getAccountID(), 2, "Account ID that this code belongs to does not match.");
+
+        assertTrue(codeRepository.delete(c), "Failed to delete code.");
+
+        Optional<Code> code = codeRepository.read(50);
+
+        assertThrows(NoSuchElementException.class, code::get, "Could is not empty.");
 
         dbService.disconnect();
     }
