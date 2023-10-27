@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public class AccountDAOImpl implements AccountDAO {
 
-    private static final String ADD_USER = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?) RETURNING id";
+    private static final String ADD_ACCOUNT = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?) RETURNING id";
 
     private static final String DELETE_ACCOUNTS = "DELETE FROM accounts WHERE user_id = ?";
 
@@ -122,7 +122,7 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public boolean addAccount(Account account) {
         try {
-            databaseService.executeUpdate(ADD_USER, account);
+            databaseService.executeUpdate(ADD_ACCOUNT, account);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return false;
