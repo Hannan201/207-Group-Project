@@ -16,9 +16,10 @@ public interface CodeRepository {
      * Create a new code.
      *
      * @param code The code to add.
-     * @return True if the code was added, otherwise false.
+     * @return An Optional containing the code if created successfully,
+     * null otherwise.
      */
-    boolean create(Code code);
+    Optional<Code> create(Code code);
 
     /**
      * Read all codes for an account.
@@ -41,25 +42,26 @@ public interface CodeRepository {
      * Update a code.
      *
      * @param code The code to update.
-     * @return True if successfully updated, false otherwise.
+     * @return An Optional containing the code if updated successfully,
+     * null otherwise.
      */
-    boolean update(Code code);
+    Optional<Code> update(Code code);
 
     /**
      * Delete a code.
      *
      * @param code The code to delete.
-     * @return True if the code was deleted successfully, false otherwise.
+     * @return An Optional containing the code if deleted, null otherwise.
      */
-    boolean delete(Code code);
+    Optional<Code> delete(Code code);
 
     /**
      * Delete all codes.
      *
      * @param account The accounts to delete the codes for.
-     * @return True if all codes were deleted successfully, false
-     * otherwise.
+     * @return List containing the codes if successfully deleted,
+     * empty list otherwise.
      */
-    boolean deleteAll(Account account);
+    List<Code> deleteAll(Account account);
 
 }
