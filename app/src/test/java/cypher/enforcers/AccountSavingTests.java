@@ -158,7 +158,7 @@ public class AccountSavingTests {
     @Test
     public void deleteAccount() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_for_account_removal.db");
+        dbService.connect("/cypher/enforcers/account_delete.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
