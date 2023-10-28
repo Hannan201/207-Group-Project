@@ -1,7 +1,6 @@
 package cypher.enforcers.data.spis;
 
 import cypher.enforcers.models.User;
-import cypher.enforcers.views.themes.Theme;
 
 import java.util.Optional;
 
@@ -14,41 +13,33 @@ public interface UserRepository {
     /**
      * Create a new user. Usernames are case-insensitive.
      *
-     * @param username The new username for this user.
-     * @param password The new password for this user.
-     * @return True if the user was successfully created, false
-     * otherwise.
+     * @param user The user to create.
+     * @return An optional containing the user if created successfully,
+     * null otherwise.
      */
-    boolean create(String username, String password);
+    Optional<User> create(User user);
 
     /**
-     * Read the current user logged in.
+     * Read a user by its ID.
      *
-     * @return An Optional containing the user. Null otherwise.
+     * @param id The ID of the user.
+     * @return An Optional containing the user if found, null otherwise.
      */
-    Optional<User> read();
+    Optional<User> read(long id);
 
     /**
-     * Read the theme for the user logged in.
-     *
-     * @return An Optional containing the theme. Null otherwise.
-     */
-    Optional<Theme> readTheme();
-
-    /**
-     * Update the theme for the user logged in.
-     *
-     * @return True if the theme was updated, false otherwise.
-     */
-    boolean update(Theme newTheme);
-
-    /**
-     * Check if a given username is taken. The search is
-     * case-insensitive.
+     * Read a user by its username. The search is case-insensitive.
      *
      * @param username The username to search for.
-     * @return True if the user is taken, false otherwise.
+     * @return An Optional containing the user if found, null otherwise.
      */
-    boolean checkUsername(String username);
+    Optional<User> read(String username);
+
+    /**
+     * Update a user.
+     *
+     * @return An Optional containing the user if updated, null otherwise.
+     */
+    Optional<User> update(User user);
 
 }
