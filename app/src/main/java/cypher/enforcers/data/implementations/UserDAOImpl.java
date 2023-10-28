@@ -21,23 +21,14 @@ import java.util.Optional;
  */
 public class UserDAOImpl implements UserDAO {
 
-    private static final String ADD_USER = "INSERT INTO users (username, password) VALUES (?, ?) RETURNING id";
+    private static final String ADD_USER = "INSERT INTO users (username, password) VALUES (?, ?)";
 
-    private static final String UPDATE_THEME = "UPDATE users SET theme_value = ? WHERE id = ?";
-
-    private static final String CHECK_USERNAME = "SELECT ( COUNT(*) > 0 ) AS 'contains' FROM users WHERE username = ?";
-
-    private static final String CHECK_USER_LOGGED_IN = "SELECT * FROM users WHERE logged_in = 1";
+    private static final String UPDATE_USER = "UPDATE users SET theme_value = ?, logged_in = ? WHERE id = ?";
 
     private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 
-    private static final String GET_THEME = "SELECT theme_value FROM users WHERE id = ?";
+    private static final String GET_USER_BY_NAME = "SELECT * FROM users WHERE username = ?";
 
-    private static final String GET_USER_DATA = "SELECT id, password FROM users WHERE username = ?";
-
-    private static final String LOGIN_USER = "UPDATE users SET logged_in = 1 WHERE id = ?";
-
-    private static final String LOGOUT_USER = "UPDATE users SET logged_in = 0 WHERE id = ?";
 
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -46,256 +37,81 @@ public class UserDAOImpl implements UserDAO {
     @SimpleService
     private DatabaseService databaseService;
 
-
-    // Cached userID to avoid having to check if someone is logged in or
-    // not.
-    // Must be >= 1 if user is logged in, -1 otherwise if no user is
-    // logged in, and null if application just started up.
-    private Long userID = null;
-
     /**
-     * Check if a given username is taken. The check is case-sensitive.
+     * Insert a new user into the database,
      *
-     * @param username The username to check.
-     * @return True if the username is taken, false otherwise.
+     * @param user The user to insert.
+     * @return A user object if the user was added, null otherwise.
      */
     @Override
-    public boolean checkUsername(String username) {
-        try {
-            Boolean bool = databaseService.executeSelect(
-                    CHECK_USERNAME,
-                    Retrievers.ofBoolean("contains"),
-                    username
-            );
-
-            if (bool == null || !bool) {
-                return false;
-            }
-        } catch (SQLException e) {
-            logger.debug("Failed select query. Cause: ", e);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Register a new user.
-     *
-     * @param username The new username for this user.
-     * @param password The new password for this user.
-     * @return True if the user was registered successfully, false otherwise.
-     */
-    @Override
-    public boolean registerUser(String username, String password) {
-        if (userID == null || userID >= 1) {
-            logger.error("Cannot create new user when there's a user currently logged in.");
-            return false;
-        }
-
+    public User registerUser(User user) {
         logger.trace("Now making update to the users table.");
 
         try {
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(password);
-
             databaseService.executeUpdate(ADD_USER, user);
-
-            userID = user.getID();
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return user;
     }
 
     /**
-     * Get the current logged-in user.
+     * Get a user from the database with a specific ID.
      *
-     * @return An Optional containing the user if found, null otherwise.
+     * @param id The ID of the user.
+     * @return User if found, null otherwise.
      */
     @Override
-    public Optional<User> getUser() {
-        if (userID == null) {
-            User user;
-            try {
-                user = databaseService.executeSelect(
-                        CHECK_USER_LOGGED_IN,
-                        User.class
-                );
+    public User getUserByID(long id) {
+        logger.trace("Getting user from table with ID {}.", id);
 
-            } catch (SQLException e) {
-                logger.debug("Failed select query. Cause: ", e);
-                return Optional.empty();
-            }
-
-            if (user != null) {
-                userID = user.getID();
-                return Optional.of(user);
-            }
-
-        } else if (userID >= 1) {
-            User user;
-            try {
-                user = databaseService.executeSelect(
-                        GET_USER_BY_ID,
-                        User.class,
-                        userID
-                );
-            } catch (SQLException e) {
-                logger.debug("Failed select query. Cause: ", e);
-                return Optional.empty();
-            }
-
-            if (user != null) {
-                return Optional.of(user);
-            }
+        try {
+            return databaseService.executeSelect(GET_USER_BY_ID, User.class, id);
+        } catch (SQLException e) {
+            logger.debug("Failed update query. Cause: ", e);
         }
 
-        userID = -1L;
-        return Optional.empty();
+        return null;
     }
 
     /**
-     * Get the theme for the current logged-in user.
+     * Get a user from the database with a specific username.
      *
-     * @return An Optional containing the theme if found, null otherwise.
+     * @param username The username of the user.
+     * @return User if found, null otherwise.
      */
     @Override
-    public Optional<Theme> getTheme() {
-        if (userID == null || userID <= 0) {
-            return Optional.empty();
-        }
+    public User getUserByName(String username) {
+        logger.trace("Getting user from table with username {}.", username);
 
         try {
-            Theme theme = databaseService.executeSelect(
-                    GET_THEME,
-                    Theme.class,
-                    userID
-            );
-
-            if (theme != null) {
-                return Optional.of(theme);
-            }
+            return databaseService.executeSelect(GET_USER_BY_NAME, User.class, username);
         } catch (SQLException e) {
-            logger.debug("Failed select query. Cause: ", e);
+            logger.debug("Failed update query. Cause: ", e);
         }
 
-        return Optional.empty();
+        return null;
     }
 
     /**
-     * Update the theme of the current logged-in user.
+     * Update a user in the database.
      *
-     * @param newTheme The new theme.
-     * @return True if the theme was updated successfully, false otherwise.
+     * @param user The user to update.
+     * @return User object with the updated data if successfully found,
+     * null otherwise.
      */
     @Override
-    public boolean updateTheme(Theme newTheme) {
-        if (userID == null || userID <= 0) {
-            return false;
-        }
-
+    public User updateUser(User user) {
         try {
-            databaseService.executeUpdate(UPDATE_THEME, newTheme.ordinal(), userID);
+            short status = (short) (user.getLoggedIn() ? 1 : 0);
+            databaseService.executeUpdate(UPDATE_USER, user.getTheme().ordinal(), status, user.getID());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
-        }
-        return true;
-    }
-
-    /*
-     The methods below are internal methods hidden from the interface.
-     Use them carefully.
-     */
-
-    /**
-     * Update the login status for a user to be logged in.
-     *
-     * @return True if the status was updated, false otherwise.
-     */
-    public boolean loginUser(long userID) {
-        try {
-            databaseService.executeUpdate(LOGIN_USER, userID);
-        } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        this.userID = userID;
-        return true;
+        return user;
     }
-
-    /**
-     * Update the login status for the current logged-in user to
-     * be logged-out.
-     *
-     * @return True if the status was updated or if no user is logged in,
-     * false otherwise.
-     */
-    public boolean logoutUser() {
-        if (userID == null || userID <= 0) {
-            return true;
-        }
-
-        try {
-            databaseService.executeUpdate(
-                    LOGOUT_USER,
-                    userID
-            );
-        } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
-            return false;
-        }
-
-        userID = -1L;
-        return true;
-    }
-
-    /**
-     * Get the password and ID of a user given their username. The
-     * search is case-insensitive. This method is usually called when
-     * trying to authenticate a user.
-     *
-     * @param username Username to search for.
-     * @return A Map containing the following key-value pairs:
-     *          "password" : password of the user as a string
-     *          "id" : id of the user as a string
-     * If no user is found, an empty map is returned instead. Lastly, if
-     * any issues come along the way, null will be returned.
-     */
-    public Map<String, String> getUserData(String username) {
-        try {
-            List<Object> results = databaseService.executeSelect(
-                    GET_USER_DATA,
-                    Retrievers.ofList("password", "id"),
-                    username
-            );
-
-            if (results != null && results.size() == 2) {
-                return Map.of(
-                        "password", (String) results.get(0),
-                        "id", String.valueOf(results.get(1))
-                );
-            }
-        } catch (SQLException e) {
-            logger.debug("Failed select query. Cause: ", e);
-        }
-
-        return Collections.emptyMap();
-    }
-
-    /**
-     * Get the ID of the current logged-in user.
-     *
-     * @return ID of the user logged-in and -1 if no use is logged in.
-     */
-    public long getUserID() {
-        return userID == null ? -1L : userID;
-    }
-
-
 }

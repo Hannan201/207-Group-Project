@@ -1,5 +1,6 @@
 package cypher.enforcers.data.implementations;
 
+import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.models.User;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     // To make updates to the database.
     @SimpleService
-    private UserDAOImpl userDAO;
+    private UserDAO userDAO;
 
     /**
      * Create a new user. Usernames are case-insensitive.

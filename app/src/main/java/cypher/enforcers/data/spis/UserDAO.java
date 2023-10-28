@@ -3,8 +3,6 @@ package cypher.enforcers.data.spis;
 import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
 
-import java.util.Optional;
-
 /**
  * Interface for the User Data Access Object (DAO) to communicate to the
  * database and make changes to any information related to the users.
@@ -12,41 +10,35 @@ import java.util.Optional;
 public interface UserDAO {
 
     /**
-     * Check if a given username is taken. The check is case-sensitive.
+     * Insert a new user into the database,
      *
-     * @param username The username to check.
-     * @return True if the username is taken, false otherwise.
+     * @param user The user to insert.
+     * @return A user object if the user was added, null otherwise.
      */
-    boolean checkUsername(String username);
+    User registerUser(User user);
 
     /**
-     * Register a new user.
+     * Get a user from the database with a specific ID.
      *
-     * @param username The new username for this user.
-     * @param password The new password for this user.
-     * @return True if the user was registered successfully, false otherwise.
+     * @param id The ID of the user.
+     * @return User if found, null otherwise.
      */
-    boolean registerUser(String username, String password);
+    User getUserByID(long id);
 
     /**
-     * Get the current logged-in user.
+     * Get a user from the database with a specific username.
      *
-     * @return An Optional containing the user if found, null otherwise.
+     * @param username The username of the user.
+     * @return User if found, null otherwise.
      */
-    Optional<User> getUser();
+    User getUserByName(String username);
 
     /**
-     * Get the theme for the current logged-in user.
+     * Update a user in the database.
      *
-     * @return An Optional containing the theme if found, null otherwise.
+     * @param user The user to update.
+     * @return User object with the updated data if successfully found,
+     * null otherwise.
      */
-    Optional<Theme> getTheme();
-
-    /**
-     * Update the theme of the current logged-in user.
-     *
-     * @param newTheme The new theme.
-     * @return True if the theme was updated successfully, false otherwise.
-     */
-    boolean updateTheme(Theme newTheme);
+    User updateUser(User user);
 }
