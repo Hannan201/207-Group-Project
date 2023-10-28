@@ -37,7 +37,7 @@ public class CodeLoadingTests {
     @Test
     public void readAllCodes() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/code_read_database.db");
+        dbService.connect("/cypher/enforcers/code_read.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
@@ -89,7 +89,7 @@ public class CodeLoadingTests {
     @Test
     public void readCodeByID() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/code_read_database.db");
+        dbService.connect("/cypher/enforcers/code_read.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 

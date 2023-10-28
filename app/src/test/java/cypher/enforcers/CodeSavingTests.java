@@ -31,7 +31,7 @@ public class CodeSavingTests {
     @Test
     public void createCode() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/code_create_database.db");
+        dbService.connect("/cypher/enforcers/code_create.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
@@ -60,7 +60,7 @@ public class CodeSavingTests {
     @Test
     public void updateCode() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/code_update_database.db");
+        dbService.connect("/cypher/enforcers/code_update.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
@@ -87,7 +87,7 @@ public class CodeSavingTests {
     @Test
     public void removeCode() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/code_delete_database.db");
+        dbService.connect("/cypher/enforcers/code_delete.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
@@ -113,7 +113,7 @@ public class CodeSavingTests {
     @Test
     public void removeAllCodes() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/code_clean_database.db");
+        dbService.connect("/cypher/enforcers/code_clean.db");
 
         CodeDAO codeDAO = new CodeDAOImpl();
 
