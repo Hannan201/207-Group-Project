@@ -92,7 +92,9 @@ public interface DatabaseService {
     }
 
     /**
-     * Execute a select statement and obtain the result.
+     * Execute a select statement and obtain the result based on
+     * a custom implementation on how to retrieve the object, with
+     * the name of the key(s) provided.
      *
      * @param query The query to execute.
      * @param retriever Retriever which has the implementation of how
@@ -114,7 +116,8 @@ public interface DatabaseService {
     }
 
     /**
-     * Execute a select statement to obtain the result.
+     * Execute a select statement to obtain the result based on the
+     * class-type of an object.
      *
      * @param query The query to execute.
      * @param type The class type of the object to retrieve.
@@ -136,7 +139,8 @@ public interface DatabaseService {
     }
 
     /**
-     * Execute a select statement to obtain multiple results in a list.
+     * Execute a select statement to obtain multiple results in a list
+     * based on the class-type of an object.
      *
      * @param query The query to execute.
      * @param type The class type of the object that should be in the list.
