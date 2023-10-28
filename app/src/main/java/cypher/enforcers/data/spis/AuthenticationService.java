@@ -1,11 +1,25 @@
 package cypher.enforcers.data.spis;
 
+import cypher.enforcers.models.User;
+
+import java.util.Optional;
+
 /**
  * Interface for the Authentication Service. This service allows this
  * application to register, authenticate, and logout users. This way,
  * unauthorised actions are prevented.
  */
 public interface AuthenticationService {
+
+     /**
+      * Create a new user for this application.
+      *
+      * @param username Username for the user.
+      * @param password Password for the user.
+      * @return True if the user was created successfully, false
+      * otherwise.
+      */
+     boolean createUser(String username, String password);
 
      /**
       * Authenticate an existing user into this application.
@@ -18,18 +32,20 @@ public interface AuthenticationService {
      boolean authenticateUser(String username, String password);
 
      /**
-      * Logout the user from this application that's currently logged in.
+      * Logout a given user from this application.
       *
-      * @return True if the current logged-in user was logged out or if
-      * no user is logged-in, false otherwise.
+      * @param id ID of the user.
+      * @return True if the user was logged out or if
+      * was not logged in, false otherwise.
       */
-     boolean logUserOut();
+     boolean logUserOut(long id);
 
      /**
-      * Get ID of the user currently logged in.
+      * Get the current logged-in user, if any.
       *
-      * @return ID of the current user.
+      * @return An Optional containing a user if any is logged in, null
+      * otherwise.
       */
-     long getLoggedInUser();
+     Optional<User> getLoggedInUser();
 
 }

@@ -1,11 +1,14 @@
 package cypher.enforcers.data.implementations;
 
+import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.AuthenticationService;
+import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.annotations.SimpleService;
 
-import java.util.Map;
+import java.util.Optional;
 
 /**
  * Implementation for the Authentication Service. This service allows this
@@ -19,7 +22,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     // Used to store information related to the current logged-in user.
     @SimpleService
-    private UserRepositoryImpl userRepository;
+    private UserRepository userRepository;
+
+    // Used to hash passwords.
+    PasswordHasher hash = new PasswordHasher();
+
+    /**
+     * Create a new user for this application.
+     *
+     * @param username Username for the user.
+     * @param password Password for the user.
+     * @return True if the user was created successfully, false
+     * otherwise.
+     */
+    @Override
+    public boolean createUser(String username, String password) {
+        String salt = hash.generateSalt();
+        String hashedPassword = salt + hash.hashPassword(password + salt, salt.getBytes());
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(hashedPassword);
+
+        Optional<User> createdUser = userRepository.create(user);
+
+        if (createdUser.isPresent() && createdUser.get().getLoggedIn() && createdUser.get().getID() >= 1) {
+            logger.trace("User created.");
+            return true;
+        }
+
+        logger.warn("Unable to create user.");
+        return false;
+    }
 
     /**
      * Authenticate an existing user into this application.
@@ -33,32 +67,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean authenticateUser(String username, String password) {
         logger.trace("Attempting to authenticate user with username {}.", username);
 
-        if (!userRepository.checkUsername(username)) {
+        Optional<User> userOptional = userRepository.read(username.toLowerCase());
+        if (userOptional.isEmpty()) {
             return false;
         }
 
-        Map<String, String> data = userRepository.read(username);
-
-        if (data == null || !(data.containsKey("password") && data.containsKey("id"))) {
-            logger.warn("Failed to authenticate user with username {}.", username);
-            return false;
-        }
-
-        String hashedPassword = data.get("password");
+        User userToVerify = userOptional.get();
+        String hashedPassword = userToVerify.getPassword();
         String salt = hashedPassword.substring(0, 24);
         String expectedPassword = hashedPassword.substring(24);
 
-        boolean loggedIn = userRepository.getPasswordHasher()
-                .verifyPassword(
+        boolean loggedIn = hash.verifyPassword(
                         expectedPassword,
                         password + salt,
                         salt
                 );
 
-        if (loggedIn && userRepository.loginUser(
-                Long.parseLong(data.get("id"))
-        )) {
-            logger.trace("User authenticated.");
+        if (loggedIn) {
+            userToVerify.setLoggedIn(true);
+            userOptional = userRepository.update(userToVerify);
+
+            if (userOptional.isPresent() && userOptional.get().getLoggedIn()) {
+                logger.trace("User authenticated.");
+            } else {
+                logger.warn("Failed to authenticate user with username {}.", username);
+            }
+
         } else {
             logger.warn("Failed to authenticate user with username {}.", username);
         }
@@ -67,16 +101,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     /**
-     * Logout the user from this application that's currently logged in.
+     * Logout a given user from this application.
      *
-     * @return True if the current logged-in user was logged out or if
-     * no user is logged-in, false otherwise.
+     * @param id ID of the user.
+     * @return True if the user was logged out or if
+     * was not logged in, false otherwise.
      */
     @Override
-    public boolean logUserOut() {
+    public boolean logUserOut(long id) {
         logger.trace("Attempting to log user out.");
 
-        if (!userRepository.logUserOut()) {
+        Optional<User> optionalUser = userRepository.read(id);
+
+        if (optionalUser.isEmpty()) {
+            logger.warn("User with ID {} does not exist.", id);
+            return false;
+        }
+
+        User user = optionalUser.get();
+
+        if (!user.getLoggedIn()) {
+            logger.trace("Use with ID {} already logged out.", id);
+            return true;
+        }
+
+        user.setLoggedIn(false);
+        optionalUser = userRepository.update(user);
+
+        if (optionalUser.isPresent() && !optionalUser.get().getLoggedIn()) {
             logger.warn("Failed to logout user.");
             return false;
         }
@@ -85,11 +137,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     /**
-     * Get ID of the user currently logged in.
+     * Get the current logged-in user, if any.
      *
-     * @return ID of the current user.
+     * @return An Optional containing a user if any is logged in, null
+     * otherwise.
      */
-    public long getLoggedInUser() {
-        return userRepository.getLoggedInUser();
+    @Override
+    public Optional<User> getLoggedInUser() {
+        return userRepository.findLoggedInUser();
     }
 }
