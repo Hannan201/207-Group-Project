@@ -40,7 +40,7 @@ public class UserSavingTests {
     @Test
     public void saveUserTest() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/empty_database.db");
+        dbService.connect("/cypher/enforcers/user_create.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
@@ -74,7 +74,7 @@ public class UserSavingTests {
     @Test
     public void saveUserThemeTest() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/second_empty_database.db");
+        dbService.connect("/cypher/enforcers/user_create_2.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(

@@ -33,7 +33,7 @@ public class UserLoadingTests {
     @Test
     public void loadsUsernames() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_with_two_users.db");
+        dbService.connect("/cypher/enforcers/user_read.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
@@ -56,7 +56,7 @@ public class UserLoadingTests {
     @Test
     public void loadLoggedInUser() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_with_logged_in_user.db");
+        dbService.connect("/cypher/enforcers/user_read_2.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
@@ -96,7 +96,7 @@ public class UserLoadingTests {
     @Test
     public void loadLoggedInUserTheme() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_with_logged_in_user.db");
+        dbService.connect("/cypher/enforcers/user_read_2.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
@@ -122,7 +122,7 @@ public class UserLoadingTests {
     @Test
     public void loadsDataForAuthentication() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_with_two_users.db");
+        dbService.connect("/cypher/enforcers/user_read.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(

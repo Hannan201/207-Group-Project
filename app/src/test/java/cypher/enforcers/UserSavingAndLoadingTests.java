@@ -39,7 +39,7 @@ public class UserSavingAndLoadingTests {
         // Password: hellobro
 
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_with_one_user.db");
+        dbService.connect("/cypher/enforcers/user_read_r.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
@@ -97,7 +97,7 @@ public class UserSavingAndLoadingTests {
     @Test
     public void testUserThemeUpdate() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_for_theme_update.db");
+        dbService.connect("/cypher/enforcers/user_update_r.db");
 
         UserDAOImpl userDAO = new UserDAOImpl();
         assertDoesNotThrow(
