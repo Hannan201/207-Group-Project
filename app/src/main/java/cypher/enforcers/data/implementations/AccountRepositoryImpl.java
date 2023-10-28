@@ -6,11 +6,8 @@ import cypher.enforcers.models.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.annotations.SimpleService;
-import cypher.enforcers.data.spis.AuthenticationService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /*
  Implementation for the Account Repository. Behaves as a collection of
@@ -25,64 +22,48 @@ public class AccountRepositoryImpl implements AccountRepository {
     @SimpleService
     private AccountDAO accountDAO;
 
-    // Used to make sure user is authenticated.
-    @SimpleService
-    private AuthenticationService authService;
-
     /**
      * Create a new account.
      *
      * @param account Account to create.
-     * @return True if the account was added, false otherwise.
+     * @return An Optional containing the account if created successfully,
+     * null otherwise.
      */
     @Override
-    public boolean create(Account account) {
-        long id = authService.getLoggedInUser();
-
-        if (id == -1) {
-            logger.warn("No use currently logged-in");
-            return false;
-        }
-
+    public Optional<Account> create(Account account) {
         logger.trace("Attempting to create account with name {} and social media type {}.", account.getName(), account.getSocialMediaType());
 
-        boolean result = accountDAO.addAccount(account);
+        Account createAccount = accountDAO.addAccount(account);
 
-        if (result) {
-            logger.trace("Account with name {} and social media type {} created with ID {}.", account.getName(), account.getSocialMediaType(), account.getID());
-        } else {
-            logger.warn("Unable to create account with name {} and social media type {}.", account.getName(), account.getSocialMediaType());
+        if (!Objects.isNull(createAccount)) {
+            logger.trace("Account with name {} and social media type {} created with ID {}.", createAccount.getName(), createAccount.getSocialMediaType(), createAccount.getID());
+            return Optional.of(createAccount);
         }
 
-        return result;
+        logger.warn("Unable to create account with name {} and social media type {}.", account.getName(), account.getSocialMediaType());
+        return Optional.empty();
     }
 
     /**
-     * Read all accounts.
+     * Read all accounts for a user given the ID.
      *
+     * @param id ID of the user.
      * @return List of accounts. Empty list is returned if no accounts
      * are present.
      */
     @Override
-    public List<Account> readAll() {
-        long id = authService.getLoggedInUser();
-
-        if (id == -1) {
-            logger.warn("No use currently logged-in.");
-            return new ArrayList<>();
-        }
-
+    public List<Account> readAll(long id) {
         logger.trace("Attempting to get all accounts for user with ID {}.", id);
 
         List<Account> result = accountDAO.getAccounts(id);
 
-        if (result == null) {
-            logger.trace("No accounts found for user with ID {}.", id);
-            return new ArrayList<>();
+        if (!Objects.isNull(result)) {
+            logger.trace("Accounts retrieved for user with ID {}.", id);
+            return result;
         }
 
-        logger.trace("Accounts retrieved for user with ID {}.", id);
-        return result;
+        logger.trace("No accounts found for user with ID {}.", id);
+        return Collections.emptyList();
     }
 
     /**
@@ -92,108 +73,61 @@ public class AccountRepositoryImpl implements AccountRepository {
      * @return An Optional containing the account. Null otherwise.
      */
     @Override
-    public Optional<Account> readByID(long accountID) {
-        long id = authService.getLoggedInUser();
-
-        if (id == -1) {
-            logger.warn("No use currently logged-in");
-            return Optional.empty();
-        }
-
+    public Optional<Account> read(long accountID) {
         logger.trace("Attempting to get account with ID {}.", accountID);
 
-        Optional<Account> account = accountDAO.getAccount(accountID);
+        Account account = accountDAO.getAccount(accountID);
 
-        if (account.isPresent()) {
+        if (!Objects.isNull(account)) {
             logger.trace("Account found.");
-        } else {
-            logger.warn("Failed to get account with ID {}.", accountID);
+            return Optional.of(account);
         }
 
-        return account;
-    }
-
-    /**
-     * Read an account by name (case-sensitive).
-     *
-     * @param name Name of the account.
-     * @return An Optional containing the account. Null otherwise.
-     */
-    @Override
-    public Optional<Account> readByName(String name) {
-        long id = authService.getLoggedInUser();
-
-        if (id == -1) {
-            logger.warn("No use currently logged-in");
-            return Optional.empty();
-        }
-
-        logger.trace("Attempting to get account with name {} for user with ID {}.", name, id);
-
-        Optional<Account> result = accountDAO.getAccountByName(id, name);
-
-        if (result.isPresent()) {
-            logger.trace("Account found.");
-        } else {
-            logger.warn("Failed to get account with name {} for user with ID {}.", name, id);
-        }
-
-        return result;
+        logger.warn("Failed to get account with ID {}.", accountID);
+        return Optional.empty();
     }
 
     /**
      * Delete an account.
      *
      * @param account Account to delete.
-     * @return True if the account was deleted successfully, false otherwise.
+     * @return An Optional containing the account if successfully deleted,
+     * null otherwise.
      */
     @Override
-    public boolean delete(Account account) {
-        long id = authService.getLoggedInUser();
-
-        if (id == -1) {
-            logger.warn("No use currently logged-in");
-            return false;
-        }
-
+    public Optional<Account> delete(Account account) {
         logger.trace("Attempting to delete account with ID {}.", account.getID());
 
-        boolean result = accountDAO.removeAccount(account.getID());
+        Account deleteAccount = accountDAO.removeAccount(account);
 
-        if (result) {
+        if (!Objects.isNull(deleteAccount)) {
             logger.trace("Deleted account successfully.");
-        } else {
-            logger.warn("Failed to delete account with ID {}.", account.getID());
+            return Optional.of(deleteAccount);
         }
 
-        return result;
+        logger.warn("Failed to delete account with ID {}.", account.getID());
+        return Optional.empty();
     }
 
     /**
-     * Delete all accounts.
+     * Delete all accounts for a user given the user's ID.
      *
-     * @return True if all accounts were deleted successfully, false
-     * otherwise.
+     * @param id ID of the user.
+     * @return List containing the accounts if successfully deleted,
+     * empty list otherwise.
      */
     @Override
-    public boolean deleteAll() {
-        long id = authService.getLoggedInUser();
-
-        if (id == -1) {
-            logger.warn("No use currently logged-in");
-            return false;
-        }
-
+    public List<Account> deleteAll(long id) {
         logger.trace("Attempting to delete all accounts for user with ID {}.", id);
 
-        boolean result = accountDAO.clearAllAccounts(id);
+        List<Account> accounts = accountDAO.clearAllAccounts(id);
 
-        if (result) {
+        if (!Objects.isNull(accounts)) {
             logger.trace("Deleted all accounts successfully.");
-        } else {
-            logger.warn("Failed to delete all accounts for user with ID {}.", id);
+            return accounts;
         }
 
-        return result;
+        logger.warn("Failed to delete all accounts for user with ID {}.", id);
+        return Collections.emptyList();
     }
 }

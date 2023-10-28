@@ -15,17 +15,19 @@ public interface AccountRepository {
      * Create a new account.
      *
      * @param account Account to create.
-     * @return True if the account was added, false otherwise.
+     * @return An Optional containing the account if created successfully,
+     * null otherwise.
      */
-    boolean create(Account account);
+    Optional<Account> create(Account account);
 
     /**
-     * Read all accounts.
+     * Read all accounts for a user given the ID.
      *
+     * @param id ID of the user.
      * @return List of accounts. Empty list is returned if no accounts
      * are present.
      */
-    List<Account> readAll();
+    List<Account> readAll(long id);
 
     /**
      * Read an account by its ID.
@@ -33,29 +35,23 @@ public interface AccountRepository {
      * @param accountID ID of the account.
      * @return An Optional containing the account. Null otherwise.
      */
-    Optional<Account> readByID(long accountID);
-
-    /**
-     * Read an account by name (case-insensitive).
-     *
-     * @param name Name of the account.
-     * @return An Optional containing the account. Null otherwise.
-     */
-    Optional<Account> readByName(String name);
+    Optional<Account> read(long accountID);
 
     /**
      * Delete an account.
      *
      * @param account Account to delete.
-     * @return True if the account was deleted successfully, false otherwise.
+     * @return An Optional containing the account if successfully deleted,
+     * null otherwise.
      */
-    boolean delete(Account account);
+    Optional<Account> delete(Account account);
 
     /**
-     * Delete all accounts.
+     * Delete all accounts for a user given the user's ID.
      *
-     * @return True if all accounts were deleted successfully, false
-     * otherwise.
+     * @param id ID of the user.
+     * @return List containing the accounts if successfully deleted,
+     * empty list otherwise.
      */
-    boolean deleteAll();
+    List<Account> deleteAll(long id);
 }
