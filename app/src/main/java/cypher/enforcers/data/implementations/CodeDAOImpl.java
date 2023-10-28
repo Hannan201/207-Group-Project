@@ -40,14 +40,13 @@ public class CodeDAOImpl implements CodeDAO {
     /**
      * Get all codes for an account.
      *
-     * @param accountID The ID of the account.
-     * @return List of codes. Returns an empty list if no codes
-     * are found.
+     * @param account The account to retrieve the codes for.
+     * @return List of codes. Returns null if any errors occur.
      */
     @Override
-    public List<Code> getCodes(long accountID) {
+    public List<Code> getCodes(Account account) {
         try {
-            return databaseService.executeMultiSelect(GET_CODES, Code.class, accountID);
+            return databaseService.executeMultiSelect(GET_CODES, Code.class, account.getID());
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -59,94 +58,87 @@ public class CodeDAOImpl implements CodeDAO {
      * Get a code by ID.
      *
      * @param codeID ID of the code to retrieve.
-     * @return An optional containing the code if found. Null otherwise.
+     * @return Code if found, null otherwise.
      */
     @Override
-    public Optional<Code> getCode(long codeID) {
+    public Code getCode(long codeID) {
         try {
-            Code code = databaseService.executeSelect(GET_CODE, Code.class, codeID);
-
-            if (code == null) {
-                return Optional.empty();
-            }
-
-            return Optional.of(code);
+            return databaseService.executeSelect(GET_CODE, Code.class, codeID);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
 
-        return Optional.empty();
+        return null;
     }
 
     /**
      * Add a code.
      *
      * @param code The code to add.
-     * @return True if the code was added, false otherwise.
+     * @return Code if successfully added, null otherwise.
      */
     @Override
-    public boolean addCode(Code code) {
+    public Code addCode(Code code) {
         try {
             databaseService.executeUpdate(ADD_CODE, code);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return code;
     }
 
     /**
      * Update a code.
      *
      * @param code The code to update.
-     * @return True if update successfully, false otherwise.
+     * @return Code object with the update data if found, null otherwise.
      */
-    public boolean updateCode(Code code) {
+    public Code updateCode(Code code) {
         try {
             databaseService.executeUpdate(UPDATE_CODE, code.getCode(), code.getId());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return code;
     }
 
     /**
      * Remove a code.
      *
      * @param code Code to remove.
-     * @return True if code was removed successfully, false otherwise.
+     * @return Code if deleted, null otherwise.
      */
     @Override
-    public boolean removeCode(Code code) {
+    public Code removeCode(Code code) {
         try {
             databaseService.executeUpdate(DELETE_CODE, code.getId());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return code;
     }
 
     /**
      * Remove all codes for an account.
      *
      * @param account The account to delete the codes for.
-     * @return True if the codes was removed successfully,
-     * false otherwise.
+     * @return Codes that were deleted, null otherwise.
      */
     @Override
-    public boolean clearAllCodes(Account account) {
+    public List<Code> clearAllCodes(Account account) {
         try {
             databaseService.executeUpdate(DELETE_CODES, account.getID());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return List.of(new Code());
     }
 }

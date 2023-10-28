@@ -56,7 +56,7 @@ public class CodeRepositoryImpl implements CodeRepository {
     public List<Code> readAll(Account account) {
         logger.trace("Attempting to get all codes for account with ID {}.", account.getID());
 
-        List<Code> result = codeDAO.getCodes(account.getID());
+        List<Code> result = codeDAO.getCodes(account);
 
         if (!Objects.isNull(result)) {
             logger.trace("Accounts retrieved for account with ID {}.", account.getID());
@@ -85,7 +85,7 @@ public class CodeRepositoryImpl implements CodeRepository {
         }
 
         logger.warn("Failed to get code with ID {}.", codeID);
-        Optional.empty();
+        return Optional.empty();
     }
 
     /**

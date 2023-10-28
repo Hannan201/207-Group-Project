@@ -15,51 +15,49 @@ public interface CodeDAO {
     /**
      * Get all codes for an account.
      *
-     * @param accountID The ID of the account.
-     * @return List of codes. Returns an empty list if no codes
-     * are found.
+     * @param account The account to retrieve the codes for.
+     * @return List of codes. Returns null if any errors occur.
      */
-    List<Code> getCodes(long accountID);
+    List<Code> getCodes(Account account);
 
     /**
      * Get a code by ID.
      *
      * @param codeID ID of the code to retrieve.
-     * @return An optional containing the code if found. Null otherwise.
+     * @return Code if found, null otherwise.
      */
-    Optional<Code> getCode(long codeID);
+    Code getCode(long codeID);
 
     /**
      * Add a code.
      *
      * @param code The code to add.
-     * @return True if the code was added, false otherwise.
+     * @return Code if successfully added, null otherwise.
      */
-    boolean addCode(Code code);
+    Code addCode(Code code);
 
     /**
      * Update a code.
      *
      * @param code The code to update.
-     * @return True if update successfully, false otherwise.
+     * @return Code object with the update data if found, null otherwise.
      */
-    boolean updateCode(Code code);
+    Code updateCode(Code code);
 
     /**
      * Remove a code.
      *
      * @param code Code to remove.
-     * @return True if code was removed successfully, false otherwise.
+     * @return Code if deleted, null otherwise.
      */
-    boolean removeCode(Code code);
+    Code removeCode(Code code);
 
     /**
      * Remove all codes for an account.
      *
      * @param account The account to delete the codes for.
-     * @return True if the codes was removed successfully,
-     * false otherwise.
+     * @return Codes that were deleted, null otherwise.
      */
-    boolean clearAllCodes(Account account);
+    List<Code> clearAllCodes(Account account);
 
 }
