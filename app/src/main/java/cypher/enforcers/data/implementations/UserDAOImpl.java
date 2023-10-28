@@ -29,6 +29,8 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String GET_USER_BY_NAME = "SELECT * FROM users WHERE username = ?";
 
+    private static final String GET_LOGGED_IN_USER = "SELECT * FROM users WHERE logged_in = 1";
+
 
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
@@ -90,6 +92,24 @@ public class UserDAOImpl implements UserDAO {
             return databaseService.executeSelect(GET_USER_BY_NAME, User.class, username);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the data for the user that has a login status of true.
+     *
+     * @return The user if any user is logged in, null otherwise.
+     */
+    @Override
+    public User getLoggedInUser() {
+        logger.trace("Getting user currently logged in.");
+
+        try {
+            return databaseService.executeSelect(GET_LOGGED_IN_USER, User.class);
+        } catch (SQLException e) {
+            logger.debug("Failed select query. Cause: ", e);
         }
 
         return null;

@@ -1,7 +1,6 @@
 package cypher.enforcers.data.spis;
 
 import cypher.enforcers.models.User;
-import cypher.enforcers.views.themes.Theme;
 
 /**
  * Interface for the User Data Access Object (DAO) to communicate to the
@@ -32,6 +31,13 @@ public interface UserDAO {
      * @return User if found, null otherwise.
      */
     User getUserByName(String username);
+
+    /**
+     * Get the data for the user that has a login status of true.
+     *
+     * @return The user if any user is logged in, null otherwise.
+     */
+    User getLoggedInUser();
 
     /**
      * Update a user in the database.
