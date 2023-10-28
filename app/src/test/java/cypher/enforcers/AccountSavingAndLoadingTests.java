@@ -30,7 +30,7 @@ public class AccountSavingAndLoadingTests {
     @Test
     public void accountCreation() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/account_create_database.db");
+        dbService.connect("/cypher/enforcers/account_create_r.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
@@ -93,7 +93,7 @@ public class AccountSavingAndLoadingTests {
         assertTrue(authService.logUserOut(), "Unable to log user out.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/account_create_database.db");
+        dbService.connect("/cypher/enforcers/account_create_r.db");
 
         assertTrue(authService.authenticateUser("Hannan", "12345"));
 
@@ -118,7 +118,7 @@ public class AccountSavingAndLoadingTests {
     @Test
     public void accountDestruction() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/account_delete_database.db");
+        dbService.connect("/cypher/enforcers/account_delete_r.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
@@ -179,7 +179,7 @@ public class AccountSavingAndLoadingTests {
         assertTrue(authService.logUserOut(), "Unable to log user out.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/account_delete_database.db");
+        dbService.connect("/cypher/enforcers/account_delete_r.db");
 
         assertTrue(authService.authenticateUser("Joe", "1234"));
 

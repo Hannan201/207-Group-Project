@@ -34,7 +34,7 @@ public class AccountLoadingTests {
     @Test
     public void loadAllAccounts() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_for_accounts.db");
+        dbService.connect("/cypher/enforcers/account_read.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
@@ -104,7 +104,7 @@ public class AccountLoadingTests {
     @Test
     public void loadingWithID() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_for_accounts.db");
+        dbService.connect("/cypher/enforcers/account_read.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
@@ -173,7 +173,7 @@ public class AccountLoadingTests {
     @Test
     public void loadingWithName() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_for_accounts.db");
+        dbService.connect("/cypher/enforcers/account_read.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(

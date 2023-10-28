@@ -43,7 +43,7 @@ public class AccountSavingTests {
     @Test
     public void saveAccountTest() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/empty_database_accounts.db");
+        dbService.connect("/cypher/enforcers/account_create.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
@@ -105,7 +105,7 @@ public class AccountSavingTests {
     @Test
     public void clearAllAccounts() {
         DatabaseService dbService = new SqliteHelper();
-        dbService.connect("/cypher/enforcers/database_to_clean.db");
+        dbService.connect("/cypher/enforcers/account_clean.db");
 
         AccountDAOImpl accountDAO = new AccountDAOImpl();
         assertDoesNotThrow(
