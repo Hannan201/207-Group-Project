@@ -94,6 +94,26 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
+     * Find the current user that's logged in.
+     *
+     * @return An Optional containing the user if found, null otherwise.
+     */
+    @Override
+    public Optional<User> findLoggedInUser() {
+        logger.trace("Attempting to find logged in user.");
+
+        User user = userDAO.getLoggedInUser();
+
+        if (!Objects.isNull(user)) {
+            logger.trace("User found.");
+            return Optional.of(user);
+        }
+
+        logger.trace("No user currently logged in.");
+        return Optional.empty();
+    }
+
+    /**
      * Update a user.
      *
      * @return An Optional containing the user if updated, null otherwise.

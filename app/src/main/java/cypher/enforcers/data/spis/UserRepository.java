@@ -36,6 +36,13 @@ public interface UserRepository {
     Optional<User> read(String username);
 
     /**
+     * Find the current user that's logged in.
+     *
+     * @return An Optional containing the user if found, null otherwise.
+     */
+    Optional<User> findLoggedInUser();
+
+    /**
      * Update a user.
      *
      * @return An Optional containing the user if updated, null otherwise.
