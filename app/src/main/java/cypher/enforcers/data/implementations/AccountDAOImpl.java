@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public class AccountDAOImpl implements AccountDAO {
 
-    private static final String ADD_ACCOUNT = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?) RETURNING id";
+    private static final String ADD_ACCOUNT = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?)";
 
     private static final String DELETE_ACCOUNTS = "DELETE FROM accounts WHERE user_id = ?";
 
@@ -26,8 +26,6 @@ public class AccountDAOImpl implements AccountDAO {
     private static final String GET_ACCOUNTS = "SELECT * FROM accounts WHERE user_id = ?";
 
     private static final String GET_ACCOUNT = "SELECT * FROM accounts WHERE id = ?";
-
-    private static final String GET_ACCOUNT_BY_NAME = "SELECT * FROM accounts WHERE user_id = ? AND name = ?";
 
     // Logger for the account data access object.
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
@@ -40,7 +38,7 @@ public class AccountDAOImpl implements AccountDAO {
      * Get all accounts for a user.
      *
      * @param userID The ID of the user.
-     * @return List of accounts. Returns an empty list if no accounts
+     * @return List of accounts. Returns null if no accounts
      * are found.
      */
     @Override
@@ -58,113 +56,70 @@ public class AccountDAOImpl implements AccountDAO {
      * Get an account by ID.
      *
      * @param accountID ID of the account to retrieve.
-     * @return An optional containing the account if found. Null otherwise.
+     * @return Account if found, null otherwise.
      */
     @Override
-    public Optional<Account> getAccount(long accountID) {
+    public Account getAccount(long accountID) {
         try {
-            Account account = databaseService.executeSelect(
-                    GET_ACCOUNT,
-                    Account.class,
-                    accountID
-            );
-
-            if (account == null) {
-                return Optional.empty();
-            }
-
-            return Optional.of(account);
+            return databaseService.executeSelect(GET_ACCOUNT, Account.class, accountID);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
 
-        return Optional.empty();
-    }
-
-    /**
-     * Get an account, by name. The search is case-sensitive.
-     * <br>
-     * It's possible for two users to have the same account name, which
-     * is why the user's ID is needed.
-     *
-     * @param userID ID of the user.
-     * @param name Name of the account.
-     * @return An optional if the account is found. Null otherwise.
-     */
-    @Override
-    public Optional<Account> getAccountByName(long userID, String name) {
-        try {
-            Account account = databaseService.executeSelect(
-                    GET_ACCOUNT_BY_NAME,
-                    Account.class,
-                    userID,
-                    name
-            );
-
-            if (account == null) {
-                return Optional.empty();
-            }
-
-            return Optional.of(account);
-        } catch (SQLException e) {
-            logger.debug("Failed select query. Cause: ", e);
-        }
-
-        return Optional.empty();
+        return null;
     }
 
     /**
      * Add an account.
      *
      * @param account Account to add.
-     * @return True if added, false otherwise.
+     * @return Account if added, null otherwise.
      */
     @Override
-    public boolean addAccount(Account account) {
+    public Account addAccount(Account account) {
         try {
             databaseService.executeUpdate(ADD_ACCOUNT, account);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return account;
     }
 
     /**
      * Remove an account.
      *
-     * @param accountID ID of the account.
-     * @return True if account was removed successfully, false otherwise.
+     * @param account Account to delete.
+     * @return Account if deleted, null otherwise.
      */
     @Override
-    public boolean removeAccount(long accountID) {
+    public Account removeAccount(Account account) {
         try {
-            databaseService.executeUpdate(DELETE_ACCOUNT, accountID);
+            databaseService.executeUpdate(DELETE_ACCOUNT, account.getID());
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return account;
     }
 
     /**
-     * Remove all accounts for a user.
+     * Remove all accounts for a user given the ID.
      *
      * @param userID ID of the user.
-     * @return True if the accounts were removed successfully, false
-     * otherwise.
+     * @return Accounts that we deleted, null otherwise.
      */
     @Override
-    public boolean clearAllAccounts(long userID) {
+    public List<Account> clearAllAccounts(long userID) {
         try {
             databaseService.executeUpdate(DELETE_ACCOUNTS, userID);
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
-            return false;
+            return null;
         }
 
-        return true;
+        return List.of(new Account());
     }
 }

@@ -15,7 +15,7 @@ public interface AccountDAO {
      * Get all accounts for a user.
      *
      * @param userID The ID of the user.
-     * @return List of accounts. Returns an empty list if no accounts
+     * @return List of accounts. Returns null if no accounts
      * are found.
      */
     List<Account> getAccounts(long userID);
@@ -24,44 +24,31 @@ public interface AccountDAO {
      * Get an account by ID.
      *
      * @param accountID ID of the account to retrieve.
-     * @return An optional containing the account if found. Null otherwise.
+     * @return Account if found, null otherwise.
      */
-    Optional<Account> getAccount(long accountID);
-
-    /**
-     * Get an account, by name. The search is case-sensitive.
-     * <br>
-     * It's possible for two users to have the same account name, which
-     * is why the user's ID is needed.
-     *
-     * @param userID ID of the user.
-     * @param name Name of the account.
-     * @return An optional if the account is found. Null otherwise.
-     */
-    Optional<Account> getAccountByName(long userID, String name);
+    Account getAccount(long accountID);
 
     /**
      * Add an account.
      *
      * @param account Account to add.
-     * @return True if added, false otherwise.
+     * @return Account if added, null otherwise.
      */
-    boolean addAccount(Account account);
+    Account addAccount(Account account);
 
     /**
      * Remove an account.
      *
-     * @param accountID ID of the account.
-     * @return True if account was removed successfully, false otherwise.
+     * @param account Account to delete.
+     * @return Account if deleted, null otherwise.
      */
-    boolean removeAccount(long accountID);
+    Account removeAccount(Account account);
 
     /**
-     * Remove all accounts for a user.
+     * Remove all accounts for a user given the ID.
      *
      * @param userID ID of the user.
-     * @return True if the accounts were removed successfully, false
-     * otherwise.
+     * @return Accounts that we deleted, null otherwise.
      */
-    boolean clearAllAccounts(long userID);
+    List<Account> clearAllAccounts(long userID);
 }
