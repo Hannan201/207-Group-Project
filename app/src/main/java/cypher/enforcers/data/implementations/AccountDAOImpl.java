@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 /*
  Implementation for the Account Data Access Object (DAO) to communicate to
@@ -18,6 +17,8 @@ import java.util.Optional;
 public class AccountDAOImpl implements AccountDAO {
 
     private static final String ADD_ACCOUNT = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?)";
+
+    private static final String GET_ACCOUNT_AFTER_ADDING = "SELECT * FROM accounts WHERE id = last_insert_rowid()";
 
     private static final String DELETE_ACCOUNTS = "DELETE FROM accounts WHERE user_id = ?";
 
@@ -79,12 +80,12 @@ public class AccountDAOImpl implements AccountDAO {
     public Account addAccount(Account account) {
         try {
             databaseService.executeUpdate(ADD_ACCOUNT, account);
+
+            return databaseService.executeSelect(GET_ACCOUNT_AFTER_ADDING, Account.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
-
-        return account;
     }
 
     /**
@@ -96,13 +97,18 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public Account removeAccount(Account account) {
         try {
+            Account account1 = getAccount(account.getID());
+
+            if (account1 == null) {
+                return null;
+            }
+
             databaseService.executeUpdate(DELETE_ACCOUNT, account.getID());
+            return account1;
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
             return null;
         }
-
-        return account;
     }
 
     /**
@@ -114,12 +120,17 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public List<Account> clearAllAccounts(long userID) {
         try {
+            List<Account> accounts = getAccounts(userID);
+
+            if (accounts == null) {
+                return null;
+            }
+
             databaseService.executeUpdate(DELETE_ACCOUNTS, userID);
+            return accounts;
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
             return null;
         }
-
-        return List.of(new Account());
     }
 }
