@@ -90,22 +90,22 @@ public class AccountRepositoryImpl implements AccountRepository {
     /**
      * Delete an account.
      *
-     * @param account Account to delete.
+     * @param id ID of the account to delete.
      * @return An Optional containing the account if successfully deleted,
      * null otherwise.
      */
     @Override
-    public Optional<Account> delete(Account account) {
-        logger.trace("Attempting to delete account with ID {}.", account.getID());
+    public Optional<Account> delete(long id) {
+        logger.trace("Attempting to delete account with ID {}.", id);
 
-        Account deleteAccount = accountDAO.removeAccount(account);
+        Account deleteAccount = accountDAO.removeAccount(id);
 
         if (!Objects.isNull(deleteAccount)) {
             logger.trace("Deleted account successfully.");
             return Optional.of(deleteAccount);
         }
 
-        logger.warn("Failed to delete account with ID {}.", account.getID());
+        logger.warn("Failed to delete account with ID {}.", id);
         return Optional.empty();
     }
 

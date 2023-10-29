@@ -3,6 +3,7 @@ package cypher.enforcers;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.security.UserDTO;
+import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.*;
 import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.Account;
@@ -272,10 +273,15 @@ public class ApplicationIntegrationTests {
         );
 
         AuthenticationService authService = new AuthenticationServiceImpl();
-
         assertDoesNotThrow(
                 () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
                 "Cannot inject Repository into Authentication service."
+        );
+
+        UserDTOMapper mapper = new UserDTOMapper();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(authService, mapper)),
+                "Cannot inject mapper service."
         );
 
         Optional<UserDTO> userOptional = authService.getLoggedInUser();
@@ -298,7 +304,7 @@ public class ApplicationIntegrationTests {
         assertEquals(account.getSocialMediaType(), "Google", "Account type does not match,");
         assertEquals(account.getUserId(), userDTO.id(), "User ID of the account does not match.");
 
-        Optional<Account> optionalAccount = accountRepository.delete(account);
+        Optional<Account> optionalAccount = accountRepository.delete(account.getID());
         assertTrue(optionalAccount.isPresent(), "Unable to delete account.");
 
         accountOptional = accountRepository.read(1);

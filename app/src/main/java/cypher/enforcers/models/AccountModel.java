@@ -1,5 +1,7 @@
 package cypher.enforcers.models;
 
+import cypher.enforcers.data.security.AccountDTO;
+import cypher.enforcers.data.security.AccountDTOMapper;
 import cypher.enforcers.data.spis.AccountRepository;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,18 +19,20 @@ public class AccountModel {
     // Used to interact with account objects.
     private AccountRepository accountRepository;
 
+    private AccountDTOMapper mapper;
+
     // List of accounts for the current user.
-    private final ObservableList<Account> accounts = FXCollections.observableArrayList();
+    private final ObservableList<AccountDTO> accounts = FXCollections.observableArrayList();
 
     // Property to store the list of accounts.
-    private final ObjectProperty<ObservableList<Account>> accountsProperty = new SimpleObjectProperty<>(accounts);
+    private final ObjectProperty<ObservableList<AccountDTO>> accountsProperty = new SimpleObjectProperty<>(accounts);
 
     /**
      * Get the accounts for the current user.
      *
      * @return An ObservableList of accounts.
      */
-    public ObservableList<Account> getAccounts() {
+    public ObservableList<AccountDTO> getAccounts() {
         return accountsProperty.get();
     }
 
@@ -37,7 +41,7 @@ public class AccountModel {
      *
      * @return Property with an ObservableList of accounts.
      */
-    public ObjectProperty<ObservableList<Account>> accountsProperty() {
+    public ObjectProperty<ObservableList<AccountDTO>> accountsProperty() {
         return accountsProperty;
     }
 
@@ -47,19 +51,19 @@ public class AccountModel {
      * @param accounts The new accounts to be set as an
      *                 ObservableList.
      */
-    public void setAccounts(ObservableList<Account> accounts) {
+    public void setAccounts(ObservableList<AccountDTO> accounts) {
         accountsProperty.set(accounts);
     }
 
     // Property to store the current account being selected.
-    private final ObjectProperty<Account> currentAccountProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<AccountDTO> currentAccountProperty = new SimpleObjectProperty<>();
 
     /**
      * Get the current account being selected.
      *
      * @return The account being selected.
      */
-    public Account getCurrentAccount() {
+    public AccountDTO getCurrentAccount() {
         return currentAccountProperty.get();
     }
 
@@ -68,7 +72,7 @@ public class AccountModel {
      *
      * @return Property of the current account.
      */
-    public ObjectProperty<Account> currentAccountProperty() {
+    public ObjectProperty<AccountDTO> currentAccountProperty() {
         return currentAccountProperty;
     }
 
@@ -77,7 +81,7 @@ public class AccountModel {
      *
      * @param account The Account to be set.
      */
-    private void setCurrentAccount(Account account) {
+    private void setCurrentAccount(AccountDTO account) {
         currentAccountProperty.set(account);
     }
 
@@ -89,7 +93,7 @@ public class AccountModel {
      * @param accountsToDelete Accounts to delete.
      * @return True if successfully deleted, false otherwise.
      */
-    public boolean deleteAccounts(long id, Account ... accountsToDelete) {
+    public boolean deleteAccounts(long id, AccountDTO ... accountsToDelete) {
         if (accountsToDelete.length == accounts.size()) {
             List<Account> results = accountRepository.deleteAll(id);
 
@@ -101,9 +105,9 @@ public class AccountModel {
             return false;
         }
 
-        for (Account a : accountsToDelete) {
-            Optional<Account> account = accountRepository.delete(a);
-            if (account.isEmpty() || account.get().getID() != a.getID()) {
+        for (AccountDTO a : accountsToDelete) {
+            Optional<Account> account = accountRepository.delete(a.id());
+            if (account.isEmpty() || account.get().getID() != a.id()) {
                 return false;
             }
 
@@ -120,9 +124,9 @@ public class AccountModel {
      * @return An Optional containing an account when found, otherwise
      * null.
      */
-    public Optional<Account> searchForAccount(String name) {
-        List<Account> results = accounts.stream()
-                .filter(a -> a.getName().equals(name))
+    public Optional<AccountDTO> searchForAccount(String name) {
+        List<AccountDTO> results = accounts.stream()
+                .filter(a -> a.name().equals(name))
                 .toList();
 
         if (results.size() == 1) {
@@ -145,7 +149,7 @@ public class AccountModel {
         account.setSocialMediaType(type);
         Optional<Account> createdAccount = accountRepository.create(account);
         if (createdAccount.isPresent()) {
-            accounts.add(account);
+            accounts.add(mapper.apply(createdAccount.get()));
             return true;
         }
 

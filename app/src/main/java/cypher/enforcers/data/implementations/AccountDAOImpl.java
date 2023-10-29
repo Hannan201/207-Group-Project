@@ -91,19 +91,19 @@ public class AccountDAOImpl implements AccountDAO {
     /**
      * Remove an account.
      *
-     * @param account Account to delete.
+     * @param id ID of the account to delete.
      * @return Account if deleted, null otherwise.
      */
     @Override
-    public Account removeAccount(Account account) {
+    public Account removeAccount(long id) {
         try {
-            Account account1 = getAccount(account.getID());
+            Account account1 = getAccount(id);
 
             if (account1 == null) {
                 return null;
             }
 
-            databaseService.executeUpdate(DELETE_ACCOUNT, account.getID());
+            databaseService.executeUpdate(DELETE_ACCOUNT, id);
             return account1;
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);

@@ -111,7 +111,7 @@ public class AccountSavingAndLoadingTests {
 
         Account delete = accounts.get(0);
 
-        Optional<Account> optionalAccount = accountRepository.delete(delete);
+        Optional<Account> optionalAccount = accountRepository.delete(delete.getID());
         assertTrue(optionalAccount.isPresent(), "Unable to delete account.");
 
         dbService.disconnect();

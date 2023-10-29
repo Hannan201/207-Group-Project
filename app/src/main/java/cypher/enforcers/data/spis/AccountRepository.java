@@ -40,11 +40,11 @@ public interface AccountRepository {
     /**
      * Delete an account.
      *
-     * @param account Account to delete.
+     * @param id ID of the account to delete.
      * @return An Optional containing the account if successfully deleted,
      * null otherwise.
      */
-    Optional<Account> delete(Account account);
+    Optional<Account> delete(long id);
 
     /**
      * Delete all accounts for a user given the user's ID.

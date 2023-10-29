@@ -109,13 +109,13 @@ public class AccountSavingTests {
         Account one = new Account();
         one.setId(1);
 
-        Optional<Account> account = accountRepository.delete(one);
+        Optional<Account> account = accountRepository.delete(one.getID());
         assertTrue(account.isPresent(), "Account was not deleted.");
 
         Account three = new Account();
         three.setId(3);
 
-        account = accountRepository.delete(three);
+        account = accountRepository.delete(three.getID());
         assertTrue(account.isPresent(), "Account was not deleted.");
 
         dbService.disconnect();

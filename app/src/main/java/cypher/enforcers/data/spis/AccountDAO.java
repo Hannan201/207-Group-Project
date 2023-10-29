@@ -39,10 +39,10 @@ public interface AccountDAO {
     /**
      * Remove an account.
      *
-     * @param account Account to delete.
+     * @param id ID of the account to delete.
      * @return Account if deleted, null otherwise.
      */
-    Account removeAccount(Account account);
+    Account removeAccount(long id);
 
     /**
      * Remove all accounts for a user given the ID.
