@@ -42,18 +42,7 @@ public class ArgumentSetters {
         try {
             statement.setLong(1, code.getAccountID());
             statement.setString(2, code.getCode());
-
-            ResultSet results = statement.executeQuery();
-
-            code.setId(results.getLong("id"));
-            statement.close();
         } catch (SQLException e) {
-            try {
-                statement.close();
-            } catch (SQLException onClose) {
-                throw new RuntimeException(onClose);
-            }
-
             throw new RuntimeException(e);
         }
     };
