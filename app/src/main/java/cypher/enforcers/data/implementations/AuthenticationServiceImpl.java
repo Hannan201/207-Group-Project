@@ -171,9 +171,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public boolean checkUsername(String username) {
-        Optional<User> optionalUser = userRepository.read(username);
+        Optional<User> optionalUser = userRepository.read(username.toLowerCase());
 
-        if (optionalUser.isPresent() && optionalUser.get().getUsername().equals(username)) {
+        if (optionalUser.isPresent() && optionalUser.get().getUsername().equalsIgnoreCase(username)) {
             logger.debug("Username is taken.");
             return true;
         }
