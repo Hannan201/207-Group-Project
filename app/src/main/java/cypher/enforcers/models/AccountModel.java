@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -82,14 +83,17 @@ public class AccountModel {
 
 
     /**
-     * Delete accounts for this user.
+     * Delete accounts for a user.
      *
+     * @param id The ID of the user.
      * @param accountsToDelete Accounts to delete.
      * @return True if successfully deleted, false otherwise.
      */
-    public boolean deleteAccounts(Account ... accountsToDelete) {
+    public boolean deleteAccounts(long id, Account ... accountsToDelete) {
         if (accountsToDelete.length == accounts.size()) {
-            if (accountRepository.deleteAll()) {
+            List<Account> results = accountRepository.deleteAll(id);
+
+            if (results.size() == accountsToDelete.length) {
                 accounts.clear();
                 return true;
             }
@@ -98,7 +102,8 @@ public class AccountModel {
         }
 
         for (Account a : accountsToDelete) {
-            if (!accountRepository.delete(a)) {
+            Optional<Account> account = accountRepository.delete(a);
+            if (account.isEmpty() || account.get().getID() != a.getID()) {
                 return false;
             }
 
@@ -116,7 +121,15 @@ public class AccountModel {
      * null.
      */
     public Optional<Account> searchForAccount(String name) {
-        return accountRepository.readByName(name);
+        List<Account> results = accounts.stream()
+                .filter(a -> a.getName().equals(name))
+                .toList();
+
+        if (results.size() == 1) {
+            return Optional.of(results.get(0));
+        }
+
+        return Optional.empty();
     }
 
     /**
@@ -130,25 +143,28 @@ public class AccountModel {
         Account account = new Account();
         account.setName(name);
         account.setSocialMediaType(type);
-        boolean result = accountRepository.create(account);
-        if (result) {
+        Optional<Account> createdAccount = accountRepository.create(account);
+        if (createdAccount.isPresent()) {
             accounts.add(account);
+            return true;
         }
 
-        return result;
+        return false;
     }
 
     /**
-     * Clear all accounts.
+     * Clear all accounts for a user.
      *
+     * @param id The ID of the user.
      * @return True if accounts are deleted successfully, false otherwise.
      */
-    public boolean clearAllAccounts() {
-        boolean result = accountRepository.deleteAll();
-        if (result) {
+    public boolean clearAllAccounts(long id) {
+        List<Account> results = accountRepository.deleteAll(id);
+        if (results.size() == accounts.size()) {
             accounts.clear();
+            return true;
         }
 
-        return result;
+        return false;
     }
 }
