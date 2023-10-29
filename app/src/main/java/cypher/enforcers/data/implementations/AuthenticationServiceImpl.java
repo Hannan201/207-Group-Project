@@ -117,7 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setLoggedIn(false);
         optionalUser = userRepository.update(user);
 
-        if (optionalUser.isPresent() && !optionalUser.get().getLoggedIn()) {
+        if (optionalUser.isPresent() && optionalUser.get().getLoggedIn()) {
             logger.warn("Failed to logout user.");
             return false;
         }
