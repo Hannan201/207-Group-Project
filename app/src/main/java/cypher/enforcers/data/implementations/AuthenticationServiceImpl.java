@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.data.security.PasswordHasher;
+import cypher.enforcers.data.security.SecurityUtils;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.models.User;
@@ -25,9 +25,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @SimpleService
     private UserRepository userRepository;
 
-    // Used to hash passwords.
-    PasswordHasher hash = new PasswordHasher();
-
     /**
      * Create a new user for this application.
      *
@@ -38,8 +35,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public boolean createUser(String username, String password) {
-        String salt = hash.generateSalt();
-        String hashedPassword = salt + hash.hashPassword(password + salt, salt.getBytes());
+        String salt = SecurityUtils.createSalt();
+        String hashedPassword = salt + SecurityUtils.hashPassword(password + salt, salt.getBytes());
 
         User user = new User();
         user.setUsername(username);
@@ -73,23 +70,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return false;
         }
 
-        User userToVerify = userOptional.get();
-        String hashedPassword = userToVerify.getPassword();
-        String salt = hashedPassword.substring(0, 24);
-        String expectedPassword = hashedPassword.substring(24);
-
-        boolean loggedIn = hash.verifyPassword(
-                        expectedPassword,
-                        password + salt,
-                        salt
-                );
-
-        if (loggedIn) {
-            userToVerify.setLoggedIn(true);
-            userOptional = userRepository.update(userToVerify);
+        User user = userOptional.get();
+        if (verifyPassword(user.getPassword(), password)) {
+            user.setLoggedIn(true);
+            userOptional = userRepository.update(user);
 
             if (userOptional.isPresent() && userOptional.get().getLoggedIn()) {
                 logger.trace("User authenticated.");
+                return true;
             } else {
                 logger.warn("Failed to authenticate user with username {}.", username);
             }
@@ -98,7 +86,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             logger.warn("Failed to authenticate user with username {}.", username);
         }
 
-        return loggedIn;
+        return false;
     }
 
     /**
@@ -203,5 +191,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Optional<User> getLoggedInUser() {
         return userRepository.findLoggedInUser();
+    }
+
+    /**
+     * Verify that the password provided by the user matches the
+     * one in the database.
+     *
+     * @param expected The password present in the database.
+     * @param actual The password provided by the user.
+     * @return True if the passwords match, false otherwise.
+     */
+    private boolean verifyPassword(String expected, String actual) {
+        String salt = expected.substring(0, SecurityUtils.SALT_LENGTH);
+        String expectedPassword = expected.substring(SecurityUtils.SALT_LENGTH);
+
+        return SecurityUtils.verifyPassword(expectedPassword, actual + salt, salt);
     }
 }
