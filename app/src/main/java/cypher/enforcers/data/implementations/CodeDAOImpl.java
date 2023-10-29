@@ -42,13 +42,13 @@ public class CodeDAOImpl implements CodeDAO {
     /**
      * Get all codes for an account.
      *
-     * @param account The account to retrieve the codes for.
+     * @param id ID of the Account to retrieve the codes for.
      * @return List of codes. Returns null if any errors occur.
      */
     @Override
-    public List<Code> getCodes(Account account) {
+    public List<Code> getCodes(long id) {
         try {
-            return databaseService.executeMultiSelect(GET_CODES, Code.class, account.getID());
+            return databaseService.executeMultiSelect(GET_CODES, Code.class, id);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -112,16 +112,16 @@ public class CodeDAOImpl implements CodeDAO {
     /**
      * Remove a code.
      *
-     * @param code Code to remove.
+     * @param id ID of the code to remove.
      * @return Code if deleted, null otherwise.
      */
     @Override
-    public Code removeCode(Code code) {
+    public Code removeCode(long id) {
         try {
-            Code result = getCode(code.getId());
+            Code result = getCode(id);
 
             if (!Objects.isNull(result)) {
-                databaseService.executeUpdate(DELETE_CODE, code.getId());
+                databaseService.executeUpdate(DELETE_CODE, id);
             }
 
             return result;
@@ -134,16 +134,16 @@ public class CodeDAOImpl implements CodeDAO {
     /**
      * Remove all codes for an account.
      *
-     * @param account The account to delete the codes for.
+     * @param id ID of the account to delete the codes for.
      * @return Codes that were deleted, null otherwise.
      */
     @Override
-    public List<Code> clearAllCodes(Account account) {
+    public List<Code> clearAllCodes(long id) {
         try {
-            List<Code> codes = getCodes(account);
+            List<Code> codes = getCodes(id);
 
             if (!Objects.isNull(codes)) {
-                databaseService.executeUpdate(DELETE_CODES, account.getID());
+                databaseService.executeUpdate(DELETE_CODES, id);
             }
 
             return codes;

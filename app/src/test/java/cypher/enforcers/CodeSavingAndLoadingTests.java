@@ -8,7 +8,6 @@ import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.injectors.Injector;
-import cypher.enforcers.models.Account;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,9 +53,7 @@ public class CodeSavingAndLoadingTests {
                 "Could not inject data access service."
         );
 
-        Account account = new Account();
-        account.setId(2);
-        List<Code> codes = codeRepository.readAll(account);
+        List<Code> codes = codeRepository.readAll(2);
         assertEquals(codes.size(), 0, "Total number of codes doest not match.");
 
         Optional<Code> codeOptional = codeRepository.read(1);
@@ -73,7 +70,7 @@ public class CodeSavingAndLoadingTests {
         dbService.disconnect();
         dbService.connect("/cypher/enforcers/code_create_r.db");
 
-        codes = codeRepository.readAll(account);
+        codes = codeRepository.readAll(2);
         assertEquals(codes.size(), 1, "Total number of codes doest not match.");
 
         assertEquals(codes.get(0).getId(), 1, "Code ID does not match.");
@@ -96,7 +93,6 @@ public class CodeSavingAndLoadingTests {
         );
 
         CodeRepository codeRepository = new CodeRepositoryImpl();
-
         assertDoesNotThrow(
                 () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
                 "Could not inject data access service."
@@ -110,7 +106,7 @@ public class CodeSavingAndLoadingTests {
         assertEquals(c.getCode(), "123 456", "Code value does not match.");
         assertEquals(c.getAccountID(), 2, "Account ID that this code belongs to does not match.");
 
-        Optional<Code> optionalCode = codeRepository.delete(c);
+        Optional<Code> optionalCode = codeRepository.delete(c.getId());
         assertTrue(optionalCode.isPresent(), "Failed to delete code.");
 
         dbService.disconnect();

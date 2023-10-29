@@ -15,10 +15,10 @@ public interface CodeDAO {
     /**
      * Get all codes for an account.
      *
-     * @param account The account to retrieve the codes for.
+     * @param id ID of the Account to retrieve the codes for.
      * @return List of codes. Returns null if any errors occur.
      */
-    List<Code> getCodes(Account account);
+    List<Code> getCodes(long id);
 
     /**
      * Get a code by ID.
@@ -47,17 +47,17 @@ public interface CodeDAO {
     /**
      * Remove a code.
      *
-     * @param code Code to remove.
+     * @param id ID of the code to remove.
      * @return Code if deleted, null otherwise.
      */
-    Code removeCode(Code code);
+    Code removeCode(long id);
 
     /**
      * Remove all codes for an account.
      *
-     * @param account The account to delete the codes for.
+     * @param id ID of the account to delete the codes for.
      * @return Codes that were deleted, null otherwise.
      */
-    List<Code> clearAllCodes(Account account);
+    List<Code> clearAllCodes(long id);
 
 }

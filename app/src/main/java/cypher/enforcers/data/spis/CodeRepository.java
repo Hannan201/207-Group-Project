@@ -24,11 +24,11 @@ public interface CodeRepository {
     /**
      * Read all codes for an account.
      *
-     * @param account Account to retrieve the codes for.
+     * @param id ID of the Account to retrieve the codes for.
      * @return List of codes. Empty list is returned if no codes
      * are present.
      */
-    List<Code> readAll(Account account);
+    List<Code> readAll(long id);
 
     /**
      * Read a code by its ID.
@@ -50,18 +50,18 @@ public interface CodeRepository {
     /**
      * Delete a code.
      *
-     * @param code The code to delete.
+     * @param id ID of the code to delete.
      * @return An Optional containing the code if deleted, null otherwise.
      */
-    Optional<Code> delete(Code code);
+    Optional<Code> delete(long id);
 
     /**
      * Delete all codes.
      *
-     * @param account The accounts to delete the codes for.
+     * @param id ID of the account to delete the codes for.
      * @return List containing the codes if successfully deleted,
      * empty list otherwise.
      */
-    List<Code> deleteAll(Account account);
+    List<Code> deleteAll(long id);
 
 }

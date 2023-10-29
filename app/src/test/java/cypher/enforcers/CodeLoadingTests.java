@@ -8,7 +8,6 @@ import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.injectors.Injector;
-import cypher.enforcers.models.Account;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -53,9 +52,7 @@ public class CodeLoadingTests {
                 "Could not inject data access service."
         );
 
-        Account account = new Account();
-        account.setId(3);
-        List<Code> codes = codeRepository.readAll(account);
+        List<Code> codes = codeRepository.readAll(3);
 
         assertEquals(codes.size(), 16, "Number of codes does not match.");
 

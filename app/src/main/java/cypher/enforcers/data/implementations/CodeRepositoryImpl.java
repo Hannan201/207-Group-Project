@@ -48,22 +48,22 @@ public class CodeRepositoryImpl implements CodeRepository {
     /**
      * Read all codes for an account.
      *
-     * @param account Account to retrieve the codes for.
+     * @param id ID of the Account to retrieve the codes for.
      * @return List of codes. Empty list is returned if no codes
      * are present.
      */
     @Override
-    public List<Code> readAll(Account account) {
-        logger.trace("Attempting to get all codes for account with ID {}.", account.getID());
+    public List<Code> readAll(long id) {
+        logger.trace("Attempting to get all codes for account with ID {}.", id);
 
-        List<Code> result = codeDAO.getCodes(account);
+        List<Code> result = codeDAO.getCodes(id);
 
         if (!Objects.isNull(result)) {
-            logger.trace("Accounts retrieved for account with ID {}.", account.getID());
+            logger.trace("Accounts retrieved for account with ID {}.", id);
             return result;
         }
 
-        logger.warn("No accounts found for account with ID {}.", account.getID());
+        logger.warn("No accounts found for account with ID {}.", id);
         return Collections.emptyList();
     }
 
@@ -113,43 +113,43 @@ public class CodeRepositoryImpl implements CodeRepository {
     /**
      * Delete a code.
      *
-     * @param code The code to delete.
+     * @param id ID of the code to delete.
      * @return An Optional containing the code if deleted, null otherwise.
      */
     @Override
-    public Optional<Code> delete(Code code) {
-        logger.trace("Attempting to delete code with ID {}.", code.getId());
+    public Optional<Code> delete(long id) {
+        logger.trace("Attempting to delete code with ID {}.", id);
 
-        Code deletedCode = codeDAO.removeCode(code);
+        Code deletedCode = codeDAO.removeCode(id);
 
         if (!Objects.isNull(deletedCode)) {
             logger.trace("Deleted code successfully.");
             return Optional.of(deletedCode);
         }
 
-        logger.warn("Failed to delete code with ID {}.", code.getId());
+        logger.warn("Failed to delete code with ID {}.", id);
         return Optional.empty();
     }
 
     /**
      * Delete all codes for an account.
      *
-     * @param account The accounts to delete the codes for.
+     * @param id ID of the account to delete the codes for.
      * @return List containing the codes if successfully deleted,
      * empty list otherwise.
      */
     @Override
-    public List<Code> deleteAll(Account account) {
-        logger.trace("Attempting to delete all codes for account with ID {}.", account.getID());
+    public List<Code> deleteAll(long id) {
+        logger.trace("Attempting to delete all codes for account with ID {}.", id);
 
-        List<Code> codes = codeDAO.clearAllCodes(account);
+        List<Code> codes = codeDAO.clearAllCodes(id);
 
         if (!Objects.isNull(codes)) {
             logger.trace("Deleted all codes successfully.");
             return codes;
         }
 
-        logger.warn("Failed to delete all codes for account with ID {}.", account.getID());
+        logger.warn("Failed to delete all codes for account with ID {}.", id);
         return Collections.emptyList();
     }
 }

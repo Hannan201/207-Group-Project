@@ -1,6 +1,9 @@
 package cypher.enforcers.models;
 
 import cypher.enforcers.code.Code;
+import cypher.enforcers.data.security.AccountDTO;
+import cypher.enforcers.data.security.CodeDTO;
+import cypher.enforcers.data.security.CodeDTOMapper;
 import cypher.enforcers.data.spis.CodeRepository;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -8,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -18,18 +22,20 @@ public class CodeModel {
     // Used to interact with the codes objects.
     private CodeRepository codeRepository;
 
+    private CodeDTOMapper mapper;
+
     // list of codes for an account.
-    private final ObservableList<Code> codes = FXCollections.observableArrayList();
+    private final ObservableList<CodeDTO> codes = FXCollections.observableArrayList();
 
     // Property to store the list of codes.
-    private final ObjectProperty<ObservableList<Code>> codesProperty = new SimpleObjectProperty<>(codes);
+    private final ObjectProperty<ObservableList<CodeDTO>> codesProperty = new SimpleObjectProperty<>(codes);
 
     /**
      * Get the codes for the current account.
      *
      * @return An ObservableList of codes.
      */
-    public ObservableList<Code> getCodes() {
+    public ObservableList<CodeDTO> getCodes() {
         return codesProperty.get();
     }
 
@@ -38,7 +44,7 @@ public class CodeModel {
      *
      * @return Property with an ObservableList of codes.
      */
-    public ObjectProperty<ObservableList<Code>> codesProperty() {
+    public ObjectProperty<ObservableList<CodeDTO>> codesProperty() {
         return codesProperty;
     }
 
@@ -47,19 +53,19 @@ public class CodeModel {
      *
      * @param codes The codes to be set.
      */
-    public void setCodes(ObservableList<Code> codes) {
+    public void setCodes(ObservableList<CodeDTO> codes) {
         codesProperty.set(codes);
     }
 
     // Property to store the current code.
-    private final ObjectProperty<Code> currentCodeProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<CodeDTO> currentCodeProperty = new SimpleObjectProperty<>();
 
     /**
      * Get the current code being selected.
      *
      * @return The code being selected.
      */
-    public Code getCurrentCode() {
+    public CodeDTO getCurrentCode() {
         return currentCodeProperty.get();
     }
 
@@ -68,7 +74,7 @@ public class CodeModel {
      *
      * @return Property of the current code.
      */
-    public ObjectProperty<Code> currentCodeProperty() {
+    public ObjectProperty<CodeDTO> currentCodeProperty() {
         return currentCodeProperty;
     }
 
@@ -77,18 +83,18 @@ public class CodeModel {
      *
      * @param code The code being selected.
      */
-    public void setCurrentCode(Code code) {
+    public void setCurrentCode(CodeDTO code) {
         currentCodeProperty.set(code);
     }
 
     /**
-     * Delete all codes for an account given the ID.
+     * Delete all codes for an account.
      *
-     * @param account The ID of the account.
+     * @param account The account to delete the codes for.
      * @return True if the codes were deleted, false otherwise.
      */
-    public boolean deleteAllCodes(Account account) {
-        List<Code> results = codeRepository.deleteAll(account);
+    public boolean deleteAllCodes(AccountDTO account) {
+        List<Code> results = codeRepository.deleteAll(account.id());
         if (results.size() == codes.size()) {
             codes.clear();
             return true;
@@ -100,18 +106,18 @@ public class CodeModel {
     /**
      * Add a new code to an account.
      *
-     * @param accountID ID of the account.
+     * @param account The account to add the code for.
      * @param code The code as a string.
      * @return True if code was added, false otherwise.
      */
-    public boolean addCode(long accountID, String code) {
+    public boolean addCode(AccountDTO account, String code) {
         Code c = new Code();
         c.setCode(code);
-        c.setAccountID(accountID);
+        c.setAccountID(account.id());
 
         Optional<Code> optionalCode = codeRepository.create(c);
         if (optionalCode.isPresent()) {
-            codes.add(c);
+            codes.add(mapper.apply(optionalCode.get()));
             return true;
         }
 
@@ -124,14 +130,14 @@ public class CodeModel {
      * @return True if deleted, false otherwise.
      */
     public boolean deleteCode() {
-        Code code = getCurrentCode();
+        CodeDTO code = getCurrentCode();
 
         if (code == null) {
             return false;
         }
 
-        Optional<Code> optionalCode = codeRepository.delete(code);
-        if (optionalCode.isPresent() && optionalCode.get().getId() == code.getId()) {
+        Optional<Code> optionalCode = codeRepository.delete(code.id());
+        if (optionalCode.isPresent() && optionalCode.get().getId() == code.id()) {
             codes.remove(code);
             return true;
         }
@@ -147,25 +153,29 @@ public class CodeModel {
      * hasn't changed from the current code. False otherwise.
      */
     public boolean updateCode(String newCode) {
-        Code code = getCurrentCode();
-
-        if (code == null) {
+        CodeDTO code = getCurrentCode();
+        if (Objects.isNull(code)) {
             return false;
         }
 
-        if (code.getCode().equals(newCode)) {
+        int index = codes.indexOf(code);
+        if (index == -1) {
+            return false;
+        }
+
+        if (code.code().equals(newCode)) {
             return true;
         }
 
-        String previous = code.getCode();
-
-        code.setCode(newCode);
-        Optional<Code> optionalCode = codeRepository.update(code);
+        Code c = new Code();
+        c.setId(code.id());
+        c.setCode(newCode);
+        Optional<Code> optionalCode = codeRepository.update(c);
         if (optionalCode.isPresent() && optionalCode.get().getCode().equals(newCode)) {
+            codes.set(index, mapper.apply(optionalCode.get()));
             return true;
         }
 
-        code.setCode(previous);
         return false;
     }
 }

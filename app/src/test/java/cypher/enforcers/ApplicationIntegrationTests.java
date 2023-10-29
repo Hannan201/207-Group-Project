@@ -189,7 +189,7 @@ public class ApplicationIntegrationTests {
         assertEquals(accounts.get(1).getSocialMediaType(), "Google", "Second account type does not match,");
         assertEquals(accounts.get(1).getUserId(), user.getID(), "User ID of the second account does not match.");
 
-        List<Code> codes = codeRepository.readAll(accounts.get(0));
+        List<Code> codes = codeRepository.readAll(accounts.get(0).getID());
 
         assertEquals(codes.size(), 2, "Number of codes for first account do not match.");
 
@@ -201,7 +201,7 @@ public class ApplicationIntegrationTests {
         assertEquals(codes.get(1).getCode(), "222", "Code of second code does not match.");
         assertEquals(codes.get(1).getAccountID(), accounts.get(0).getID(), "Account ID of second code does not match.");
 
-        codes = codeRepository.readAll(accounts.get(1));
+        codes = codeRepository.readAll(accounts.get(1).getID());
 
         assertEquals(codes.size(), 1, "Number of codes for second account do not match.");
 
@@ -311,7 +311,7 @@ public class ApplicationIntegrationTests {
         assertTrue(accountOptional.isPresent(), "Second account is empty.");
         account = accountOptional.get();
 
-        List<Code> codes = codeRepository.readAll(account);
+        List<Code> codes = codeRepository.readAll(account.getID());
 
         assertEquals(codes.size(), 2, "Number of codes does not match.");
 
@@ -319,7 +319,7 @@ public class ApplicationIntegrationTests {
         assertEquals(codes.get(0).getCode(), "111", "Code value of code does not match.");
         assertEquals(codes.get(0).getAccountID(), account.getID(), "Account ID of code does not match.");
 
-        Optional<Code> optionalCode = codeRepository.delete(codes.get(0));
+        Optional<Code> optionalCode = codeRepository.delete(codes.get(0).getId());
         assertTrue(optionalCode.isPresent(), "Unable to delete first code.");
 
         codes.get(1).setCode("420 530 640");
@@ -352,7 +352,7 @@ public class ApplicationIntegrationTests {
         assertEquals(account.getSocialMediaType(), "Reddit", "Account type (after reload) does not match,");
         assertEquals(account.getUserId(), user.getID(), "User ID of the account (after reload) does not match.");
 
-        codes = codeRepository.readAll(account);
+        codes = codeRepository.readAll(account.getID());
         assertEquals(codes.size(), 1, "List of codes (after reload) does not match.");
 
         assertEquals(codes.get(0).getId(), 2, "ID of code (after reload) does not match.");
@@ -437,7 +437,7 @@ public class ApplicationIntegrationTests {
         assertEquals(account.getSocialMediaType(), "Reddit", "Account type does not match,");
         assertEquals(account.getUserId(), user.getID(), "User ID of the account does not match.");
 
-        List<Code> codes = codeRepository.readAll(account);
+        List<Code> codes = codeRepository.readAll(account.getID());
         assertEquals(codes.size(), 1, "List of codes does not match.");
 
         assertEquals(codes.get(0).getId(), 2, "ID of code does not match.");

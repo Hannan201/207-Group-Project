@@ -8,7 +8,6 @@ import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.injectors.Injector;
-import cypher.enforcers.models.Account;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -110,10 +109,7 @@ public class CodeSavingTests {
                 "Could not inject data access service."
         );
 
-        Code code = new Code();
-        code.setId(1);
-
-        Optional<Code> optionalCode = codeRepository.delete(code);
+        Optional<Code> optionalCode = codeRepository.delete(1);
         assertTrue(optionalCode.isPresent(), "User cannot delete code.");
 
         dbService.disconnect();
@@ -138,10 +134,7 @@ public class CodeSavingTests {
                 "Could not inject data access service."
         );
 
-        Account account = new Account();
-        account.setId(2);
-
-        List<Code> codes = codeRepository.deleteAll(account);
+        List<Code> codes = codeRepository.deleteAll(2);
         assertFalse(codes.isEmpty(), "User cannot delete code.");
 
         dbService.disconnect();
