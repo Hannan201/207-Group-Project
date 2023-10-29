@@ -39,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String hashedPassword = salt + SecurityUtils.hashPassword(password + salt, salt.getBytes());
 
         User user = new User();
-        user.setUsername(username);
+        user.setUsername(username.toLowerCase());
         user.setPassword(hashedPassword);
 
         Optional<User> createdUser = userRepository.create(user);
