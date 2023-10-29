@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 /*
  Implementation for the Code Data Access Object (DAO) to communicate to the
@@ -18,7 +18,9 @@ import java.util.Optional;
  */
 public class CodeDAOImpl implements CodeDAO {
 
-    private static final String ADD_CODE = "INSERT INTO codes (account_id, code) VALUES (?, ?) RETURNING id";
+    private static final String ADD_CODE = "INSERT INTO codes (account_id, code) VALUES (?, ?)";
+
+    private static final String GET_CODE_AFTER_ADDING = "SELECT * FROM codes WHERE id = last_insert_rowid()";
 
     private static final String DELETE_CODE = "DELETE FROM codes WHERE id = ?";
 
@@ -81,12 +83,13 @@ public class CodeDAOImpl implements CodeDAO {
     public Code addCode(Code code) {
         try {
             databaseService.executeUpdate(ADD_CODE, code);
+
+            return databaseService.executeSelect(GET_CODE_AFTER_ADDING, Code.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
 
-        return code;
     }
 
     /**
@@ -98,12 +101,12 @@ public class CodeDAOImpl implements CodeDAO {
     public Code updateCode(Code code) {
         try {
             databaseService.executeUpdate(UPDATE_CODE, code.getCode(), code.getId());
+
+            return databaseService.executeSelect(GET_CODE, Code.class, code.getId());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
-
-        return code;
     }
 
     /**
@@ -115,13 +118,17 @@ public class CodeDAOImpl implements CodeDAO {
     @Override
     public Code removeCode(Code code) {
         try {
-            databaseService.executeUpdate(DELETE_CODE, code.getId());
+            Code result = getCode(code.getId());
+
+            if (!Objects.isNull(result)) {
+                databaseService.executeUpdate(DELETE_CODE, code.getId());
+            }
+
+            return result;
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
-
-        return code;
     }
 
     /**
@@ -133,12 +140,16 @@ public class CodeDAOImpl implements CodeDAO {
     @Override
     public List<Code> clearAllCodes(Account account) {
         try {
-            databaseService.executeUpdate(DELETE_CODES, account.getID());
+            List<Code> codes = getCodes(account);
+
+            if (!Objects.isNull(codes)) {
+                databaseService.executeUpdate(DELETE_CODES, account.getID());
+            }
+
+            return codes;
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
-
-        return List.of(new Code());
     }
 }
