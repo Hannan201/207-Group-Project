@@ -4,12 +4,13 @@ import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
+import cypher.enforcers.data.security.UserDTO;
+import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.injectors.Injector;
-import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -60,8 +61,14 @@ public class UserSavingTests {
                 "Could not inject Repository service."
         );
 
+        UserDTOMapper mapper = new UserDTOMapper();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(authService, mapper)),
+                "Could not inject Mapper service."
+        );
+
         // No user should be logged in.
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<UserDTO> optionalUser = authService.getLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -71,7 +78,7 @@ public class UserSavingTests {
 
         optionalUser = authService.getLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User is empty.");
-        assertEquals(optionalUser.get().getID(), 1, "Only one user should be present in database.");
+        assertEquals(optionalUser.get().id(), 1, "Only one user should be present in database.");
         dbService.disconnect();
     }
 
@@ -98,8 +105,14 @@ public class UserSavingTests {
                 "Could not inject Repository service."
         );
 
+        UserDTOMapper mapper = new UserDTOMapper();
+        assertDoesNotThrow(
+                () -> assertTrue(injector.injectServicesInto(authService, mapper)),
+                "Could not inject Mapper service."
+        );
+
         // No user should be logged in.
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<UserDTO> optionalUser = authService.getLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -109,9 +122,9 @@ public class UserSavingTests {
 
         optionalUser = authService.getLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User is empty.");
-        assertEquals(optionalUser.get().getID(), 1, "Only one user should be present in database.");
+        assertEquals(optionalUser.get().id(), 1, "Only one user should be present in database.");
 
-        assertTrue(authService.updateUserTheme(optionalUser.get().getID(), Theme.DARK), "Unable to update theme.");
+        assertTrue(authService.updateUserTheme(optionalUser.get().id(), Theme.DARK), "Unable to update theme.");
         dbService.disconnect();
     }
 

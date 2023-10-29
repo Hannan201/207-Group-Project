@@ -1,6 +1,8 @@
 package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.security.SecurityUtils;
+import cypher.enforcers.data.security.UserDTO;
+import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.models.User;
@@ -24,6 +26,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     // Used to store information related to the current logged-in user.
     @SimpleService
     private UserRepository userRepository;
+
+    @SimpleService
+    private UserDTOMapper mapper;
 
     /**
      * Create a new user for this application.
@@ -189,8 +194,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * otherwise.
      */
     @Override
-    public Optional<User> getLoggedInUser() {
-        return userRepository.findLoggedInUser();
+    public Optional<UserDTO> getLoggedInUser() {
+        return userRepository.findLoggedInUser()
+                .map(user -> mapper.apply(user));
     }
 
     /**

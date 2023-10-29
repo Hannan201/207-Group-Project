@@ -2,6 +2,7 @@ package cypher.enforcers;
 
 import cypher.enforcers.code.Code;
 import cypher.enforcers.data.implementations.*;
+import cypher.enforcers.data.security.UserDTO;
 import cypher.enforcers.data.spis.*;
 import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.Account;
@@ -102,12 +103,12 @@ public class ApplicationIntegrationTests {
                 "Cannot inject Repository into Authentication service."
         );
 
-        Optional<User> userOptional = authService.getLoggedInUser();
+        Optional<User> userOptional = userRepository.findLoggedInUser();
         assertThrows(NoSuchElementException.class, userOptional::get, "User is not empty.");
 
         assertTrue(authService.createUser("Test", "password"), "User cannot register.");
 
-        userOptional = authService.getLoggedInUser();
+        userOptional = userRepository.findLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
         User user = userOptional.get();
 
@@ -163,7 +164,7 @@ public class ApplicationIntegrationTests {
 
         assertTrue(authService.authenticateUser("Test", "password"), "User cannot log in.");
 
-        userOptional = authService.getLoggedInUser();
+        userOptional = userRepository.findLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
         user = userOptional.get();
 
@@ -277,16 +278,16 @@ public class ApplicationIntegrationTests {
                 "Cannot inject Repository into Authentication service."
         );
 
-        Optional<User> userOptional = authService.getLoggedInUser();
+        Optional<UserDTO> userOptional = authService.getLoggedInUser();
         assertThrows(NoSuchElementException.class, userOptional::get, "User is not empty.");
 
         assertTrue(authService.authenticateUser("Test", "password"), "User cannot register.");
 
         userOptional = authService.getLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
-        User user = userOptional.get();
+        UserDTO userDTO = userOptional.get();
 
-        assertTrue(authService.updateUserTheme(user.getID(), Theme.DARK), "Unable to update theme.");
+        assertTrue(authService.updateUserTheme(userDTO.id(), Theme.DARK), "Unable to update theme.");
 
         Optional<Account> accountOptional = accountRepository.read(2);
         assertTrue(accountOptional.isPresent(), "Account is empty.");
@@ -295,7 +296,7 @@ public class ApplicationIntegrationTests {
         assertEquals(account.getID(), 2, "Account ID does not match.");
         assertEquals(account.getName(), "moment", "Account name does not match.");
         assertEquals(account.getSocialMediaType(), "Google", "Account type does not match,");
-        assertEquals(account.getUserId(), user.getID(), "User ID of the account does not match.");
+        assertEquals(account.getUserId(), userDTO.id(), "User ID of the account does not match.");
 
         Optional<Account> optionalAccount = accountRepository.delete(account);
         assertTrue(optionalAccount.isPresent(), "Unable to delete account.");
@@ -320,15 +321,15 @@ public class ApplicationIntegrationTests {
         optionalCode = codeRepository.update(codes.get(1));
         assertTrue(optionalCode.isPresent(), "Unable to update second code.");
 
-        assertTrue(authService.logUserOut(user.getID()), "User cannot log out.");
+        assertTrue(authService.logUserOut(userDTO.id()), "User cannot log out.");
         dbService.disconnect();
         dbService.connect("/cypher/enforcers/interaction_2.db");
 
         assertTrue(authService.authenticateUser("Test", "password"), "Unable to login user.");
 
-        userOptional = authService.getLoggedInUser();
-        assertTrue(userOptional.isPresent(), "User is empty.");
-        user = userOptional.get();
+        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        assertTrue(optionalUser.isPresent(), "User is empty.");
+        User user = optionalUser.get();
 
         assertEquals(user.getID(), 1, "User ID does not match.");
         assertEquals(user.getUsername(), "test", "Username does not match.");
@@ -411,7 +412,7 @@ public class ApplicationIntegrationTests {
                 "Cannot inject Repository into Authentication service."
         );
 
-        Optional<User> userOptional = authService.getLoggedInUser();
+        Optional<User> userOptional = userRepository.findLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
         User user = userOptional.get();
 

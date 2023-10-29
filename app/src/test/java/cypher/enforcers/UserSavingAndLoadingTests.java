@@ -4,7 +4,6 @@ import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
-import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
@@ -62,7 +61,7 @@ public class UserSavingAndLoadingTests {
         );
 
         // No user should be logged in.
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -70,7 +69,7 @@ public class UserSavingAndLoadingTests {
 
         assertTrue(authService.authenticateUser("test", "hellobro"), "User should be logged in.");
 
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
         User user = optionalUser.get();
 
@@ -81,7 +80,7 @@ public class UserSavingAndLoadingTests {
 
         assertTrue(authService.logUserOut(user.getID()), "Unable to log user out.");
 
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -114,7 +113,7 @@ public class UserSavingAndLoadingTests {
         );
 
         // No user should be logged in.
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -122,7 +121,7 @@ public class UserSavingAndLoadingTests {
 
         assertTrue(authService.authenticateUser("test", "hellobro"), "User should be logged in.");
 
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
         User user = optionalUser.get();
 
@@ -135,7 +134,7 @@ public class UserSavingAndLoadingTests {
 
         assertTrue(authService.logUserOut(user.getID()), "Unable to log user out.");
 
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -143,7 +142,7 @@ public class UserSavingAndLoadingTests {
 
         assertTrue(authService.authenticateUser("test", "hellobro"), "User should be logged in.");
 
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
         user = optionalUser.get();
 
@@ -151,7 +150,7 @@ public class UserSavingAndLoadingTests {
 
         assertTrue(authService.logUserOut(user.getID()));
 
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get

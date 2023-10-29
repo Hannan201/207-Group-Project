@@ -1,6 +1,7 @@
 package cypher.enforcers.models;
 
 import cypher.enforcers.annotations.SimpleService;
+import cypher.enforcers.data.security.UserDTO;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.views.themes.Theme;
 import javafx.beans.property.ObjectProperty;
@@ -26,14 +27,14 @@ public class UserModel {
     }
 
     // Property to store the current logged-in user.
-    private final ObjectProperty<User> currentUserProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<UserDTO> currentUserProperty = new SimpleObjectProperty<>();
 
     /**
      * Get the current logged-in user.
      *
      * @return The current user logged-in.
      */
-    public User getCurrentUser() {
+    public UserDTO getCurrentUser() {
         return currentUserProperty.get();
     }
 
@@ -42,7 +43,7 @@ public class UserModel {
      *
      * @return Property with the current user logged in.
      */
-    public ObjectProperty<User> currentUserProperty() {
+    public ObjectProperty<UserDTO> currentUserProperty() {
         return currentUserProperty;
     }
 
@@ -51,7 +52,7 @@ public class UserModel {
      *
      * @param user The new User to be set.
      */
-    public void setCurrentUser(User user) {
+    public void setCurrentUser(UserDTO user) {
         currentUserProperty.set(user);
     }
 
@@ -66,7 +67,7 @@ public class UserModel {
         boolean result = authSerivce.authenticateUser(username, password);
 
         if (result) {
-            Optional<User> userOptional = authSerivce.getLoggedInUser();
+            Optional<UserDTO> userOptional = authSerivce.getLoggedInUser();
             userOptional.ifPresentOrElse(
                     this::setCurrentUser,
                     () -> {
@@ -85,10 +86,10 @@ public class UserModel {
      * False otherwise.
      */
     public boolean logOutUser() {
-        User user = getCurrentUser();
+        UserDTO user = getCurrentUser();
 
         if (!Objects.isNull(user)) {
-            return authSerivce.logUserOut(user.getID());
+            return authSerivce.logUserOut(user.id());
         }
 
         return false;
@@ -116,7 +117,7 @@ public class UserModel {
         boolean result = authSerivce.createUser(username, password);
 
         if (result) {
-            Optional<User> userOptional = authSerivce.getLoggedInUser();
+            Optional<UserDTO> userOptional = authSerivce.getLoggedInUser();
             userOptional.ifPresentOrElse(
                     this::setCurrentUser,
                     () -> {
@@ -139,10 +140,10 @@ public class UserModel {
             return false;
         }
 
-        User user = getCurrentUser();
+        UserDTO user = getCurrentUser();
 
         if (!Objects.isNull(user)) {
-            return authSerivce.updateUserTheme(user.getID(), theme);
+            return authSerivce.updateUserTheme(user.id(), theme);
         }
 
         return false;

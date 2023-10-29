@@ -86,7 +86,7 @@ public class UserLoadingTests {
         );
 
         // One user should be logged in.
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
         User user = optionalUser.get();
 
@@ -97,7 +97,7 @@ public class UserLoadingTests {
 
         // Re-read the user to see if it gets the correct one the
         // second time.
-        optionalUser = authService.getLoggedInUser();
+        optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
         user = optionalUser.get();
 
@@ -133,7 +133,7 @@ public class UserLoadingTests {
 
         assertTrue(authService.authenticateUser("hannan", "12345"), "Failed to login user.");
 
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
 
         User user = optionalUser.get();
@@ -168,7 +168,7 @@ public class UserLoadingTests {
 
         assertTrue(authService.authenticateUser("joe", "1234"), "Failed to login user.");
 
-        Optional<User> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
 
         User user = optionalUser.get();
