@@ -1,8 +1,6 @@
 package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.models.User;
-import cypher.enforcers.utilities.sqliteutilities.retrievers.Retrievers;
-import cypher.enforcers.views.themes.Theme;
 import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
@@ -10,10 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Implementation for the User Data Access Object (DAO) to communicate
@@ -22,6 +16,8 @@ import java.util.Optional;
 public class UserDAOImpl implements UserDAO {
 
     private static final String ADD_USER = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+    private static final String GET_USER_AFTER_ADDING = "SELECT * FROM users WHERE id = last_insert_rowid()";
 
     private static final String UPDATE_USER = "UPDATE users SET theme_value = ?, logged_in = ? WHERE id = ?";
 
@@ -51,12 +47,12 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             databaseService.executeUpdate(ADD_USER, user);
+
+            return databaseService.executeSelect(GET_USER_AFTER_ADDING, User.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
-
-        return user;
     }
 
     /**
@@ -127,11 +123,12 @@ public class UserDAOImpl implements UserDAO {
         try {
             short status = (short) (user.getLoggedIn() ? 1 : 0);
             databaseService.executeUpdate(UPDATE_USER, user.getTheme().ordinal(), status, user.getID());
+
+            return databaseService.executeSelect(GET_USER_BY_ID, User.class, user.getID());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
         }
 
-        return user;
     }
 }

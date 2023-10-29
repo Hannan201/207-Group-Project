@@ -21,20 +21,7 @@ public class ArgumentSetters {
         try {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
-
-            statement.execute();
-
-            ResultSet results = statement.getResultSet();
-
-            user.setID(results.getLong("id"));
-            statement.close();
         } catch (SQLException e) {
-            try {
-                statement.close();
-            } catch (SQLException onClose) {
-                throw new RuntimeException(onClose);
-            }
-
             throw new RuntimeException(e);
         }
     };
