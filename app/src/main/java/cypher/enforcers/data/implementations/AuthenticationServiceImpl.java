@@ -154,7 +154,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         optionalUser = userRepository.update(user);
 
         if (optionalUser.isPresent() && optionalUser.get().getTheme().equals(theme)) {
-            logger.trace("Theme successfully to {} for user with ID {}.", theme, id);
+            logger.trace("Theme successfully updated to {} for user with ID {}.", theme, id);
             return true;
         }
 

@@ -121,7 +121,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User updateUser(User user) {
         try {
-            short status = (short) (user.getLoggedIn() ? 1 : 0);
+            int status = user.getLoggedIn() ? 1 : 0;
             databaseService.executeUpdate(UPDATE_USER, user.getTheme().ordinal(), status, user.getID());
 
             return databaseService.executeSelect(GET_USER_BY_ID, User.class, user.getID());
