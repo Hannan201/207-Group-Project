@@ -7,7 +7,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.Objects;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is used to model a code in our application.
@@ -81,18 +82,19 @@ public class CodeModel {
     }
 
     /**
-     * Delete all codes.
+     * Delete all codes for an account given the ID.
      *
-     * @param account The account to delete the codes for.
+     * @param account The ID of the account.
      * @return True if the codes were deleted, false otherwise.
      */
     public boolean deleteAllCodes(Account account) {
-        boolean result = codeRepository.deleteAll(account);
-        if (result) {
+        List<Code> results = codeRepository.deleteAll(account);
+        if (results.size() == codes.size()) {
             codes.clear();
+            return true;
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -103,13 +105,17 @@ public class CodeModel {
      * @return True if code was added, false otherwise.
      */
     public boolean addCode(long accountID, String code) {
-        Code c = new Code(-1, code);
-        boolean result = codeRepository.create(c);
-        if (result) {
+        Code c = new Code();
+        c.setCode(code);
+        c.setAccountID(accountID);
+
+        Optional<Code> optionalCode = codeRepository.create(c);
+        if (optionalCode.isPresent()) {
             codes.add(c);
+            return true;
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -124,12 +130,13 @@ public class CodeModel {
             return false;
         }
 
-        boolean result = codeRepository.delete(code);
-        if (result) {
+        Optional<Code> optionalCode = codeRepository.delete(code);
+        if (optionalCode.isPresent() && optionalCode.get().getId() == code.getId()) {
             codes.remove(code);
+            return true;
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -150,7 +157,15 @@ public class CodeModel {
             return true;
         }
 
-        // Call setter method.
-        return true;
+        String previous = code.getCode();
+
+        code.setCode(newCode);
+        Optional<Code> optionalCode = codeRepository.update(code);
+        if (optionalCode.isPresent() && optionalCode.get().getCode().equals(newCode)) {
+            return true;
+        }
+
+        code.setCode(previous);
+        return false;
     }
 }
