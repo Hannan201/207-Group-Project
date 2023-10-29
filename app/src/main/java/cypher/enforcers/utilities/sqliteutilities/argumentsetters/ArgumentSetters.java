@@ -32,18 +32,7 @@ public class ArgumentSetters {
             statement.setLong(1, account.getUserId());
             statement.setString(2, account.getName());
             statement.setString(3, account.getSocialMediaType());
-
-            ResultSet results = statement.executeQuery();
-
-            account.setId(results.getLong("id"));
-            statement.close();
         } catch (SQLException e) {
-            try {
-                statement.close();
-            } catch (SQLException onClose) {
-                throw new RuntimeException(onClose);
-            }
-
             throw new RuntimeException(e);
         }
     };
