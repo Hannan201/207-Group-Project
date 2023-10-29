@@ -1,6 +1,7 @@
 package cypher.enforcers.data.spis;
 
 import cypher.enforcers.models.User;
+import cypher.enforcers.views.themes.Theme;
 
 import java.util.Optional;
 
@@ -39,6 +40,25 @@ public interface AuthenticationService {
       * was not logged in, false otherwise.
       */
      boolean logUserOut(long id);
+
+     /**
+      * Update the theme for a given user.
+      *
+      * @param id The ID of the user.
+      * @param theme The new theme of the user.
+      * @return True if theme updated successfully, false otherwise.
+      */
+     boolean updateUserTheme(long id, Theme theme);
+
+     /**
+      * Check if a given username is taken.
+      *
+      * @param username The username to search for.
+      * @return True if the username is taken, false otherwise. Note that
+      * a blank or empty username is invalid thus this method would return
+      * false if that's the case.
+      */
+     boolean checkUsername(String username);
 
      /**
       * Get the current logged-in user, if any.

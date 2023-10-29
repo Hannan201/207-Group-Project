@@ -4,6 +4,7 @@ import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.models.User;
+import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.annotations.SimpleService;
@@ -134,6 +135,63 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         return true;
+    }
+
+    /**
+     * Update the theme for a given user.
+     *
+     * @param id The ID of the user.
+     * @param theme The new theme of the user.
+     * @return True if theme updated successfully, false otherwise.
+     */
+    @Override
+    public boolean updateUserTheme(long id, Theme theme) {
+        logger.trace("Attempting to update theme to {} of user with ID {}.", theme, id);
+
+        Optional<User> optionalUser = userRepository.read(id);
+
+        if (optionalUser.isEmpty()) {
+            logger.warn("User with ID {} does not exist.", id);
+            return false;
+        }
+
+        User user = optionalUser.get();
+
+        if (!user.getLoggedIn()) {
+            logger.warn("Use with ID {} is not logged in.", id);
+            return false;
+        }
+
+        user.setTheme(theme);
+        optionalUser = userRepository.update(user);
+
+        if (optionalUser.isPresent() && optionalUser.get().getTheme().equals(theme)) {
+            logger.trace("Theme successfully to {} for user with ID {}.", theme, id);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a given username is taken.
+     *
+     * @param username The username to search for.
+     * @return True if the username is taken, false otherwise. Note that
+     * a blank or empty username is invalid thus this method would return
+     * false if that's the case.
+     */
+    @Override
+    public boolean checkUsername(String username) {
+        Optional<User> optionalUser = userRepository.read(username);
+
+        if (optionalUser.isPresent() && optionalUser.get().getUsername().equals(username)) {
+            logger.debug("Username is taken.");
+            return true;
+        }
+
+        logger.debug("Username is not taken.");
+        return false;
     }
 
     /**

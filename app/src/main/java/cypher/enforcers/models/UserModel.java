@@ -1,11 +1,12 @@
 package cypher.enforcers.models;
 
+import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.AuthenticationService;
-import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.views.themes.Theme;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -14,16 +15,14 @@ import java.util.Optional;
 public class UserModel {
 
     // Used to log-in users.
+    @SimpleService
     private AuthenticationService authSerivce;
-
-    // Used to interact with user objects.
-    private UserRepository userRepository;
 
     /**
      * Create a new user model, loaded with a user if logged in.
      */
     public UserModel() {
-        setCurrentUser(userRepository.read().orElse(null));
+        setCurrentUser(authSerivce.getLoggedInUser().orElse(null));
     }
 
     // Property to store the current logged-in user.
@@ -67,7 +66,7 @@ public class UserModel {
         boolean result = authSerivce.authenticateUser(username, password);
 
         if (result) {
-            Optional<User> userOptional = userRepository.read();
+            Optional<User> userOptional = authSerivce.getLoggedInUser();
             userOptional.ifPresentOrElse(
                     this::setCurrentUser,
                     () -> {
@@ -86,7 +85,13 @@ public class UserModel {
      * False otherwise.
      */
     public boolean logOutUser() {
-        return authSerivce.logUserOut();
+        User user = getCurrentUser();
+
+        if (!Objects.isNull(user)) {
+            return authSerivce.logUserOut(user.getID());
+        }
+
+        return false;
     }
 
     /**
@@ -97,7 +102,7 @@ public class UserModel {
      * @return True if it is taken, false otherwise.
      */
     public boolean isUsernameTaken(String username) {
-        return userRepository.checkUsername(username);
+        return authSerivce.checkUsername(username);
     }
 
     /**
@@ -108,10 +113,10 @@ public class UserModel {
      * @return True if successfully registered, false otherwise.
      */
     public boolean registerUser(String username, String password) {
-        boolean result = userRepository.create(username, password);
+        boolean result = authSerivce.createUser(username, password);
 
         if (result) {
-            Optional<User> userOptional = userRepository.read();
+            Optional<User> userOptional = authSerivce.getLoggedInUser();
             userOptional.ifPresentOrElse(
                     this::setCurrentUser,
                     () -> {
@@ -127,13 +132,19 @@ public class UserModel {
      * Attempt to update the theme for the current user.
      *
      * @param theme Theme for the new user.
-     * @return True if successfully deleted, false otherwise.
+     * @return True if successfully update, false otherwise.
      */
     public boolean updateTheme(Theme theme) {
         if (theme == null) {
             return false;
         }
 
-        return userRepository.update(theme);
+        User user = getCurrentUser();
+
+        if (!Objects.isNull(user)) {
+            return authSerivce.updateUserTheme(user.getID(), theme);
+        }
+
+        return false;
     }
 }
