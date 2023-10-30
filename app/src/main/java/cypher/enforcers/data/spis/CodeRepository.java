@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,7 @@ public interface CodeRepository {
      * @return An Optional containing the code if created successfully,
      * null otherwise.
      */
-    Optional<Code> create(Code code);
+    Optional<CodeEntity> create(CodeEntity code);
 
     /**
      * Read all codes for an account.
@@ -27,7 +27,7 @@ public interface CodeRepository {
      * @return List of codes. Empty list is returned if no codes
      * are present.
      */
-    List<Code> readAll(long id);
+    List<CodeEntity> readAll(long id);
 
     /**
      * Read a code by its ID.
@@ -35,7 +35,7 @@ public interface CodeRepository {
      * @param codeID ID of the code.
      * @return An Optional containing the code. Null otherwise.
      */
-    Optional<Code> read(long codeID);
+    Optional<CodeEntity> read(long codeID);
 
     /**
      * Update a code.
@@ -44,7 +44,7 @@ public interface CodeRepository {
      * @return An Optional containing the code if updated successfully,
      * null otherwise.
      */
-    Optional<Code> update(Code code);
+    Optional<CodeEntity> update(CodeEntity code);
 
     /**
      * Delete a code.
@@ -52,7 +52,7 @@ public interface CodeRepository {
      * @param id ID of the code to delete.
      * @return An Optional containing the code if deleted, null otherwise.
      */
-    Optional<Code> delete(long id);
+    Optional<CodeEntity> delete(long id);
 
     /**
      * Delete all codes.
@@ -61,6 +61,6 @@ public interface CodeRepository {
      * @return List containing the codes if successfully deleted,
      * empty list otherwise.
      */
-    List<Code> deleteAll(long id);
+    List<CodeEntity> deleteAll(long id);
 
 }

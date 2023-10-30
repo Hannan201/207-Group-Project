@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface CodeDAO {
      * @param id ID of the Account to retrieve the codes for.
      * @return List of codes. Returns null if any errors occur.
      */
-    List<Code> getCodes(long id);
+    List<CodeEntity> getCodes(long id);
 
     /**
      * Get a code by ID.
@@ -24,7 +24,7 @@ public interface CodeDAO {
      * @param codeID ID of the code to retrieve.
      * @return Code if found, null otherwise.
      */
-    Code getCode(long codeID);
+    CodeEntity getCode(long codeID);
 
     /**
      * Add a code.
@@ -32,7 +32,7 @@ public interface CodeDAO {
      * @param code The code to add.
      * @return Code if successfully added, null otherwise.
      */
-    Code addCode(Code code);
+    CodeEntity addCode(CodeEntity code);
 
     /**
      * Update a code.
@@ -40,7 +40,7 @@ public interface CodeDAO {
      * @param code The code to update.
      * @return Code object with the update data if found, null otherwise.
      */
-    Code updateCode(Code code);
+    CodeEntity updateCode(CodeEntity code);
 
     /**
      * Remove a code.
@@ -48,7 +48,7 @@ public interface CodeDAO {
      * @param id ID of the code to remove.
      * @return Code if deleted, null otherwise.
      */
-    Code removeCode(long id);
+    CodeEntity removeCode(long id);
 
     /**
      * Remove all codes for an account.
@@ -56,6 +56,6 @@ public interface CodeDAO {
      * @param id ID of the account to delete the codes for.
      * @return Codes that were deleted, null otherwise.
      */
-    List<Code> clearAllCodes(long id);
+    List<CodeEntity> clearAllCodes(long id);
 
 }

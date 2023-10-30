@@ -1,6 +1,6 @@
 package cypher.enforcers.models;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.security.Account;
 import cypher.enforcers.data.security.CodeDTO;
 import cypher.enforcers.data.security.CodeDTOMapper;
@@ -107,7 +107,7 @@ public class CodeModel {
      * @return True if the codes were deleted, false otherwise.
      */
     public boolean deleteAllCodes(Account account) {
-        List<Code> results = codeRepository.deleteAll(account.id());
+        List<CodeEntity> results = codeRepository.deleteAll(account.id());
         if (results.size() == codes.size()) {
             codes.clear();
             return true;
@@ -124,11 +124,11 @@ public class CodeModel {
      * @return True if code was added, false otherwise.
      */
     public boolean addCode(Account account, String code) {
-        Code c = new Code();
+        CodeEntity c = new CodeEntity();
         c.setCode(code);
         c.setAccountID(account.id());
 
-        Optional<Code> optionalCode = codeRepository.create(c);
+        Optional<CodeEntity> optionalCode = codeRepository.create(c);
         if (optionalCode.isPresent()) {
             codes.add(mapper.apply(optionalCode.get()));
             return true;
@@ -149,7 +149,7 @@ public class CodeModel {
             return false;
         }
 
-        Optional<Code> optionalCode = codeRepository.delete(code.id());
+        Optional<CodeEntity> optionalCode = codeRepository.delete(code.id());
         if (optionalCode.isPresent() && optionalCode.get().getId() == code.id()) {
             codes.remove(code);
             return true;
@@ -180,10 +180,10 @@ public class CodeModel {
             return true;
         }
 
-        Code c = new Code();
+        CodeEntity c = new CodeEntity();
         c.setId(code.id());
         c.setCode(newCode);
-        Optional<Code> optionalCode = codeRepository.update(c);
+        Optional<CodeEntity> optionalCode = codeRepository.update(c);
         if (optionalCode.isPresent() && optionalCode.get().getCode().equals(newCode)) {
             codes.set(index, mapper.apply(optionalCode.get()));
             return true;

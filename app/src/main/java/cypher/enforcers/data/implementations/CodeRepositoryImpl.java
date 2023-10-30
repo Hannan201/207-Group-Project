@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import org.slf4j.Logger;
@@ -38,10 +38,10 @@ public class CodeRepositoryImpl implements CodeRepository {
      * null otherwise.
      */
     @Override
-    public Optional<Code> create(Code code) {
+    public Optional<CodeEntity> create(CodeEntity code) {
         logger.trace("Attempting to create code {} for account with ID {}.", code.getCode(), code.getAccountID());
 
-        Code createCode = codeDAO.addCode(code);
+        CodeEntity createCode = codeDAO.addCode(code);
 
         if (!Objects.isNull(createCode)) {
             logger.trace("Code {} created with ID {} for account with ID {}", createCode.getCode(), createCode.getId(), createCode.getAccountID());
@@ -60,10 +60,10 @@ public class CodeRepositoryImpl implements CodeRepository {
      * are present.
      */
     @Override
-    public List<Code> readAll(long id) {
+    public List<CodeEntity> readAll(long id) {
         logger.trace("Attempting to get all codes for account with ID {}.", id);
 
-        List<Code> result = codeDAO.getCodes(id);
+        List<CodeEntity> result = codeDAO.getCodes(id);
 
         if (!Objects.isNull(result)) {
             logger.trace("Accounts retrieved for account with ID {}.", id);
@@ -81,10 +81,10 @@ public class CodeRepositoryImpl implements CodeRepository {
      * @return An Optional containing the code. Null otherwise.
      */
     @Override
-    public Optional<Code> read(long codeID) {
+    public Optional<CodeEntity> read(long codeID) {
         logger.trace("Attempting to get code with ID {}.", codeID);
 
-        Code code = codeDAO.getCode(codeID);
+        CodeEntity code = codeDAO.getCode(codeID);
 
         if (!Objects.isNull(code)) {
             logger.trace("Code found.");
@@ -103,10 +103,10 @@ public class CodeRepositoryImpl implements CodeRepository {
      * null otherwise.
      */
     @Override
-    public Optional<Code> update(Code code) {
+    public Optional<CodeEntity> update(CodeEntity code) {
         logger.trace("Attempting to update code with ID {} to {}.", code.getId(), code.getCode());
 
-        Code updatedCode = codeDAO.updateCode(code);
+        CodeEntity updatedCode = codeDAO.updateCode(code);
 
         if (!Objects.isNull(updatedCode)) {
             logger.trace("Updated code successfully.");
@@ -124,10 +124,10 @@ public class CodeRepositoryImpl implements CodeRepository {
      * @return An Optional containing the code if deleted, null otherwise.
      */
     @Override
-    public Optional<Code> delete(long id) {
+    public Optional<CodeEntity> delete(long id) {
         logger.trace("Attempting to delete code with ID {}.", id);
 
-        Code deletedCode = codeDAO.removeCode(id);
+        CodeEntity deletedCode = codeDAO.removeCode(id);
 
         if (!Objects.isNull(deletedCode)) {
             logger.trace("Deleted code successfully.");
@@ -146,10 +146,10 @@ public class CodeRepositoryImpl implements CodeRepository {
      * empty list otherwise.
      */
     @Override
-    public List<Code> deleteAll(long id) {
+    public List<CodeEntity> deleteAll(long id) {
         logger.trace("Attempting to delete all codes for account with ID {}.", id);
 
-        List<Code> codes = codeDAO.clearAllCodes(id);
+        List<CodeEntity> codes = codeDAO.clearAllCodes(id);
 
         if (!Objects.isNull(codes)) {
             logger.trace("Deleted all codes successfully.");

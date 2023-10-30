@@ -1,6 +1,6 @@
 package cypher.enforcers.code;
 
-public class Code {
+public class CodeEntity {
 
     // ID for this code.
     private long id;
@@ -19,7 +19,7 @@ public class Code {
      * @param ID ID of the code.
      * @param codeName Name of the code
      */
-    public Code(int ID, String codeName) {
+    public CodeEntity(int ID, String codeName) {
         this.id = ID;
         this.code = codeName;
     }
@@ -27,7 +27,7 @@ public class Code {
     /**
      * Create a code.
      */
-    public Code() {
+    public CodeEntity() {
 
     }
 

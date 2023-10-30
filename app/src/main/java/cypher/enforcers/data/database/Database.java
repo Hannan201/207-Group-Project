@@ -5,7 +5,7 @@ import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.security.Token;
 import cypher.enforcers.data.security.TokenGenerator;
 import cypher.enforcers.models.AccountEntity;
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetter;
 import cypher.enforcers.views.themes.Theme;
@@ -734,14 +734,14 @@ public class Database {
      * @param accountID ID of the account.
      * @return List of codes contained within the account.
      */
-    public static List<Code> getCodes(Token token, int accountID) {
-        List<Code> codes = new ArrayList<>();
+    public static List<CodeEntity> getCodes(Token token, int accountID) {
+        List<CodeEntity> codes = new ArrayList<>();
 
         if (safetyChecks(token)) {
             int id = ((CustomToken) token).ID;
             logger.trace("Attempting to retrieve all codes for user with ID {} and with account ID {}.", id, accountID);
 
-            List<Code> result = sqLiteHelper.executeSelect(
+            List<CodeEntity> result = sqLiteHelper.executeSelect(
                 """
                     SELECT id, code FROM codes
                     WHERE account_id = ?
@@ -768,12 +768,12 @@ public class Database {
      * @param codeID ID of the code.
      * @return The code.
      */
-    public static Code getCode(Token token, int codeID) {
+    public static CodeEntity getCode(Token token, int codeID) {
         if (safetyChecks(token)) {
             int id = ((CustomToken) token).ID;
             logger.trace("Attempting to retrieve code with ID {} for user with ID {}.", codeID, id);
 
-            Code c = sqLiteHelper.executeSelect(
+            CodeEntity c = sqLiteHelper.executeSelect(
                 """
                     SELECT id, code FROM codes
                     WHERE id = ?

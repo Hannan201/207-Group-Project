@@ -1,6 +1,6 @@
 package cypher.enforcers;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.implementations.CodeDAOImpl;
 import cypher.enforcers.data.implementations.CodeRepositoryImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
@@ -24,14 +24,14 @@ public class CodeSavingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        Code c = new Code();
+        CodeEntity c = new CodeEntity();
         c.setCode("123 456");
         c.setAccountID(1);
 
-        Optional<Code> optionalCode = codeRepository.create(c);
+        Optional<CodeEntity> optionalCode = codeRepository.create(c);
         assertTrue(optionalCode.isPresent(), "User cannot create code.");
 
-        Code code = optionalCode.get();
+        CodeEntity code = optionalCode.get();
         assertEquals(code.getId(), 1, "Code ID should be 1.");
 
         dbService.disconnect();
@@ -45,11 +45,11 @@ public class CodeSavingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        Code code = new Code();
+        CodeEntity code = new CodeEntity();
         code.setCode("4EW C0D3");
         code.setId(33);
 
-        Optional<Code> optionalCode = codeRepository.update(code);
+        Optional<CodeEntity> optionalCode = codeRepository.update(code);
         assertTrue(optionalCode.isPresent(), "User cannot update code.");
 
         dbService.disconnect();
@@ -63,7 +63,7 @@ public class CodeSavingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        Optional<Code> optionalCode = codeRepository.delete(1);
+        Optional<CodeEntity> optionalCode = codeRepository.delete(1);
         assertTrue(optionalCode.isPresent(), "User cannot delete code.");
 
         dbService.disconnect();
@@ -77,7 +77,7 @@ public class CodeSavingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        List<Code> codes = codeRepository.deleteAll(2);
+        List<CodeEntity> codes = codeRepository.deleteAll(2);
         assertFalse(codes.isEmpty(), "User cannot delete code.");
 
         dbService.disconnect();

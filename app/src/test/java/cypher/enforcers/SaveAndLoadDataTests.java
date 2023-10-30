@@ -2,7 +2,7 @@ package cypher.enforcers;
 
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.security.Token;
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 import cypher.enforcers.models.AccountEntity;
@@ -100,7 +100,7 @@ public class SaveAndLoadDataTests {
         assertEquals(account.getName(), "One");
         assertEquals(account.getSocialMediaType(), "Discord");
 
-        List<Code> codes = Database.getCodes(token, (int) account.getID());
+        List<CodeEntity> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 16);
 
         String[] expectedCodes = new String[]{"yuyk-775x",
@@ -121,7 +121,7 @@ public class SaveAndLoadDataTests {
                                               "osyv-2vjq"};
 
         String[] actualCodes = codes.stream()
-                        .map(Code::getCode)
+                        .map(CodeEntity::getCode)
                         .toArray(String[]::new);
         assertArrayEquals(expectedCodes, actualCodes);
 
@@ -150,7 +150,7 @@ public class SaveAndLoadDataTests {
                                      "2k3uw-imada"};
 
         actualCodes = codes.stream()
-                .map(Code::getCode)
+                .map(CodeEntity::getCode)
                 .toArray(String[]::new);
         assertArrayEquals(actualCodes, expectedCodes);
 
@@ -179,7 +179,7 @@ public class SaveAndLoadDataTests {
                                      "1578 1639"};
 
         actualCodes = codes.stream()
-                .map(Code::getCode)
+                .map(CodeEntity::getCode)
                 .toArray(String[]::new);
 
         assertArrayEquals(expectedCodes, actualCodes);
@@ -234,7 +234,7 @@ public class SaveAndLoadDataTests {
         AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        List<Code> codes = Database.getCodes(token, (int) account.getID());
+        List<CodeEntity> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 16);
 
         Database.clearAllCodes(token, (int) account.getID());
@@ -271,7 +271,7 @@ public class SaveAndLoadDataTests {
         assertNotNull(account);
 
         int id = Database.addCode(token, (int) account.getID(), "4EW C0D3");
-        Code c = Database.getCode(token, id);
+        CodeEntity c = Database.getCode(token, id);
         assertNotNull(c);
         assertEquals(c.getCode(), "4EW C0D3");
 
@@ -297,11 +297,11 @@ public class SaveAndLoadDataTests {
         AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        List<Code> codes = Database.getCodes(token, (int) account.getID());
+        List<CodeEntity> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 2);
 
         int id = -1;
-        for (Code c : codes) {
+        for (CodeEntity c : codes) {
             if (c.getCode().equals("123 456")) {
                 id = (int) c.getId();
                 break;
@@ -332,9 +332,9 @@ public class SaveAndLoadDataTests {
         AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
-        List<Code> code = Database.getCodes(token, (int) account.getID());
+        List<CodeEntity> code = Database.getCodes(token, (int) account.getID());
         assertEquals(code.size(), 1);
-        Code c = code.get(0);
+        CodeEntity c = code.get(0);
         int id = (int) c.getId();
 
         Database.updateCode(token, (int) c.getId(), "U9D47ED");
@@ -360,7 +360,7 @@ public class SaveAndLoadDataTests {
         AccountEntity account = Database.getAccountByName(token, "Joe");
         assertNotNull(account);
 
-        List<Code> codes = Database.getCodes(token, (int) account.getID());
+        List<CodeEntity> codes = Database.getCodes(token, (int) account.getID());
         int before = codes.size();
 
         for (int i = 0; i < 5; i++) {

@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.CodeDAO;
 import org.slf4j.Logger;
@@ -54,9 +54,9 @@ public class CodeDAOImpl implements CodeDAO {
      * @return List of codes. Returns null if any errors occur.
      */
     @Override
-    public List<Code> getCodes(long id) {
+    public List<CodeEntity> getCodes(long id) {
         try {
-            return databaseService.executeMultiSelect(GET_CODES, Code.class, id);
+            return databaseService.executeMultiSelect(GET_CODES, CodeEntity.class, id);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -71,9 +71,9 @@ public class CodeDAOImpl implements CodeDAO {
      * @return Code if found, null otherwise.
      */
     @Override
-    public Code getCode(long codeID) {
+    public CodeEntity getCode(long codeID) {
         try {
-            return databaseService.executeSelect(GET_CODE, Code.class, codeID);
+            return databaseService.executeSelect(GET_CODE, CodeEntity.class, codeID);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -88,11 +88,11 @@ public class CodeDAOImpl implements CodeDAO {
      * @return Code if successfully added, null otherwise.
      */
     @Override
-    public Code addCode(Code code) {
+    public CodeEntity addCode(CodeEntity code) {
         try {
             databaseService.executeUpdate(ADD_CODE, code);
 
-            return databaseService.executeSelect(GET_CODE_AFTER_ADDING, Code.class);
+            return databaseService.executeSelect(GET_CODE_AFTER_ADDING, CodeEntity.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
@@ -106,11 +106,11 @@ public class CodeDAOImpl implements CodeDAO {
      * @param code The code to update.
      * @return Code object with the update data if found, null otherwise.
      */
-    public Code updateCode(Code code) {
+    public CodeEntity updateCode(CodeEntity code) {
         try {
             databaseService.executeUpdate(UPDATE_CODE, code.getCode(), code.getId());
 
-            return databaseService.executeSelect(GET_CODE, Code.class, code.getId());
+            return databaseService.executeSelect(GET_CODE, CodeEntity.class, code.getId());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
@@ -124,9 +124,9 @@ public class CodeDAOImpl implements CodeDAO {
      * @return Code if deleted, null otherwise.
      */
     @Override
-    public Code removeCode(long id) {
+    public CodeEntity removeCode(long id) {
         try {
-            Code result = getCode(id);
+            CodeEntity result = getCode(id);
 
             if (!Objects.isNull(result)) {
                 databaseService.executeUpdate(DELETE_CODE, id);
@@ -146,9 +146,9 @@ public class CodeDAOImpl implements CodeDAO {
      * @return Codes that were deleted, null otherwise.
      */
     @Override
-    public List<Code> clearAllCodes(long id) {
+    public List<CodeEntity> clearAllCodes(long id) {
         try {
-            List<Code> codes = getCodes(id);
+            List<CodeEntity> codes = getCodes(id);
 
             if (!Objects.isNull(codes)) {
                 databaseService.executeUpdate(DELETE_CODES, id);

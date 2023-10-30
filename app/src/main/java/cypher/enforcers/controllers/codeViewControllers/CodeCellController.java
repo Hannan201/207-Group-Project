@@ -9,7 +9,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +42,10 @@ public class CodeCellController {
     private Button edit;
 
     // Reference to the current code associated with this cell.
-    private Code currentCell;
+    private CodeEntity currentCell;
 
     // Reference to the parent list view.
-    private ListView<Code> currentListView;
+    private ListView<CodeEntity> currentListView;
 
     // If this code is selected or not.
     private boolean selected;
@@ -59,7 +59,7 @@ public class CodeCellController {
      * @param cell The current CodeCell
      * @param parent The ListView that contains this CodeCell
      */
-    public void setCodeCell(Code cell, ListView<Code> parent) {
+    public void setCodeCell(CodeEntity cell, ListView<CodeEntity> parent) {
         currentCell = cell;
         currentListView = parent;
         selected = false;

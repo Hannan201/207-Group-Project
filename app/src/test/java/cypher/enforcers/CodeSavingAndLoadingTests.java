@@ -1,6 +1,6 @@
 package cypher.enforcers;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.implementations.CodeDAOImpl;
 import cypher.enforcers.data.implementations.CodeRepositoryImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
@@ -26,18 +26,18 @@ public class CodeSavingAndLoadingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        List<Code> codes = codeRepository.readAll(2);
+        List<CodeEntity> codes = codeRepository.readAll(2);
         assertEquals(codes.size(), 0, "Total number of codes doest not match.");
 
-        Optional<Code> codeOptional = codeRepository.read(1);
+        Optional<CodeEntity> codeOptional = codeRepository.read(1);
 
         assertThrows(NoSuchElementException.class, codeOptional::get, "Code is not empty.");
 
-        Code previous = new Code();
+        CodeEntity previous = new CodeEntity();
         previous.setCode("123 456");
         previous.setAccountID(2);
 
-        Optional<Code> optionalCode = codeRepository.create(previous);
+        Optional<CodeEntity> optionalCode = codeRepository.create(previous);
         assertTrue(optionalCode.isPresent(), "Code cannot be created.");
 
         dbService.disconnect();
@@ -61,21 +61,21 @@ public class CodeSavingAndLoadingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        Optional<Code> codeOptional = codeRepository.read(50);
+        Optional<CodeEntity> codeOptional = codeRepository.read(50);
         assertTrue(codeOptional.isPresent(), "Code is not present.");
-        Code c = codeOptional.get();
+        CodeEntity c = codeOptional.get();
 
         assertEquals(c.getId(), 50, "ID does not match.");
         assertEquals(c.getCode(), "123 456", "Code value does not match.");
         assertEquals(c.getAccountID(), 2, "Account ID that this code belongs to does not match.");
 
-        Optional<Code> optionalCode = codeRepository.delete(c.getId());
+        Optional<CodeEntity> optionalCode = codeRepository.delete(c.getId());
         assertTrue(optionalCode.isPresent(), "Failed to delete code.");
 
         dbService.disconnect();
         dbService.connect("/cypher/enforcers/code_delete_r.db");
 
-        Optional<Code> code = codeRepository.read(50);
+        Optional<CodeEntity> code = codeRepository.read(50);
 
         assertThrows(NoSuchElementException.class, code::get, "Could is not empty.");
 
@@ -90,9 +90,9 @@ public class CodeSavingAndLoadingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        Optional<Code> codeOptional = codeRepository.read(33);
+        Optional<CodeEntity> codeOptional = codeRepository.read(33);
         assertTrue(codeOptional.isPresent(), "Code is not present.");
-        Code c = codeOptional.get();
+        CodeEntity c = codeOptional.get();
 
         assertEquals(c.getId(), 33, "ID does not match.");
         assertEquals(c.getCode(), "7294 8105", "Code value does not match.");
@@ -100,7 +100,7 @@ public class CodeSavingAndLoadingTests {
 
         c.setCode("ABCD EFGH");
 
-        Optional<Code> optionalCode = codeRepository.update(c);
+        Optional<CodeEntity> optionalCode = codeRepository.update(c);
         assertTrue(optionalCode.isPresent(), "Failed to update code.");
 
         dbService.disconnect();

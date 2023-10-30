@@ -1,7 +1,7 @@
 package cypher.enforcers;
 
 import cypher.enforcers.data.security.Token;
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import org.junit.jupiter.api.Test;
 import cypher.enforcers.models.AccountEntity;
 import cypher.enforcers.data.database.Database;
@@ -42,9 +42,9 @@ public class LoadingDataTests {
         assertEquals(account.getName(), "Joe");
         assertEquals(account.getSocialMediaType(), "1234");
 
-        List<Code> codes = Database.getCodes(token, (int) account.getID());
+        List<CodeEntity> codes = Database.getCodes(token, (int) account.getID());
         assertEquals(codes.size(), 3);
-        for (Code c : codes) {
+        for (CodeEntity c : codes) {
             assertEquals(c.getCode(), "1234");
         }
 

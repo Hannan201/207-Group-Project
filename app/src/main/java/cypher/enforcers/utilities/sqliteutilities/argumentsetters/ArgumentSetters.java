@@ -1,6 +1,6 @@
 package cypher.enforcers.utilities.sqliteutilities.argumentsetters;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.models.AccountEntity;
 import cypher.enforcers.models.UserEntity;
 
@@ -37,7 +37,7 @@ public class ArgumentSetters {
     };
 
     // How a code should be added to the database.
-    private static final BiConsumer<PreparedStatement, Code> FOR_CODE = (statement, code) -> {
+    private static final BiConsumer<PreparedStatement, CodeEntity> FOR_CODE = (statement, code) -> {
         try {
             statement.setLong(1, code.getAccountID());
             statement.setString(2, code.getCode());
@@ -90,7 +90,7 @@ public class ArgumentSetters {
                     Map.entry(UserEntity.class, FOR_USER),
                     Map.entry(AccountEntity.class, FOR_ACCOUNT),
                     Map.entry(Long.class, FOR_ONE_LONG),
-                    Map.entry(Code.class, FOR_CODE)
+                    Map.entry(CodeEntity.class, FOR_CODE)
             );
 
     // Maps the socialMediaType of object to which index it should be added. Since

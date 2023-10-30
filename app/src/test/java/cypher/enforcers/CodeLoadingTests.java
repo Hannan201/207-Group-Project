@@ -1,6 +1,6 @@
 package cypher.enforcers;
 
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.implementations.CodeDAOImpl;
 import cypher.enforcers.data.implementations.CodeRepositoryImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
@@ -25,7 +25,7 @@ public class CodeLoadingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        List<Code> codes = codeRepository.readAll(3);
+        List<CodeEntity> codes = codeRepository.readAll(3);
 
         assertEquals(codes.size(), 16, "Number of codes does not match.");
 
@@ -64,9 +64,9 @@ public class CodeLoadingTests {
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        Optional<Code> codeOptional = codeRepository.read(49);
+        Optional<CodeEntity> codeOptional = codeRepository.read(49);
         assertTrue(codeOptional.isPresent(), "Code is null.");
-        Code c = codeOptional.get();
+        CodeEntity c = codeOptional.get();
 
         assertEquals(c.getId(), 49, "ID should be 49.");
         assertEquals(c.getCode(), "EEE EEE", "Codes do not match.");

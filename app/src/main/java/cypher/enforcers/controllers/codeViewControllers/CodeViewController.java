@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
-import cypher.enforcers.code.Code;
+import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.views.utilities.codeViewUtilities.CodeCell;
 
 import java.io.File;
@@ -63,7 +63,7 @@ public class CodeViewController implements Initializable {
 
     // Displays all the codes.
     @FXML
-    private ListView<Code> codeListView;
+    private ListView<CodeEntity> codeListView;
 
     // Label that says code.
     @FXML
