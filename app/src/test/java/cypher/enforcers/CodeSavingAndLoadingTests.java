@@ -7,51 +7,24 @@ import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.injectors.Injector;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CodeSavingAndLoadingTests {
-
-    private static Injector injector;
-
-    @BeforeAll
-    public static void create() {
-        injector = new Injector();
-    }
-
-    @AfterAll
-    public static void destroy() {
-        injector = null;
-    }
 
     @Test
     public void codeCreation() {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_create_r.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         List<Code> codes = codeRepository.readAll(2);
         assertEquals(codes.size(), 0, "Total number of codes doest not match.");
@@ -85,18 +58,8 @@ public class CodeSavingAndLoadingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_delete_r.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         Optional<Code> codeOptional = codeRepository.read(50);
         assertTrue(codeOptional.isPresent(), "Code is not present.");
@@ -124,19 +87,8 @@ public class CodeSavingAndLoadingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_update_r.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         Optional<Code> codeOptional = codeRepository.read(33);
         assertTrue(codeOptional.isPresent(), "Code is not present.");

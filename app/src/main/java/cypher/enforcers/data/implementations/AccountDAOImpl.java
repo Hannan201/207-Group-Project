@@ -1,6 +1,5 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.models.Account;
@@ -32,8 +31,18 @@ public class AccountDAOImpl implements AccountDAO {
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
 
     // Service to communicate to the database.
-    @SimpleService
-    private DatabaseService databaseService;
+    private final DatabaseService databaseService;
+
+    /**
+     * Create a new Account Data Access Object to load accounts
+     * from a database.
+     *
+     * @param service The service that provides a connection to the
+     *                database.
+     */
+    public AccountDAOImpl(DatabaseService service) {
+        this.databaseService = service;
+    }
 
     /**
      * Get all accounts for a user.

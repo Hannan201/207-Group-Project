@@ -5,12 +5,9 @@ import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.security.UserDTO;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.*;
-import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.Account;
 import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,18 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * deleting a code, and updating a code.
  */
 public class ApplicationIntegrationTests {
-
-    private static Injector injector;
-
-    @BeforeAll
-    public static void create() {
-        injector = new Injector();
-    }
-
-    @AfterAll
-    public static void destroy() {
-        injector = null;
-    }
 
     @Test
     public void interactionOne() {
@@ -59,50 +44,17 @@ public class ApplicationIntegrationTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/interaction_1.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        AccountDAO accountDAO = new AccountDAOImpl();
-        CodeDAO codeDAO = new CodeDAOImpl();
+        UserDAO userDAO = new UserDAOImpl(dbService);
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Cannot inject Database service into UserDAO."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Cannot inject Database service into AccountDAO."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Cannot inject Database service into CodeDAO."
-        );
-
-        UserRepository userRepository = new UserRepositoryImpl();
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Cannot inject Data Access Service service into User Repository."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Cannot inject Data Access Service service into Account Repository."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Cannot inject Data Access Service service into Code Repository."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Cannot inject Repository into Authentication service."
-        );
+        UserDTOMapper mapper = new UserDTOMapper();
+        AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         Optional<User> userOptional = userRepository.findLoggedInUser();
         assertThrows(NoSuchElementException.class, userOptional::get, "User is not empty.");
@@ -234,55 +186,17 @@ public class ApplicationIntegrationTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/interaction_2.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        AccountDAO accountDAO = new AccountDAOImpl();
-        CodeDAO codeDAO = new CodeDAOImpl();
+        UserDAO userDAO = new UserDAOImpl(dbService);
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Cannot inject Database service into UserDAO."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Cannot inject Database service into AccountDAO."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Cannot inject Database service into CodeDAO."
-        );
-
-        UserRepository userRepository = new UserRepositoryImpl();
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Cannot inject Data Access Service service into User Repository."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Cannot inject Data Access Service service into Account Repository."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Cannot inject Data Access Service service into Code Repository."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Cannot inject Repository into Authentication service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         UserDTOMapper mapper = new UserDTOMapper();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, mapper)),
-                "Cannot inject mapper service."
-        );
+        AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         Optional<UserDTO> userOptional = authService.getLoggedInUser();
         assertThrows(NoSuchElementException.class, userOptional::get, "User is not empty.");
@@ -373,50 +287,17 @@ public class ApplicationIntegrationTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/interaction_3.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        AccountDAO accountDAO = new AccountDAOImpl();
-        CodeDAO codeDAO = new CodeDAOImpl();
+        UserDAO userDAO = new UserDAOImpl(dbService);
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Cannot inject Database service into UserDAO."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Cannot inject Database service into AccountDAO."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Cannot inject Database service into CodeDAO."
-        );
-
-        UserRepository userRepository = new UserRepositoryImpl();
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Cannot inject Data Access Service service into User Repository."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Cannot inject Data Access Service service into Account Repository."
-        );
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Cannot inject Data Access Service service into Code Repository."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Cannot inject Repository into Authentication service."
-        );
+        UserDTOMapper mapper = new UserDTOMapper();
+        AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         Optional<User> userOptional = userRepository.findLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");

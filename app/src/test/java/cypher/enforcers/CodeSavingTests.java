@@ -7,9 +7,6 @@ import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.injectors.Injector;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,34 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CodeSavingTests {
 
-    private static Injector injector;
-
-    @BeforeAll
-    public static void create() {
-        injector = new Injector();
-    }
-
-    @AfterAll
-    public static void destroy() {
-        injector = null;
-    }
-
     @Test
     public void createCode() {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_create.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         Code c = new Code();
         c.setCode("123 456");
@@ -66,19 +42,8 @@ public class CodeSavingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_update.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         Code code = new Code();
         code.setCode("4EW C0D3");
@@ -95,19 +60,8 @@ public class CodeSavingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_delete.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         Optional<Code> optionalCode = codeRepository.delete(1);
         assertTrue(optionalCode.isPresent(), "User cannot delete code.");
@@ -120,19 +74,8 @@ public class CodeSavingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/code_clean.db");
 
-        CodeDAO codeDAO = new CodeDAOImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        CodeRepository codeRepository = new CodeRepositoryImpl();
-
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(codeRepository, codeDAO)),
-                "Could not inject data access service."
-        );
+        CodeDAO codeDAO = new CodeDAOImpl(dbService);
+        CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
 
         List<Code> codes = codeRepository.deleteAll(2);
         assertFalse(codes.isEmpty(), "User cannot delete code.");

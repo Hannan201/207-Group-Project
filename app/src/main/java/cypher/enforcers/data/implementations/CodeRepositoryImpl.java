@@ -5,8 +5,6 @@ import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.models.Account;
-import cypher.enforcers.annotations.SimpleService;
 
 import java.util.*;
 
@@ -20,8 +18,17 @@ public class CodeRepositoryImpl implements CodeRepository {
     private static final Logger logger = LoggerFactory.getLogger(CodeRepositoryImpl.class);
 
     // To make updates to the database.
-    @SimpleService
-    private CodeDAO codeDAO;
+    private final CodeDAO codeDAO;
+
+    /**
+     * Create a new Code Repository linked to a Code Data Access Object
+     * to work with the codes as a collection.
+     *
+     * @param dao The Code Data Access Object.
+     */
+    public CodeRepositoryImpl(CodeDAO dao) {
+        this.codeDAO = dao;
+    }
 
     /**
      * Create a new code.

@@ -1,7 +1,6 @@
 package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.models.User;
-import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import org.slf4j.Logger;
@@ -32,13 +31,15 @@ public class UserDAOImpl implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     // Service to communicate to the database.
-    @SimpleService
-    private DatabaseService databaseService;
+    private final DatabaseService databaseService;
 
-    public UserDAOImpl() {
-
-    }
-
+    /**
+     * Create a new User Data Access Object to load users
+     * from a database.
+     *
+     * @param service The service that provides a connection to the
+     *                database.
+     */
     public UserDAOImpl(DatabaseService service) {
         this.databaseService = service;
     }

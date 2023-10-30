@@ -4,15 +4,13 @@ import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
+import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -21,40 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserLoadingTests {
 
-    private static Injector injector;
-
-    @BeforeAll
-    public static void create() {
-        injector = new Injector();
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        injector = null;
-    }
-
     @Test
     public void loadsUsernames() {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/user_read.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Could not inject Database service."
-        );
-
-        UserRepository userRepository = new UserRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Could not inject Data Access Service."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Could not inject Repository service."
-        );
+        UserDAO userDAO = new UserDAOImpl(dbService);
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
+        UserDTOMapper mapper = new UserDTOMapper();
+        AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         assertTrue(authService.checkUsername("joe"), "Username is not taken.");
         assertTrue(authService.checkUsername("haNNan"), "Username is not taken.");
@@ -67,23 +40,9 @@ public class UserLoadingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/user_read_2.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Could not inject Database service."
-        );
+        UserDAO userDAO = new UserDAOImpl(dbService);
 
-        UserRepository userRepository = new UserRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Could not inject Data Access Service."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Could not inject Repository service."
-        );
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
 
         // One user should be logged in.
         Optional<User> optionalUser = userRepository.findLoggedInUser();
@@ -113,23 +72,10 @@ public class UserLoadingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/user_read_3.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Could not inject Database service."
-        );
-
-        UserRepository userRepository = new UserRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Could not inject Data Access Service."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Could not inject Repository service."
-        );
+        UserDAO userDAO = new UserDAOImpl(dbService);
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
+        UserDTOMapper mapper = new UserDTOMapper();
+        AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         assertTrue(authService.authenticateUser("hannan", "12345"), "Failed to login user.");
 
@@ -148,23 +94,10 @@ public class UserLoadingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/user_read_4.db");
 
-        UserDAO userDAO = new UserDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Could not inject Database service."
-        );
-
-        UserRepository userRepository = new UserRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userRepository, userDAO)),
-                "Could not inject Data Access Service."
-        );
-
-        AuthenticationService authService = new AuthenticationServiceImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(authService, userRepository)),
-                "Could not inject Repository service."
-        );
+        UserDAO userDAO = new UserDAOImpl(dbService);
+        UserRepository userRepository = new UserRepositoryImpl(userDAO);
+        UserDTOMapper mapper = new UserDTOMapper();
+        AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         assertTrue(authService.authenticateUser("joe", "1234"), "Failed to login user.");
 

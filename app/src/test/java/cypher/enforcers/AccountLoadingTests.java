@@ -4,55 +4,24 @@ import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.AccountRepository;
 import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.Account;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountLoadingTests {
-
-    private static Injector injector;
-
-    @BeforeAll
-    public static void create() {
-        injector = new Injector();
-    }
-
-    @AfterAll
-    public static void destroy() {
-        injector = null;
-    }
 
     @Test
     public void loadAllAccounts() {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/account_read.db");
 
-        AccountDAO accountDAO = new AccountDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Could not inject Data Access Service."
-        );
-
-        UserDAOImpl userDAO = new UserDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(userDAO, dbService)),
-                "Could not inject database service."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
         List<Account> accounts = accountRepository.readAll(1);
 
@@ -81,17 +50,8 @@ public class AccountLoadingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/account_read.db");
 
-        AccountDAO accountDAO = new AccountDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Could not inject Data Access Service."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
         Optional<Account> accountOptional = accountRepository.read(2);
         assertTrue(accountOptional.isPresent(), "First account is empty.");

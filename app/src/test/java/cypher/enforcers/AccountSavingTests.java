@@ -1,13 +1,8 @@
 package cypher.enforcers;
 
 import cypher.enforcers.data.implementations.*;
-import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.spis.*;
-import cypher.enforcers.injectors.Injector;
 import cypher.enforcers.models.Account;
-import cypher.enforcers.models.User;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,18 +11,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountSavingTests {
-
-    private static Injector injector;
-
-    @BeforeAll
-    public static void create() {
-        injector = new Injector();
-    }
-
-    @AfterAll
-    public static void destroy() {
-        injector = null;
-    }
 
     // Username: Hannan
     // Password: 12345
@@ -43,17 +26,8 @@ public class AccountSavingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/account_create.db");
 
-        AccountDAO accountDAO = new AccountDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Could not inject Data Access Service."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
         Account account = new Account();
         account.setName("One");
@@ -71,17 +45,8 @@ public class AccountSavingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/account_clean.db");
 
-        AccountDAO accountDAO = new AccountDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Could not inject Data Access Service."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
         List<Account> accounts = accountRepository.deleteAll(1);
         assertFalse(accounts.isEmpty(), "Accounts were not deleted.");
@@ -94,17 +59,8 @@ public class AccountSavingTests {
         DatabaseService dbService = new SqliteHelper();
         dbService.connect("/cypher/enforcers/account_delete.db");
 
-        AccountDAO accountDAO = new AccountDAOImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountDAO, dbService)),
-                "Could not inject database service."
-        );
-
-        AccountRepository accountRepository = new AccountRepositoryImpl();
-        assertDoesNotThrow(
-                () -> assertTrue(injector.injectServicesInto(accountRepository, accountDAO)),
-                "Could not inject Data Access Service."
-        );
+        AccountDAO accountDAO = new AccountDAOImpl(dbService);
+        AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
         Account one = new Account();
         one.setId(1);

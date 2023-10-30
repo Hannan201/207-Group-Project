@@ -5,7 +5,6 @@ import cypher.enforcers.data.spis.AccountRepository;
 import cypher.enforcers.models.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.annotations.SimpleService;
 
 import java.util.*;
 
@@ -19,8 +18,17 @@ public class AccountRepositoryImpl implements AccountRepository {
     private static final Logger logger = LoggerFactory.getLogger(AccountRepositoryImpl.class);
 
     // To make updates to the database.
-    @SimpleService
-    private AccountDAO accountDAO;
+    private final AccountDAO accountDAO;
+
+    /**
+     * Create a new Account Repository linked to a Account Data Access
+     * Object to work with the accounts as a collection.
+     *
+     * @param dao The Account Data Access Object.
+     */
+    public AccountRepositoryImpl(AccountDAO dao) {
+        this.accountDAO = dao;
+    }
 
     /**
      * Create a new account.

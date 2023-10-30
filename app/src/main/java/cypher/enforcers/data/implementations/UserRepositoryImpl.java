@@ -5,7 +5,6 @@ import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.annotations.SimpleService;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -20,13 +19,14 @@ public class UserRepositoryImpl implements UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     // To make updates to the database.
-    @SimpleService
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
-    public UserRepositoryImpl() {
-
-    }
-
+    /**
+     * Create a new User Repository linked to a User Data Access Object
+     * to work with the users as a collection.
+     *
+     * @param dao The User Data Access Object.
+     */
     public UserRepositoryImpl(UserDAO dao) {
         this.userDAO = dao;
     }

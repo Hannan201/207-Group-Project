@@ -20,9 +20,22 @@ import java.util.Optional;
 public class CodeModel {
 
     // Used to interact with the codes objects.
-    private CodeRepository codeRepository;
+    private final CodeRepository codeRepository;
 
-    private CodeDTOMapper mapper;
+    private final CodeDTOMapper mapper;
+
+    /**
+     * Create a new code model linked to a Code Repository with a mapper
+     * to convert a code object to a transfer object.
+     *
+     * @param repository The repository containing the codes.
+     * @param mapper The mapper that converts a code object to be
+     *               transferred.
+     */
+    public CodeModel(CodeRepository repository, CodeDTOMapper mapper) {
+        this.codeRepository = repository;
+        this.mapper = mapper;
+    }
 
     // list of codes for an account.
     private final ObservableList<CodeDTO> codes = FXCollections.observableArrayList();

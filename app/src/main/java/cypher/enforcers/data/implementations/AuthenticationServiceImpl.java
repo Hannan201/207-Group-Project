@@ -9,7 +9,6 @@ import cypher.enforcers.models.User;
 import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.annotations.SimpleService;
 
 import java.util.Optional;
 
@@ -24,19 +23,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
     // Used to store information related to the current logged-in user.
-    @SimpleService
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @SimpleService
-    private UserDTOMapper mapper;
+    // Used to hide sensitive information.
+    private final UserDTOMapper mapper;
 
+    /**
+     * Create a new Authentication service linked to a User Repository
+     * and a mapper to convert the User object to a transfer object.
+     *
+     * @param repository The Repository containing the users.
+     * @param mapper The mapper that converts a user object to be
+     *               transferred.
+     */
     public AuthenticationServiceImpl(UserRepository repository, UserDTOMapper mapper) {
         this.userRepository = repository;
         this.mapper = mapper;
-    }
-
-    public AuthenticationServiceImpl() {
-
     }
 
     /**

@@ -1,10 +1,8 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.CodeDAO;
-import cypher.enforcers.models.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +34,18 @@ public class CodeDAOImpl implements CodeDAO {
     private static final Logger logger = LoggerFactory.getLogger(CodeDAOImpl.class);
 
     // Service to communicate to the database.
-    @SimpleService
-    private DatabaseService databaseService;
+    private final DatabaseService databaseService;
+
+    /**
+     * Create a new Code Data Access Object to load codes
+     * from a database.
+     *
+     * @param service The service that provides a connection to the
+     *                database.
+     */
+    public CodeDAOImpl(DatabaseService service) {
+        this.databaseService = service;
+    }
 
     /**
      * Get all codes for an account.

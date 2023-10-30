@@ -17,9 +17,22 @@ import java.util.Optional;
 public class AccountModel {
 
     // Used to interact with account objects.
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-    private AccountDTOMapper mapper;
+    private final AccountDTOMapper mapper;
+
+    /**
+     * Create a new account model linked to an Account Repository with
+     * a mapper to convert an account object to a transfer object.
+     *
+     * @param repository The repository containing the account.
+     * @param mapper The mapper that converts an account object to be
+     *               transferred.
+     */
+    public AccountModel(AccountRepository repository, AccountDTOMapper mapper) {
+        this.accountRepository = repository;
+        this.mapper = mapper;
+    }
 
     // List of accounts for the current user.
     private final ObservableList<AccountDTO> accounts = FXCollections.observableArrayList();
