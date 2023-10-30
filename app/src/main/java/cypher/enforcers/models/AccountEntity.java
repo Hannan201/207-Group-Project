@@ -9,7 +9,7 @@ import java.util.*;
  * related to a specific social media account.
  */
 
-public class Account {
+public class AccountEntity {
 
     // List of social media platforms that allow the imports
     // of text files.
@@ -48,7 +48,7 @@ public class Account {
     /**
      * Create an account.
      */
-    public Account() {
+    public AccountEntity() {
 
     }
 
@@ -150,7 +150,7 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Account account = (Account) o;
+        AccountEntity account = (AccountEntity) o;
 
         if (!socialMediaType.equals(account.socialMediaType)) return false;
         return name.equals(account.name);

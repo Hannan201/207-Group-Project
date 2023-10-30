@@ -2,11 +2,11 @@ package cypher.enforcers;
 
 import cypher.enforcers.code.Code;
 import cypher.enforcers.data.implementations.*;
-import cypher.enforcers.data.security.UserDTO;
+import cypher.enforcers.data.security.User;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.*;
-import cypher.enforcers.models.Account;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 
@@ -56,14 +56,14 @@ public class ApplicationIntegrationTests {
         UserDTOMapper mapper = new UserDTOMapper();
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
-        Optional<User> userOptional = userRepository.findLoggedInUser();
+        Optional<UserEntity> userOptional = userRepository.findLoggedInUser();
         assertThrows(NoSuchElementException.class, userOptional::get, "User is not empty.");
 
         assertTrue(authService.createUser("Test", "password"), "User cannot register.");
 
         userOptional = userRepository.findLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
-        User user = userOptional.get();
+        UserEntity user = userOptional.get();
 
         assertEquals(user.getID(), 1, "User ID does not match.");
         assertEquals(user.getUsername(), "test", "Username does not match.");
@@ -71,23 +71,23 @@ public class ApplicationIntegrationTests {
         assertEquals(user.getTheme(), Theme.LIGHT, "Theme does not match.");
         assertTrue(user.getLoggedIn(), "User is not logged in.");
 
-        Account one = new Account();
+        AccountEntity one = new AccountEntity();
         one.setName("bruh");
         one.setSocialMediaType("Reddit");
         one.setUserId(user.getID());
 
-        Optional<Account> optionalAccount = accountRepository.create(one);
+        Optional<AccountEntity> optionalAccount = accountRepository.create(one);
         assertTrue(optionalAccount.isPresent(), "Cannot create first account.");
-        Account firstCreated = optionalAccount.get();
+        AccountEntity firstCreated = optionalAccount.get();
 
-        Account two = new Account();
+        AccountEntity two = new AccountEntity();
         two.setName("moment");
         two.setSocialMediaType("Google");
         two.setUserId(user.getID());
 
         optionalAccount = accountRepository.create(two);
         assertTrue(optionalAccount.isPresent(), "Cannot create second account.");
-        Account secondCreated = optionalAccount.get();
+        AccountEntity secondCreated = optionalAccount.get();
 
         Code codeOne = new Code();
         codeOne.setCode("111");
@@ -127,18 +127,18 @@ public class ApplicationIntegrationTests {
         assertEquals(user.getTheme(), Theme.LIGHT, "Theme does not match.");
         assertTrue(user.getLoggedIn(), "User is not logged in.");
 
-        List<Account> accounts = accountRepository.readAll(user.getID());
+        List<AccountEntity> accounts = accountRepository.readAll(user.getID());
 
         assertEquals(accounts.size(), 2, "Number of accounts do not match.");
 
         assertEquals(accounts.get(0).getID(), 1, "First account ID does not match.");
         assertEquals(accounts.get(0).getName(), "bruh", "First account name does not match.");
-        assertEquals(accounts.get(0).getSocialMediaType(), "Reddit", "First account type does not match,");
+        assertEquals(accounts.get(0).getSocialMediaType(), "Reddit", "First account socialMediaType does not match,");
         assertEquals(accounts.get(0).getUserId(), user.getID(), "User ID of the first account does not match.");
 
         assertEquals(accounts.get(1).getID(), 2, "Second account ID does not match.");
         assertEquals(accounts.get(1).getName(), "moment", "Second account name does not match.");
-        assertEquals(accounts.get(1).getSocialMediaType(), "Google", "Second account type does not match,");
+        assertEquals(accounts.get(1).getSocialMediaType(), "Google", "Second account socialMediaType does not match,");
         assertEquals(accounts.get(1).getUserId(), user.getID(), "User ID of the second account does not match.");
 
         List<Code> codes = codeRepository.readAll(accounts.get(0).getID());
@@ -198,27 +198,27 @@ public class ApplicationIntegrationTests {
         UserDTOMapper mapper = new UserDTOMapper();
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
-        Optional<UserDTO> userOptional = authService.getLoggedInUser();
+        Optional<User> userOptional = authService.getLoggedInUser();
         assertThrows(NoSuchElementException.class, userOptional::get, "User is not empty.");
 
         assertTrue(authService.authenticateUser("Test", "password"), "User cannot register.");
 
         userOptional = authService.getLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
-        UserDTO userDTO = userOptional.get();
+        User userDTO = userOptional.get();
 
         assertTrue(authService.updateUserTheme(userDTO.id(), Theme.DARK), "Unable to update theme.");
 
-        Optional<Account> accountOptional = accountRepository.read(2);
+        Optional<AccountEntity> accountOptional = accountRepository.read(2);
         assertTrue(accountOptional.isPresent(), "Account is empty.");
-        Account account = accountOptional.get();
+        AccountEntity account = accountOptional.get();
 
         assertEquals(account.getID(), 2, "Account ID does not match.");
         assertEquals(account.getName(), "moment", "Account name does not match.");
-        assertEquals(account.getSocialMediaType(), "Google", "Account type does not match,");
+        assertEquals(account.getSocialMediaType(), "Google", "Account socialMediaType does not match,");
         assertEquals(account.getUserId(), userDTO.id(), "User ID of the account does not match.");
 
-        Optional<Account> optionalAccount = accountRepository.delete(account.getID());
+        Optional<AccountEntity> optionalAccount = accountRepository.delete(account.getID());
         assertTrue(optionalAccount.isPresent(), "Unable to delete account.");
 
         accountOptional = accountRepository.read(1);
@@ -247,9 +247,9 @@ public class ApplicationIntegrationTests {
 
         assertTrue(authService.authenticateUser("Test", "password"), "Unable to login user.");
 
-        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        Optional<UserEntity> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User is empty.");
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
 
         assertEquals(user.getID(), 1, "User ID does not match.");
         assertEquals(user.getUsername(), "test", "Username does not match.");
@@ -257,13 +257,13 @@ public class ApplicationIntegrationTests {
         assertEquals(user.getTheme(), Theme.DARK, "Theme does not match.");
         assertTrue(user.getLoggedIn(), "User is not logged in.");
 
-        List<Account> accounts = accountRepository.readAll(user.getID());
+        List<AccountEntity> accounts = accountRepository.readAll(user.getID());
         assertEquals(accounts.size(), 1,  "Account size (after reload) does not match.");
         account = accounts.get(0);
 
         assertEquals(account.getID(), 1, "Account ID (after reload) does not match.");
         assertEquals(account.getName(), "bruh", "Account name (after reload) does not match.");
-        assertEquals(account.getSocialMediaType(), "Reddit", "Account type (after reload) does not match,");
+        assertEquals(account.getSocialMediaType(), "Reddit", "Account socialMediaType (after reload) does not match,");
         assertEquals(account.getUserId(), user.getID(), "User ID of the account (after reload) does not match.");
 
         codes = codeRepository.readAll(account.getID());
@@ -299,9 +299,9 @@ public class ApplicationIntegrationTests {
         UserDTOMapper mapper = new UserDTOMapper();
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
-        Optional<User> userOptional = userRepository.findLoggedInUser();
+        Optional<UserEntity> userOptional = userRepository.findLoggedInUser();
         assertTrue(userOptional.isPresent(), "User is empty.");
-        User user = userOptional.get();
+        UserEntity user = userOptional.get();
 
         assertEquals(user.getID(), 1, "User ID does not match.");
         assertEquals(user.getUsername(), "test", "Username does not match.");
@@ -309,13 +309,13 @@ public class ApplicationIntegrationTests {
         assertEquals(user.getTheme(), Theme.DARK, "Theme does not match.");
         assertTrue(user.getLoggedIn(), "User is not logged in.");
 
-        List<Account> accounts = accountRepository.readAll(user.getID());
+        List<AccountEntity> accounts = accountRepository.readAll(user.getID());
         assertEquals(accounts.size(), 1,  "Account size does not match.");
-        Account account = accounts.get(0);
+        AccountEntity account = accounts.get(0);
 
         assertEquals(account.getID(), 1, "Account ID does not match.");
         assertEquals(account.getName(), "bruh", "Account name does not match.");
-        assertEquals(account.getSocialMediaType(), "Reddit", "Account type does not match,");
+        assertEquals(account.getSocialMediaType(), "Reddit", "Account socialMediaType does not match,");
         assertEquals(account.getUserId(), user.getID(), "User ID of the account does not match.");
 
         List<Code> codes = codeRepository.readAll(account.getID());

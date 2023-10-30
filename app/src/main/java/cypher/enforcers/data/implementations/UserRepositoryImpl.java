@@ -2,7 +2,7 @@ package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
      * null otherwise.
      */
     @Override
-    public Optional<User> create(User user) {
+    public Optional<UserEntity> create(UserEntity user) {
         logger.trace("Attempting to create user with username {}.", user.getUsername());
 
         if (user.getUsername().isBlank() || user.getUsername().isEmpty()
@@ -48,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
             return Optional.empty();
         }
 
-        User createUser = userDAO.registerUser(user);
+        UserEntity createUser = userDAO.registerUser(user);
 
         if (!Objects.isNull(user)) {
             logger.trace("User created.");
@@ -66,10 +66,10 @@ public class UserRepositoryImpl implements UserRepository {
      * @return An Optional containing the user if found, null otherwise.
      */
     @Override
-    public Optional<User> read(long id) {
+    public Optional<UserEntity> read(long id) {
         logger.trace("Attempting to get user with ID {}.", id);
 
-        User user = userDAO.getUserByID(id);
+        UserEntity user = userDAO.getUserByID(id);
 
         if (!Objects.isNull(user)) {
             logger.trace("User found.");
@@ -87,10 +87,10 @@ public class UserRepositoryImpl implements UserRepository {
      * @return An Optional containing the user if found, null otherwise.
      */
     @Override
-    public Optional<User> read(String username) {
+    public Optional<UserEntity> read(String username) {
         logger.trace("Fetching user with username {}.", username);
 
-        User user = userDAO.getUserByName(username);
+        UserEntity user = userDAO.getUserByName(username);
 
         if (!Objects.isNull(user)) {
             logger.trace("User found.");
@@ -107,10 +107,10 @@ public class UserRepositoryImpl implements UserRepository {
      * @return An Optional containing the user if found, null otherwise.
      */
     @Override
-    public Optional<User> findLoggedInUser() {
+    public Optional<UserEntity> findLoggedInUser() {
         logger.trace("Attempting to find logged in user.");
 
-        User user = userDAO.getLoggedInUser();
+        UserEntity user = userDAO.getLoggedInUser();
 
         if (!Objects.isNull(user)) {
             logger.trace("User found.");
@@ -127,10 +127,10 @@ public class UserRepositoryImpl implements UserRepository {
      * @return An Optional containing the user if updated, null otherwise.
      */
     @Override
-    public Optional<User> update(User user) {
+    public Optional<UserEntity> update(UserEntity user) {
         logger.trace("Attempting to update user with ID {}.", user.getID());
 
-        User updatedUser = userDAO.updateUser(user);
+        UserEntity updatedUser = userDAO.updateUser(user);
 
         if (!Objects.isNull(updatedUser)) {
             logger.trace("User updated successfully.");

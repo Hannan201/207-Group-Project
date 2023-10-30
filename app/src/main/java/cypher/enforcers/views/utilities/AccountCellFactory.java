@@ -1,9 +1,9 @@
 package cypher.enforcers.views.utilities;
 
+import cypher.enforcers.data.security.Account;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-import cypher.enforcers.models.Account;
 
 
 /**

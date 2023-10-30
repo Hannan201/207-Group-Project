@@ -1,8 +1,8 @@
 package cypher.enforcers.utilities.sqliteutilities.retrievers;
 
 import cypher.enforcers.code.Code;
-import cypher.enforcers.models.Account;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 
 import java.sql.ResultSet;
@@ -65,14 +65,14 @@ public class Retrievers {
     }
 
     // How to retrieve a user from a result set.
-    private static final Function<ResultSet, User> FOR_USER = resultSet -> {
-        User user;
+    private static final Function<ResultSet, UserEntity> FOR_USER = resultSet -> {
+        UserEntity user;
         try {
             if (!resultSet.isBeforeFirst()) {
                 return null;
             }
 
-            user = new User();
+            user = new UserEntity();
             user.setID(resultSet.getLong("id"));
             user.setUsername(resultSet.getString("username"));
             user.setPassword(resultSet.getString("password"));
@@ -96,13 +96,13 @@ public class Retrievers {
     };
 
     // How to retrieve an account from the result set.
-    private static final Function<ResultSet, Account> FOR_ACCOUNT = resultSet -> {
+    private static final Function<ResultSet, AccountEntity> FOR_ACCOUNT = resultSet -> {
         try {
             if (resultSet.getRow() == 0 && !resultSet.isBeforeFirst()) {
                 return null;
             }
 
-            Account account = new Account();
+            AccountEntity account = new AccountEntity();
             account.setId(resultSet.getLong("id"));
             account.setName(resultSet.getString("name"));
             account.setSocialMediaType(resultSet.getString("type"));
@@ -130,21 +130,21 @@ public class Retrievers {
         }
     };
 
-    // Maps the type of object to how it should be retrieved.
+    // Maps the socialMediaType of object to how it should be retrieved.
     private static final Map<Class<?>, Function<ResultSet, ?>> OBJECT_TYPE_TO_RETRIEVER =
             Map.ofEntries(
-                    Map.entry(User.class, FOR_USER),
+                    Map.entry(UserEntity.class, FOR_USER),
                     Map.entry(Theme.class, FOR_THEME),
-                    Map.entry(Account.class, FOR_ACCOUNT),
+                    Map.entry(AccountEntity.class, FOR_ACCOUNT),
                     Map.entry(Code.class, FOR_CODE)
             );
 
     /**
-     * Get a retriever that can retrieve a specific type of object from
+     * Get a retriever that can retrieve a specific socialMediaType of object from
      * a result set.
      *
      * @param type The class of the object to retrieve.
-     * @param <T> The type of data to retrieve.
+     * @param <T> The socialMediaType of data to retrieve.
      * @return A retriever that knows how to retrieve the object from
      * the result set.
      */

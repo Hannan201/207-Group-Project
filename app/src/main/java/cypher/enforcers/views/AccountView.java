@@ -55,6 +55,7 @@ public class AccountView extends View implements Reversible {
     protected void initUI() {
         try {
             FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountsView.fxml"));
+            loader.setControllerFactory(View.CONTROLLER_FACTORY);
             this.setRoot(loader.load());
             this.controller = loader.getController();
         } catch (Exception e) {

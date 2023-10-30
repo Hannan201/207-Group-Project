@@ -9,7 +9,7 @@ import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 
@@ -45,9 +45,9 @@ public class UserLoadingTests {
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
 
         // One user should be logged in.
-        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        Optional<UserEntity> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
 
         assertEquals(user.getUsername(), "Joe", "Usernames don't match.");
         assertEquals(user.getID(), 1, "ID does not match.");
@@ -79,10 +79,10 @@ public class UserLoadingTests {
 
         assertTrue(authService.authenticateUser("hannan", "12345"), "Failed to login user.");
 
-        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        Optional<UserEntity> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
 
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
         assertEquals(user.getID(), 1, "Id for first user not equal.");
         assertTrue(user.getPassword().contains("RoQRUJ"), "Password does not match.");
 
@@ -101,10 +101,10 @@ public class UserLoadingTests {
 
         assertTrue(authService.authenticateUser("joe", "1234"), "Failed to login user.");
 
-        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        Optional<UserEntity> optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
 
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
         assertEquals(user.getID(), 2, "Id for first user not equal.");
         assertTrue(user.getPassword().contains("Oy+eiw"), "Password does not match.");
         dbService.disconnect();

@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 
 /**
  * Interface for the User Data Access Object (DAO) to communicate to the
@@ -14,7 +14,7 @@ public interface UserDAO {
      * @param user The user to insert.
      * @return A user object if the user was added, null otherwise.
      */
-    User registerUser(User user);
+    UserEntity registerUser(UserEntity user);
 
     /**
      * Get a user from the database with a specific ID.
@@ -22,7 +22,7 @@ public interface UserDAO {
      * @param id The ID of the user.
      * @return User if found, null otherwise.
      */
-    User getUserByID(long id);
+    UserEntity getUserByID(long id);
 
     /**
      * Get a user from the database with a specific username.
@@ -30,14 +30,14 @@ public interface UserDAO {
      * @param username The username of the user.
      * @return User if found, null otherwise.
      */
-    User getUserByName(String username);
+    UserEntity getUserByName(String username);
 
     /**
      * Get the data for the user that has a login status of true.
      *
      * @return The user if any user is logged in, null otherwise.
      */
-    User getLoggedInUser();
+    UserEntity getLoggedInUser();
 
     /**
      * Update a user in the database.
@@ -46,5 +46,5 @@ public interface UserDAO {
      * @return User object with the updated data if successfully found,
      * null otherwise.
      */
-    User updateUser(User user);
+    UserEntity updateUser(UserEntity user);
 }

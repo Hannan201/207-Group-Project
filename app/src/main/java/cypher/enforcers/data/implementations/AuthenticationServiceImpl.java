@@ -1,11 +1,11 @@
 package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.security.SecurityUtils;
-import cypher.enforcers.data.security.UserDTO;
+import cypher.enforcers.data.security.User;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +54,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String salt = SecurityUtils.createSalt();
         String hashedPassword = salt + SecurityUtils.hashPassword(password + salt, salt.getBytes());
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setUsername(username.toLowerCase());
         user.setPassword(hashedPassword);
 
-        Optional<User> createdUser = userRepository.create(user);
+        Optional<UserEntity> createdUser = userRepository.create(user);
 
         if (createdUser.isPresent() && createdUser.get().getLoggedIn() && createdUser.get().getID() >= 1) {
             logger.trace("User created.");
@@ -81,12 +81,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean authenticateUser(String username, String password) {
         logger.trace("Attempting to authenticate user with username {}.", username);
 
-        Optional<User> userOptional = userRepository.read(username.toLowerCase());
+        Optional<UserEntity> userOptional = userRepository.read(username.toLowerCase());
         if (userOptional.isEmpty()) {
             return false;
         }
 
-        User user = userOptional.get();
+        UserEntity user = userOptional.get();
         if (verifyPassword(user.getPassword(), password)) {
             user.setLoggedIn(true);
             userOptional = userRepository.update(user);
@@ -116,14 +116,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean logUserOut(long id) {
         logger.trace("Attempting to log user out.");
 
-        Optional<User> optionalUser = userRepository.read(id);
+        Optional<UserEntity> optionalUser = userRepository.read(id);
 
         if (optionalUser.isEmpty()) {
             logger.warn("User with ID {} does not exist.", id);
             return false;
         }
 
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
 
         if (!user.getLoggedIn()) {
             logger.trace("Use with ID {} already logged out.", id);
@@ -152,14 +152,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean updateUserTheme(long id, Theme theme) {
         logger.trace("Attempting to update theme to {} of user with ID {}.", theme, id);
 
-        Optional<User> optionalUser = userRepository.read(id);
+        Optional<UserEntity> optionalUser = userRepository.read(id);
 
         if (optionalUser.isEmpty()) {
             logger.warn("User with ID {} does not exist.", id);
             return false;
         }
 
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
 
         if (!user.getLoggedIn()) {
             logger.warn("Use with ID {} is not logged in.", id);
@@ -187,7 +187,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public boolean checkUsername(String username) {
-        Optional<User> optionalUser = userRepository.read(username.toLowerCase());
+        Optional<UserEntity> optionalUser = userRepository.read(username.toLowerCase());
 
         if (optionalUser.isPresent() && optionalUser.get().getUsername().equalsIgnoreCase(username)) {
             logger.debug("Username is taken.");
@@ -205,9 +205,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * otherwise.
      */
     @Override
-    public Optional<UserDTO> getLoggedInUser() {
+    public Optional<User> getLoggedInUser() {
         return userRepository.findLoggedInUser()
-                .map(user -> mapper.apply(user));
+                .map(mapper);
     }
 
     /**

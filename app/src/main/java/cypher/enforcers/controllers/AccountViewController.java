@@ -1,11 +1,13 @@
 package cypher.enforcers.controllers;
 
+import cypher.enforcers.data.security.Account;
+import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
+import javafx.collections.FXCollections;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Debouncer;
-import cypher.enforcers.data.Storage;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,8 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import cypher.enforcers.models.Account;
-import cypher.enforcers.data.database.Database;
+import cypher.enforcers.models.AccountEntity;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 import cypher.enforcers.views.utilities.AccountCellFactory;
@@ -27,6 +28,7 @@ import cypher.enforcers.views.utilities.AccountCellFactory;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -110,8 +112,19 @@ public class AccountViewController implements Initializable {
     // To make searching accounts more efficient.
     private Debouncer debounce;
 
-    // To interact with the user's accounts.
+    // To interact with the current user.
     private UserModel userModel;
+
+    // To interact with the user's accounts.
+    private AccountModel accountModel;
+
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
+
+    public void setAccountModel(AccountModel model) {
+        this.accountModel = model;
+    }
 
     /**
      * Configure the stage for this view to disconnect and close threads
@@ -129,6 +142,22 @@ public class AccountViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        accounts.itemsProperty().bind(accountModel.accountsProperty());
+
+        if (!Objects.isNull(userModel.getCurrentUser())) {
+            accountModel.loadAccounts(userModel.getCurrentUser().id());
+        }
+
+        userModel.currentUserProperty().addListener((observable, oldValue, newValue) -> {
+            if (!Objects.isNull(newValue)) {
+                accountModel.loadAccounts(newValue.id());
+                return;
+            }
+
+            accountModel.clear();
+        });
+
+        accountModel.currentAccountProperty().bind(accounts.getSelectionModel().selectedItemProperty());
 
         /*
         This view would break down if the screen went too large or
@@ -214,16 +243,12 @@ public class AccountViewController implements Initializable {
                 key,
                 () -> {
                     Platform.runLater(() -> {
-                        List<Account> allAccounts = Database.getAccounts(Storage.getToken());
-
                         if (!result.isEmpty()) {
-                            allAccounts = searchAccounts(
-                                    allAccounts, key
-                            );
+                            accounts.itemsProperty().unbind();
+                            accounts.setItems(FXCollections.observableList(findAccounts(accountModel.getAccounts(), key)));
+                        } else {
+                            accounts.itemsProperty().bind(accountModel.accountsProperty());
                         }
-
-                        accounts.getItems().clear();
-                        accounts.getItems().addAll(allAccounts);
 
                         logger.debug("Finished search for account with name {}.", key);
                     });
@@ -248,7 +273,30 @@ public class AccountViewController implements Initializable {
      * @param name The name of the account to search.
      * @return List of accounts with usernames that match.
      */
-    public static List<Account> searchAccounts(List<Account> accounts, String name) {
+    public static List<Account> findAccounts(List<Account> accounts, String name) {
+        logger.debug("Starting search for account with name: {}.", name);
+
+        return accounts.stream().filter(account -> account.name()
+                        .toLowerCase()
+                        .contains(name.toLowerCase()))
+                .toList();
+    }
+
+    /**
+     * Utility method to search through the list of accounts and find all
+     * accounts that have a username that matches the name to search.
+     * <p>
+     * In this case, match means that the name being searched
+     * is contained in the account name.
+     * <p>
+     * Both the account name and the name being searched are converted to
+     * lowercase before the contains-check is done.
+     *
+     * @param accounts List of accounts.
+     * @param name The name of the account to search.
+     * @return List of accounts with usernames that match.
+     */
+    public static List<AccountEntity> searchAccounts(List<AccountEntity> accounts, String name) {
         logger.debug("Starting search for account with name: {}.", name);
 
         return accounts.stream().filter(account -> account.getName()
@@ -270,13 +318,10 @@ public class AccountViewController implements Initializable {
      * to the HomePageView.
      */
     public void handleLogout() {
-        Database.logUserOut(Storage.getToken());
-
-        logger.trace("Switching from the AccountView to the HomePageView.");
-        View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
-
-        Storage.setToken(null);
-        accounts.getItems().clear();
+        if (userModel.logOutUser()) {
+            logger.trace("Switching from the AccountView to the HomePageView.");
+            View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
+        }
     }
 
     /**
@@ -307,10 +352,10 @@ public class AccountViewController implements Initializable {
      * @param ID ID of the Account to be added.
      */
     public void addAccount(int ID) {
-        accounts.getItems()
-                .add(
-                        Database.getAccount(Storage.getToken(), ID)
-                );
+//        accounts.getItems()
+//                .add(
+//                        Database.getAccount(Storage.getToken(), ID)
+//                );
     }
 
     /**
@@ -318,9 +363,9 @@ public class AccountViewController implements Initializable {
      *
      * @param userAccounts List containing the accounts.
      */
-    public void addAccounts(List<Account> userAccounts) {
+    public void addAccounts(List<AccountEntity> userAccounts) {
         accounts.getItems().clear();
-        accounts.getItems().addAll(userAccounts);
+        //accounts.getItems().addAll(userAccounts);
     }
 
     /**
@@ -339,9 +384,6 @@ public class AccountViewController implements Initializable {
         // Credit to https://stackoverflow.com/questions/24206854/javafx-clearing-the-listview for the code below.
 
         List<Account> selectedItemsCopy = new ArrayList<>(accounts.getSelectionModel().getSelectedItems());
-        accounts.getItems().removeAll(selectedItemsCopy);
-        for (Account account : selectedItemsCopy) {
-            Database.removeAccount(Storage.getToken(), (int) account.getID());
-        }
+        accountModel.deleteAccounts(userModel.getCurrentUser().id(), selectedItemsCopy);
     }
 }

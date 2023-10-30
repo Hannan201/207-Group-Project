@@ -1,7 +1,7 @@
 package cypher.enforcers;
 
 import cypher.enforcers.controllers.AccountViewController;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,23 +11,23 @@ import java.util.ArrayList;
 
 public class SearchAccountTests {
 
-    private List<Account> createAccounts() {
-        Account one = new Account();
+    private List<AccountEntity> createAccounts() {
+        AccountEntity one = new AccountEntity();
         one.setId(1);
         one.setName("Joe");
         one.setSocialMediaType("Reddit");
 
-        Account two = new Account();
+        AccountEntity two = new AccountEntity();
         two.setId(2);
         two.setName("Random");
         two.setSocialMediaType("Slack");
 
-        Account three = new Account();
+        AccountEntity three = new AccountEntity();
         three.setId(3);
         three.setName("Oof");
         three.setSocialMediaType("Google");
 
-        Account four = new Account();
+        AccountEntity four = new AccountEntity();
         four.setId(4);
         four.setName("Razor");
         four.setSocialMediaType("Origin");
@@ -40,7 +40,7 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenAccountExists() {
-        List<Account> result = AccountViewController.searchAccounts(createAccounts(), "Joe");
+        List<AccountEntity> result = AccountViewController.searchAccounts(createAccounts(), "Joe");
         assertEquals(1, result.size());
         assertEquals("Joe", result.get(0).getName());
         assertEquals(
@@ -55,7 +55,7 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenEmpty() {
-        List<Account> result = AccountViewController.searchAccounts(
+        List<AccountEntity> result = AccountViewController.searchAccounts(
                 new ArrayList<>(),
                 ""
         );
@@ -70,7 +70,7 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenNoMatches() {
-        List<Account> result = AccountViewController.searchAccounts(
+        List<AccountEntity> result = AccountViewController.searchAccounts(
                 createAccounts(),
                 "Gordan Ramsey"
         );
@@ -82,7 +82,7 @@ public class SearchAccountTests {
      */
     @Test
     void testWhenMultipleMatches() {
-        List<Account> result = AccountViewController.searchAccounts(
+        List<AccountEntity> result = AccountViewController.searchAccounts(
                 createAccounts(),
                 "Ra"
         );

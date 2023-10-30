@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import org.slf4j.Logger;
@@ -51,13 +51,13 @@ public class UserDAOImpl implements UserDAO {
      * @return A user object if the user was added, null otherwise.
      */
     @Override
-    public User registerUser(User user) {
+    public UserEntity registerUser(UserEntity user) {
         logger.trace("Now making update to the users table.");
 
         try {
             databaseService.executeUpdate(ADD_USER, user);
 
-            return databaseService.executeSelect(GET_USER_AFTER_ADDING, User.class);
+            return databaseService.executeSelect(GET_USER_AFTER_ADDING, UserEntity.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
@@ -71,11 +71,11 @@ public class UserDAOImpl implements UserDAO {
      * @return User if found, null otherwise.
      */
     @Override
-    public User getUserByID(long id) {
+    public UserEntity getUserByID(long id) {
         logger.trace("Getting user from table with ID {}.", id);
 
         try {
-            return databaseService.executeSelect(GET_USER_BY_ID, User.class, id);
+            return databaseService.executeSelect(GET_USER_BY_ID, UserEntity.class, id);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
         }
@@ -90,11 +90,11 @@ public class UserDAOImpl implements UserDAO {
      * @return User if found, null otherwise.
      */
     @Override
-    public User getUserByName(String username) {
+    public UserEntity getUserByName(String username) {
         logger.trace("Getting user from table with username {}.", username);
 
         try {
-            return databaseService.executeSelect(GET_USER_BY_NAME, User.class, username);
+            return databaseService.executeSelect(GET_USER_BY_NAME, UserEntity.class, username);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
         }
@@ -108,11 +108,11 @@ public class UserDAOImpl implements UserDAO {
      * @return The user if any user is logged in, null otherwise.
      */
     @Override
-    public User getLoggedInUser() {
+    public UserEntity getLoggedInUser() {
         logger.trace("Getting user currently logged in.");
 
         try {
-            return databaseService.executeSelect(GET_LOGGED_IN_USER, User.class);
+            return databaseService.executeSelect(GET_LOGGED_IN_USER, UserEntity.class);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -128,12 +128,12 @@ public class UserDAOImpl implements UserDAO {
      * null otherwise.
      */
     @Override
-    public User updateUser(User user) {
+    public UserEntity updateUser(UserEntity user) {
         try {
             int status = user.getLoggedIn() ? 1 : 0;
             databaseService.executeUpdate(UPDATE_USER, user.getTheme().ordinal(), status, user.getID());
 
-            return databaseService.executeSelect(GET_USER_BY_ID, User.class, user.getID());
+            return databaseService.executeSelect(GET_USER_BY_ID, UserEntity.class, user.getID());
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;

@@ -1,13 +1,10 @@
 package cypher.enforcers.controllers;
 
-import cypher.enforcers.data.database.Database;
-import cypher.enforcers.data.Storage;
+import cypher.enforcers.data.security.Account;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.View;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -15,17 +12,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
-import cypher.enforcers.models.Account;
-import cypher.enforcers.views.AccountView;
-import cypher.enforcers.views.AddAccountView;
 
 import java.net.URL;
-import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -70,18 +62,17 @@ public class CreateAccountController implements Initializable{
     // To interact with the user's accounts.
     private AccountModel accountModel;
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
+    // To interact with the current user.
+    private UserModel userModel;
+
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
+
+    public void setAccountModel(AccountModel model) {
+        this.accountModel = model;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Clear all the text fields when this window closes. Since
@@ -113,10 +104,9 @@ public class CreateAccountController implements Initializable{
 
         // adds the Account to the ListView in AccountsView when the button is clicked
         createAccount.setOnAction(c -> {
-            int id = Database.addAccount(Storage.getToken(), username.getText(), platform.getText());
-            ((AccountView) AccountView.getInstance()).getAccountViewController().addAccount(id);
-
-            View.closeWindow((Node) c.getSource());
+            if (accountModel.addAccount(userModel.getCurrentUser().id(), username.getText(), platform.getText())) {
+                View.closeWindow((Node) c.getSource());
+            }
         });
 
         box.getChildren().add(createAccountWrapper); // adds the decorated button to the HBox
@@ -125,12 +115,12 @@ public class CreateAccountController implements Initializable{
         // if there exists an Account with the same username and platform
         validator.createCheck()
                 .withMethod(c -> {
-                    List<Account> accounts = Database.getAccounts(Storage.getToken());
-                    Account account = new Account();
-                    account.setName(username.getText());
-                    account.setSocialMediaType(platform.getText());
-                    boolean duplicate = accounts.contains(account);
-                    if (duplicate && !(username.getText().isEmpty() || platform.getText().isEmpty())) {
+                    Optional<Account> result = accountModel.getAccounts()
+                            .stream()
+                            .filter(account -> account.name().equals(username.getText()) && account.socialMediaType().equals(platform.getText()))
+                            .findFirst();
+
+                    if (result.isPresent() && !(username.getText().isEmpty() || platform.getText().isEmpty())) {
                         c.error("This account already exists, please try again!");
                     }
                 })

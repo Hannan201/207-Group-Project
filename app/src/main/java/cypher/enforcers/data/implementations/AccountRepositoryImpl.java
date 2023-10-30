@@ -2,7 +2,7 @@ package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.AccountRepository;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,17 +38,17 @@ public class AccountRepositoryImpl implements AccountRepository {
      * null otherwise.
      */
     @Override
-    public Optional<Account> create(Account account) {
-        logger.trace("Attempting to create account with name {} and social media type {}.", account.getName(), account.getSocialMediaType());
+    public Optional<AccountEntity> create(AccountEntity account) {
+        logger.trace("Attempting to create account with name {} and social media socialMediaType {}.", account.getName(), account.getSocialMediaType());
 
-        Account createAccount = accountDAO.addAccount(account);
+        AccountEntity createAccount = accountDAO.addAccount(account);
 
         if (!Objects.isNull(createAccount)) {
-            logger.trace("Account with name {} and social media type {} created with ID {}.", createAccount.getName(), createAccount.getSocialMediaType(), createAccount.getID());
+            logger.trace("Account with name {} and social media socialMediaType {} created with ID {}.", createAccount.getName(), createAccount.getSocialMediaType(), createAccount.getID());
             return Optional.of(createAccount);
         }
 
-        logger.warn("Unable to create account with name {} and social media type {}.", account.getName(), account.getSocialMediaType());
+        logger.warn("Unable to create account with name {} and social media socialMediaType {}.", account.getName(), account.getSocialMediaType());
         return Optional.empty();
     }
 
@@ -60,10 +60,10 @@ public class AccountRepositoryImpl implements AccountRepository {
      * are present.
      */
     @Override
-    public List<Account> readAll(long id) {
+    public List<AccountEntity> readAll(long id) {
         logger.trace("Attempting to get all accounts for user with ID {}.", id);
 
-        List<Account> result = accountDAO.getAccounts(id);
+        List<AccountEntity> result = accountDAO.getAccounts(id);
 
         if (!Objects.isNull(result)) {
             logger.trace("Accounts retrieved for user with ID {}.", id);
@@ -81,10 +81,10 @@ public class AccountRepositoryImpl implements AccountRepository {
      * @return An Optional containing the account. Null otherwise.
      */
     @Override
-    public Optional<Account> read(long accountID) {
+    public Optional<AccountEntity> read(long accountID) {
         logger.trace("Attempting to get account with ID {}.", accountID);
 
-        Account account = accountDAO.getAccount(accountID);
+        AccountEntity account = accountDAO.getAccount(accountID);
 
         if (!Objects.isNull(account)) {
             logger.trace("Account found.");
@@ -103,10 +103,10 @@ public class AccountRepositoryImpl implements AccountRepository {
      * null otherwise.
      */
     @Override
-    public Optional<Account> delete(long id) {
+    public Optional<AccountEntity> delete(long id) {
         logger.trace("Attempting to delete account with ID {}.", id);
 
-        Account deleteAccount = accountDAO.removeAccount(id);
+        AccountEntity deleteAccount = accountDAO.removeAccount(id);
 
         if (!Objects.isNull(deleteAccount)) {
             logger.trace("Deleted account successfully.");
@@ -125,10 +125,10 @@ public class AccountRepositoryImpl implements AccountRepository {
      * empty list otherwise.
      */
     @Override
-    public List<Account> deleteAll(long id) {
+    public List<AccountEntity> deleteAll(long id) {
         logger.trace("Attempting to delete all accounts for user with ID {}.", id);
 
-        List<Account> accounts = accountDAO.clearAllAccounts(id);
+        List<AccountEntity> accounts = accountDAO.clearAllAccounts(id);
 
         if (!Objects.isNull(accounts)) {
             logger.trace("Deleted all accounts successfully.");

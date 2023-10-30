@@ -100,7 +100,7 @@ public interface DatabaseService {
      * @param retriever Retriever which has the implementation of how
      *                  the data should be obtained from the result set.
      * @param objects The arguments that need to be set for the placeholder.
-     * @param <T> The type of value that should be returned.
+     * @param <T> The socialMediaType of value that should be returned.
      * @return The value, if any errors occur null will be returned.
      * @throws SQLException If anything goes wrong.
      */
@@ -117,12 +117,12 @@ public interface DatabaseService {
 
     /**
      * Execute a select statement to obtain the result based on the
-     * class-type of an object.
+     * class-socialMediaType of an object.
      *
      * @param query The query to execute.
-     * @param type The class type of the object to retrieve.
+     * @param type The class socialMediaType of the object to retrieve.
      * @param objects The arguments that need to be set for the placeholder.
-     * @param <T> The type of value that should be returned.
+     * @param <T> The socialMediaType of value that should be returned.
      * @return The value, if any errors occur null will be returned.
      * @throws SQLException If anything goes wrong.
      */
@@ -140,12 +140,12 @@ public interface DatabaseService {
 
     /**
      * Execute a select statement to obtain multiple results in a list
-     * based on the class-type of an object.
+     * based on the class-socialMediaType of an object.
      *
      * @param query The query to execute.
-     * @param type The class type of the object that should be in the list.
+     * @param type The class socialMediaType of the object that should be in the list.
      * @param objects The arguments that need to be set for the placeholder.
-     * @param <T> The type of value that should be in the list.
+     * @param <T> The socialMediaType of value that should be in the list.
      * @return The list of values, if any errors occur null will be returned.
      * @throws SQLException If anything goes wrong.
      */

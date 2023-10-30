@@ -1,6 +1,6 @@
 package cypher.enforcers.models;
 
-import cypher.enforcers.data.security.AccountDTO;
+import cypher.enforcers.data.security.Account;
 import cypher.enforcers.data.security.AccountDTOMapper;
 import cypher.enforcers.data.spis.AccountRepository;
 import javafx.beans.property.ObjectProperty;
@@ -35,17 +35,17 @@ public class AccountModel {
     }
 
     // List of accounts for the current user.
-    private final ObservableList<AccountDTO> accounts = FXCollections.observableArrayList();
+    private final ObservableList<Account> accounts = FXCollections.observableArrayList();
 
     // Property to store the list of accounts.
-    private final ObjectProperty<ObservableList<AccountDTO>> accountsProperty = new SimpleObjectProperty<>(accounts);
+    private final ObjectProperty<ObservableList<Account>> accountsProperty = new SimpleObjectProperty<>(accounts);
 
     /**
      * Get the accounts for the current user.
      *
      * @return An ObservableList of accounts.
      */
-    public ObservableList<AccountDTO> getAccounts() {
+    public ObservableList<Account> getAccounts() {
         return accountsProperty.get();
     }
 
@@ -54,7 +54,7 @@ public class AccountModel {
      *
      * @return Property with an ObservableList of accounts.
      */
-    public ObjectProperty<ObservableList<AccountDTO>> accountsProperty() {
+    public ObjectProperty<ObservableList<Account>> accountsProperty() {
         return accountsProperty;
     }
 
@@ -64,19 +64,19 @@ public class AccountModel {
      * @param accounts The new accounts to be set as an
      *                 ObservableList.
      */
-    public void setAccounts(ObservableList<AccountDTO> accounts) {
+    public void setAccounts(ObservableList<Account> accounts) {
         accountsProperty.set(accounts);
     }
 
     // Property to store the current account being selected.
-    private final ObjectProperty<AccountDTO> currentAccountProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<Account> currentAccountProperty = new SimpleObjectProperty<>();
 
     /**
      * Get the current account being selected.
      *
      * @return The account being selected.
      */
-    public AccountDTO getCurrentAccount() {
+    public Account getCurrentAccount() {
         return currentAccountProperty.get();
     }
 
@@ -85,7 +85,7 @@ public class AccountModel {
      *
      * @return Property of the current account.
      */
-    public ObjectProperty<AccountDTO> currentAccountProperty() {
+    public ObjectProperty<Account> currentAccountProperty() {
         return currentAccountProperty;
     }
 
@@ -94,40 +94,48 @@ public class AccountModel {
      *
      * @param account The Account to be set.
      */
-    private void setCurrentAccount(AccountDTO account) {
+    private void setCurrentAccount(Account account) {
         currentAccountProperty.set(account);
     }
 
+    /**
+     * Load accounts for a user given the ID.
+     *
+     * @param id ID of the user.
+     */
+    public void loadAccounts(long id) {
+        List<Account> converted = accountRepository.readAll(id)
+                .stream().map(mapper)
+                .toList();
+
+        accounts.setAll(converted);
+    }
 
     /**
      * Delete accounts for a user.
      *
-     * @param id The ID of the user.
+     * @param id               The ID of the user.
      * @param accountsToDelete Accounts to delete.
-     * @return True if successfully deleted, false otherwise.
      */
-    public boolean deleteAccounts(long id, AccountDTO ... accountsToDelete) {
-        if (accountsToDelete.length == accounts.size()) {
-            List<Account> results = accountRepository.deleteAll(id);
+    public void deleteAccounts(long id, List<Account> accountsToDelete) {
+        if (accountsToDelete.size() == accounts.size()) {
+            List<AccountEntity> results = accountRepository.deleteAll(id);
 
-            if (results.size() == accountsToDelete.length) {
+            if (results.size() == accountsToDelete.size()) {
                 accounts.clear();
-                return true;
             }
 
-            return false;
+            return;
         }
 
-        for (AccountDTO a : accountsToDelete) {
-            Optional<Account> account = accountRepository.delete(a.id());
+        for (Account a : accountsToDelete) {
+            Optional<AccountEntity> account = accountRepository.delete(a.id());
             if (account.isEmpty() || account.get().getID() != a.id()) {
-                return false;
+                return;
             }
 
             accounts.remove(a);
         }
-
-        return true;
     }
 
     /**
@@ -137,8 +145,8 @@ public class AccountModel {
      * @return An Optional containing an account when found, otherwise
      * null.
      */
-    public Optional<AccountDTO> searchForAccount(String name) {
-        List<AccountDTO> results = accounts.stream()
+    public Optional<Account> searchForAccount(String name) {
+        List<Account> results = accounts.stream()
                 .filter(a -> a.name().equals(name))
                 .toList();
 
@@ -150,17 +158,19 @@ public class AccountModel {
     }
 
     /**
-     * Add a new account.
+     * Add a new account for a user.
      *
+     * @param id The ID of the user this account should belong to.
      * @param name Name of the account.
      * @param type Social Media type of the account.
      * @return True if the account was created, false otherwise.
      */
-    public boolean addAccount(String name, String type) {
-        Account account = new Account();
+    public boolean addAccount(long id, String name, String type) {
+        AccountEntity account = new AccountEntity();
         account.setName(name);
         account.setSocialMediaType(type);
-        Optional<Account> createdAccount = accountRepository.create(account);
+        account.setUserId(id);
+        Optional<AccountEntity> createdAccount = accountRepository.create(account);
         if (createdAccount.isPresent()) {
             accounts.add(mapper.apply(createdAccount.get()));
             return true;
@@ -176,12 +186,20 @@ public class AccountModel {
      * @return True if accounts are deleted successfully, false otherwise.
      */
     public boolean clearAllAccounts(long id) {
-        List<Account> results = accountRepository.deleteAll(id);
+        List<AccountEntity> results = accountRepository.deleteAll(id);
         if (results.size() == accounts.size()) {
             accounts.clear();
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Clear the current list of accounts. usually called when no
+     * user is logged in and the account view is loaded.
+     */
+    public void clear() {
+        accounts.clear();
     }
 }

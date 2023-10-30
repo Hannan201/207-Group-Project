@@ -1,5 +1,6 @@
 package cypher.enforcers.views.utilities;
 
+import cypher.enforcers.data.security.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContentDisplay;
@@ -10,7 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
@@ -100,12 +101,12 @@ public class AccountCell extends ListCell<Account> {
             // checks if the account's platform is either Google, Discord, Shopify, or GitHub
             // and if so, adds a custom icon to the account
             String path;
-            if (Account.supportsImport(item.getSocialMediaType().toLowerCase())) {
-                path = Account.getIcons().get(item.getSocialMediaType().toLowerCase());
+            if (AccountEntity.supportsImport(item.socialMediaType().toLowerCase())) {
+                path = AccountEntity.getIcons().get(item.socialMediaType().toLowerCase());
             } else {
                 // Adds a default logo for the account if it is not Discord, Google,
                 // GitHub, or Shopify
-                path = Account.getIcons().get("default");
+                path = AccountEntity.getIcons().get("default");
             }
 
             // There were some configurations here that I moved into
@@ -118,8 +119,8 @@ public class AccountCell extends ListCell<Account> {
             HBox.setHgrow(cell, Priority.NEVER);
             setWrapText(true); // wraps the text in the ListCell to avoid long text
 
-            platformName.setText(item.getSocialMediaType());
-            username.setText(item.getName());
+            platformName.setText(item.socialMediaType());
+            username.setText(item.name());
 
             // If the AccountCell is double-clicked, then this handle method will transition
             // the view from the AccountsView to the CodeView
@@ -129,7 +130,7 @@ public class AccountCell extends ListCell<Account> {
                     logger.trace("Switching from the AccountView to the CodeView.");
                     View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
 
-                    ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes((int) item.getID());
+                    ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes((int) item.id());
                 }
             });
 

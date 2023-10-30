@@ -2,7 +2,7 @@ package cypher.enforcers;
 
 import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.spis.*;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -29,12 +29,12 @@ public class AccountSavingTests {
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        Account account = new Account();
+        AccountEntity account = new AccountEntity();
         account.setName("One");
         account.setSocialMediaType("Reddit");
         account.setUserId(1);
 
-        Optional<Account> optionalAccount = accountRepository.create(account);
+        Optional<AccountEntity> optionalAccount = accountRepository.create(account);
         assertTrue(optionalAccount.isPresent(), "Returned account should not be empty.");
 
         dbService.disconnect();
@@ -48,7 +48,7 @@ public class AccountSavingTests {
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        List<Account> accounts = accountRepository.deleteAll(1);
+        List<AccountEntity> accounts = accountRepository.deleteAll(1);
         assertFalse(accounts.isEmpty(), "Accounts were not deleted.");
 
         dbService.disconnect();
@@ -62,13 +62,13 @@ public class AccountSavingTests {
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        Account one = new Account();
+        AccountEntity one = new AccountEntity();
         one.setId(1);
 
-        Optional<Account> account = accountRepository.delete(one.getID());
+        Optional<AccountEntity> account = accountRepository.delete(one.getID());
         assertTrue(account.isPresent(), "Account was not deleted.");
 
-        Account three = new Account();
+        AccountEntity three = new AccountEntity();
         three.setId(3);
 
         account = accountRepository.delete(three.getID());

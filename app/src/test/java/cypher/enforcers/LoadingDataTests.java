@@ -3,9 +3,9 @@ package cypher.enforcers;
 import cypher.enforcers.data.security.Token;
 import cypher.enforcers.code.Code;
 import org.junit.jupiter.api.Test;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import cypher.enforcers.data.database.Database;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 
 import java.util.List;
 
@@ -32,13 +32,13 @@ public class LoadingDataTests {
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
         assertEquals(user.getUsername(), "hannan");
 
-        List<Account> accounts = Database.getAccounts(token);
+        List<AccountEntity> accounts = Database.getAccounts(token);
         assertEquals(accounts.size(), 1);
-        Account account = accounts.get(0);
+        AccountEntity account = accounts.get(0);
         assertEquals(account.getName(), "Joe");
         assertEquals(account.getSocialMediaType(), "1234");
 

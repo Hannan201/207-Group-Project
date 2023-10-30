@@ -1,17 +1,9 @@
 package cypher.enforcers.views;
 
-import cypher.enforcers.controllers.HomePageController;
-import cypher.enforcers.controllers.SignInController;
-import cypher.enforcers.controllers.SignUpController;
-import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
+import cypher.enforcers.controllers.*;
 import cypher.enforcers.data.implementations.SqliteHelper;
-import cypher.enforcers.data.implementations.UserDAOImpl;
-import cypher.enforcers.data.implementations.UserRepositoryImpl;
-import cypher.enforcers.data.security.UserDTOMapper;
-import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.data.spis.UserDAO;
-import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -58,7 +50,7 @@ public abstract class View {
     // Index 2: Path to the CSS file for high contrast mode.
     protected String[] cssFilesPaths = new String[Theme.values().length];
 
-    private static final Callback<Class<?>, Object> controllerFactory = new Callback<Class<?>, Object>() {
+    public static final Callback<Class<?>, Object> CONTROLLER_FACTORY = new Callback<>() {
         private static final DatabaseService dbService = new SqliteHelper();
 
         static {
@@ -66,6 +58,8 @@ public abstract class View {
         }
 
         private final UserModel userModel = Utilities.prepareUserModel(dbService);
+
+        private final AccountModel accountModel = Utilities.prepareAccountModel(dbService);
 
         @Override
         public Object call(Class<?> param) {
@@ -83,6 +77,12 @@ public abstract class View {
                 ((SignUpController) o).setUserModel(userModel);
             } else if (param == HomePageController.class) {
                 ((HomePageController) o).setUserModel(userModel);
+            } else if (param == AccountViewController.class) {
+                ((AccountViewController) o).setUserModel(userModel);
+                ((AccountViewController) o).setAccountModel(accountModel);
+            } else if (param == CreateAccountController.class) {
+                ((CreateAccountController) o).setUserModel(userModel);
+                ((CreateAccountController) o).setAccountModel(accountModel);
             }
 
             return o;
@@ -113,7 +113,7 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[0];
 
         Utilities.updateIcons(
-                Account.getIcons(),
+                AccountEntity.getIcons(),
                 "/cypher/enforcers/images/icons8-discord-100.png",
                 "/cypher/enforcers/images/icons8-github-100.png",
                 "/cypher/enforcers/images/icons8-google-100.png",
@@ -129,7 +129,7 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[1];
 
         Utilities.updateIcons(
-                Account.getIcons(),
+                AccountEntity.getIcons(),
                 "/cypher/enforcers/images/discord_darkmode.png",
                 "/cypher/enforcers/images/github_darkmode.png",
                 "/cypher/enforcers/images/google_darkmode.png",
@@ -145,7 +145,7 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[2];
 
         Utilities.updateIcons(
-                Account.getIcons(),
+                AccountEntity.getIcons(),
                 "/cypher/enforcers/images/hc-discord.png",
                 "/cypher/enforcers/images/hc-github.png",
                 "/cypher/enforcers/images/hc-google.png",
@@ -189,7 +189,7 @@ public abstract class View {
     protected void loadRoot(String fileName) {
         try {
             FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/" + fileName));
-            loader.setControllerFactory(controllerFactory);
+            loader.setControllerFactory(CONTROLLER_FACTORY);
             this.root = loader.load();
         } catch (IOException e) {
             logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);

@@ -7,7 +7,7 @@ import cypher.enforcers.views.themes.Theme;
  * related to a user of this application.
  */
 
-public class User {
+public class UserEntity {
 
     // ID of the user.
     private long id;
@@ -32,7 +32,7 @@ public class User {
     /**
      * Creates a user.
      */
-    public User() {
+    public UserEntity() {
 
     }
 

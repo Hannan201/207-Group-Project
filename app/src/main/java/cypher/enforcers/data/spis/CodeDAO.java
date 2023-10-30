@@ -1,10 +1,8 @@
 package cypher.enforcers.data.spis;
 
 import cypher.enforcers.code.Code;
-import cypher.enforcers.models.Account;
 
 import java.util.List;
-import java.util.Optional;
 
 /*
  Interface for the Code Data Access Object (DAO) to communicate to the

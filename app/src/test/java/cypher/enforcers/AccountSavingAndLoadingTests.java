@@ -4,7 +4,7 @@ import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.AccountRepository;
 import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class AccountSavingAndLoadingTests {
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        List<Account> accounts = accountRepository.readAll(1);
+        List<AccountEntity> accounts = accountRepository.readAll(1);
 
         assertEquals(accounts.size(), 1, "Total accounts do not match.");
 
@@ -31,12 +31,12 @@ public class AccountSavingAndLoadingTests {
         assertEquals(accounts.get(0).getSocialMediaType(), "1234", "Type should be 1234.");
         assertEquals(accounts.get(0).getUserId(), 1, "User ID should be 1.");
 
-        Account account = new Account();
+        AccountEntity account = new AccountEntity();
         account.setName("Apple Boy99");
         account.setSocialMediaType("Google");
         account.setUserId(1);
 
-        Optional<Account> optionalAccount = accountRepository.create(account);
+        Optional<AccountEntity> optionalAccount = accountRepository.create(account);
         assertTrue(optionalAccount.isPresent(), "Account cannot be created.");
 
         dbService.disconnect();
@@ -67,7 +67,7 @@ public class AccountSavingAndLoadingTests {
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
 
-        List<Account> accounts = accountRepository.readAll(2);
+        List<AccountEntity> accounts = accountRepository.readAll(2);
 
         assertEquals(accounts.size(), 1, "Total accounts do not match.");
 
@@ -76,9 +76,9 @@ public class AccountSavingAndLoadingTests {
         assertEquals(accounts.get(0).getSocialMediaType(), "GitHub", "Type should be GitHub.");
         assertEquals(accounts.get(0).getUserId(), 2, "User ID should be 2.");
 
-        Account delete = accounts.get(0);
+        AccountEntity delete = accounts.get(0);
 
-        Optional<Account> optionalAccount = accountRepository.delete(delete.getID());
+        Optional<AccountEntity> optionalAccount = accountRepository.delete(delete.getID());
         assertTrue(optionalAccount.isPresent(), "Unable to delete account.");
 
         dbService.disconnect();

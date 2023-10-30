@@ -7,15 +7,11 @@ import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.database.Database;
-import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
-import cypher.enforcers.data.implementations.UserDAOImpl;
-import cypher.enforcers.data.implementations.UserRepositoryImpl;
+import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.security.AccountDTOMapper;
 import cypher.enforcers.data.security.UserDTOMapper;
-import cypher.enforcers.data.spis.AuthenticationService;
-import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.data.spis.UserDAO;
-import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.data.spis.*;
+import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import org.apache.commons.io.FilenameUtils;
@@ -228,5 +224,18 @@ public class Utilities {
         UserDTOMapper mapper = new UserDTOMapper();
         AuthenticationService authService = new AuthenticationServiceImpl(repository, mapper);
         return new UserModel(authService);
+    }
+
+    /**
+     * Prepare the account model.
+     *
+     * @param service The database service.
+     * @return The new account model.
+     */
+    public static AccountModel prepareAccountModel(DatabaseService service) {
+        AccountDAO userDAO = new AccountDAOImpl(service);
+        AccountRepository repository = new AccountRepositoryImpl(userDAO);
+        AccountDTOMapper mapper = new AccountDTOMapper();
+        return new AccountModel(repository, mapper);
     }
 }

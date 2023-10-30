@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,7 @@ public interface AccountRepository {
      * @return An Optional containing the account if created successfully,
      * null otherwise.
      */
-    Optional<Account> create(Account account);
+    Optional<AccountEntity> create(AccountEntity account);
 
     /**
      * Read all accounts for a user given the ID.
@@ -27,7 +27,7 @@ public interface AccountRepository {
      * @return List of accounts. Empty list is returned if no accounts
      * are present.
      */
-    List<Account> readAll(long id);
+    List<AccountEntity> readAll(long id);
 
     /**
      * Read an account by its ID.
@@ -35,7 +35,7 @@ public interface AccountRepository {
      * @param accountID ID of the account.
      * @return An Optional containing the account. Null otherwise.
      */
-    Optional<Account> read(long accountID);
+    Optional<AccountEntity> read(long accountID);
 
     /**
      * Delete an account.
@@ -44,7 +44,7 @@ public interface AccountRepository {
      * @return An Optional containing the account if successfully deleted,
      * null otherwise.
      */
-    Optional<Account> delete(long id);
+    Optional<AccountEntity> delete(long id);
 
     /**
      * Delete all accounts for a user given the user's ID.
@@ -53,5 +53,5 @@ public interface AccountRepository {
      * @return List containing the accounts if successfully deleted,
      * empty list otherwise.
      */
-    List<Account> deleteAll(long id);
+    List<AccountEntity> deleteAll(long id);
 }

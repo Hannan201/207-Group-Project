@@ -4,7 +4,7 @@ import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
-import cypher.enforcers.data.security.UserDTO;
+import cypher.enforcers.data.security.User;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
@@ -34,7 +34,7 @@ public class UserSavingTests {
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         // No user should be logged in.
-        Optional<UserDTO> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = authService.getLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -59,7 +59,7 @@ public class UserSavingTests {
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         // No user should be logged in.
-        Optional<UserDTO> optionalUser = authService.getLoggedInUser();
+        Optional<User> optionalUser = authService.getLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get

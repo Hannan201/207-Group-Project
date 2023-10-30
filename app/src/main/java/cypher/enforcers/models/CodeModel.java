@@ -1,7 +1,7 @@
 package cypher.enforcers.models;
 
 import cypher.enforcers.code.Code;
-import cypher.enforcers.data.security.AccountDTO;
+import cypher.enforcers.data.security.Account;
 import cypher.enforcers.data.security.CodeDTO;
 import cypher.enforcers.data.security.CodeDTOMapper;
 import cypher.enforcers.data.spis.CodeRepository;
@@ -106,7 +106,7 @@ public class CodeModel {
      * @param account The account to delete the codes for.
      * @return True if the codes were deleted, false otherwise.
      */
-    public boolean deleteAllCodes(AccountDTO account) {
+    public boolean deleteAllCodes(Account account) {
         List<Code> results = codeRepository.deleteAll(account.id());
         if (results.size() == codes.size()) {
             codes.clear();
@@ -123,7 +123,7 @@ public class CodeModel {
      * @param code The code as a string.
      * @return True if code was added, false otherwise.
      */
-    public boolean addCode(AccountDTO account, String code) {
+    public boolean addCode(Account account, String code) {
         Code c = new Code();
         c.setCode(code);
         c.setAccountID(account.id());

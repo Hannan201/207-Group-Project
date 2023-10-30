@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public interface UserRepository {
      * @return An optional containing the user if created successfully,
      * null otherwise.
      */
-    Optional<User> create(User user);
+    Optional<UserEntity> create(UserEntity user);
 
     /**
      * Read a user by its ID.
@@ -25,7 +25,7 @@ public interface UserRepository {
      * @param id The ID of the user.
      * @return An Optional containing the user if found, null otherwise.
      */
-    Optional<User> read(long id);
+    Optional<UserEntity> read(long id);
 
     /**
      * Read a user by its username. The search is case-insensitive.
@@ -33,20 +33,20 @@ public interface UserRepository {
      * @param username The username to search for.
      * @return An Optional containing the user if found, null otherwise.
      */
-    Optional<User> read(String username);
+    Optional<UserEntity> read(String username);
 
     /**
      * Find the current user that's logged in.
      *
      * @return An Optional containing the user if found, null otherwise.
      */
-    Optional<User> findLoggedInUser();
+    Optional<UserEntity> findLoggedInUser();
 
     /**
      * Update a user.
      *
      * @return An Optional containing the user if updated, null otherwise.
      */
-    Optional<User> update(User user);
+    Optional<UserEntity> update(UserEntity user);
 
 }

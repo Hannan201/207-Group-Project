@@ -5,9 +5,9 @@ import cypher.enforcers.data.security.Token;
 import cypher.enforcers.code.Code;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import cypher.enforcers.data.database.Database;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class SaveAndLoadDataTests {
         Token token = Database.registerUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
         int id = Database.addAccount(token, "One", "Discord");
@@ -89,14 +89,14 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
         assertEquals(user.getUsername(), "test");
 
-        List<Account> accounts = Database.getAccounts(token);
+        List<AccountEntity> accounts = Database.getAccounts(token);
         assertEquals(accounts.size(), 3);
 
-        Account account = accounts.get(0);
+        AccountEntity account = accounts.get(0);
         assertEquals(account.getName(), "One");
         assertEquals(account.getSocialMediaType(), "Discord");
 
@@ -195,10 +195,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        Account account = Database.getAccountByName(token, "One");
+        AccountEntity account = Database.getAccountByName(token, "One");
         assertNotNull(account);
 
         Database.removeAccount(token, (int) account.getID());
@@ -228,10 +228,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        Account account = Database.getAccountByName(token, "Two");
+        AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
         List<Code> codes = Database.getCodes(token, (int) account.getID());
@@ -264,10 +264,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        Account account = Database.getAccountByName(token, "Two");
+        AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
         int id = Database.addCode(token, (int) account.getID(), "4EW C0D3");
@@ -291,10 +291,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        Account account = Database.getAccountByName(token, "Two");
+        AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
         List<Code> codes = Database.getCodes(token, (int) account.getID());
@@ -326,10 +326,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Test", "hellobro");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        Account account = Database.getAccountByName(token, "Two");
+        AccountEntity account = Database.getAccountByName(token, "Two");
         assertNotNull(account);
 
         List<Code> code = Database.getCodes(token, (int) account.getID());
@@ -354,10 +354,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        Account account = Database.getAccountByName(token, "Joe");
+        AccountEntity account = Database.getAccountByName(token, "Joe");
         assertNotNull(account);
 
         List<Code> codes = Database.getCodes(token, (int) account.getID());
@@ -395,7 +395,7 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
         Database.disconnect();
@@ -411,7 +411,7 @@ public class SaveAndLoadDataTests {
         Token token = Storage.getToken();
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
         assertEquals(user.getUsername(), "hannan");
@@ -427,7 +427,7 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
         assertEquals(Database.getTheme(token), Theme.LIGHT);
@@ -459,10 +459,10 @@ public class SaveAndLoadDataTests {
         Token token = Database.authenticateUser("Hannan", "12345");
         assertNotNull(token);
 
-        User user = Database.getUser(token);
+        UserEntity user = Database.getUser(token);
         assertNotNull(user);
 
-        List<Account> accounts = Database.getAccounts(token);
+        List<AccountEntity> accounts = Database.getAccounts(token);
         assertFalse(accounts.isEmpty());
 
         Database.clearAllAccounts(token);

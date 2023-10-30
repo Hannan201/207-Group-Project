@@ -1,15 +1,15 @@
 package cypher.enforcers.data.security;
 
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 
 import java.util.function.Function;
 
 /**
  * Converts an account object to an account data-transfer-object.
  */
-public class AccountDTOMapper implements Function<Account, AccountDTO> {
+public class AccountDTOMapper implements Function<AccountEntity, Account> {
     @Override
-    public AccountDTO apply(Account account) {
-        return new AccountDTO(account.getID(), account.getName(), account.getSocialMediaType());
+    public Account apply(AccountEntity account) {
+        return new Account(account.getID(), account.getName(), account.getSocialMediaType());
     }
 }

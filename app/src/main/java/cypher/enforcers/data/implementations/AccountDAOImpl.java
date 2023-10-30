@@ -2,7 +2,7 @@ package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.DatabaseService;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,9 +52,9 @@ public class AccountDAOImpl implements AccountDAO {
      * are found.
      */
     @Override
-    public List<Account> getAccounts(long userID) {
+    public List<AccountEntity> getAccounts(long userID) {
         try {
-            return databaseService.executeMultiSelect(GET_ACCOUNTS, Account.class, userID);
+            return databaseService.executeMultiSelect(GET_ACCOUNTS, AccountEntity.class, userID);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -69,9 +69,9 @@ public class AccountDAOImpl implements AccountDAO {
      * @return Account if found, null otherwise.
      */
     @Override
-    public Account getAccount(long accountID) {
+    public AccountEntity getAccount(long accountID) {
         try {
-            return databaseService.executeSelect(GET_ACCOUNT, Account.class, accountID);
+            return databaseService.executeSelect(GET_ACCOUNT, AccountEntity.class, accountID);
         } catch (SQLException e) {
             logger.debug("Failed select query. Cause: ", e);
         }
@@ -86,11 +86,11 @@ public class AccountDAOImpl implements AccountDAO {
      * @return Account if added, null otherwise.
      */
     @Override
-    public Account addAccount(Account account) {
+    public AccountEntity addAccount(AccountEntity account) {
         try {
             databaseService.executeUpdate(ADD_ACCOUNT, account);
 
-            return databaseService.executeSelect(GET_ACCOUNT_AFTER_ADDING, Account.class);
+            return databaseService.executeSelect(GET_ACCOUNT_AFTER_ADDING, AccountEntity.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
             return null;
@@ -104,16 +104,16 @@ public class AccountDAOImpl implements AccountDAO {
      * @return Account if deleted, null otherwise.
      */
     @Override
-    public Account removeAccount(long id) {
+    public AccountEntity removeAccount(long id) {
         try {
-            Account account1 = getAccount(id);
+            AccountEntity account = getAccount(id);
 
-            if (account1 == null) {
+            if (account == null) {
                 return null;
             }
 
             databaseService.executeUpdate(DELETE_ACCOUNT, id);
-            return account1;
+            return account;
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
             return null;
@@ -127,9 +127,9 @@ public class AccountDAOImpl implements AccountDAO {
      * @return Accounts that we deleted, null otherwise.
      */
     @Override
-    public List<Account> clearAllAccounts(long userID) {
+    public List<AccountEntity> clearAllAccounts(long userID) {
         try {
-            List<Account> accounts = getAccounts(userID);
+            List<AccountEntity> accounts = getAccounts(userID);
 
             if (accounts == null) {
                 return null;

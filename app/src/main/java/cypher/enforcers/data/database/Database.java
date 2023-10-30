@@ -4,9 +4,9 @@ import cypher.enforcers.data.*;
 import cypher.enforcers.data.security.PasswordHasher;
 import cypher.enforcers.data.security.Token;
 import cypher.enforcers.data.security.TokenGenerator;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import cypher.enforcers.code.Code;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetter;
 import cypher.enforcers.views.themes.Theme;
 import javafx.util.Callback;
@@ -498,12 +498,12 @@ public class Database {
      *              for authentication purposes.
      * @return User object if logged in, null otherwise.
      */
-    public static User getUser(Token token) {
+    public static UserEntity getUser(Token token) {
         if (safetyChecks(token)) {
             int id = ((CustomToken) token).ID;
             logger.trace("Attempting to get user with ID {}.", id);
 
-            User user = sqLiteHelper.executeSelect(
+            UserEntity user = sqLiteHelper.executeSelect(
                     """
                             SELECT * FROM users
                             WHERE id = ?
@@ -511,12 +511,12 @@ public class Database {
                     new IntegerSetter(id),
                     new Callback<>() {
                         @Override
-                        public User call(ResultSet resultSet) {
+                        public UserEntity call(ResultSet resultSet) {
                             try {
                                 int userID = resultSet.getInt("id");
                                 String name = resultSet.getString("username");
                                 Theme theme = getThemeByID(resultSet.getInt("theme_id"));
-                                User createdUser = new User();
+                                UserEntity createdUser = new UserEntity();
                                 createdUser.setUsername(name);
                                 createdUser.setTheme(theme);
                                 createdUser.setID(userID);
@@ -547,27 +547,27 @@ public class Database {
      * @param token Token given to the user once registered/logged in,
      *              for authentication purposes.
      */
-    public static List<Account> getAccounts(Token token) {
-        List<Account> accounts = new ArrayList<>();
+    public static List<AccountEntity> getAccounts(Token token) {
+        List<AccountEntity> accounts = new ArrayList<>();
 
         if (safetyChecks(token)) {
             int id = ((CustomToken) token).ID;
             logger.trace("Attempting to get all accounts for user with ID {}.", id);
 
-            List<Account> result = sqLiteHelper.executeSelect(
+            List<AccountEntity> result = sqLiteHelper.executeSelect(
                 """
-                    SELECT id, name, type FROM accounts
+                    SELECT id, name, socialMediaType FROM accounts
                     WHERE user_id = ?
                     """,
                     new IntegerSetter(id),
                     new ListRetriever<>(accounts, new Callback<>() {
                         @Override
-                        public Account call(ResultSet resultSet) {
+                        public AccountEntity call(ResultSet resultSet) {
                             try {
                                 int accountID = resultSet.getInt("id");
                                 String name = resultSet.getString("name");
                                 String type = resultSet.getString("type");
-                                Account account = new Account();
+                                AccountEntity account = new AccountEntity();
                                 account.setId(accountID);
                                 account.setName(name);
                                 account.setSocialMediaType(type);
@@ -598,12 +598,12 @@ public class Database {
      *              for authentication purposes.
      * @param accountID ID of the account.
      */
-    public static Account getAccount(Token token, int accountID) {
+    public static AccountEntity getAccount(Token token, int accountID) {
         int id = ((CustomToken) token).ID;
         logger.trace("Attempting to get account with ID {} for user with ID {}.", accountID, id);
-        List<Account> accounts = Database.getAccounts(token);
+        List<AccountEntity> accounts = Database.getAccounts(token);
 
-        for (Account temp : accounts) {
+        for (AccountEntity temp : accounts) {
             if (temp.getID() == accountID) {
                 logger.trace("Account found.");
                 return temp;
@@ -622,13 +622,13 @@ public class Database {
      * @param name Name of the account.
      * @return Account if found, otherwise null.
      */
-    public static Account getAccountByName(Token token, String name) {
+    public static AccountEntity getAccountByName(Token token, String name) {
         int id = ((CustomToken) token).ID;
         logger.trace("Attempting to get account with name {} for user with ID {}.", name, id);
 
-        List<Account> accounts = Database.getAccounts(token);
+        List<AccountEntity> accounts = Database.getAccounts(token);
 
-        for (Account temp : accounts) {
+        for (AccountEntity temp : accounts) {
             if (temp.getName().equals(name)) {
                 logger.trace("Account found.");
                 return temp;

@@ -18,7 +18,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
 import cypher.enforcers.data.database.Database;
-import cypher.enforcers.models.Account;
+import cypher.enforcers.models.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
@@ -108,7 +108,7 @@ public class CodeViewController implements Initializable {
     private Region spaceBetween;
 
     // Current account to display.
-    private Account account;
+    private AccountEntity account;
 
     // This property is used to control the padding on the left side
     // of the list view so that the content can fit when the screen
@@ -127,18 +127,6 @@ public class CodeViewController implements Initializable {
     // To interact with the account's codes.
     private CodeModel codeModel;
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         background.paddingProperty().bind(windowPadding);
@@ -346,7 +334,7 @@ public class CodeViewController implements Initializable {
 
             // Only allow user to click the import codes button
             // if their account is supported.
-            importCodes.setDisable(!Account.supportsImport(account.getSocialMediaType().toLowerCase()));
+            importCodes.setDisable(!AccountEntity.supportsImport(account.getSocialMediaType().toLowerCase()));
 
             codeListView.getItems().addAll(Database.getCodes(Storage.getToken(), ID));
         }
@@ -359,7 +347,7 @@ public class CodeViewController implements Initializable {
      * @return Account object which is currently
      * is in use.
      */
-    public Account getAccount() {
+    public AccountEntity getAccount() {
         return this.account;
     }
 

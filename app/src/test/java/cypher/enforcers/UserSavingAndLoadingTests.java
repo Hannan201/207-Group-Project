@@ -9,7 +9,7 @@ import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.User;
+import cypher.enforcers.models.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +34,7 @@ public class UserSavingAndLoadingTests {
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         // No user should be logged in.
-        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        Optional<UserEntity> optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -44,7 +44,7 @@ public class UserSavingAndLoadingTests {
 
         optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
 
         assertTrue(user.getLoggedIn(), "User should be logged in.");
         assertEquals(user.getUsername(), "test", "Username does not match.");
@@ -73,7 +73,7 @@ public class UserSavingAndLoadingTests {
         AuthenticationService authService = new AuthenticationServiceImpl(userRepository, mapper);
 
         // No user should be logged in.
-        Optional<User> optionalUser = userRepository.findLoggedInUser();
+        Optional<UserEntity> optionalUser = userRepository.findLoggedInUser();
         assertThrows(
                 NoSuchElementException.class,
                 optionalUser::get
@@ -83,7 +83,7 @@ public class UserSavingAndLoadingTests {
 
         optionalUser = userRepository.findLoggedInUser();
         assertTrue(optionalUser.isPresent(), "User should not be null.");
-        User user = optionalUser.get();
+        UserEntity user = optionalUser.get();
 
         assertTrue(user.getLoggedIn(), "User should be logged in.");
         assertEquals(user.getUsername(), "test", "Username does not match.");

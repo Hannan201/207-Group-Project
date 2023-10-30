@@ -1,7 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.data.security.UserDTO;
-import cypher.enforcers.models.User;
+import cypher.enforcers.data.security.User;
 import cypher.enforcers.views.themes.Theme;
 
 import java.util.Optional;
@@ -67,6 +66,6 @@ public interface AuthenticationService {
       * @return An Optional containing a user if any is logged in, null
       * otherwise.
       */
-     Optional<UserDTO> getLoggedInUser();
+     Optional<User> getLoggedInUser();
 
 }
