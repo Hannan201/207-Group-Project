@@ -21,7 +21,7 @@ public class SqliteHelper implements DatabaseService {
     private static final Logger logger = LoggerFactory.getLogger(SqliteHelper.class);
 
     // Default name of the database.
-    private static final String DEFAULT_NAME = "database.db";
+    private static final String DEFAULT_NAME = "/cypher/enforcers/database/database.db";
 
     // Connection to the database.
     private Connection connection;

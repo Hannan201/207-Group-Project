@@ -35,6 +35,14 @@ public class UserDAOImpl implements UserDAO {
     @SimpleService
     private DatabaseService databaseService;
 
+    public UserDAOImpl() {
+
+    }
+
+    public UserDAOImpl(DatabaseService service) {
+        this.databaseService = service;
+    }
+
     /**
      * Insert a new user into the database,
      *

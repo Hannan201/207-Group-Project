@@ -23,6 +23,14 @@ public class UserRepositoryImpl implements UserRepository {
     @SimpleService
     private UserDAO userDAO;
 
+    public UserRepositoryImpl() {
+
+    }
+
+    public UserRepositoryImpl(UserDAO dao) {
+        this.userDAO = dao;
+    }
+
     /**
      * Create a new user. Usernames are case-insensitive.
      *

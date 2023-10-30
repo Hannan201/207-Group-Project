@@ -4,10 +4,6 @@ import cypher.enforcers.models.UserModel;
 import javafx.scene.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.utilities.Utilities;
-import cypher.enforcers.data.database.Database;
-import cypher.enforcers.data.Storage;
-import cypher.enforcers.data.security.Token;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -92,18 +88,10 @@ public class SignInController implements Initializable {
     // To interact with the user data.
     private UserModel userModel;
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Clear all the text fields when this window closes. Since
@@ -249,11 +237,8 @@ public class SignInController implements Initializable {
                         return;
                     }
 
-                    Token token = Database.authenticateUser(unameInput.getText(), passInput.getText());
-                    if (token == null) {
+                    if (!userModel.logInUser(unameInput.getText(), passInput.getText())) {
                         c.error("Wrong username or password, please try again.");
-                    } else {
-                        Storage.setToken(token);
                     }
                 })
                 .dependsOn("uNameInput", unameInput.textProperty())
@@ -291,9 +276,7 @@ public class SignInController implements Initializable {
      * @param node The node that triggered the event.
      */
     private void loadAccountView(Node node) {
-        Utilities.loadAccounts();
         View.closeWindow(node);
-        Utilities.adjustTheme();
 
         logger.trace("Switching from the HomePageView to the AccountsView.");
         View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());

@@ -30,6 +30,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @SimpleService
     private UserDTOMapper mapper;
 
+    public AuthenticationServiceImpl(UserRepository repository, UserDTOMapper mapper) {
+        this.userRepository = repository;
+        this.mapper = mapper;
+    }
+
+    public AuthenticationServiceImpl() {
+
+    }
+
     /**
      * Create a new user for this application.
      *

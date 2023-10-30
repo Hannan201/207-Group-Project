@@ -1,5 +1,8 @@
 package cypher.enforcers.controllers;
 
+import cypher.enforcers.models.UserModel;
+import cypher.enforcers.utilities.Utilities;
+import cypher.enforcers.views.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
@@ -11,11 +14,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.views.SignInView;
-import cypher.enforcers.views.SignUpView;
-import cypher.enforcers.views.View;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -64,6 +65,12 @@ public class HomePageController implements Initializable {
     // two values.
     private final DoubleProperty delta = new SimpleDoubleProperty();
 
+    // Used to check if a user's already logged in.
+    private UserModel userModel;
+
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
 
     /**
      * A handle method for the Sign-In button that opens a pop-up to allow the
@@ -83,20 +90,21 @@ public class HomePageController implements Initializable {
         View.loadNewWindow(SignUpView.getInstance());
     }
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (!Objects.isNull(userModel.getCurrentUser())) {
+            main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+                if (oldScene == null && newScene != null) {
+                    newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
+                        if (oldWindow == null && newWindow != null) {
+                            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+                            Utilities.adjustTheme(userModel.getCurrentUser().theme());
+                        }
+                    }));
+                }
+            }));
+        }
+
         // The spacings above the title and below the buttons were not
         // equal when this project was first submitted. Since I wasn't
         // responsible for the UI and didn't want to tamper with to
@@ -189,6 +197,5 @@ public class HomePageController implements Initializable {
                 }
             }
         });
-
     }
 }

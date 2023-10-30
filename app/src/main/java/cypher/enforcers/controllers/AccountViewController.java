@@ -122,22 +122,9 @@ public class AccountViewController implements Initializable {
     public void configureStage(Stage stage) {
         stage.setOnCloseRequest(windowEvent -> {
             debounce.tearDown();
-            Database.disconnect();
         });
     }
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         accounts.setCellFactory(new AccountCellFactory());

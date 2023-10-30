@@ -1,7 +1,19 @@
 package cypher.enforcers.views;
 
+import cypher.enforcers.controllers.HomePageController;
+import cypher.enforcers.controllers.SignInController;
+import cypher.enforcers.controllers.SignUpController;
+import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
+import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.UserDAOImpl;
+import cypher.enforcers.data.implementations.UserRepositoryImpl;
+import cypher.enforcers.data.security.UserDTOMapper;
+import cypher.enforcers.data.spis.AuthenticationService;
+import cypher.enforcers.data.spis.DatabaseService;
+import cypher.enforcers.data.spis.UserDAO;
+import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -10,12 +22,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import cypher.enforcers.models.Account;
 
-import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * This class is responsible for displaying a specific
@@ -44,6 +57,37 @@ public abstract class View {
     // Index 1: Path to the CSS file for dark mode.
     // Index 2: Path to the CSS file for high contrast mode.
     protected String[] cssFilesPaths = new String[Theme.values().length];
+
+    private static final Callback<Class<?>, Object> controllerFactory = new Callback<Class<?>, Object>() {
+        private static final DatabaseService dbService = new SqliteHelper();
+
+        static {
+            dbService.connect();
+        }
+
+        private final UserModel userModel = Utilities.prepareUserModel(dbService);
+
+        @Override
+        public Object call(Class<?> param) {
+            Object o;
+            try {
+                o = param.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
+                     IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (param == SignInController.class) {
+                ((SignInController) o).setUserModel(userModel);
+            } else if (param == SignUpController.class) {
+                ((SignUpController) o).setUserModel(userModel);
+            } else if (param == HomePageController.class) {
+                ((HomePageController) o).setUserModel(userModel);
+            }
+
+            return o;
+        }
+    };
 
     /**
      * Initialise the UI elements for this view.
@@ -144,9 +188,9 @@ public abstract class View {
      */
     protected void loadRoot(String fileName) {
         try {
-            this.root = FXMLLoader.load(
-                    Utilities.loadFileByURL("/cypher/enforcers/view/" + fileName)
-            );
+            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/" + fileName));
+            loader.setControllerFactory(controllerFactory);
+            this.root = loader.load();
         } catch (IOException e) {
             logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);
         }

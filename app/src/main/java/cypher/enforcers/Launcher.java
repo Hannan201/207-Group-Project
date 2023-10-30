@@ -6,8 +6,6 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
-import cypher.enforcers.data.database.Database;
-import cypher.enforcers.data.Storage;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -26,9 +24,6 @@ public class Launcher extends Application {
     // Logger used for logging.
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
-    // Path to the database file (relative to the resources folder).
-    private static final String PATH_TO_DATABASE = "/cypher/enforcers/database/database.db";
-
     // Path to the logback configuration file (relative to the resources folder).
     private static final String PATH_TO_LOGBACK_CONFIG = "/cypher/enforcers/logback.xml";
 
@@ -38,10 +33,10 @@ public class Launcher extends Application {
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
+        logger.trace("Configuring logger....");
         configureLogger();
-        logger.info("Starting application...");
 
-        Database.setConnectionSource(PATH_TO_DATABASE);
+        logger.info("Starting application...");
 
         logger.debug("Launching JavaFX application...");
         launch(args);
@@ -59,28 +54,12 @@ public class Launcher extends Application {
                 .configureStage(stage);
         logger.debug("Configured action for stage when exited.");
 
-        View view = initialize();
+        View view = HomePageView.getInstance();
         Scene scene = new Scene(view.getRoot());
         scene.getStylesheets().add(view.getCurrentThemePath());
         stage.setScene(scene);
         stage.show();
         logger.info("Displaying application window.");
-    }
-
-    /**
-     * Initialize user settings and data if the user closed the
-     * application without logging out to load the correct view.
-     */
-    private View initialize() {
-        if (Storage.getToken() != null) {
-            logger.debug("Logged in user found, retrieving data.");
-            Utilities.adjustTheme();
-            Utilities.loadAccounts();
-            return AccountView.getInstance();
-        }
-
-        logger.debug("No logged in user found, displaying home page view.");
-        return HomePageView.getInstance();
     }
 
     /**

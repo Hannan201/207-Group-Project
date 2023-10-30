@@ -1,8 +1,5 @@
 package cypher.enforcers.controllers;
 
-import cypher.enforcers.data.database.Database;
-import cypher.enforcers.data.Storage;
-import cypher.enforcers.data.security.Token;
 import cypher.enforcers.models.UserModel;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -64,18 +61,10 @@ public class SignUpController implements Initializable {
     // To interact with the user data.
     private UserModel userModel;
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
+
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Clear all the text fields when this window closes. Since
         // we're using singleton pattern, only one view instance will be
@@ -107,7 +96,6 @@ public class SignUpController implements Initializable {
         box.getChildren().add(createAccountWrapper);
 
         signUp.setOnAction(this::handleSignUp);
-
 
         // checks if the username field is empty
 
@@ -176,7 +164,7 @@ public class SignUpController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (! initialPassword.getText().equals(verifiedPassword.getText())) {
+                    if (!initialPassword.getText().equals(verifiedPassword.getText())) {
                         c.error("Your passwords do not match, please try again.");
                     }
                 })
@@ -190,7 +178,20 @@ public class SignUpController implements Initializable {
 
         validator.createCheck()
                 .withMethod(c -> {
-                    if (Database.checkUsername(initialUsername.getText())) {
+                    // Only show this error on two conditions:
+                    // 1 ) Initial username is not empty.
+                    // 2 ) Initial username and verified username are not
+                    // empty and equal each other. This prevents the
+                    // database from having to do a useless search and
+                    // prevents ValidatorFX from overriding the previous
+                    // alert with this alert.
+
+                    if (initialUsername.getText().isEmpty() || !initialUsername.getText().equals(verifiedUsername.getText())
+                       || initialPassword.getText().isEmpty() || !initialPassword.getText().equals(verifiedPassword.getText())) {
+                        return;
+                    }
+
+                    if (userModel.isUsernameTaken(initialUsername.getText())) {
                         c.error("This account is already registered.");
                     }
                 })
@@ -215,15 +216,14 @@ public class SignUpController implements Initializable {
 
         // open pop up
 
-        View.closeWindow((Node) e.getSource());
+        if (userModel.registerUser(initialUsername.getText(), initialPassword.getText())) {
+            View.closeWindow((Node) e.getSource());
 
-        logger.trace("Switching from the HomePageView to the AccountsView.");
-        View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+            logger.trace("Switching from the HomePageView to the AccountsView.");
+            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
 
-        // Clear the attributes such that when the signs out
-        // they do not have access to the credentials <-- Now done in the initialize method.
-
-        Token token = Database.registerUser(initialUsername.getText(), initialPassword.getText());
-        Storage.setToken(token);
+            // Clear the attributes such that when the signs out
+            // they do not have access to the credentials <-- Now done in the initialize method.
+        }
     }
 }

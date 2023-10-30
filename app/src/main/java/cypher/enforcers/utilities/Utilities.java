@@ -7,6 +7,16 @@ import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.database.Database;
+import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
+import cypher.enforcers.data.implementations.UserDAOImpl;
+import cypher.enforcers.data.implementations.UserRepositoryImpl;
+import cypher.enforcers.data.security.AccountDTOMapper;
+import cypher.enforcers.data.security.UserDTOMapper;
+import cypher.enforcers.data.spis.AuthenticationService;
+import cypher.enforcers.data.spis.DatabaseService;
+import cypher.enforcers.data.spis.UserDAO;
+import cypher.enforcers.data.spis.UserRepository;
+import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -39,12 +49,13 @@ public class Utilities {
                 .addAccounts(Database.getAccounts(Storage.getToken()));
     }
 
-    /**
-     * Adjust the theme for a user.
-     */
-    public static void adjustTheme() {
-        Theme theme = Database.getTheme(Storage.getToken());
 
+    /**
+     * Adjust the theme for this application.
+     *
+     * @param theme The new theme to switch to.
+     */
+    public static void adjustTheme(Theme theme) {
         if (theme == null) {
             logger.debug("Cannot switch theme because it's null. Aborting request.");
             return;
@@ -203,5 +214,19 @@ public class Utilities {
 
         logger.trace("Updating icon for default from {} to {}.", icons.get("default"), defaultIcon);
         icons.put("default", loadFileByURL(defaultIcon).toExternalForm());
+    }
+
+    /**
+     * Prepare the user model.
+     *
+     * @param service The database service.
+     * @return The new user model.
+     */
+    public static UserModel prepareUserModel(DatabaseService service) {
+        UserDAO userDAO = new UserDAOImpl(service);
+        UserRepository repository = new UserRepositoryImpl(userDAO);
+        UserDTOMapper mapper = new UserDTOMapper();
+        AuthenticationService authService = new AuthenticationServiceImpl(repository, mapper);
+        return new UserModel(authService);
     }
 }

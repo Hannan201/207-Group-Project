@@ -1,6 +1,5 @@
 package cypher.enforcers.models;
 
-import cypher.enforcers.annotations.SimpleService;
 import cypher.enforcers.data.security.UserDTO;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.views.themes.Theme;
@@ -16,14 +15,17 @@ import java.util.Optional;
 public class UserModel {
 
     // Used to log-in users.
-    @SimpleService
-    private AuthenticationService authSerivce;
+    private final AuthenticationService authService;
 
     /**
      * Create a new user model, loaded with a user if logged in.
+     *
+     * @param service The Authentication service to verify user
+     *                information.
      */
-    public UserModel() {
-        setCurrentUser(authSerivce.getLoggedInUser().orElse(null));
+    public UserModel(AuthenticationService service) {
+        this.authService = service;
+        setCurrentUser(authService.getLoggedInUser().orElse(null));
     }
 
     // Property to store the current logged-in user.
@@ -64,10 +66,10 @@ public class UserModel {
      * @return True if successfully logged in, false otherwise.
      */
     public boolean logInUser(String username, String password) {
-        boolean result = authSerivce.authenticateUser(username, password);
+        boolean result = authService.authenticateUser(username, password);
 
         if (result) {
-            Optional<UserDTO> userOptional = authSerivce.getLoggedInUser();
+            Optional<UserDTO> userOptional = authService.getLoggedInUser();
             userOptional.ifPresentOrElse(
                     this::setCurrentUser,
                     () -> {
@@ -89,7 +91,7 @@ public class UserModel {
         UserDTO user = getCurrentUser();
 
         if (!Objects.isNull(user)) {
-            return authSerivce.logUserOut(user.id());
+            return authService.logUserOut(user.id());
         }
 
         return false;
@@ -103,7 +105,7 @@ public class UserModel {
      * @return True if it is taken, false otherwise.
      */
     public boolean isUsernameTaken(String username) {
-        return authSerivce.checkUsername(username);
+        return authService.checkUsername(username);
     }
 
     /**
@@ -114,10 +116,10 @@ public class UserModel {
      * @return True if successfully registered, false otherwise.
      */
     public boolean registerUser(String username, String password) {
-        boolean result = authSerivce.createUser(username, password);
+        boolean result = authService.createUser(username, password);
 
         if (result) {
-            Optional<UserDTO> userOptional = authSerivce.getLoggedInUser();
+            Optional<UserDTO> userOptional = authService.getLoggedInUser();
             userOptional.ifPresentOrElse(
                     this::setCurrentUser,
                     () -> {
@@ -143,7 +145,7 @@ public class UserModel {
         UserDTO user = getCurrentUser();
 
         if (!Objects.isNull(user)) {
-            return authSerivce.updateUserTheme(user.id(), theme);
+            return authService.updateUserTheme(user.id(), theme);
         }
 
         return false;
