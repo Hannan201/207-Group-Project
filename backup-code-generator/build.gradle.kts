@@ -23,6 +23,11 @@ plugins {
 group = "cypher.enforcers"
 version = "1.0.0"
 
+// Add the module version while compiling.
+tasks.named<JavaCompile>("compileJava") {
+    options.javaModuleVersion.set(provider { version as String })
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()

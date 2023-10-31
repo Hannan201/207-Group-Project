@@ -100,20 +100,20 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!Objects.isNull(userModel.getCurrentUser())) {
+            // Switch to account view if user's still logged in.
             main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
                 if (oldScene == null && newScene != null) {
                     newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                         if (oldWindow == null && newWindow != null) {
                             Utilities.adjustTheme(userModel.getCurrentUser().theme());
                             View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-                            newScene.getWindow()
-                                    .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> userModel.shutDown());
                         }
                     }));
                 }
             }));
         }
 
+        // To close the database connection when window closes.
         main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
