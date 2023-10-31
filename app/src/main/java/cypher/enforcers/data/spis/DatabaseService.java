@@ -1,8 +1,8 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.utilities.sqliteutilities.argumentsetters.ArgumentSetters;
-import cypher.enforcers.utilities.sqliteutilities.argumentsetters.TriConsumer;
-import cypher.enforcers.utilities.sqliteutilities.retrievers.Retrievers;
+import cypher.enforcers.utilities.sqliteutilities.ArgumentSetters;
+import cypher.enforcers.utilities.sqliteutilities.TriConsumer;
+import cypher.enforcers.utilities.sqliteutilities.Retrievers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

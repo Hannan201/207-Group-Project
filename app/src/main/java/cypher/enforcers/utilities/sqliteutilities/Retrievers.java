@@ -1,4 +1,4 @@
-package cypher.enforcers.utilities.sqliteutilities.retrievers;
+package cypher.enforcers.utilities.sqliteutilities;
 
 import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.entities.AccountEntity;

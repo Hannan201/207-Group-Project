@@ -1,4 +1,4 @@
-package cypher.enforcers.utilities.sqliteutilities.argumentsetters;
+package cypher.enforcers.utilities.sqliteutilities;
 
 /**
  * A functional interface that accepts three values.
