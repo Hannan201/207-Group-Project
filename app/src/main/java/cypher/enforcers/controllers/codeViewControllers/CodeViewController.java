@@ -5,8 +5,13 @@ import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
 import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
 import cypher.enforcers.code.readers.types.ReaderType;
-import cypher.enforcers.data.Storage;
+import cypher.enforcers.data.security.Code;
+import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
+import cypher.enforcers.models.UserModel;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -17,13 +22,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
-import cypher.enforcers.data.database.Database;
 import cypher.enforcers.models.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
-import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.views.utilities.codeViewUtilities.CodeCell;
 
 import java.io.File;
@@ -63,7 +66,7 @@ public class CodeViewController implements Initializable {
 
     // Displays all the codes.
     @FXML
-    private ListView<CodeEntity> codeListView;
+    private ListView<Code> codeListView;
 
     // Label that says code.
     @FXML
@@ -107,9 +110,6 @@ public class CodeViewController implements Initializable {
     @FXML
     private Region spaceBetween;
 
-    // Current account to display.
-    private AccountEntity account;
-
     // This property is used to control the padding on the left side
     // of the list view so that the content can fit when the screen
     // gets too small.
@@ -124,14 +124,89 @@ public class CodeViewController implements Initializable {
     // so that the contents can fit when the screen gets to small.
     private final ObjectProperty<Insets> windowPadding = new SimpleObjectProperty<>(new Insets(5, 5, 5, 5));
 
+    // To log out the current user.
+    private UserModel userModel;
+
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
+
+    // To interact with the current account.
+    private AccountModel accountModel;
+
+    /**
+     * Set the account model.
+     *
+     * @param model The Account Model.
+     */
+    public void setAccountModel(AccountModel model) {
+        this.accountModel = model;
+    }
+
     // To interact with the account's codes.
     private CodeModel codeModel;
+
+    /**
+     * Set the code model.
+     *
+     * @param model The Code Model.
+     */
+    public void setCodeModel(CodeModel model) {
+        this.codeModel = model;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         background.paddingProperty().bind(windowPadding);
         left.paddingProperty().bind(padding);
         right.paddingProperty().bind(rightSidePadding);
+
+        codeListView.itemsProperty().bind(codeModel.codesProperty());
+
+        codeModel.currentCodeProperty().bind(codeListView.getSelectionModel().selectedItemProperty());
+
+        accountModel.currentAccountProperty().addListener((observable, oldValue, newValue) -> {
+            if (!Objects.isNull(newValue)) {
+                codeModel.loadCodes(newValue.id());
+                return;
+            }
+
+            codeModel.clear();
+        });
+
+        /*
+        If a current account is selected, we want to show its type
+        and name, otherwise default labels.
+         */
+        StringBinding bindingForTitle = Bindings.createStringBinding(
+                () -> Objects.isNull(accountModel.getCurrentAccount()) ?
+                        "Social Media Platform Name\n"
+                        : accountModel.getCurrentAccount().socialMediaType() + "\n",
+                accountModel.currentAccountProperty()
+        );
+        title.textProperty().bind(bindingForTitle);
+
+        StringBinding bindingForUsername = Bindings.createStringBinding(
+                () -> Objects.isNull(accountModel.getCurrentAccount()) ?
+                        "Label"
+                        : accountModel.getCurrentAccount().name(),
+                accountModel.currentAccountProperty()
+        );
+        usernameTitle.textProperty().bind(bindingForUsername);
+
+        /*
+        Only make import button visible if account supports it.
+         */
+        BooleanBinding bindingForImports = Bindings.createBooleanBinding(
+                () -> Objects.isNull(accountModel.getCurrentAccount()) || !AccountEntity.supportsImport(accountModel.getCurrentAccount().socialMediaType().toLowerCase()),
+                accountModel.currentAccountProperty()
+        );
+        importCodes.disableProperty().bind(bindingForImports);
 
         /*
         This view would break down if the screen went too large or
@@ -231,7 +306,9 @@ public class CodeViewController implements Initializable {
 
         codeListView.setCellFactory(test -> {
             try {
-                return new CodeCell(codeListView);
+                CodeCell cell = new CodeCell(codeListView);
+                cell.setCodeModel(codeModel);
+                return cell;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -246,10 +323,10 @@ public class CodeViewController implements Initializable {
      */
     public void importCodeOnAction() {
         // 1) Get the platform for the account
-        String AccountType = account.getSocialMediaType().toLowerCase();
+        String AccountType = accountModel.getCurrentAccount().socialMediaType().toUpperCase();
 
         // 2) select a reader based on the corresponding account type
-        CodeReader reader = CodeReaderFactory.makeCodeReader(ReaderType.valueOf(AccountType.toUpperCase()));
+        CodeReader reader = CodeReaderFactory.makeCodeReader(ReaderType.valueOf(AccountType));
 
         if (reader == null) {
             logger.warn("No reader of type {}. Aborting request.", AccountType);
@@ -278,8 +355,7 @@ public class CodeViewController implements Initializable {
      * This method clears the items in the listview.
      */
     public void deleteAllOnAction() {
-        codeListView.getItems().clear();
-        Database.clearAllCodes(Storage.getToken(), (int) account.getID());
+        codeModel.deleteAllCodes(accountModel.getCurrentAccount());
     }
 
     /**
@@ -310,57 +386,23 @@ public class CodeViewController implements Initializable {
         for (String s : returned) {
             // Don't want to add empty codes.
             if (!s.isEmpty()) {
-                int id = Database.addCode(Storage.getToken(), (int) account.getID(), s);
-                codeListView.getItems().add(Database.getCode(Storage.getToken(), id));
-                addCodeInput.setText("");
+                if (!codeModel.addCode(accountModel.getCurrentAccount(), s)) {
+                    return;
+                }
             }
         }
-    }
 
-    /**
-     * Clear the list of codes being displayed in this view
-     * and only show the codes for a specific social media
-     * account.
-     *
-     * @param ID ID of the social media account to show
-     *             the codes for.
-     */
-    public void addCodes(int ID) {
-        codeListView.getItems().clear();
-        account = Database.getAccount(Storage.getToken(), ID);
-        if (account != null) {
-            title.setText(account.getSocialMediaType() + "\n");
-            usernameTitle.setText(account.getName());
-
-            // Only allow user to click the import codes button
-            // if their account is supported.
-            importCodes.setDisable(!AccountEntity.supportsImport(account.getSocialMediaType().toLowerCase()));
-
-            codeListView.getItems().addAll(Database.getCodes(Storage.getToken(), ID));
-        }
-    }
-
-    /**
-     * Return the Account that's currently
-     * being used to display the codes.
-     *
-     * @return Account object which is currently
-     * is in use.
-     */
-    public AccountEntity getAccount() {
-        return this.account;
+        addCodeInput.setText("");
     }
 
     /**
      * Allows a user to logout and redirects them to the home page.
      */
     public void handleLogout() {
-        Database.logUserOut(Storage.getToken());
-
-        logger.trace("Switching from the CodeView to the HomePageView.");
-        View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
-
-        Storage.setToken(null);
+        if (userModel.logOutUser()) {
+            logger.trace("Switching from the CodeView to the HomePageView.");
+            View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
+        }
     }
 
     /**

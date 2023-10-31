@@ -129,8 +129,6 @@ public class AccountCell extends ListCell<Account> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
                     logger.trace("Switching from the AccountView to the CodeView.");
                     View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
-
-                    ((CodeView) CodeView.getInstance()).getCodeViewController().addCodes((int) item.id());
                 }
             });
 

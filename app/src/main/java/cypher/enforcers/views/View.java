@@ -1,9 +1,11 @@
 package cypher.enforcers.views;
 
 import cypher.enforcers.controllers.*;
+import cypher.enforcers.controllers.codeViewControllers.CodeViewController;
 import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.models.AccountModel;
+import cypher.enforcers.models.CodeModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import javafx.fxml.FXMLLoader;
@@ -61,6 +63,8 @@ public abstract class View {
 
         private final AccountModel accountModel = Utilities.prepareAccountModel(dbService);
 
+        private final CodeModel codeModel = Utilities.prepareCodeModel(dbService);
+
         @Override
         public Object call(Class<?> param) {
             Object o;
@@ -83,6 +87,10 @@ public abstract class View {
             } else if (param == CreateAccountController.class) {
                 ((CreateAccountController) o).setUserModel(userModel);
                 ((CreateAccountController) o).setAccountModel(accountModel);
+            } else if (param == CodeViewController.class) {
+                ((CodeViewController) o).setUserModel(userModel);
+                ((CodeViewController) o).setAccountModel(accountModel);
+                ((CodeViewController) o).setCodeModel(codeModel);
             }
 
             return o;

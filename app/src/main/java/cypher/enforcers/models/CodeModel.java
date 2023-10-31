@@ -2,7 +2,7 @@ package cypher.enforcers.models;
 
 import cypher.enforcers.code.CodeEntity;
 import cypher.enforcers.data.security.Account;
-import cypher.enforcers.data.security.CodeDTO;
+import cypher.enforcers.data.security.Code;
 import cypher.enforcers.data.security.CodeDTOMapper;
 import cypher.enforcers.data.spis.CodeRepository;
 import javafx.beans.property.ObjectProperty;
@@ -38,17 +38,17 @@ public class CodeModel {
     }
 
     // list of codes for an account.
-    private final ObservableList<CodeDTO> codes = FXCollections.observableArrayList();
+    private final ObservableList<Code> codes = FXCollections.observableArrayList();
 
     // Property to store the list of codes.
-    private final ObjectProperty<ObservableList<CodeDTO>> codesProperty = new SimpleObjectProperty<>(codes);
+    private final ObjectProperty<ObservableList<Code>> codesProperty = new SimpleObjectProperty<>(codes);
 
     /**
      * Get the codes for the current account.
      *
      * @return An ObservableList of codes.
      */
-    public ObservableList<CodeDTO> getCodes() {
+    public ObservableList<Code> getCodes() {
         return codesProperty.get();
     }
 
@@ -57,7 +57,7 @@ public class CodeModel {
      *
      * @return Property with an ObservableList of codes.
      */
-    public ObjectProperty<ObservableList<CodeDTO>> codesProperty() {
+    public ObjectProperty<ObservableList<Code>> codesProperty() {
         return codesProperty;
     }
 
@@ -66,19 +66,19 @@ public class CodeModel {
      *
      * @param codes The codes to be set.
      */
-    public void setCodes(ObservableList<CodeDTO> codes) {
+    public void setCodes(ObservableList<Code> codes) {
         codesProperty.set(codes);
     }
 
     // Property to store the current code.
-    private final ObjectProperty<CodeDTO> currentCodeProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<Code> currentCodeProperty = new SimpleObjectProperty<>();
 
     /**
      * Get the current code being selected.
      *
      * @return The code being selected.
      */
-    public CodeDTO getCurrentCode() {
+    public Code getCurrentCode() {
         return currentCodeProperty.get();
     }
 
@@ -87,7 +87,7 @@ public class CodeModel {
      *
      * @return Property of the current code.
      */
-    public ObjectProperty<CodeDTO> currentCodeProperty() {
+    public ObjectProperty<Code> currentCodeProperty() {
         return currentCodeProperty;
     }
 
@@ -96,24 +96,34 @@ public class CodeModel {
      *
      * @param code The code being selected.
      */
-    public void setCurrentCode(CodeDTO code) {
+    public void setCurrentCode(Code code) {
         currentCodeProperty.set(code);
+    }
+
+    /**
+     * Load codes for an account given the ID.
+     *
+     * @param id The ID of the account.
+     */
+    public void loadCodes(long id) {
+        List<Code> converted = codeRepository.readAll(id)
+                .stream()
+                .map(mapper)
+                .toList();
+
+        codes.setAll(converted);
     }
 
     /**
      * Delete all codes for an account.
      *
      * @param account The account to delete the codes for.
-     * @return True if the codes were deleted, false otherwise.
      */
-    public boolean deleteAllCodes(Account account) {
+    public void deleteAllCodes(Account account) {
         List<CodeEntity> results = codeRepository.deleteAll(account.id());
         if (results.size() == codes.size()) {
             codes.clear();
-            return true;
         }
-
-        return false;
     }
 
     /**
@@ -139,23 +149,16 @@ public class CodeModel {
 
     /**
      * Attempt to delete the current selected code.
-     *
-     * @return True if deleted, false otherwise.
      */
-    public boolean deleteCode() {
-        CodeDTO code = getCurrentCode();
+    public void deleteCode() {
+        Code code = getCurrentCode();
 
-        if (code == null) {
-            return false;
+        if (!Objects.isNull(code)) {
+            Optional<CodeEntity> optionalCode = codeRepository.delete(code.id());
+            if (optionalCode.isPresent() && optionalCode.get().getId() == code.id()) {
+                codes.remove(code);
+            }
         }
-
-        Optional<CodeEntity> optionalCode = codeRepository.delete(code.id());
-        if (optionalCode.isPresent() && optionalCode.get().getId() == code.id()) {
-            codes.remove(code);
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -166,29 +169,31 @@ public class CodeModel {
      * hasn't changed from the current code. False otherwise.
      */
     public boolean updateCode(String newCode) {
-        CodeDTO code = getCurrentCode();
-        if (Objects.isNull(code)) {
-            return false;
-        }
+        Code code = getCurrentCode();
+        if (!Objects.isNull(code) && !code.code().equals(newCode)) {
+            int index = codes.indexOf(code);
+            if (index == -1) {
+                return false;
+            }
 
-        int index = codes.indexOf(code);
-        if (index == -1) {
-            return false;
-        }
-
-        if (code.code().equals(newCode)) {
-            return true;
-        }
-
-        CodeEntity c = new CodeEntity();
-        c.setId(code.id());
-        c.setCode(newCode);
-        Optional<CodeEntity> optionalCode = codeRepository.update(c);
-        if (optionalCode.isPresent() && optionalCode.get().getCode().equals(newCode)) {
-            codes.set(index, mapper.apply(optionalCode.get()));
-            return true;
+            CodeEntity c = new CodeEntity();
+            c.setId(code.id());
+            c.setCode(newCode);
+            Optional<CodeEntity> optionalCode = codeRepository.update(c);
+            if (optionalCode.isPresent() && optionalCode.get().getCode().equals(newCode)) {
+                codes.set(index, mapper.apply(optionalCode.get()));
+                return true;
+            }
         }
 
         return false;
+    }
+
+    /**
+     * Clear the current list of codes. usually called when no
+     * account is selected and the code view is loaded.
+     */
+    public void clear() {
+        codes.clear();
     }
 }

@@ -7,9 +7,9 @@ import java.util.function.Function;
 /**
  * Converts a code object to a code data-transfer-object.
  */
-public class CodeDTOMapper implements Function<CodeEntity, CodeDTO> {
+public class CodeDTOMapper implements Function<CodeEntity, Code> {
     @Override
-    public CodeDTO apply(CodeEntity code) {
-        return new CodeDTO(code.getId(), code.getCode());
+    public Code apply(CodeEntity code) {
+        return new Code(code.getId(), code.getCode());
     }
 }

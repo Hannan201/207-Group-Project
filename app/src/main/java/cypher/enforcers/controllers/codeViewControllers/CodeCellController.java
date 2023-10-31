@@ -1,7 +1,6 @@
 package cypher.enforcers.controllers.codeViewControllers;
 
-import cypher.enforcers.data.database.Database;
-import cypher.enforcers.data.Storage;
+import cypher.enforcers.data.security.Code;
 import cypher.enforcers.models.CodeModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,9 +8,10 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import cypher.enforcers.code.CodeEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 /**
  * Controller for the code cell.
@@ -41,11 +41,8 @@ public class CodeCellController {
     @FXML
     private Button edit;
 
-    // Reference to the current code associated with this cell.
-    private CodeEntity currentCell;
-
     // Reference to the parent list view.
-    private ListView<CodeEntity> currentListView;
+    private ListView<Code> currentListView;
 
     // If this code is selected or not.
     private boolean selected;
@@ -58,21 +55,23 @@ public class CodeCellController {
      *
      * @param cell The current CodeCell
      * @param parent The ListView that contains this CodeCell
+     * @param model The code model
      */
-    public void setCodeCell(CodeEntity cell, ListView<CodeEntity> parent) {
-        currentCell = cell;
+    public void setCodeCell(Code cell, ListView<Code> parent, CodeModel model) {
         currentListView = parent;
         selected = false;
 
         // Making the text of the code and text work in tandem with one another.
-        code.setText(cell.getCode());
-        userInput.setText(cell.getCode());
+        code.setText(cell.code());
+        userInput.setText(cell.code());
 
         edit.setDisable(true);
         delete.setDisable(true);
         copy.setDisable(true);
 
         userInput.setVisible(false);
+
+        this.codeModel = model;
     }
 
     /**
@@ -118,16 +117,18 @@ public class CodeCellController {
         // handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
         // Don't let the user enter an empty code.
         if (e.getCode() == KeyCode.ENTER && !userInput.getText().isEmpty()) {
-            logger.debug("Switching code from {} to {}.", currentCell.getCode(), userInput.getText());
+            String logText = Objects.isNull(codeModel.getCurrentCode()) ?
+                    "null" : codeModel.getCurrentCode().code();
+            logger.debug("Switching code from {} to {}.", logText, userInput.getText());
 
-            Database.updateCode(Storage.getToken(), (int) currentCell.getId(), userInput.getText());
-
-            code.setText((userInput.getText()));
-            currentCell = Database.getCode(Storage.getToken(), (int) currentCell.getId());
+            if (codeModel.updateCode(userInput.getText())) {
+                code.setText((userInput.getText()));
+            }
 
             userInput.setVisible(false);
             code.setVisible(true);
         }
+
         // After the edit operation is finished, the delete and copy buttons can be interacted with.
         delete.setDisable(false);
         copy.setDisable(false);
@@ -141,7 +142,9 @@ public class CodeCellController {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
 
-        content.putString(currentCell.getCode());
+        String value = Objects.isNull(codeModel.getCurrentCode()) ?
+                "" : codeModel.getCurrentCode().code();
+        content.putString(value);
         clipboard.setContent(content);
     }
 
@@ -149,8 +152,6 @@ public class CodeCellController {
      * Handles when the delete button is pressed
      */
     public void deleteOnAction() {
-        // handle the event when delete button is clicked
-        currentListView.getItems().remove(currentCell);
-        Database.removeCode(Storage.getToken(), (int) currentCell.getId());
+        codeModel.deleteCode();
     }
 }

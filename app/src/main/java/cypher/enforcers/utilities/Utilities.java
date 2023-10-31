@@ -9,9 +9,11 @@ import cypher.enforcers.data.Storage;
 import cypher.enforcers.data.database.Database;
 import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.security.AccountDTOMapper;
+import cypher.enforcers.data.security.CodeDTOMapper;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.*;
 import cypher.enforcers.models.AccountModel;
+import cypher.enforcers.models.CodeModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import org.apache.commons.io.FilenameUtils;
@@ -233,9 +235,22 @@ public class Utilities {
      * @return The new account model.
      */
     public static AccountModel prepareAccountModel(DatabaseService service) {
-        AccountDAO userDAO = new AccountDAOImpl(service);
-        AccountRepository repository = new AccountRepositoryImpl(userDAO);
+        AccountDAO accountDAO = new AccountDAOImpl(service);
+        AccountRepository repository = new AccountRepositoryImpl(accountDAO);
         AccountDTOMapper mapper = new AccountDTOMapper();
         return new AccountModel(repository, mapper);
+    }
+
+    /**
+     * Prepare the code model.
+     *
+     * @param service The database service.
+     * @return The new code model.
+     */
+    public static CodeModel prepareCodeModel(DatabaseService service) {
+        CodeDAO codeDAO = new CodeDAOImpl(service);
+        CodeRepository repository = new CodeRepositoryImpl(codeDAO);
+        CodeDTOMapper mapper = new CodeDTOMapper();
+        return new CodeModel(repository, mapper);
     }
 }
