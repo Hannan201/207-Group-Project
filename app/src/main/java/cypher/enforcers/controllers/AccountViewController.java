@@ -21,7 +21,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 import cypher.enforcers.views.accountview.AccountCellFactory;
@@ -141,9 +140,8 @@ public class AccountViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
-                newScene.getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
-                    debounce.tearDown();
-                });
+                newScene.getWindow()
+                        .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> debounce.tearDown());
             }
         }));
 

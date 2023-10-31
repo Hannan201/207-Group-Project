@@ -5,7 +5,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
-
 /**
  * Factory to create an account cell.
  */

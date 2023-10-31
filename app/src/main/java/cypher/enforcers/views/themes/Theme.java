@@ -7,6 +7,6 @@ public enum Theme {
 
     LIGHT,
     DARK,
-    HIGH_CONTRAST;
+    HIGH_CONTRAST
 
 }

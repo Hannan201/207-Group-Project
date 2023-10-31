@@ -7,8 +7,6 @@ import cypher.enforcers.views.themes.Theme;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -17,52 +15,6 @@ import java.util.function.Function;
  * retrieved from a result set after executing a SELECT SQL statement.
  */
 public class Retrievers {
-
-    /**
-     * A retriever that returns a boolean value based on the column name.
-     *
-     * @param key The name of the column.
-     * @return The boolean value.
-     */
-    public static Function<ResultSet, Boolean> ofBoolean(String key) {
-        return resultSet -> {
-            try {
-                return resultSet.getBoolean(key);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-
-    /**
-     * A retriever that returns multiple values based on the key names
-     * provided.
-     *
-     * @param keys The names of the keys to return.
-     * @return A list that contains the found results in order the
-     * key names were specified. Example: if the keys are: first, second
-     * then at index 0 will contain the value from column first, and the
-     * value and index 1 will contain the value from column second. If no
-     * results are found, null is returned.
-     */
-    public static Function<ResultSet, List<Object>> ofList(String ... keys) {
-        return resultSet -> {
-            List<Object> objects = new ArrayList<>();
-            try {
-                if (!resultSet.isBeforeFirst()) {
-                    return null;
-                }
-
-                for (String key : keys) {
-                    objects.add(resultSet.getObject(key));
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            return objects;
-        };
-    }
 
     // How to retrieve a user from a result set.
     private static final Function<ResultSet, UserEntity> FOR_USER = resultSet -> {

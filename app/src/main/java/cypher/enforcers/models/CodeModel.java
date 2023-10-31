@@ -22,6 +22,7 @@ public class CodeModel {
     // Used to interact with the codes objects.
     private final CodeRepository codeRepository;
 
+    // Converts entity to data transfer object.
     private final CodeDTOMapper mapper;
 
     /**

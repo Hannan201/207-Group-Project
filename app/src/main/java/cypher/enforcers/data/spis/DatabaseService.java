@@ -92,30 +92,6 @@ public interface DatabaseService {
     }
 
     /**
-     * Execute a select statement and obtain the result based on
-     * a custom implementation on how to retrieve the object, with
-     * the name of the key(s) provided.
-     *
-     * @param query The query to execute.
-     * @param retriever Retriever which has the implementation of how
-     *                  the data should be obtained from the result set.
-     * @param objects The arguments that need to be set for the placeholder.
-     * @param <T> The socialMediaType of value that should be returned.
-     * @return The value, if any errors occur null will be returned.
-     * @throws SQLException If anything goes wrong.
-     */
-    default <T> T executeSelect(String query, Function<ResultSet, T> retriever, Object ... objects) throws SQLException {
-        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
-            for (int i = 0; i < objects.length; i++) {
-                TriConsumer<PreparedStatement, Integer, Object> setter
-                        = ArgumentSetters.getSetter(objects[i].getClass());
-                setter.accept(statement, i + 1, objects[i]);
-            }
-            return retriever.apply(statement.executeQuery());
-        }
-    }
-
-    /**
      * Execute a select statement to obtain the result based on the
      * class-socialMediaType of an object.
      *

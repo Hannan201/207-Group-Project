@@ -1,6 +1,5 @@
 package cypher.enforcers.controllers;
 
-import cypher.enforcers.data.security.dtos.Account;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.View;
@@ -17,7 +16,6 @@ import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**

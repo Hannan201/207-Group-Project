@@ -20,6 +20,7 @@ public class AccountModel {
     // Used to interact with account objects.
     private final AccountRepository accountRepository;
 
+    // Converts entity to data transfer object.
     private final AccountDTOMapper mapper;
 
     /**

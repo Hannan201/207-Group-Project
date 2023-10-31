@@ -21,7 +21,7 @@ import cypher.enforcers.views.View;
 import java.io.IOException;
 
 /**
- * Class to represent a account cell.
+ * Class to represent an account cell.
  */
 public class AccountCell extends ListCell<Account> {
 
