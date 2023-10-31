@@ -8,6 +8,8 @@ import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.security.User;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
+import cypher.enforcers.views.accountview.AccountView;
+import cypher.enforcers.views.codeview.CodeView;
 import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,7 @@
-package cypher.enforcers.views;
+package cypher.enforcers.views.accountview;
 
 import cypher.enforcers.controllers.AccountViewController;
+import cypher.enforcers.views.View;
 import javafx.fxml.FXMLLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

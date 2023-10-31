@@ -25,13 +25,11 @@ module cypher.enforcers {
     // Adds utility functions to work with URLs.
     requires org.apache.commons.io;
 
-    // JavaFX requires access to the controllers and any other
-    // methods from other packages used inside the controllers.
+    // JavaFX requires access to the controllers.
     opens cypher.enforcers.controllers to javafx.fxml;
     opens cypher.enforcers.controllers.codeViewControllers to javafx.fxml;
-    opens cypher.enforcers.views to javafx.fxml;
-    opens cypher.enforcers.views.utilities to javafx.fxml;
-    opens cypher.enforcers.views.utilities.codeViewUtilities to javafx.fxml;
+    opens cypher.enforcers.views.accountview to javafx.fxml;
+    opens cypher.enforcers.views.codeview to javafx.fxml;
 
     exports cypher.enforcers;
 }

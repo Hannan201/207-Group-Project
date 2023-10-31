@@ -9,6 +9,8 @@ import cypher.enforcers.data.security.Code;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
 import cypher.enforcers.models.UserModel;
+import cypher.enforcers.views.accountview.AccountView;
+import cypher.enforcers.views.codeview.CodeView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringBinding;
@@ -27,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
-import cypher.enforcers.views.utilities.codeViewUtilities.CodeCell;
+import cypher.enforcers.views.codeview.CodeCell;
 
 import java.io.File;
 import java.io.IOException;

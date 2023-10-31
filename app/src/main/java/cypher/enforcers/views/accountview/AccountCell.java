@@ -1,4 +1,4 @@
-package cypher.enforcers.views.utilities;
+package cypher.enforcers.views.accountview;
 
 import cypher.enforcers.data.security.Account;
 import javafx.fxml.FXML;
@@ -15,8 +15,7 @@ import cypher.enforcers.data.entities.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
-import cypher.enforcers.views.AccountView;
-import cypher.enforcers.views.CodeView;
+import cypher.enforcers.views.codeview.CodeView;
 import cypher.enforcers.views.View;
 
 import java.io.IOException;

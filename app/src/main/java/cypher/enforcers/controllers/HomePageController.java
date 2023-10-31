@@ -3,6 +3,7 @@ package cypher.enforcers.controllers;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.utilities.Utilities;
 import cypher.enforcers.views.*;
+import cypher.enforcers.views.accountview.AccountView;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;

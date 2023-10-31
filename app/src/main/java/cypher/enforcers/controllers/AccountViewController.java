@@ -3,6 +3,7 @@ package cypher.enforcers.controllers;
 import cypher.enforcers.data.security.Account;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
+import cypher.enforcers.views.accountview.AccountView;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ import javafx.stage.Stage;
 import cypher.enforcers.data.entities.AccountEntity;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
-import cypher.enforcers.views.utilities.AccountCellFactory;
+import cypher.enforcers.views.accountview.AccountCellFactory;
 
 import java.net.URL;
 import java.util.ArrayList;

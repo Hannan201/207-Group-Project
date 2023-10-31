@@ -17,7 +17,7 @@ import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.views.AccountView;
+import cypher.enforcers.views.accountview.AccountView;
 import cypher.enforcers.views.HomePageView;
 import cypher.enforcers.views.View;
 

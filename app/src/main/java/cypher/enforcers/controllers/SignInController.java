@@ -2,6 +2,7 @@ package cypher.enforcers.controllers;
 
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.utilities.Utilities;
+import cypher.enforcers.views.accountview.AccountView;
 import javafx.scene.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

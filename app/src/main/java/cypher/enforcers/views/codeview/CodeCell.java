@@ -1,4 +1,4 @@
-package cypher.enforcers.views.utilities.codeViewUtilities;
+package cypher.enforcers.views.codeview;
 
 import cypher.enforcers.controllers.codeViewControllers.CodeCellController;
 import cypher.enforcers.data.security.Code;
