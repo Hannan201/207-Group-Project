@@ -140,22 +140,18 @@ public class AccountModel {
     }
 
     /**
-     * Search for an account by name. The search is case-insensitive.
+     * Check if an account with specific name and platform already
+     * exists. The search is case-insensitive.
      *
-     * @param name The name to search for.
-     * @return An Optional containing an account when found, otherwise
-     * null.
+     * @param name     The name of the account.
+     * @param platform The type of the account.
+     * @return True if already exists, false otherwise.
      */
-    public Optional<Account> searchForAccount(String name) {
-        List<Account> results = accounts.stream()
-                .filter(a -> a.name().equals(name))
-                .toList();
-
-        if (results.size() == 1) {
-            return Optional.of(results.get(0));
-        }
-
-        return Optional.empty();
+    public boolean checkDuplicate(String name, String platform) {
+        return accounts.stream()
+                .anyMatch(account ->
+                        account.name().equalsIgnoreCase(name)
+                        && account.socialMediaType().equalsIgnoreCase(platform));
     }
 
     /**
