@@ -21,7 +21,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     private final AccountDAO accountDAO;
 
     /**
-     * Create a new Account Repository linked to a Account Data Access
+     * Create a new Account Repository linked to an Account Data Access
      * Object to work with the accounts as a collection.
      *
      * @param dao The Account Data Access Object.

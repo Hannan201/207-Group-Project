@@ -23,7 +23,7 @@ plugins {
 group = "cypher.enforcers"
 version = "1.0.0"
 
-// Add the module version while compiling.
+// Adds the module version to the module-info.java file.
 tasks.named<JavaCompile>("compileJava") {
     options.javaModuleVersion.set(provider { version as String })
 }
@@ -75,7 +75,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(20))
+        languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.ADOPTIUM) // To use OpenJDK.
     }
 }

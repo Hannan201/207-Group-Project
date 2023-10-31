@@ -26,7 +26,6 @@ public class UserDAOImpl implements UserDAO {
 
     private static final String GET_LOGGED_IN_USER = "SELECT * FROM users WHERE logged_in = 1";
 
-
     // Logger for the user data access object.
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 

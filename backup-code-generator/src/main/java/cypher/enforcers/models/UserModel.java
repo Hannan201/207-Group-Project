@@ -163,7 +163,7 @@ public class UserModel {
     }
 
     /**
-     * Disconnect from the database.
+     * Shutdown any related services to the user model.
      */
     public void shutDown() {
         onShutDown.run();
