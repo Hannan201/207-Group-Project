@@ -183,16 +183,12 @@ public class AccountModel {
      * Clear all accounts for a user.
      *
      * @param id The ID of the user.
-     * @return True if accounts are deleted successfully, false otherwise.
      */
-    public boolean clearAllAccounts(long id) {
+    public void clearAllAccounts(long id) {
         List<AccountEntity> results = accountRepository.deleteAll(id);
         if (results.size() == accounts.size()) {
             accounts.clear();
-            return true;
         }
-
-        return false;
     }
 
     /**

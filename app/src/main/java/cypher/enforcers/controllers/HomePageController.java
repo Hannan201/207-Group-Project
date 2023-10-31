@@ -97,8 +97,8 @@ public class HomePageController implements Initializable {
                 if (oldScene == null && newScene != null) {
                     newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                         if (oldWindow == null && newWindow != null) {
-                            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
                             Utilities.adjustTheme(userModel.getCurrentUser().theme());
+                            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
                         }
                     }));
                 }

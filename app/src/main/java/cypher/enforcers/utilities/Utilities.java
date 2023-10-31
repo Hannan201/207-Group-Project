@@ -38,17 +38,6 @@ public class Utilities {
     private static final Logger logger = LoggerFactory.getLogger(Utilities.class);
 
     /**
-     * Load all the accounts to the account view. Ideally called when
-     * the scene is being switched to the account view.
-     */
-    public static void loadAccounts() {
-        logger.debug("Attempting to load all accounts for user.");
-        ((AccountView) AccountView.getInstance()).getAccountViewController()
-                .addAccounts(Database.getAccounts(Storage.getToken()));
-    }
-
-
-    /**
      * Adjust the theme for this application.
      *
      * @param theme The new theme to switch to.

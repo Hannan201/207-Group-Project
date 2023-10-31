@@ -91,6 +91,9 @@ public abstract class View {
                 ((CodeViewController) o).setUserModel(userModel);
                 ((CodeViewController) o).setAccountModel(accountModel);
                 ((CodeViewController) o).setCodeModel(codeModel);
+            } else if (param == SettingsViewController.class) {
+                ((SettingsViewController) o).setUserModel(userModel);
+                ((SettingsViewController) o).setAccountModel(accountModel);
             }
 
             return o;

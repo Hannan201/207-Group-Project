@@ -5,20 +5,18 @@ import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
+import cypher.enforcers.data.security.User;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cypher.enforcers.utilities.Utilities;
-import cypher.enforcers.data.Storage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.HyperlinkLabel;
-import cypher.enforcers.data.database.Database;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 
@@ -28,6 +26,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -68,11 +67,29 @@ public class SettingsViewController implements Initializable {
             "[app] icon, [Google] icon, [Discord]icon, [Shopify] icon, " +
             "[Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon.";
 
+    // Used to interact with the users.
+    private UserModel userModel;
+
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
+    public void setUserModel(UserModel model) {
+        this.userModel = model;
+    }
+
     // Used to interact with the accounts.
     private AccountModel accountModel;
 
-    // Used to interact with the users.
-    private UserModel userModel;
+    /**
+     * Set the account model.
+     *
+     * @param model The Account Model.
+     */
+    public void setAccountModel(AccountModel model) {
+        this.accountModel = model;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -119,10 +136,10 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToHighContrastMode() {
-        logger.info("Updating application look and feel to high contrast mode.");
-        updateTheme(highContrastModeCommand);
-
-        Database.updateTheme(Storage.getToken(), Theme.HIGH_CONTRAST);
+        if (userModel.updateTheme(Theme.HIGH_CONTRAST)) {
+            logger.info("Updating application look and feel to high contrast mode.");
+            updateTheme(highContrastModeCommand);
+        }
     }
 
     /**
@@ -130,22 +147,21 @@ public class SettingsViewController implements Initializable {
      */
     @FXML
     private void switchToDarkMode() {
-        logger.info("Updating application look and feel to dark mode.");
-        updateTheme(darkModeCommand);
-
-        Database.updateTheme(Storage.getToken(), Theme.DARK);
+        if (userModel.updateTheme(Theme.DARK)) {
+            logger.info("Updating application look and feel to dark mode.");
+            updateTheme(darkModeCommand);
+        }
     }
 
     /**
      * Switch all the view's theme to Light Mode.
-     *
      */
     @FXML
     private void switchToLightMode() {
-        logger.info("Updating application look and feel to light mode.");
-        updateTheme(lightModeCommand);
-
-        Database.updateTheme(Storage.getToken(), Theme.LIGHT);
+        if (userModel.updateTheme(Theme.LIGHT)) {
+            logger.info("Updating application look and feel to light mode.");
+            updateTheme(lightModeCommand);
+        }
     }
 
     /**
@@ -160,7 +176,12 @@ public class SettingsViewController implements Initializable {
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().add(SettingsView.getInstance().getCurrentThemePath());
 
-        Utilities.loadAccounts();
+        // This is so the list view updates to display the correct
+        // icons for the theme.
+        User u = userModel.getCurrentUser();
+        if (!Objects.isNull(u)) {
+            accountModel.loadAccounts(u.id());
+        }
     }
 
     /**
@@ -174,15 +195,12 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Allows a user to logout and redirects them to the home page.
-     *
      */
     public void handleLogout() {
-        Database.logUserOut(Storage.getToken());
-
-        logger.trace("Switching from the SettingsView to the HomePageView.");
-        View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
-
-        Storage.setToken(null);
+        if (userModel.logOutUser()) {
+            logger.trace("Switching from the SettingsView to the HomePageView.");
+            View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
+        }
     }
 
     /**
@@ -223,7 +241,9 @@ public class SettingsViewController implements Initializable {
      * Delete all accounts for this user.
      */
     public void handleDeleteAccounts() {
-        Database.clearAllAccounts(Storage.getToken());
-        Utilities.loadAccounts();
+        User u = userModel.getCurrentUser();
+        if (!Objects.isNull(u)) {
+            accountModel.clearAllAccounts(u.id());
+        }
     }
 }
