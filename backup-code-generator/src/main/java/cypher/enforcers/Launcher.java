@@ -50,8 +50,6 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-        logger.debug("Configured action for stage when exited.");
-
         View view = HomePageView.getInstance();
         Scene scene = new Scene(view.getRoot());
         scene.getStylesheets().add(view.getCurrentThemePath());
