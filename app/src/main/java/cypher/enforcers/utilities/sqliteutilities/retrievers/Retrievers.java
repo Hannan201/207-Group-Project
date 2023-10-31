@@ -1,8 +1,8 @@
 package cypher.enforcers.utilities.sqliteutilities.retrievers;
 
-import cypher.enforcers.code.CodeEntity;
-import cypher.enforcers.models.AccountEntity;
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.CodeEntity;
+import cypher.enforcers.data.entities.AccountEntity;
+import cypher.enforcers.data.entities.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 
 import java.sql.ResultSet;

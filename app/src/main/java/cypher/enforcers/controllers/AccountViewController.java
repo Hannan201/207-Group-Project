@@ -20,7 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.data.entities.AccountEntity;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 import cypher.enforcers.views.utilities.AccountCellFactory;

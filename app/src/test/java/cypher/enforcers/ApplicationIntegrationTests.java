@@ -1,12 +1,12 @@
 package cypher.enforcers;
 
-import cypher.enforcers.code.CodeEntity;
+import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.security.User;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.*;
-import cypher.enforcers.models.AccountEntity;
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.AccountEntity;
+import cypher.enforcers.data.entities.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 

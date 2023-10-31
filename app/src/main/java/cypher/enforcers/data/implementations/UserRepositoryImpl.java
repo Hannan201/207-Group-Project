@@ -2,7 +2,7 @@ package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

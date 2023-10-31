@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 
 /**
  * Interface for the User Data Access Object (DAO) to communicate to the

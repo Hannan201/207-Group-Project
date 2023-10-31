@@ -1,6 +1,6 @@
 package cypher.enforcers.data.security;
 
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 
 import java.util.function.Function;
 

@@ -1,4 +1,4 @@
-package cypher.enforcers.models;
+package cypher.enforcers.data.entities;
 
 import cypher.enforcers.views.themes.Theme;
 

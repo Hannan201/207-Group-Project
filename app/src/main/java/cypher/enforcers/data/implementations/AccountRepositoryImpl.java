@@ -2,7 +2,7 @@ package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.spis.AccountDAO;
 import cypher.enforcers.data.spis.AccountRepository;
-import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.data.entities.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

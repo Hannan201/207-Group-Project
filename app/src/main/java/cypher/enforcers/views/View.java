@@ -14,7 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.data.entities.AccountEntity;
 
 import javafx.util.Callback;
 import org.slf4j.Logger;

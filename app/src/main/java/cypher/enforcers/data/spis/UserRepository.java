@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 
 import java.util.Optional;
 

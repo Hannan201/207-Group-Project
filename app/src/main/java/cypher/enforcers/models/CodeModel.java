@@ -1,6 +1,6 @@
 package cypher.enforcers.models;
 
-import cypher.enforcers.code.CodeEntity;
+import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.security.Account;
 import cypher.enforcers.data.security.Code;
 import cypher.enforcers.data.security.CodeDTOMapper;

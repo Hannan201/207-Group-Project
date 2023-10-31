@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.code.CodeEntity;
+import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.CodeDAO;
 import org.slf4j.Logger;

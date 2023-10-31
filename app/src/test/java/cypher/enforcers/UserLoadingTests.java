@@ -9,7 +9,7 @@ import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.junit.jupiter.api.Test;
 

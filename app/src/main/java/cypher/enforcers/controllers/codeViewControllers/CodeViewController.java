@@ -22,7 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.scene.input.KeyCode;
-import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.data.entities.AccountEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;

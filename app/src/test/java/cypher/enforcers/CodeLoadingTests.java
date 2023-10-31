@@ -1,6 +1,6 @@
 package cypher.enforcers;
 
-import cypher.enforcers.code.CodeEntity;
+import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.implementations.CodeDAOImpl;
 import cypher.enforcers.data.implementations.CodeRepositoryImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;

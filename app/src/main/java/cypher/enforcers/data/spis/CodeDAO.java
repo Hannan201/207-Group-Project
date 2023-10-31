@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.code.CodeEntity;
+import cypher.enforcers.data.entities.CodeEntity;
 
 import java.util.List;
 

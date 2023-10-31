@@ -1,6 +1,6 @@
 package cypher.enforcers.data.implementations;
 
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;
 import org.slf4j.Logger;

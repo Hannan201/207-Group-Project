@@ -1,7 +1,7 @@
 package cypher.enforcers;
 
 import cypher.enforcers.controllers.AccountViewController;
-import cypher.enforcers.models.AccountEntity;
+import cypher.enforcers.data.entities.AccountEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

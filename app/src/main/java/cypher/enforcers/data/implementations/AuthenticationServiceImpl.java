@@ -5,7 +5,7 @@ import cypher.enforcers.data.security.User;
 import cypher.enforcers.data.security.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
-import cypher.enforcers.models.UserEntity;
+import cypher.enforcers.data.entities.UserEntity;
 import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

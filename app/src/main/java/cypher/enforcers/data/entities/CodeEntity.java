@@ -1,4 +1,4 @@
-package cypher.enforcers.code;
+package cypher.enforcers.data.entities;
 
 public class CodeEntity {
 
