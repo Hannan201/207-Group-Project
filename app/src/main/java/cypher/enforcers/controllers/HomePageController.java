@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,11 @@ public class HomePageController implements Initializable {
     // Used to check if a user's already logged in.
     private UserModel userModel;
 
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
     public void setUserModel(UserModel model) {
         this.userModel = model;
     }
@@ -100,6 +106,7 @@ public class HomePageController implements Initializable {
                         if (oldWindow == null && newWindow != null) {
                             Utilities.adjustTheme(userModel.getCurrentUser().theme());
                             View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+                            newScene.getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> userModel.shutDown());
                         }
                     }));
                 }

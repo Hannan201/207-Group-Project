@@ -17,14 +17,20 @@ public class UserModel {
     // Used to log-in users.
     private final AuthenticationService authService;
 
+    // Run this when the model is being shut down.
+    private final Runnable onShutDown;
+
     /**
      * Create a new user model, loaded with a user if logged in.
      *
      * @param service The Authentication service to verify user
      *                information.
+     * @param runnable Function to run when this model is being shut down.
      */
-    public UserModel(AuthenticationService service) {
+    public UserModel(AuthenticationService service, Runnable runnable) {
         this.authService = service;
+        this.onShutDown = runnable;
+
         setCurrentUser(authService.getLoggedInUser().orElse(null));
     }
 
@@ -154,5 +160,12 @@ public class UserModel {
         }
 
         return false;
+    }
+
+    /**
+     * Disconnect from the database.
+     */
+    public void shutDown() {
+        onShutDown.run();
     }
 }

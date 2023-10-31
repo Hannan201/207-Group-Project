@@ -51,8 +51,6 @@ public class Launcher extends Application {
      */
     @Override
     public void start(Stage stage) {
-        ((AccountView) AccountView.getInstance()).getAccountViewController()
-                .configureStage(stage);
         logger.debug("Configured action for stage when exited.");
 
         View view = HomePageView.getInstance();

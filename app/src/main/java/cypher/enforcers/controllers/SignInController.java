@@ -108,7 +108,7 @@ public class SignInController implements Initializable {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                     if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnCloseRequest(windowEvent -> {
+                        newWindow.setOnHidden(windowEvent -> {
                             logger.trace("Clearing fields.");
                             unameInput.clear();
                             passInput.clear();

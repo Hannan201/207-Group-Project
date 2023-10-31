@@ -65,10 +65,20 @@ public class CreateAccountController implements Initializable{
     // To interact with the current user.
     private UserModel userModel;
 
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
     public void setUserModel(UserModel model) {
         this.userModel = model;
     }
 
+    /**
+     * Set the account model.
+     *
+     * @param model The Account Model.
+     */
     public void setAccountModel(AccountModel model) {
         this.accountModel = model;
     }
@@ -82,7 +92,7 @@ public class CreateAccountController implements Initializable{
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                     if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnCloseRequest((windowEvent -> {
+                        newWindow.setOnHidden((windowEvent -> {
                             platform.clear();
                             username.clear();
                         }));

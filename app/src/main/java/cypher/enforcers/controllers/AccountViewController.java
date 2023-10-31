@@ -6,6 +6,7 @@ import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.accountview.AccountView;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.HBox;
+import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Debouncer;
@@ -118,28 +119,34 @@ public class AccountViewController implements Initializable {
     // To interact with the user's accounts.
     private AccountModel accountModel;
 
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
     public void setUserModel(UserModel model) {
         this.userModel = model;
     }
 
+    /**
+     * Set the account model.
+     *
+     * @param model The Account Model.
+     */
     public void setAccountModel(AccountModel model) {
         this.accountModel = model;
     }
 
-    /**
-     * Configure the stage for this view to disconnect and close threads
-     * on shut down.
-     *
-     * @param stage Stage of the application.
-     */
-    public void configureStage(Stage stage) {
-        stage.setOnCloseRequest(windowEvent -> {
-            debounce.tearDown();
-        });
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
+                    debounce.tearDown();
+                });
+            }
+        }));
+
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         accounts.itemsProperty().bind(accountModel.accountsProperty());

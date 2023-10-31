@@ -214,7 +214,7 @@ public class Utilities {
         UserRepository repository = new UserRepositoryImpl(userDAO);
         UserDTOMapper mapper = new UserDTOMapper();
         AuthenticationService authService = new AuthenticationServiceImpl(repository, mapper);
-        return new UserModel(authService);
+        return new UserModel(authService, service::disconnect);
     }
 
     /**
