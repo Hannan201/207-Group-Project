@@ -106,12 +106,24 @@ public class HomePageController implements Initializable {
                         if (oldWindow == null && newWindow != null) {
                             Utilities.adjustTheme(userModel.getCurrentUser().theme());
                             View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-                            newScene.getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> userModel.shutDown());
+                            newScene.getWindow()
+                                    .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> userModel.shutDown());
                         }
                     }));
                 }
             }));
         }
+
+        main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        newScene.getWindow()
+                                .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> userModel.shutDown());
+                    }
+                }));
+            }
+        }));
 
         // The spacings above the title and below the buttons were not
         // equal when this project was first submitted. Since I wasn't
