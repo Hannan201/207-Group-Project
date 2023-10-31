@@ -5,8 +5,6 @@ import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
-import cypher.enforcers.data.Storage;
-import cypher.enforcers.data.database.Database;
 import cypher.enforcers.data.implementations.*;
 import cypher.enforcers.data.security.AccountDTOMapper;
 import cypher.enforcers.data.security.CodeDTOMapper;
