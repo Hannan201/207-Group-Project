@@ -61,7 +61,7 @@ public interface DatabaseService {
             }
 
             getConnection().commit();
-        } catch (SQLException e)  {
+        } catch (SQLException e) {
             getConnection().rollback();
         }
     }

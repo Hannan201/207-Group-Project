@@ -50,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         UserEntity createUser = userDAO.registerUser(user);
 
-        if (!Objects.isNull(user)) {
+        if (!Objects.isNull(createUser)) {
             logger.trace("User created.");
             return Optional.of(createUser);
         }

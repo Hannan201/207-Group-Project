@@ -1,6 +1,8 @@
 package cypher.enforcers.controllers;
 
 import cypher.enforcers.models.UserModel;
+import cypher.enforcers.utilities.Utilities;
+import cypher.enforcers.views.themes.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,6 +63,11 @@ public class SignUpController implements Initializable {
     // To interact with the user data.
     private UserModel userModel;
 
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
     public void setUserModel(UserModel model) {
         this.userModel = model;
     }
@@ -73,7 +80,7 @@ public class SignUpController implements Initializable {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                     if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnCloseRequest((windowEvent -> {
+                        newWindow.setOnHidden((windowEvent -> {
                             logger.trace("Clearing all text fields.");
                             initialUsername.clear();
                             initialPassword.clear();
@@ -186,8 +193,7 @@ public class SignUpController implements Initializable {
                     // prevents ValidatorFX from overriding the previous
                     // alert with this alert.
 
-                    if (initialUsername.getText().isEmpty() || !initialUsername.getText().equals(verifiedUsername.getText())
-                       || initialPassword.getText().isEmpty() || !initialPassword.getText().equals(verifiedPassword.getText())) {
+                    if (initialUsername.getText().isEmpty() || !initialUsername.getText().equals(verifiedUsername.getText())) {
                         return;
                     }
 
@@ -218,6 +224,9 @@ public class SignUpController implements Initializable {
 
         if (userModel.registerUser(initialUsername.getText(), initialPassword.getText())) {
             View.closeWindow((Node) e.getSource());
+
+            // Since by default, this application is light mode.
+            Utilities.adjustTheme(Theme.LIGHT);
 
             logger.trace("Switching from the HomePageView to the AccountsView.");
             View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
