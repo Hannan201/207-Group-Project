@@ -20,6 +20,8 @@ module cypher.enforcers {
     requires org.controlsfx.controls;
 
     // SQLite support.
+    requires java.sql;
+    requires java.sql.rowset;
     requires org.xerial.sqlitejdbc;
 
     // Adds utility functions to work with URLs.
