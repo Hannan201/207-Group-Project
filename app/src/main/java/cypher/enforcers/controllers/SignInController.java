@@ -1,6 +1,7 @@
 package cypher.enforcers.controllers;
 
 import cypher.enforcers.models.UserModel;
+import cypher.enforcers.utilities.Utilities;
 import javafx.scene.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +89,11 @@ public class SignInController implements Initializable {
     // To interact with the user data.
     private UserModel userModel;
 
+    /**
+     * Set the user model.
+     *
+     * @param model The User Model.
+     */
     public void setUserModel(UserModel model) {
         this.userModel = model;
     }
@@ -254,7 +260,12 @@ public class SignInController implements Initializable {
      * TextFields
      */
     private void signInOnAction(ActionEvent actionEvent) {
-        loadAccountView((Node) actionEvent.getSource());
+        View.closeWindow((Node) actionEvent.getSource());
+
+        Utilities.adjustTheme(userModel.getCurrentUser().theme());
+
+        logger.trace("Switching from the HomePageView to the AccountsView.");
+        View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
     }
 
     /**
@@ -266,19 +277,12 @@ public class SignInController implements Initializable {
      */
     private void signInFromEnterKey(KeyEvent e) {
         if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
-            loadAccountView((Node) e.getSource());
+            View.closeWindow((Node) e.getSource());
+
+            Utilities.adjustTheme(userModel.getCurrentUser().theme());
+
+            logger.trace("Switching from the HomePageView to the AccountsView.");
+            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
         }
-    }
-
-    /**
-     * Load the account view and retrieve user's stored data.
-     *
-     * @param node The node that triggered the event.
-     */
-    private void loadAccountView(Node node) {
-        View.closeWindow(node);
-
-        logger.trace("Switching from the HomePageView to the AccountsView.");
-        View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
     }
 }
