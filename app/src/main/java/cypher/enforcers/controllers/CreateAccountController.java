@@ -115,7 +115,7 @@ public class CreateAccountController implements Initializable{
         // if there exists an Account with the same username and platform
         validator.createCheck()
                 .withMethod(c -> {
-                    if (!(username.getText().isEmpty() || platform.getText().isEmpty()) && !accountModel.checkDuplicate(username.getText(), platform.getText())) {
+                    if (!(username.getText().isEmpty() || platform.getText().isEmpty()) && accountModel.checkDuplicate(username.getText(), platform.getText())) {
                         c.error("This account already exists, please try again!");
                     }
                 })

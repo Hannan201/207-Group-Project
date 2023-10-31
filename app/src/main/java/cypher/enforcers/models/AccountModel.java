@@ -33,13 +33,11 @@ public class AccountModel {
     public AccountModel(AccountRepository repository, AccountDTOMapper mapper) {
         this.accountRepository = repository;
         this.mapper = mapper;
+        setAccounts(FXCollections.observableArrayList());
     }
 
-    // List of accounts for the current user.
-    private final ObservableList<Account> accounts = FXCollections.observableArrayList();
-
     // Property to store the list of accounts.
-    private final ObjectProperty<ObservableList<Account>> accountsProperty = new SimpleObjectProperty<>(accounts);
+    private final ObjectProperty<ObservableList<Account>> accountsProperty = new SimpleObjectProperty<>();
 
     /**
      * Get the accounts for the current user.
@@ -109,7 +107,7 @@ public class AccountModel {
                 .stream().map(mapper)
                 .toList();
 
-        accounts.setAll(converted);
+        setAccounts(FXCollections.observableArrayList(converted));
     }
 
     /**
@@ -119,11 +117,11 @@ public class AccountModel {
      * @param accountsToDelete Accounts to delete.
      */
     public void deleteAccounts(long id, List<Account> accountsToDelete) {
-        if (accountsToDelete.size() == accounts.size()) {
+        if (accountsToDelete.size() == getAccounts().size()) {
             List<AccountEntity> results = accountRepository.deleteAll(id);
 
             if (results.size() == accountsToDelete.size()) {
-                accounts.clear();
+                getAccounts().clear();
             }
 
             return;
@@ -135,7 +133,7 @@ public class AccountModel {
                 return;
             }
 
-            accounts.remove(a);
+            getAccounts().remove(a);
         }
     }
 
@@ -148,10 +146,28 @@ public class AccountModel {
      * @return True if already exists, false otherwise.
      */
     public boolean checkDuplicate(String name, String platform) {
-        return accounts.stream()
+        return getAccounts().stream()
                 .anyMatch(account ->
                         account.name().equalsIgnoreCase(name)
                         && account.socialMediaType().equalsIgnoreCase(platform));
+    }
+
+    /**
+     * Search through the list of accounts and find all
+     * accounts that have a username that matches the name to search.
+     * The search is case-insensitive.
+     * <br>
+     * In this case, match means that the name being searched
+     * is contained in the account name.
+     *
+     * @param name The name of the account to search.
+     * @return List of accounts with usernames that match.
+     */
+    public List<Account> searchAccounts(String name) {
+        return getAccounts().stream()
+                .filter(account ->
+                        account.name().toLowerCase().contains(name.toLowerCase()))
+                .toList();
     }
 
     /**
@@ -169,7 +185,7 @@ public class AccountModel {
         account.setUserId(id);
         Optional<AccountEntity> createdAccount = accountRepository.create(account);
         if (createdAccount.isPresent()) {
-            accounts.add(mapper.apply(createdAccount.get()));
+            getAccounts().add(mapper.apply(createdAccount.get()));
             return true;
         }
 
@@ -183,8 +199,8 @@ public class AccountModel {
      */
     public void clearAllAccounts(long id) {
         List<AccountEntity> results = accountRepository.deleteAll(id);
-        if (results.size() == accounts.size()) {
-            accounts.clear();
+        if (results.size() == getAccounts().size()) {
+            getAccounts().clear();
         }
     }
 
@@ -193,6 +209,6 @@ public class AccountModel {
      * user is logged in and the account view is loaded.
      */
     public void clear() {
-        accounts.clear();
+        setAccounts(FXCollections.observableArrayList());
     }
 }

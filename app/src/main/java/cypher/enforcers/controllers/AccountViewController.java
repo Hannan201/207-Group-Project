@@ -21,7 +21,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import cypher.enforcers.data.entities.AccountEntity;
 import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 import cypher.enforcers.views.accountview.AccountCellFactory;
@@ -246,7 +245,8 @@ public class AccountViewController implements Initializable {
                     Platform.runLater(() -> {
                         if (!result.isEmpty()) {
                             accounts.itemsProperty().unbind();
-                            accounts.setItems(FXCollections.observableList(findAccounts(accountModel.getAccounts(), key)));
+                            List<Account> results = accountModel.searchAccounts(key);
+                            accounts.setItems(FXCollections.observableList(results));
                         } else {
                             accounts.itemsProperty().bind(accountModel.accountsProperty());
                         }
@@ -258,52 +258,6 @@ public class AccountViewController implements Initializable {
                 },
                 125
         );
-    }
-
-    /**
-     * Utility method to search through the list of accounts and find all
-     * accounts that have a username that matches the name to search.
-     * <p>
-     * In this case, match means that the name being searched
-     * is contained in the account name.
-     * <p>
-     * Both the account name and the name being searched are converted to
-     * lowercase before the contains-check is done.
-     *
-     * @param accounts List of accounts.
-     * @param name The name of the account to search.
-     * @return List of accounts with usernames that match.
-     */
-    public static List<Account> findAccounts(List<Account> accounts, String name) {
-        logger.debug("Starting search for account with name: {}.", name);
-
-        return accounts.stream().filter(account -> account.name()
-                        .toLowerCase()
-                        .contains(name.toLowerCase()))
-                .toList();
-    }
-
-    /**
-     * Utility method to search through the list of accounts and find all
-     * accounts that have a username that matches the name to search.
-     * <p>
-     * In this case, match means that the name being searched
-     * is contained in the account name.
-     * <p>
-     * Both the account name and the name being searched are converted to
-     * lowercase before the contains-check is done.
-     *
-     * @param accounts List of accounts.
-     * @param name The name of the account to search.
-     * @return List of accounts with usernames that match.
-     */
-    public static List<AccountEntity> searchAccounts(List<AccountEntity> accounts, String name) {
-        logger.debug("Starting search for account with name: {}.", name);
-
-        return accounts.stream().filter(account -> account.getName()
-                .toLowerCase()
-                .contains(name.toLowerCase()))
-                .toList();
     }
 
     /**
@@ -345,28 +299,6 @@ public class AccountViewController implements Initializable {
     public void handleAddAccount() {
         logger.trace("Engaging CreateAccountView window.");
         View.loadNewWindow(AddAccountView.getInstance());
-    }
-
-    /**
-     * Adds an account to the accounts ListView.
-     *
-     * @param ID ID of the Account to be added.
-     */
-    public void addAccount(int ID) {
-//        accounts.getItems()
-//                .add(
-//                        Database.getAccount(Storage.getToken(), ID)
-//                );
-    }
-
-    /**
-     * Add multiple accounts to the ListView.
-     *
-     * @param userAccounts List containing the accounts.
-     */
-    public void addAccounts(List<AccountEntity> userAccounts) {
-        accounts.getItems().clear();
-        //accounts.getItems().addAll(userAccounts);
     }
 
     /**
