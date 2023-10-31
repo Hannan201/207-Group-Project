@@ -1,6 +1,6 @@
 package cypher.enforcers.views.accountview;
 
-import cypher.enforcers.data.security.Account;
+import cypher.enforcers.data.security.dtos.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContentDisplay;

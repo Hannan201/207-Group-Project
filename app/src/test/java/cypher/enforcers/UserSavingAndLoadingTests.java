@@ -4,7 +4,7 @@ import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
 import cypher.enforcers.data.implementations.SqliteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
-import cypher.enforcers.data.security.UserDTOMapper;
+import cypher.enforcers.data.security.mappers.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.data.spis.UserDAO;

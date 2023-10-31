@@ -5,7 +5,7 @@ import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
-import cypher.enforcers.data.security.User;
+import cypher.enforcers.data.security.dtos.User;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.accountview.AccountView;

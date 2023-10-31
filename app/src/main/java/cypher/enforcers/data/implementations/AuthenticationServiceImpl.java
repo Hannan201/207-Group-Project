@@ -1,8 +1,8 @@
 package cypher.enforcers.data.implementations;
 
 import cypher.enforcers.data.security.SecurityUtils;
-import cypher.enforcers.data.security.User;
-import cypher.enforcers.data.security.UserDTOMapper;
+import cypher.enforcers.data.security.dtos.User;
+import cypher.enforcers.data.security.mappers.UserDTOMapper;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.data.spis.UserRepository;
 import cypher.enforcers.data.entities.UserEntity;

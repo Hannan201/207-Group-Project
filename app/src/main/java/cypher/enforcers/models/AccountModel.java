@@ -1,8 +1,8 @@
 package cypher.enforcers.models;
 
 import cypher.enforcers.data.entities.AccountEntity;
-import cypher.enforcers.data.security.Account;
-import cypher.enforcers.data.security.AccountDTOMapper;
+import cypher.enforcers.data.security.dtos.Account;
+import cypher.enforcers.data.security.mappers.AccountDTOMapper;
 import cypher.enforcers.data.spis.AccountRepository;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

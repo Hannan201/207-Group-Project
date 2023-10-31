@@ -1,4 +1,4 @@
-package cypher.enforcers.data.security;
+package cypher.enforcers.data.security.dtos;
 
 import cypher.enforcers.views.themes.Theme;
 

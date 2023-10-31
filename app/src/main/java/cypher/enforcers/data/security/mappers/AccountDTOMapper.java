@@ -1,6 +1,7 @@
-package cypher.enforcers.data.security;
+package cypher.enforcers.data.security.mappers;
 
 import cypher.enforcers.data.entities.AccountEntity;
+import cypher.enforcers.data.security.dtos.Account;
 
 import java.util.function.Function;
 

@@ -1,6 +1,6 @@
 package cypher.enforcers.models;
 
-import cypher.enforcers.data.security.User;
+import cypher.enforcers.data.security.dtos.User;
 import cypher.enforcers.data.spis.AuthenticationService;
 import cypher.enforcers.views.themes.Theme;
 import javafx.beans.property.ObjectProperty;

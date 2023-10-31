@@ -1,9 +1,9 @@
 package cypher.enforcers.models;
 
 import cypher.enforcers.data.entities.CodeEntity;
-import cypher.enforcers.data.security.Account;
-import cypher.enforcers.data.security.Code;
-import cypher.enforcers.data.security.CodeDTOMapper;
+import cypher.enforcers.data.security.dtos.Account;
+import cypher.enforcers.data.security.dtos.Code;
+import cypher.enforcers.data.security.mappers.CodeDTOMapper;
 import cypher.enforcers.data.spis.CodeRepository;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

@@ -1,6 +1,6 @@
 package cypher.enforcers.controllers.codeViewControllers;
 
-import cypher.enforcers.data.security.Code;
+import cypher.enforcers.data.security.dtos.Code;
 import cypher.enforcers.models.CodeModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

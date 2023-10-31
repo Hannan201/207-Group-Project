@@ -1,7 +1,6 @@
 package cypher.enforcers.views.accountview;
 
-import cypher.enforcers.data.security.Account;
-import cypher.enforcers.views.accountview.AccountCell;
+import cypher.enforcers.data.security.dtos.Account;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;

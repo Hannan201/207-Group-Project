@@ -1,7 +1,7 @@
 package cypher.enforcers.views.codeview;
 
 import cypher.enforcers.controllers.codeViewControllers.CodeCellController;
-import cypher.enforcers.data.security.Code;
+import cypher.enforcers.data.security.dtos.Code;
 import cypher.enforcers.models.CodeModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

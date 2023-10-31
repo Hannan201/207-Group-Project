@@ -1,6 +1,7 @@
-package cypher.enforcers.data.security;
+package cypher.enforcers.data.security.mappers;
 
 import cypher.enforcers.data.entities.CodeEntity;
+import cypher.enforcers.data.security.dtos.Code;
 
 import java.util.function.Function;
 

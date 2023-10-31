@@ -5,7 +5,7 @@ import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
 import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
 import cypher.enforcers.code.readers.types.ReaderType;
-import cypher.enforcers.data.security.Code;
+import cypher.enforcers.data.security.dtos.Code;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
 import cypher.enforcers.models.UserModel;

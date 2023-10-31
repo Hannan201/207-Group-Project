@@ -1,6 +1,6 @@
 package cypher.enforcers.controllers;
 
-import cypher.enforcers.data.security.Account;
+import cypher.enforcers.data.security.dtos.Account;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.View;

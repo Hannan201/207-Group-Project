@@ -2,8 +2,8 @@ package cypher.enforcers;
 
 import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.implementations.*;
-import cypher.enforcers.data.security.User;
-import cypher.enforcers.data.security.UserDTOMapper;
+import cypher.enforcers.data.security.dtos.User;
+import cypher.enforcers.data.security.mappers.UserDTOMapper;
 import cypher.enforcers.data.spis.*;
 import cypher.enforcers.data.entities.AccountEntity;
 import cypher.enforcers.data.entities.UserEntity;

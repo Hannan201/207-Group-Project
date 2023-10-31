@@ -1,6 +1,6 @@
 package cypher.enforcers.data.spis;
 
-import cypher.enforcers.data.security.User;
+import cypher.enforcers.data.security.dtos.User;
 import cypher.enforcers.views.themes.Theme;
 
 import java.util.Optional;
