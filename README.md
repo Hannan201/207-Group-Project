@@ -10,7 +10,7 @@ dangerous attack (kind of like using inspect element on a web browser to trick s
 else into giving away import details). Since all authentication and data
 saving is done on client side, use this program at your own risk.
 
-A local desktop JavaFX application to display the backup codes that a user has for each social media platform they use. 
+A local desktop JavaFX application to display the backup codes / two-factor authentication codes that a user has for each social media platform they use. 
 
 ## Acknowledgements
 Special thanks to [Icons8](https://icons8.com/) for the following icons:
