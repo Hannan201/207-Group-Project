@@ -1,4 +1,4 @@
-module cypher.enforcers {
+module backup.code.generator {
     // Java Desktop (Used for launching the web browser).
     requires java.desktop;
 

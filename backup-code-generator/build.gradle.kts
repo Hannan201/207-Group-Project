@@ -82,7 +82,7 @@ java {
 
 application {
     // Define the main module for the application.
-    mainModule.set("cypher.enforcers")
+    mainModule.set("backup.code.generator")
 
     // Define the main class for the application.
     mainClass.set("cypher.enforcers.Launcher")
