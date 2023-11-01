@@ -118,12 +118,12 @@ To just build the jar file (the jar won't contain the dependencies, you'll need 
 
 `./gradlew assemble`
 
+Assuming you're inside the root directory of this repository (which should be `Cypher-Enforcers`) then
+the jar file will appear at: `<directory goes here>`.
+
 To build the jar file and run the tests, you can use:
 
 `./gradlew build`
-
-Assuming you're inside the root directory of this repository (which should be `Cypher-Enforcers`) then
-the jar file will appear at: `<directory goes here>`.
 
 To build a uber jar or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
 
