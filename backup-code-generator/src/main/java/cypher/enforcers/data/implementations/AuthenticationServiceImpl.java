@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Optional<UserEntity> createdUser = userRepository.create(user);
 
         if (createdUser.isPresent() && createdUser.get().getLoggedIn() && createdUser.get().getID() >= 1) {
-            logger.trace("User created.");
+            logger.info("User created.");
             return true;
         }
 
@@ -92,16 +92,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             userOptional = userRepository.update(user);
 
             if (userOptional.isPresent() && userOptional.get().getLoggedIn()) {
-                logger.trace("User authenticated.");
+                logger.info("User authenticated.");
                 return true;
-            } else {
-                logger.warn("Failed to authenticate user with username {}.", username);
             }
-
-        } else {
-            logger.warn("Failed to authenticate user with username {}.", username);
         }
 
+        logger.warn("Failed to authenticate user with username {}.", username);
         return false;
     }
 
@@ -138,6 +134,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return false;
         }
 
+        logger.info("User logged out.");
         return true;
     }
 
@@ -174,6 +171,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return true;
         }
 
+        logger.warn("Failed to update theme to {} for user with ID {}", theme, id);
         return false;
     }
 

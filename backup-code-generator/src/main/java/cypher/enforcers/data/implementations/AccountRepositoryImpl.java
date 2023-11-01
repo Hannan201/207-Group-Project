@@ -44,7 +44,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         AccountEntity createAccount = accountDAO.addAccount(account);
 
         if (!Objects.isNull(createAccount)) {
-            logger.trace("Account with name {} and social media socialMediaType {} created with ID {}.", createAccount.getName(), createAccount.getSocialMediaType(), createAccount.getID());
+            logger.info("Account with name {} and social media type {} created.", createAccount.getName(), createAccount.getSocialMediaType());
             return Optional.of(createAccount);
         }
 
@@ -109,7 +109,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         AccountEntity deleteAccount = accountDAO.removeAccount(id);
 
         if (!Objects.isNull(deleteAccount)) {
-            logger.trace("Deleted account successfully.");
+            logger.info("Deleted account successfully.");
             return Optional.of(deleteAccount);
         }
 
@@ -131,7 +131,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         List<AccountEntity> accounts = accountDAO.clearAllAccounts(id);
 
         if (!Objects.isNull(accounts)) {
-            logger.trace("Deleted all accounts successfully.");
+            logger.info("Deleted all accounts successfully.");
             return accounts;
         }
 

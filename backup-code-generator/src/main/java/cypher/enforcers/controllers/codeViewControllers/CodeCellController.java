@@ -123,6 +123,7 @@ public class CodeCellController {
 
             if (codeModel.updateCode(userInput.getText())) {
                 code.setText((userInput.getText()));
+                logger.info("Updated code from {} to {} successfully.", logText, userInput.getText());
             }
 
             userInput.setVisible(false);

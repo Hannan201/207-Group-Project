@@ -44,7 +44,7 @@ public class CodeRepositoryImpl implements CodeRepository {
         CodeEntity createCode = codeDAO.addCode(code);
 
         if (!Objects.isNull(createCode)) {
-            logger.trace("Code {} created with ID {} for account with ID {}", createCode.getCode(), createCode.getId(), createCode.getAccountID());
+            logger.info("Code {} created", createCode.getCode());
             return Optional.of(createCode);
         }
 
@@ -130,7 +130,7 @@ public class CodeRepositoryImpl implements CodeRepository {
         CodeEntity deletedCode = codeDAO.removeCode(id);
 
         if (!Objects.isNull(deletedCode)) {
-            logger.trace("Deleted code successfully.");
+            logger.info("Deleted code successfully.");
             return Optional.of(deletedCode);
         }
 
@@ -152,7 +152,7 @@ public class CodeRepositoryImpl implements CodeRepository {
         List<CodeEntity> codes = codeDAO.clearAllCodes(id);
 
         if (!Objects.isNull(codes)) {
-            logger.trace("Deleted all codes successfully.");
+            logger.info("Deleted all codes successfully.");
             return codes;
         }
 

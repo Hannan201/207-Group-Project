@@ -248,12 +248,18 @@ public class AccountViewController implements Initializable {
                 key,
                 () -> {
                     Platform.runLater(() -> {
+                        int amount = 0;
                         if (!result.isEmpty()) {
                             accounts.itemsProperty().unbind();
                             List<Account> results = accountModel.searchAccounts(key);
+                            amount = results.size();
                             accounts.setItems(FXCollections.observableList(results));
                         } else {
                             accounts.itemsProperty().bind(accountModel.accountsProperty());
+                        }
+
+                        if (!result.isEmpty()) {
+                            logger.info("Found {} accounts matching name {}.", amount, key);
                         }
 
                         logger.debug("Finished search for account with name {}.", key);
