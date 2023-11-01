@@ -95,7 +95,7 @@ move the `database.db` file with it. Otherwise, this application won't load
 any of the data and make a new empty `database.db` file. If you're running this
 application inside the cloned repository by using `./gradlew run` and assuming you're inside the root directory
 of this repository (which should be `Cypher-Enforcers`) then the `database.db` file
-will appear in `./backup-code-generator/build/libs/database.db`.
+will appear at `./backup-code-generator/build/libs/database.db`.
 
 To launch the application after cloning this repository, you can run the application by doing the following:
 
@@ -105,7 +105,8 @@ To build a native image (such as an .exe for Windows) you can use this:
 
 `./gradlew `
 
-The file will be made here: `<directory goes here>`. 
+Assuming you're inside the root directory of this repository (which should be `Cypher-Enforcers`) then
+the file will be made here: `<directory goes here>`. 
 You can then run the application as any other regular
 application depending on your OS.
 
@@ -121,9 +122,15 @@ To build the jar file and run the tests, you can use:
 
 `./gradlew build`
 
+Assuming you're inside the root directory of this repository (which should be `Cypher-Enforcers`) then
+the jar file will appear at: `<directory goes here>`.
+
 To build a uber jar or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
 
 `./gradlew <something>`
+
+Assuming you're inside the root directory of this repository (which should be `Cypher-Enforcers`) then
+the jar file will appear at: `<directory goes here>`.
 
 To clean the build output (this will also remove the generated `database.db` file in the cloned repository), then use the following:
 
