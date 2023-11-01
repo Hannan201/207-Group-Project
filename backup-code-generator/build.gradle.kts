@@ -52,7 +52,7 @@ dependencies {
     implementation("org.controlsfx:controlsfx:11.1.2")
 
     // SQLite support.
-    implementation("org.xerial:sqlite-jdbc:3.42.0.1")
+    implementation("org.xerial:sqlite-jdbc:3.43.2.2")
 
     // Junit5 in our case needs two modules.
     // Junit jupiter -> This is for the @Test annotations and the assertions
@@ -69,7 +69,7 @@ dependencies {
     }
 
     // Used to extract filename from an url.
-    implementation("commons-io:commons-io:2.14.0")
+    implementation("commons-io:commons-io:2.15.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

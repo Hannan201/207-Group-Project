@@ -1,52 +1,127 @@
 # Backup Code Generator
-A JavaFX application to display the backup codes that a user has for each social media platform they use. The application allows for importing `.txt` files if their social media account is one of the following: Discord, Google, Shopify or GitHub. This application also saves user data as well as support accessibility features.
+> **Disclaimer:** The *University Of Toronto*, *University Of Toronto Mississauga*,
+*University Of Toronto Scarborough*, any person or thing related to the
+*University Of Toronto*, or any contributor for this project is not responsible
+for the loss of your backup codes or account data. Since the data is saved 
+locally on the machine this program runs on and not on a server, it's possible
+for the data to be lost if the computer is wiped clean, or if any other user 
+on your machine modifies the source code and rebuilds the project for a
+dangerous attack (kind of like using inspect element on a web browser to trick someone
+else into giving away import details). Since all authentication and data
+saving is done on client side, use this program at your own risk.
 
-# Prerequisites
+A local desktop JavaFX application to display the backup codes that a user has for each social media platform they use. 
+
+## Features
+* The ability to create multiple accounts, which you can create and log in to. This allows for multiple users to share this application if they share the same computer.
+    * Note that the account information and any data related to it (such as social media accounts, theme preference, and backup codes) are saved locally, so if you
+    try to log in on a different computer, the data will not transfer. Unless you create the account again and
+    add all the information again manually. The ability to import data across computers will be added in the
+    distant future.
+* The ability to add a social media account with the account username (of the social media account, not the user that logs in to the application) and social media type.
+    * For each social media account a user adds, you can also delete it.
+    * The ability to pin an account for faster access will be added in the distant future.
+* The ability to search through your social media accounts if the list becomes too long.
+* The ability to add backup codes / two-factor authentication codes for a specific account.
+    * For each code a user adds, you can either copy it, delete it, or modify it.
+* The ability to import a `.txt` file instead of having to type in each code one by one.
+    * This functionality only works if your social media account is one of the following: Discord, Google, GitHub or Shopify. As they provided `.txt` files for their backup codes.
+    * If you attempt to import the wrong type of `.txt` file for an account (For example, importing a GitHub file for a Google account) you'll end up with undefined results. Luckily the
+    results can be deleted from your list of codes. Do take caution.
+
+## Accessibility
+This application offers three colour schemes in total, they can be changed in the
+settings page and will be remembered the next time a user logs in or launches the application
+if they didn't log out.
+
+* A light mode colour scheme, which is the default.
+* A high-contrast mode theme for those with sensitive eyes.
+* A dark mode theme for those with sensitive eyes.
+
+## Prerequisites
 Java JDK version 21.0 or greater.
+* The specific vendor this application uses is OpenJDK 
+    * OpenJDK's source: <https://openjdk.org/>.
+    * OpenJDK's prebuilt binaries can be found at Adoptium: <https://adoptium.net/>.
 
-# Dependencies
-SLF4J version 2.0.9 or greater: [link](https://www.slf4j.org/)
+## Dependencies
+* SLF4J version 2.0.9 or greater: <https://www.slf4j.org/>.
+* Logback version 1.4.11 or greater: <https://logback.qos.ch/>.
+* JavaFX version 21.0 or greater: <https://openjfx.io/>.
+* ControlsFX version 11.1.2 or greater: <https://controlsfx.github.io/>.
+* ValidatorFX version 0.4.2 or greater: <https://github.com/effad/ValidatorFX>.
+* SQLite JDBC Driver version 3.43.2.2 or greater: <https://www.sqlitetutorial.net/sqlite-java/>.
+* Apache Commons IO version 2.15.0 or greater: <https://commons.apache.org/proper/commons-io/>.
 
-Logback version 1.3.7 or greater: [link](https://logback.qos.ch/)
+## Testing Dependencies
+* Junit 5 version 5.10.0 or greater: <https://junit.org/junit5/>.
 
-JavaFX version 21.0 or greater: [link](https://openjfx.io/)
+## Getting started
+This application used Gradle as the build tool, which provided tasks to aid development. Here a few.
 
-ControlsFX version 11.1.2 or greater: [link](https://controlsfx.github.io/)
+**Note:** When running this application as a native image
+(such as an .exe for Windows) or a jar (outside the cloned repository) file, then the `database.db`
+file will be created in the same directory in which the application is 
+running in. So if you move the native image or jar file, make sure you also
+move the `database.db` file with it. Otherwise, this application won't load 
+any of the data and have to make a new empty `database.db` file. If you're running this
+application inside the cloned repository and assuming you're inside the root directory
+of this repository (which could be `Cypher-Enforcers`) then the `database.db` file
+will appear in `./backup-code-generator/build/libs/database.db`.
 
-ValidatorFX version 0.4.2 or greater: [link](https://github.com/effad/ValidatorFX)
 
-SQLite JDBC Driver version 3.43.2.0 or greater: [link](https://www.sqlitetutorial.net/sqlite-java/)
+To build a native image (such as an .exe for Windows) you can use this.
 
-Apache Commons IO version 2.14.0 or greater: [link](https://commons.apache.org/proper/commons-io/)
+`./gradlew `
 
-FOR TESTING:
+The file will be made here: `<directory goes here>`. 
+You can them run the application as any other regular
+application depending on your OS.
 
-Junit 5 version 5.10.0 or greater: [link](https://junit.org/junit5/)
+To launch the application after cloning this repository, you can run the application by doing the following:
 
-# Details
+`./gradlew run`
+
+To run the tests, you can use any of these:
+
+`./gradlew test` or `./gradlew check`
+
+To just build the jar file (the jar won't contain the dependencies, you'll need to use module path for it to work).
+
+`./gradlew build`
+
+To build a jar uber or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
+
+`./gradlew <something>`
+
+To clean the build output (this will also remove the generated `database.db` file in the cloned repository), then use the following:
+
+`./gradlew clean`
+
+## Details
 Entry point to application is `Launcher.java`
 
 Dependencies are managed by Gradle.
 
-# Acknowledgements
+## Acknowledgements
 Special thanks to [Icons8](https://icons8.com/) for the following icons:
 [app](https://icons8.com/) icon, [Google](https://icons8.com/icon/60984/google/) icon, [Discord](https://icons8.com/icon/30888/discord/) icon, [Shopify](https://icons8.com/icon/SZ0VDlOvY5zB/shopify/) icon, [GitHub](https://icons8.com/icon/62856/github/) icon, [Settings](https://icons8.com/icon/H6C79JoP90DH/settings/) icon, [Log Out](https://icons8.com/icon/26194/back-arrow/) icon, [Back Arrow](https://icons8.com/icon/O78uUJpfEyFx/log-out/) icon.
 
-# Documentation
+## Documentation
 There are Javadocs for all
 methods created in this file, 
 but this section will show
 how to use the application
 from users perspective.
 
-# Usage
+### Usage
 Since this application
 supports both light mode and
 high contrast mode, for each
 view in ths application, the
 light view will be shown.
 
-Note: This application is offline, so if a user makes an account on one computer, and tries to sign in with the same username and password on another computer, it won't transfer the data. Transferring of data will be added in the distant future. Additionally, the username and password made in this tutorial won't be accessible to the users following this tutorial as two different computers don't have access to the same database containing the usernames, passwords, social media accounts, backup codes, and theme configurations. Functionality of two computers accessing the same database will be added in the distant future.
+Note: This application is offline, so if a user makes an account on one computer, and tries to sign in with the same username and password on another computer, it won't transfer the data. Additionally, the username and password made in this tutorial won't be accessible to the users following this tutorial as two different computers don't have access to the same database containing the usernames, passwords, social media accounts, backup codes, and theme configurations.
 
 When the application is launched for the first time, this is what should appear:
 
@@ -124,7 +199,7 @@ The user can also edit a specific code, by first double-clicking the code itself
 
 ![17](https://user-images.githubusercontent.com/56102200/209512991-719272cb-90d3-4b61-8faa-1290ab7d56c9.jpg)
 
-Then double-click the edit button:
+Then click the edit button:
 
 ![18](https://user-images.githubusercontent.com/56102200/209512992-a2d02e5b-78b7-401d-aea7-3056672f7675.jpg)
 
@@ -140,17 +215,17 @@ The user can also copy a specific code, by first double-clicking the code itself
 
 ![17](https://user-images.githubusercontent.com/56102200/209512991-719272cb-90d3-4b61-8faa-1290ab7d56c9.jpg)
 
-Then double-clicking the copy button will copy the code to the user's clipboard.
+Then clicking the copy button will copy the code to the user's clipboard.
 
 The user can also delete a specific code, by first double-clicking the code itself which contains the numbers, digits or symbols.
 
 ![21](https://user-images.githubusercontent.com/56102200/209512995-927c4eaa-1e7f-4c6c-8bba-cdec9dcab43b.jpg)
 
-Then double-clicking the delete button will remove the code:
+Then clicking the delete button will remove the code:
 
 ![22](https://user-images.githubusercontent.com/56102200/209512998-6546a62d-a888-482b-b7ff-c7f5f8b56c2d.jpg)
 
-If the user would like to delete all their backup codes, the Delete All Codes button will remove them all. Simply double-clicking the Delete All Codes button will remove all the codes from the list:
+If the user would like to delete all their backup codes, the Delete All Codes button will remove them all. Simply clicking the Delete All Codes button will remove all the codes from the list:
 
 ![23](https://user-images.githubusercontent.com/56102200/209512999-6fbeef30-b065-4752-89a4-6725ed2f0ab8.jpg)
 
@@ -178,7 +253,7 @@ Clicking the enter button when the cursor is active in the text field or the Add
 
 ![28](https://user-images.githubusercontent.com/56102200/209513007-a3ce79e2-c42f-4968-ae8d-8dbad0e084ed.jpg)
 
-The user can then edit, copy or delete a specific code just like the example with the Discord account. The user can also delete all codes, just as shown with the example with the Discord account.
+The user can then edit, copy or delete a specific code just like the example with the Discord account above. The user can also delete all codes, just as shown with the example with the Discord account above.
 
 The user can also delete a specific social media account  by first selecting it, then clicking the Delete Accounts button:
 
