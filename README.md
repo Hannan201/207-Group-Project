@@ -50,8 +50,8 @@ Java JDK version 21.0 or greater.
 * The specific vendor this application uses is OpenJDK 
     * OpenJDK's source: <https://openjdk.org/>.
     * OpenJDK's prebuilt binaries can be found at Adoptium: <https://adoptium.net/>.
-    * Gradle will automatically download the required JDK with the correct vendor automatically if you don't already have it, which
-    will be located at: `<home directory of the current user>/.gradle/jdks/`. There should be a folder
+    * Gradle will automatically download the required JDK with the correct vendor automatically if you don't already have it. If you don't have it, Gradle will download it
+    at: `<home directory of the current user>/.gradle/jdks/`. There should be a folder
     which contains `eclipse_adoptium-21`, the ending of the folder name might vary depending on your OS and
     computer architecture. 
 
