@@ -101,7 +101,7 @@ To launch the application after cloning this repository, you can run the applica
 
 `./gradlew run`
 
-To build a native image (such as an .exe for Windows) you can use this.
+To build a native image (such as an .exe for Windows) you can use this:
 
 `./gradlew `
 
