@@ -12,6 +12,13 @@ saving is done on client side, use this program at your own risk.
 
 A local desktop JavaFX application to display the backup codes that a user has for each social media platform they use. 
 
+## Acknowledgements
+Special thanks to [Icons8](https://icons8.com/) for the following icons:
+[app](https://icons8.com/) icon, [Google](https://icons8.com/icon/60984/google/) icon, [Discord](https://icons8.com/icon/30888/discord/) icon, [Shopify](https://icons8.com/icon/SZ0VDlOvY5zB/shopify/) icon, [GitHub](https://icons8.com/icon/62856/github/) icon, [Settings](https://icons8.com/icon/H6C79JoP90DH/settings/) icon, [Log Out](https://icons8.com/icon/26194/back-arrow/) icon, [Back Arrow](https://icons8.com/icon/O78uUJpfEyFx/log-out/) icon.
+
+Special credits to @Hansunkekes and @Kedi24 for the development of the UIs for
+this application.
+
 ## Features
 * The ability to create multiple accounts, which you can create and log in to. This allows for multiple users to share this application if they share the same computer.
     * Note that the account information and any data related to it (such as social media accounts, theme preference, and backup codes) are saved locally, so if you
@@ -43,7 +50,7 @@ Java JDK version 21.0 or greater.
 * The specific vendor this application uses is OpenJDK 
     * OpenJDK's source: <https://openjdk.org/>.
     * OpenJDK's prebuilt binaries can be found at Adoptium: <https://adoptium.net/>.
-    * Gradle will automatically download the required JDK wih the correct vendor automatically, which
+    * Gradle will automatically download the required JDK with the correct vendor automatically, which
     will be located at: `<home directory of the current user>/.gradle/jdks/`. There should be a folder
     which contains `eclipse_adoptium-21`, the ending of the folder name might vary depending on your OS and
     computer architecture. 
@@ -60,56 +67,67 @@ Java JDK version 21.0 or greater.
 ## Testing Dependencies
 * Junit 5 version 5.10.0 or greater: <https://junit.org/junit5/>.
 
+**Note:** Some of the tests copy a file, modify it and read it. So they need to
+be deleted from the output directory the next time the tests are run to return to their original state. With Gradle, it
+was easy to add a task to do this (you can run the task by using `./gradlew cleanUpTestFiles` on a Unix based OS, and `.\gradlew cleanUpTestFiles` on Windows. Gradle will call this task automatically when
+running tests by `./gradlew test` on a Unix based OS, or `.\gradlew cleanUpTestFiles` on Windows, so you won't have to). If you're using Gradle to run the tests, everything should work.
+Otherwise, you'll need to delete the generated files from the tests manually to ensure they
+work every time.
+
+## Details
+Entry point to application is `Launcher.java`.
+
+Main module of this application is `backup.code.generator`.
+
+Dependencies are managed by Gradle. Thanks to the Gradle wrapper, you don't need to install
+it to run this application.
+
 ## Getting started
-This application used Gradle as the build tool, which provided tasks to aid development. Here a few.
+This application used Gradle as the build tool, which provided tasks to aid development. Here a few of them you can execute from the terminal.
+
+For those using a Unix based OS, use `./gradlew` when executing gradle tasks. For Windows users, use `.\gradlew`.
 
 **Note:** When running this application as a native image
-(such as an .exe for Windows) or a jar (outside the cloned repository) file, then the `database.db`
+(such as an .exe for Windows) or a jar file (outside the cloned repository), then the `database.db`
 file will be created in the same directory in which the application is 
 running in. So if you move the native image or jar file, make sure you also
 move the `database.db` file with it. Otherwise, this application won't load 
-any of the data and have to make a new empty `database.db` file. If you're running this
-application inside the cloned repository and assuming you're inside the root directory
+any of the data and make a new empty `database.db` file. If you're running this
+application inside the cloned repository by using `./gradlew run` and assuming you're inside the root directory
 of this repository (which should be `Cypher-Enforcers`) then the `database.db` file
 will appear in `./backup-code-generator/build/libs/database.db`.
 
+To launch the application after cloning this repository, you can run the application by doing the following:
+
+`./gradlew run`
 
 To build a native image (such as an .exe for Windows) you can use this.
 
 `./gradlew `
 
 The file will be made here: `<directory goes here>`. 
-You can them run the application as any other regular
+You can then run the application as any other regular
 application depending on your OS.
-
-To launch the application after cloning this repository, you can run the application by doing the following:
-
-`./gradlew run`
 
 To run the tests, you can use any of these:
 
 `./gradlew test` or `./gradlew check`
 
-To just build the jar file (the jar won't contain the dependencies, you'll need to use module path for it to work).
+To just build the jar file (the jar won't contain the dependencies, you'll need to use module path for it to work), use this:
+
+`./gradlew assemble`
+
+To build the jar file and run the tests, you can use:
 
 `./gradlew build`
 
-To build a jar uber or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
+To build a uber jar or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
 
 `./gradlew <something>`
 
 To clean the build output (this will also remove the generated `database.db` file in the cloned repository), then use the following:
 
 `./gradlew clean`
-
-## Details
-Entry point to application is `Launcher.java`
-
-Dependencies are managed by Gradle.
-
-## Acknowledgements
-Special thanks to [Icons8](https://icons8.com/) for the following icons:
-[app](https://icons8.com/) icon, [Google](https://icons8.com/icon/60984/google/) icon, [Discord](https://icons8.com/icon/30888/discord/) icon, [Shopify](https://icons8.com/icon/SZ0VDlOvY5zB/shopify/) icon, [GitHub](https://icons8.com/icon/62856/github/) icon, [Settings](https://icons8.com/icon/H6C79JoP90DH/settings/) icon, [Log Out](https://icons8.com/icon/26194/back-arrow/) icon, [Back Arrow](https://icons8.com/icon/O78uUJpfEyFx/log-out/) icon.
 
 ## Documentation
 There are Javadocs for all
