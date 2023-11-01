@@ -45,7 +45,7 @@ Java JDK version 21.0 or greater.
     * OpenJDK's prebuilt binaries can be found at Adoptium: <https://adoptium.net/>.
     * Gradle will automatically download the required JDK wih the correct vendor automatically, which
     will be located at: `<home directory of the current user>/.gradle/jdks/`. There should be a folder
-    which contains `eclipse_adoptium-21`, the ending might vary depending on your OS and
+    which contains `eclipse_adoptium-21`, the ending of the folder name might vary depending on your OS and
     computer architecture. 
 
 ## Dependencies
