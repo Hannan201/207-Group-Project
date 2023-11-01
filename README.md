@@ -43,6 +43,10 @@ Java JDK version 21.0 or greater.
 * The specific vendor this application uses is OpenJDK 
     * OpenJDK's source: <https://openjdk.org/>.
     * OpenJDK's prebuilt binaries can be found at Adoptium: <https://adoptium.net/>.
+    * Gradle will automatically download the required JDK wih the correct vendor automatically, which
+    will be located at: `<home directory of the current user>/.gradle/jdks/`. There should be a folder
+    which contains `eclipse_adoptium-21`, the ending might vary depending on your OS and
+    computer architecture. 
 
 ## Dependencies
 * SLF4J version 2.0.9 or greater: <https://www.slf4j.org/>.
@@ -66,7 +70,7 @@ running in. So if you move the native image or jar file, make sure you also
 move the `database.db` file with it. Otherwise, this application won't load 
 any of the data and have to make a new empty `database.db` file. If you're running this
 application inside the cloned repository and assuming you're inside the root directory
-of this repository (which could be `Cypher-Enforcers`) then the `database.db` file
+of this repository (which should be `Cypher-Enforcers`) then the `database.db` file
 will appear in `./backup-code-generator/build/libs/database.db`.
 
 
