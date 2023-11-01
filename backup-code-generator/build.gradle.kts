@@ -14,10 +14,6 @@ plugins {
 
     // Plugin to work with Intellij IDEA.
     idea
-
-    // To add extra module info for old dependencies that don't have
-    // a module-info.java file present.
-    id("org.gradlex.extra-java-module-info") version "1.4.2"
 }
 
 group = "cypher.enforcers"
