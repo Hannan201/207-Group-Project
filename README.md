@@ -125,7 +125,7 @@ To build the jar file and run the tests, you can use:
 
 `./gradlew build`
 
-To build a uber jar or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
+To build an uber jar or fat jar file (which is a jar of this main application as well as the dependencies, you won't need to use the module path in this case) you can use:
 
 `./gradlew <something>`
 
