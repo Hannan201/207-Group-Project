@@ -3,7 +3,7 @@ package cypher.enforcers;
 import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.implementations.CodeDAOImpl;
 import cypher.enforcers.data.implementations.CodeRepositoryImpl;
-import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
@@ -19,7 +19,7 @@ public class CodeLoadingTests {
 
     @Test
     public void readAllCodes() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/code_read.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
@@ -58,7 +58,7 @@ public class CodeLoadingTests {
 
     @Test
     public void readCodeByID() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/code_read.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);

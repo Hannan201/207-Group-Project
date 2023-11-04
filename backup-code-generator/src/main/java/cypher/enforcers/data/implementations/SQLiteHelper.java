@@ -15,10 +15,10 @@ import java.sql.*;
  send queries to the database, ensure connection reliability and
  deliver any important alerts.
  */
-public class SqliteHelper implements DatabaseService {
+public class SQLiteHelper implements DatabaseService {
 
     // Logger for the SQLite helper.
-    private static final Logger logger = LoggerFactory.getLogger(SqliteHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(SQLiteHelper.class);
 
     // Default name of the database.
     private static final String DEFAULT_NAME = "/cypher/enforcers/database/database.db";
@@ -40,11 +40,9 @@ public class SqliteHelper implements DatabaseService {
             configurations.enforceForeignKeys(true);
             connection = DriverManager.getConnection(
                     "jdbc:sqlite:" +
-                            Utilities.getJarParentDirectory() +
+                            Utilities.getParentDirectory() +
                             File.separator +
-                            FilenameUtils.getName(
-                                    Utilities.loadFileByURL(name).getPath()
-                            ),
+                            FilenameUtils.getName(name),
                     configurations.toProperties()
             );
         } catch (SQLException e) {

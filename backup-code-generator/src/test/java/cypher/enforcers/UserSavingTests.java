@@ -1,7 +1,7 @@
 package cypher.enforcers;
 
 import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
-import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
 import cypher.enforcers.data.security.dtos.User;
@@ -25,7 +25,7 @@ public class UserSavingTests {
 
     @Test
     public void saveUserTest() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_create.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -50,7 +50,7 @@ public class UserSavingTests {
 
     @Test
     public void saveUserThemeTest() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_create_2.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);

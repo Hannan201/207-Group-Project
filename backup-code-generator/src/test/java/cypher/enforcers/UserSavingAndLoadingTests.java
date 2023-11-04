@@ -1,7 +1,7 @@
 package cypher.enforcers;
 
 import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
-import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
 import cypher.enforcers.data.security.mappers.UserDTOMapper;
@@ -25,7 +25,7 @@ public class UserSavingAndLoadingTests {
         // Username: test
         // Password: hellobro
 
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_read_r.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -64,7 +64,7 @@ public class UserSavingAndLoadingTests {
 
     @Test
     public void testUserThemeUpdate() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_update_r.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);

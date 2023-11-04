@@ -2,7 +2,7 @@ package cypher.enforcers.views;
 
 import cypher.enforcers.controllers.*;
 import cypher.enforcers.controllers.codeViewControllers.CodeViewController;
-import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.spis.DatabaseService;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
@@ -53,7 +53,7 @@ public abstract class View {
     protected String[] cssFilesPaths = new String[Theme.values().length];
 
     public static final Callback<Class<?>, Object> CONTROLLER_FACTORY = new Callback<>() {
-        private static final DatabaseService dbService = new SqliteHelper();
+        private static final DatabaseService dbService = new SQLiteHelper();
 
         static {
             dbService.connect();

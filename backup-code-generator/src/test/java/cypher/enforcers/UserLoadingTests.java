@@ -1,7 +1,7 @@
 package cypher.enforcers;
 
 import cypher.enforcers.data.implementations.AuthenticationServiceImpl;
-import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.implementations.UserDAOImpl;
 import cypher.enforcers.data.implementations.UserRepositoryImpl;
 import cypher.enforcers.data.security.mappers.UserDTOMapper;
@@ -21,7 +21,7 @@ public class UserLoadingTests {
 
     @Test
     public void loadsUsernames() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_read.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -37,7 +37,7 @@ public class UserLoadingTests {
 
     @Test
     public void loadLoggedInUser() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_read_2.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -69,7 +69,7 @@ public class UserLoadingTests {
 
     @Test
     public void loadsDataForAuthentication() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_read_3.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -91,7 +91,7 @@ public class UserLoadingTests {
 
     @Test
     public void loadsDataForAuthenticationSecond() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/user_read_4.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);

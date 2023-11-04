@@ -3,7 +3,7 @@ package cypher.enforcers;
 import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.implementations.CodeDAOImpl;
 import cypher.enforcers.data.implementations.CodeRepositoryImpl;
-import cypher.enforcers.data.implementations.SqliteHelper;
+import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.spis.CodeDAO;
 import cypher.enforcers.data.spis.CodeRepository;
 import cypher.enforcers.data.spis.DatabaseService;
@@ -18,7 +18,7 @@ public class CodeSavingTests {
 
     @Test
     public void createCode() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/code_create.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
@@ -39,7 +39,7 @@ public class CodeSavingTests {
 
     @Test
     public void updateCode() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/code_update.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
@@ -57,7 +57,7 @@ public class CodeSavingTests {
 
     @Test
     public void removeCode() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/code_delete.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
@@ -71,7 +71,7 @@ public class CodeSavingTests {
 
     @Test
     public void removeAllCodes() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/code_clean.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);

@@ -5,6 +5,7 @@ out/
 *.iml
 *.log
 *.class
+backup-code-generator/database.db
 # Ignore Gradle project-specific cache directory
 .gradle
 

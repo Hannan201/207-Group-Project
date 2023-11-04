@@ -16,7 +16,7 @@ public class AccountSavingAndLoadingTests {
 
     @Test
     public void accountCreation() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/account_create_r.db");
 
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
@@ -61,7 +61,7 @@ public class AccountSavingAndLoadingTests {
 
     @Test
     public void accountDestruction() {
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/account_delete_r.db");
 
         AccountDAO accountDAO = new AccountDAOImpl(dbService);

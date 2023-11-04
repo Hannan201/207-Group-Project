@@ -41,7 +41,7 @@ public class ApplicationIntegrationTests {
         - sign back in and verify the data is still there.
          */
 
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/interaction_1.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -183,7 +183,7 @@ public class ApplicationIntegrationTests {
             - close application without logging out
          */
 
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/interaction_2.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
@@ -284,7 +284,7 @@ public class ApplicationIntegrationTests {
         - Verify the data is there since the user did not log out
         - log out
          */
-        DatabaseService dbService = new SqliteHelper();
+        DatabaseService dbService = new SQLiteHelper();
         dbService.connect("/cypher/enforcers/interaction_3.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);

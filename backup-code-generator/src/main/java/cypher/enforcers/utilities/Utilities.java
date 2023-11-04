@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory;
 import cypher.enforcers.views.*;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -114,19 +114,8 @@ public class Utilities {
      *
      * @return The path as a string.
      */
-    public static String getJarParentDirectory() {
-        try {
-            return new File(
-                    Utilities.class.getProtectionDomain()
-                            .getCodeSource()
-                            .getLocation()
-                            .toURI()
-            ).getParent();
-        } catch (URISyntaxException e) {
-            logger.warn("Unable to find parent directory of jar. Cause: ", e);
-        }
-
-        return null;
+    public static String getParentDirectory() {
+        return Paths.get("").toAbsolutePath().toString();
     }
 
     /**
@@ -150,7 +139,7 @@ public class Utilities {
             url = loadFileByURL(file);
 
             File fileToCreate = new File(
-                    Objects.requireNonNull(getJarParentDirectory()) +
+                    getParentDirectory() +
                     File.separator +
                     FilenameUtils.getName(url.getPath())
             );
