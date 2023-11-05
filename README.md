@@ -48,8 +48,8 @@ This application offers three colour schemes in total, they can be changed in th
 settings page and will be remembered the next time a user logs in or launches the application
 if they didn't log out.
 
-* A **light mode** colour scheme, which is the default.
-* A **high-contrast** mode theme for those with sensitive eyes.
+* A **light mode** theme, which is the default.
+* A **high-contrast mode** theme for those with sensitive eyes.
 * A **dark mode** theme for those who prefer a darker colour scheme.
 
 ## Prerequisites
