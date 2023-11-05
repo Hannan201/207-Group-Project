@@ -51,6 +51,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public boolean createUser(String username, String password) {
+        if (username.isBlank() || username.isEmpty()
+            || password.isBlank() || password.isEmpty()) {
+            logger.warn("Username or password cannot be empty.");
+            return false;
+        }
+
         String salt = SecurityUtils.createSalt();
         String hashedPassword = salt + SecurityUtils.hashPassword(password + salt, salt.getBytes());
 
@@ -181,10 +187,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @param username The username to search for.
      * @return True if the username is taken, false otherwise. Note that
      * a blank or empty username is invalid thus this method would return
-     * false if that's the case.
+     * true if that's the case.
      */
     @Override
     public boolean checkUsername(String username) {
+        if (username.isEmpty() || username.isBlank()) {
+            logger.warn("Username cannot be empty.");
+            return true;
+        }
+
         Optional<UserEntity> optionalUser = userRepository.read(username.toLowerCase());
 
         if (optionalUser.isPresent() && optionalUser.get().getUsername().equalsIgnoreCase(username)) {

@@ -42,12 +42,6 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<UserEntity> create(UserEntity user) {
         logger.trace("Attempting to create user with username {}.", user.getUsername());
 
-        if (user.getUsername().isBlank() || user.getUsername().isEmpty()
-            || user.getPassword().isBlank() || user.getPassword().isEmpty()) {
-            logger.warn("Username or password cannot be empty.");
-            return Optional.empty();
-        }
-
         UserEntity createUser = userDAO.registerUser(user);
 
         if (!Objects.isNull(createUser)) {
