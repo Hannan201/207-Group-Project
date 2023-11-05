@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -40,6 +41,18 @@ public interface DatabaseService {
     Connection getConnection();
 
     /**
+     * Check if this database service is not connected.
+     *
+     * @return True if not connected, false otherwise.
+     * @throws SQLException if anything goes wrong while checking
+     * for the connection status.
+     */
+    default boolean noConnection() throws SQLException {
+        Connection con = getConnection();
+        return Objects.isNull(con) || con.isClosed();
+    }
+
+    /**
      * Execute an update query with placeholders for an object.
      *
      * @param query The query to execute.
@@ -51,15 +64,15 @@ public interface DatabaseService {
      */
     @SuppressWarnings("unchecked")
     default <T> void executeUpdate(String query, T object) throws SQLException {
+        if (noConnection()) {
+            throw new SQLException("No connection.");
+        }
+
         try (PreparedStatement statement = getConnection().prepareStatement(query)) {
             getConnection().setAutoCommit(false);
             BiConsumer<PreparedStatement, T> consumer = (BiConsumer<PreparedStatement, T>) ArgumentSetters.getObjectSetter(object.getClass());
             consumer.accept(statement, object);
-
-            if (!statement.isClosed()) {
-                statement.executeUpdate();
-            }
-
+            statement.executeUpdate();
             getConnection().commit();
         } catch (SQLException e) {
             getConnection().rollback();
@@ -75,6 +88,14 @@ public interface DatabaseService {
      * will be rolled back.
      */
     default void executeUpdate(String query, Object ... objects) throws SQLException {
+        if (noConnection()) {
+            throw new SQLException("No connection.");
+        }
+
+        if (noMatch(query, objects.length)) {
+            throw new SQLException("Number of arguments does not match number of place holders.");
+        }
+
         try (PreparedStatement statement = getConnection().prepareStatement(query)) {
             getConnection().setAutoCommit(false);
 
@@ -93,16 +114,24 @@ public interface DatabaseService {
 
     /**
      * Execute a select statement to obtain the result based on the
-     * class-socialMediaType of an object.
+     * class-type of an object.
      *
      * @param query The query to execute.
-     * @param type The class socialMediaType of the object to retrieve.
+     * @param type The class type of the object to retrieve.
      * @param objects The arguments that need to be set for the placeholder.
-     * @param <T> The socialMediaType of value that should be returned.
+     * @param <T> The type of value that should be returned.
      * @return The value, if any errors occur null will be returned.
      * @throws SQLException If anything goes wrong.
      */
     default <T> T executeSelect(String query, Class<T> type, Object ... objects) throws SQLException {
+        if (noConnection()) {
+            throw new SQLException("No connection.");
+        }
+
+        if (noMatch(query, objects.length)) {
+            throw new SQLException("Number of arguments does not match number of place holders.");
+        }
+
         try (PreparedStatement statement = getConnection().prepareStatement(query)) {
             for (int i = 0; i < objects.length; i++) {
                 TriConsumer<PreparedStatement, Integer, Object> setter
@@ -116,16 +145,25 @@ public interface DatabaseService {
 
     /**
      * Execute a select statement to obtain multiple results in a list
-     * based on the class-socialMediaType of an object.
+     * based on the class-type of an object.
      *
      * @param query The query to execute.
-     * @param type The class socialMediaType of the object that should be in the list.
+     * @param type The class type of the object that should be in the list.
      * @param objects The arguments that need to be set for the placeholder.
-     * @param <T> The socialMediaType of value that should be in the list.
-     * @return The list of values, if any errors occur null will be returned.
+     * @param <T> The type of value that should be in the list.
+     * @return The list of values, if any errors occur or no results
+     * are found null will be returned.
      * @throws SQLException If anything goes wrong.
      */
     default <T> List<T> executeMultiSelect(String query, Class<T> type, Object ... objects) throws SQLException {
+        if (noConnection()) {
+            throw new SQLException("No connection.");
+        }
+
+        if (noMatch(query, objects.length)) {
+            throw new SQLException("Number of arguments does not match number of place holders.");
+        }
+
         try (PreparedStatement statement = getConnection().prepareStatement(query)) {
             for (int i = 0; i < objects.length; i++) {
                 TriConsumer<PreparedStatement, Integer, Object> setter
@@ -133,13 +171,17 @@ public interface DatabaseService {
                 setter.accept(statement, i + 1, objects[i]);
             }
 
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                return null;
+            }
+
             List<T> results = new ArrayList<>();
             Function<ResultSet, T> function = Retrievers.get(type);
-            ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
+            do {
                 results.add(function.apply(resultSet));
-            }
+            } while (resultSet.next());
 
             return results;
         }
@@ -149,5 +191,17 @@ public interface DatabaseService {
      * Disconnect from the current database.
      */
     void disconnect();
+
+    /**
+     * Checks if the number of placeholders in an SQL query do not
+     * the amount of argument passed in.
+     *
+     * @param query The query.
+     * @param amount The number of arguments passed in.
+     * @return True if they don't match, false otherwise.
+     */
+    default boolean noMatch(String query, int amount) {
+        return (query.length() - query.replace("?", "").length()) != amount;
+    }
 
 }
