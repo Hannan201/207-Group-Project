@@ -38,7 +38,7 @@ this application.
     * For each code a user adds, you can either copy it, delete it, or modify it.
 * The ability to import a `.txt` file instead of having to type in each code one by one.
     * This functionality only works if your social media account is one of the following: 
-    *Discord*, *Google*, *GitHub* or *Shopify*. As they provided `.txt` files for their backup codes.
+    **Discord**, **Google**, **GitHub** or **Shopify**. As they provided `.txt` files for their backup codes.
     * If you attempt to import the wrong type of `.txt` file for an account (For example, 
     importing a GitHub file for a Google account) you'll end up with undefined results. Luckily the
     results can be deleted from your list of codes. Do take caution.
@@ -48,9 +48,9 @@ This application offers three colour schemes in total, they can be changed in th
 settings page and will be remembered the next time a user logs in or launches the application
 if they didn't log out.
 
-* A *light mode* colour scheme, which is the default.
-* A *high-contrast* mode theme for those with sensitive eyes.
-* A *dark mode* theme for those with sensitive eyes.
+* A **light mode** colour scheme, which is the default.
+* A **high-contrast** mode theme for those with sensitive eyes.
+* A **dark mode** theme for those who prefer a darker colour scheme.
 
 ## Prerequisites
 Java JDK version 21.0 or greater.
