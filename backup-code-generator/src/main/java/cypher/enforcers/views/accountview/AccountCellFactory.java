@@ -19,9 +19,11 @@ public class AccountCellFactory implements Callback<ListView<Account>, ListCell<
      * @return a new AccountCell.
      * @throws UncheckedIOException If any errors occur when creating
      * the account cell.
+     * @throws NullPointerException If any data is missing for when
+     * creating this account cell.
      */
     @Override
-    public ListCell<Account> call(ListView<Account> param) throws UncheckedIOException {
+    public ListCell<Account> call(ListView<Account> param) throws UncheckedIOException, NullPointerException {
         try {
             return new AccountCell();
         } catch (IOException e) {

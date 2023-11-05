@@ -24,8 +24,10 @@ public class SettingsView extends View implements Reversible {
      *
      * @throws IOException If any errors occur when creating the settings
      * view.
+     * @throws NullPointerException If there's any missing data for
+     * creating the settings view.
      */
-    private SettingsView() throws IOException {
+    private SettingsView() throws IOException, NullPointerException {
         initUI();
     }
 
@@ -35,8 +37,10 @@ public class SettingsView extends View implements Reversible {
      * @return Instance of this settings view.
      * @throws IOException If any errors occur when trying to
      * retrieve the settings view.
+     * @throws NullPointerException If there's any missing data when
+     * trying to retrieve the settings view.
      */
-    public static View getInstance() throws IOException {
+    public static View getInstance() throws IOException, NullPointerException {
         if (firstInstance == null) {
             firstInstance = new SettingsView();
             SettingsViewController.addView(firstInstance);
@@ -50,9 +54,11 @@ public class SettingsView extends View implements Reversible {
      * view.
      * @throws IOException If any errors occur when loading in the
      * FXML file for the settings view.
+     * @throws NullPointerException If the FXML file or CSS files for the
+     * settings view cannot be found from resources.
      */
     @Override
-    protected void initUI() throws IOException {
+    protected void initUI() throws IOException, NullPointerException {
         this.loadRoot("SettingsView.fxml");
 
         this.loadStylesheets(

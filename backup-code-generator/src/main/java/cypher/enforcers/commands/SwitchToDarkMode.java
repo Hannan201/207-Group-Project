@@ -28,6 +28,9 @@ public class SwitchToDarkMode implements Command {
     /**
      * Execute this command to switch the views to
      * dark mode.
+     *
+     * @throws NullPointerException If there's any missing data for
+     * switching the theme to dark mode (such as icons).
      */
     @Override
     public void execute() {

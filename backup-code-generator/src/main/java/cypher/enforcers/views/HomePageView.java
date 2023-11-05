@@ -17,8 +17,10 @@ public class HomePageView extends View {
      *
      * @throws IOException If any errors occur when creating the home page
      * view.
+     * @throws NullPointerException If there's any missing data for
+     * creating the home page view.
      */
-    private HomePageView() throws IOException {
+    private HomePageView() throws IOException, NullPointerException {
         initUI();
     }
 
@@ -27,9 +29,11 @@ public class HomePageView extends View {
      *
      * @return Instance of this home page view.
      * @throws IOException If any errors occur when trying to
-     * retrieve the sign-up view.
+     * retrieve the home page view.
+     * @throws NullPointerException If there's any missing data when
+     * trying to retrieve the home page view.
      */
-    public static View getInstance() throws IOException {
+    public static View getInstance() throws IOException, NullPointerException {
         if (firstInstance == null) {
             firstInstance = new HomePageView();
         }
@@ -43,9 +47,11 @@ public class HomePageView extends View {
      *
      * @throws IOException If any errors occur when loading in the
      * FXML file for the home page view.
+     * @throws NullPointerException If the FXML file or CSS files for the
+     * home page view cannot be found from resources.
      */
     @Override
-    protected void initUI() throws IOException {
+    protected void initUI() throws IOException, NullPointerException {
         this.loadRoot("HomePageView.fxml");
 
         this.loadStylesheets(

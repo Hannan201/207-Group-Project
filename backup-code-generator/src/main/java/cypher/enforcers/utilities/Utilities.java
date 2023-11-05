@@ -51,8 +51,10 @@ public class Utilities {
      *
      * @param theme The new theme to switch to.
      * @throws IOException if any errors occur while loading in the views.
+     * @throws NullPointerException If there's any missing data which
+     * prevents the theme from being changed, such as icons.
      */
-    public static void adjustTheme(Theme theme) throws IOException {
+    public static void adjustTheme(Theme theme) throws IOException, NullPointerException {
         if (theme == null) {
             logger.debug("Cannot switch theme because it's null. Aborting request.");
             return;
@@ -70,8 +72,10 @@ public class Utilities {
      * @param theme Name of the theme.
      * @return The ThemeSwitcher ready to change all the themes.
      * @throws IOException if any errors occur while loading in the views.
+     * @throws NullPointerException If there's any missing data which
+     * prevents any of the views from being created.
      */
-    private static ThemeSwitcher getThemeSwitcher(Theme theme) throws IOException {
+    private static ThemeSwitcher getThemeSwitcher(Theme theme) throws IOException, NullPointerException {
         List<View> views = List.of(
                 HomePageView.getInstance(),
                 SignUpView.getInstance(),
@@ -98,7 +102,7 @@ public class Utilities {
      * a URL.
      *
      * @param path Path to the file relative to the resource folder.
-     * @throws NullPointerException If resource can't be found.
+     * @throws NullPointerException If the resource can't be found.
      */
     public static URL loadFileByURL(String path) throws NullPointerException {
         logger.debug("Attempting to load file from resource: /cypher/enforcers/" + path);
@@ -112,7 +116,7 @@ public class Utilities {
      * a InputStream.
      *
      * @param path Path to the file relative to the resource folder.
-     * @throws NullPointerException If resource can't be found.
+     * @throws NullPointerException If the resource can't be found.
      */
     public static InputStream loadFileByInputStream(String path) throws NullPointerException {
         logger.debug("Attempting to load file (as input stream) from resource: /cypher/enforcers/" + path);
@@ -136,8 +140,10 @@ public class Utilities {
      * exist in the same directory in which this application is running.
      *
      * @param file Path of file (relative to the resources folder).
+     * @throws NullPointerException When the file from resources can't be
+     * found.
      */
-    public static void copyResourceFileIf(String file) {
+    public static void copyResourceFileIf(String file) throws NullPointerException {
         /*
         The file variable only contains the path relative to the resources
         folder, but we just need the name. So we first load the file
@@ -182,13 +188,15 @@ public class Utilities {
      * @param defaultIcon Path to the icon of the default
      *                    social media platform (relative to the resources
      *                    folder).
+     * @throws NullPointerException If any of the image files cannot
+     * be found.
      */
     public static void updateIcons(
             Map<String, String> icons,
             String discord, String github,
             String google, String shopify,
             String defaultIcon
-    ) {
+    ) throws NullPointerException {
         logger.trace("Updating icon for Discord from {} to {}.", icons.get("discord"), discord);
         icons.put("discord", loadFileByURL(discord).toExternalForm());
 
@@ -250,8 +258,15 @@ public class Utilities {
      * any event handlers, streams, resources etc.
      *
      * @param stage The main window for this application.
+     * @throws NullPointerException If the configuration file can't
+     * be found from resources.
+     * @throws IOException If any errors occur when loading the resource
+     * file.
+     * @throws JoranException If any errors occur during the configuration
+     * process after the file has been loaded (such as unknown xml tags).
      */
-    public static void prepare(Stage stage) {
+    public static void prepare(Stage stage) throws NullPointerException,
+            JoranException, IOException {
         configureLogger();
         registerExceptionHandler(stage);
     }
@@ -290,8 +305,16 @@ public class Utilities {
 
     /**
      * Configure logger to use configuration file.
+     *
+     * @throws NullPointerException If the configuration file can't
+     * be found from resources.
+     * @throws IOException If any errors occur when loading the resource
+     * file.
+     * @throws JoranException If any errors occur during the configuration
+     * process after the file has been loaded (such as unknown xml tags).
      */
-    private static void configureLogger() {
+    private static void configureLogger() throws NullPointerException,
+            IOException, JoranException {
         logger.trace("Configuring logger...");
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         loggerContext.reset();
@@ -299,10 +322,6 @@ public class Utilities {
         configurator.setContext(loggerContext);
         try (InputStream configStream = Utilities.loadFileByInputStream(PATH_TO_LOGBACK_CONFIG)) {
             configurator.doConfigure(configStream); // loads logback file
-        } catch (JoranException e) {
-            logger.error(String.format("Failed to configure logback file: %s. Cause: ", PATH_TO_LOGBACK_CONFIG), e);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load logback file: %s. Cause: ", PATH_TO_LOGBACK_CONFIG), ioException);
         }
     }
 }

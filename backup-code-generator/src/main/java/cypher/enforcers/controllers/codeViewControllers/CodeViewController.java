@@ -323,8 +323,13 @@ public class CodeViewController implements Initializable {
      * Handles the event where the "Import Codes" button is clicked
      * This method allows the user to specify the path to the corresponding
      * .txt file that contains the codes they would like to add.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * code view.
+     * @throws NullPointerException If the code view cannot be created
+     * due to missing data.
      */
-    public void importCodeOnAction() throws IOException {
+    public void importCodeOnAction() throws IOException, NullPointerException {
         // 1) Get the platform for the account
         String AccountType = accountModel.getCurrentAccount().socialMediaType().toUpperCase();
 
@@ -403,8 +408,10 @@ public class CodeViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * home page view.
+     * @throws NullPointerException If the home page view cannot be created
+     * due to missing data.
      */
-    public void handleLogout() throws IOException {
+    public void handleLogout() throws IOException, NullPointerException {
         if (userModel.logOutUser()) {
             logger.trace("Switching from the CodeView to the HomePageView.");
             View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
@@ -416,8 +423,10 @@ public class CodeViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the code view
      * or settings view.
+     * @throws NullPointerException If the code view or settings view
+     * cannot be created due to missing data.
      */
-    public void handleSettings() throws IOException {
+    public void handleSettings() throws IOException, NullPointerException {
         logger.debug("Setting the previous scene for the SettingsView to the CodeView.");
         ((Reversible) SettingsView.getInstance()).setPreviousView(CodeView.getInstance());
 
@@ -430,8 +439,10 @@ public class CodeViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * accounts view.
+     * @throws NullPointerException If the accounts view cannot be created
+     * due to missing data.
      */
-    public void handleGoBack() throws IOException {
+    public void handleGoBack() throws IOException, NullPointerException {
         logger.trace("Switching from CodeView to AccountView.");
         View.switchSceneTo(CodeView.getInstance(), AccountView.getInstance());
     }

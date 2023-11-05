@@ -282,8 +282,11 @@ public class SignInController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * accounts view.
+     * @throws NullPointerException If the accounts view cannot be created
+     * due to missing data or if the theme for the user cannot be set due
+     * to missing data.
      */
-    private void signInOnAction(ActionEvent actionEvent) throws IOException {
+    private void signInOnAction(ActionEvent actionEvent) throws IOException, NullPointerException {
         View.closeWindow((Node) actionEvent.getSource());
 
         Utilities.adjustTheme(userModel.getCurrentUser().theme());
@@ -300,8 +303,11 @@ public class SignInController implements Initializable {
      * @param e The key the user clicked.
      * @throws IOException if any errors occur while loading in the
      * accounts view.
+     * @throws NullPointerException If the accounts view cannot be created
+     * due to missing data or if the theme for the user cannot be set due
+     * to missing data.
      */
-    private void signInFromEnterKey(KeyEvent e) throws IOException {
+    private void signInFromEnterKey(KeyEvent e) throws IOException, NullPointerException {
         if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
             View.closeWindow((Node) e.getSource());
 

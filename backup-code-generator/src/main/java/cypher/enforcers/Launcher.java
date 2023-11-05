@@ -1,5 +1,6 @@
 package cypher.enforcers;
 
+import ch.qos.logback.core.joran.spi.JoranException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
@@ -46,7 +47,7 @@ public class Launcher extends Application {
             stage.setScene(scene);
             stage.show();
             logger.info("Displaying application window.");
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException | JoranException e) {
             Utilities.onException(stage, e);
         }
     }

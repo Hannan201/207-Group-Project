@@ -17,8 +17,10 @@ public class AddAccountView extends View {
      *
      * @throws IOException If any errors occur when creating the create
      * account view.
+     * @throws NullPointerException If there's any missing data for
+     * creating the create account view.
      */
-    private AddAccountView() throws IOException {
+    private AddAccountView() throws IOException, NullPointerException {
         initUI();
     }
 
@@ -28,8 +30,10 @@ public class AddAccountView extends View {
      * @return Instance of this add-new-account view.
      * @throws IOException If any errors occur when trying to
      * retrieve the create account view.
+     * @throws NullPointerException If there's any missing data when
+     * trying to retrieve the create account view.
      */
-    public static View getInstance() throws IOException {
+    public static View getInstance() throws IOException, NullPointerException {
         if (firstInstance == null) {
             firstInstance = new AddAccountView();
         }
@@ -43,9 +47,11 @@ public class AddAccountView extends View {
      *
      * @throws IOException If any errors occur when loading in the
      * FXML file for the create account view.
+     * @throws NullPointerException If the FXML file or CSS files for the
+     * create account view cannot be found from resources.
      */
     @Override
-    protected void initUI() throws IOException {
+    protected void initUI() throws IOException, NullPointerException {
         this.loadRoot("CreateAccountView.fxml");
 
         this.loadStylesheets(

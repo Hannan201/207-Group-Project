@@ -45,7 +45,7 @@ public class SQLiteHelper implements DatabaseService {
                             FilenameUtils.getName(name),
                     configurations.toProperties()
             );
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             logger.warn("Connection to database failed. No new changes will be saved. Cause: ", e);
             return;
         }

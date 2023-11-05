@@ -101,9 +101,11 @@ public class SettingsViewController implements Initializable {
      *                       the root object was not localized.
      * @throws UncheckedIOException If any errors occur while loading
      * in all the views for the theme switcher.
+     * @throws NullPointerException If there's any missing data which
+     * prevents the theme from being set to the default, such as icons.
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) throws UncheckedIOException {
+    public void initialize(URL url, ResourceBundle resourceBundle) throws UncheckedIOException, NullPointerException {
         /*
         The copyright label for some reason would overflow when the
         screen gets to small, and the text would appear on the buttons.
@@ -149,9 +151,11 @@ public class SettingsViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * settings view.
+     * @throws NullPointerException If there's any missing data for
+     * switching the theme to high contrast mode (such as icons).
      */
     @FXML
-    private void switchToHighContrastMode() throws IOException {
+    private void switchToHighContrastMode() throws IOException, NullPointerException {
         if (userModel.updateTheme(Theme.HIGH_CONTRAST)) {
             logger.info("Updating application look and feel to high contrast mode.");
             updateTheme(highContrastModeCommand);
@@ -163,9 +167,11 @@ public class SettingsViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * settings view.
+     * @throws NullPointerException If there's any missing data for
+     * switching the theme to dark mode (such as icons).
      */
     @FXML
-    private void switchToDarkMode() throws IOException {
+    private void switchToDarkMode() throws IOException, NullPointerException {
         if (userModel.updateTheme(Theme.DARK)) {
             logger.info("Updating application look and feel to dark mode.");
             updateTheme(darkModeCommand);
@@ -177,9 +183,11 @@ public class SettingsViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * settings view.
+     * @throws NullPointerException If there's any missing data for
+     * switching the theme to light mode (such as icons).
      */
     @FXML
-    private void switchToLightMode() throws IOException {
+    private void switchToLightMode() throws IOException, NullPointerException {
         if (userModel.updateTheme(Theme.LIGHT)) {
             logger.info("Updating application look and feel to light mode.");
             updateTheme(lightModeCommand);
@@ -193,8 +201,10 @@ public class SettingsViewController implements Initializable {
      *                to the correct theme.
      * @throws IOException if any errors occur while loading in the
      * settings view.
+     * @throws NullPointerException If there's any missing data which
+     * prevents the theme from being changed, such as icons.
      */
-    private void updateTheme(Command command) throws IOException {
+    private void updateTheme(Command command) throws IOException, NullPointerException {
         this.switcher.setCommand(command);
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
@@ -222,8 +232,10 @@ public class SettingsViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * home page view.
+     * @throws NullPointerException If the home page view cannot be created
+     * due to missing data.
      */
-    public void handleLogout() throws IOException {
+    public void handleLogout() throws IOException, NullPointerException {
         if (userModel.logOutUser()) {
             logger.trace("Switching from the SettingsView to the HomePageView.");
             View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
@@ -235,8 +247,10 @@ public class SettingsViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading the
      * previous view.
+     * @throws NullPointerException If the previous view cannot be created
+     * due to missing data.
      */
-    public void handleGoBack() throws IOException {
+    public void handleGoBack() throws IOException, NullPointerException {
         logger.trace("Switching to previous view.");
         View.switchSceneTo(SettingsView.getInstance(), ((Reversible) SettingsView.getInstance()).getPreviousView());
     }

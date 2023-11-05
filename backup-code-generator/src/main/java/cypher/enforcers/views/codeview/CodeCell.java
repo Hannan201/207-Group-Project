@@ -42,8 +42,10 @@ public class CodeCell extends ListCell<Code> {
      * @param parentListView The current list view this cell belongs to.
      * @throws IOException If any errors occur when loading the FXML
      * file for this cell.
+     * @throws NullPointerException If the FXML file for the code cell
+     * cannot be found from resources.
      */
-    public CodeCell(ListView<Code> parentListView) throws IOException {
+    public CodeCell(ListView<Code> parentListView) throws IOException, NullPointerException {
         // Each cell only loads the FXML file once to speed up runtime
         FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/CodeViewFXML/CodeCell.fxml"));
 

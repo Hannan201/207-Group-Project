@@ -86,8 +86,10 @@ public class HomePageController implements Initializable {
      * user to sign-in.
      *
      * @throws IOException if any errors occur while loading in the views.
+     * @throws NullPointerException If the sign-in view cannot be created
+     * due to missing data.
      */
-    public void handleSignIn() throws IOException {
+    public void handleSignIn() throws IOException, NullPointerException {
         logger.trace("Engaging SignInView window.");
         View.loadNewWindow(SignInView.getInstance());
     }
@@ -97,8 +99,10 @@ public class HomePageController implements Initializable {
      * user to sign in.
      *
      * @throws IOException if any errors occur while loading in the views.
+     * @throws NullPointerException If the sign-up view cannot be created
+     * due to missing data.
      */
-    public void handleSignUp() throws IOException {
+    public void handleSignUp() throws IOException, NullPointerException {
         logger.trace("Engaging SignUpView window.");
         View.loadNewWindow(SignUpView.getInstance());
     }

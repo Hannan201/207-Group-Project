@@ -117,8 +117,11 @@ public abstract class View {
 
     /**
      * Switch this view to light mode.
+     *
+     * @throws NullPointerException If any of the images
+     * cannot be found from resources.
      */
-    public void switchToLightMode() {
+    public void switchToLightMode() throws NullPointerException {
         this.currentThemePath = this.cssFilesPaths[0];
 
         Utilities.updateIcons(
@@ -133,8 +136,11 @@ public abstract class View {
 
     /**
      * Switch this view to dark mode.
+     *
+     * @throws NullPointerException If any of the images
+     * cannot be found from resources.
      */
-    public void switchToDarkMode() {
+    public void switchToDarkMode() throws NullPointerException {
         this.currentThemePath = this.cssFilesPaths[1];
 
         Utilities.updateIcons(
@@ -149,8 +155,11 @@ public abstract class View {
 
     /**
      * Switch this view to high contrast mode.
+     *
+     * @throws NullPointerException If any of the images
+     * cannot be found from resources.
      */
-    public void switchToHighContrastMode() {
+    public void switchToHighContrastMode() throws NullPointerException {
         this.currentThemePath = this.cssFilesPaths[2];
 
         Utilities.updateIcons(
@@ -196,8 +205,10 @@ public abstract class View {
      * @param fileName The name of the FXML file.
      * @throws IOException If any errors occur while loading the
      * FXML file.
+     * @throws NullPointerException If the FXML file cannot be found from
+     * resources.
      */
-    protected void loadRoot(String fileName) throws IOException {
+    protected void loadRoot(String fileName) throws IOException, NullPointerException {
         FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/" + fileName));
         loader.setControllerFactory(CONTROLLER_FACTORY);
         this.root = loader.load();
@@ -206,8 +217,11 @@ public abstract class View {
     /**
      * Load the stylesheets (CSS files) for this
      * view.
+     *
+     * @throws NullPointerException If any of the CSS files cannot
+     * be found from resources.
      */
-    protected void loadStylesheets(String ... files) {
+    protected void loadStylesheets(String ... files) throws NullPointerException {
         for (int i = 0; i < files.length; i++) {
             this.cssFilesPaths[i] = Utilities.loadFileByURL(
                     "css/" + files[i]

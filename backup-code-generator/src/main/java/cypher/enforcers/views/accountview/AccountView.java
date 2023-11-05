@@ -3,8 +3,6 @@ package cypher.enforcers.views.accountview;
 import cypher.enforcers.controllers.AccountViewController;
 import cypher.enforcers.views.View;
 import javafx.fxml.FXMLLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
 import cypher.enforcers.views.interfaces.Reversible;
 
@@ -17,9 +15,6 @@ import java.io.IOException;
  */
 
 public class AccountView extends View implements Reversible {
-
-    // Logger for the account view.
-    private static final Logger logger = LoggerFactory.getLogger(AccountView.class);
 
     // An instance for this account-viewer view.
     private static View firstInstance = null;
@@ -35,8 +30,10 @@ public class AccountView extends View implements Reversible {
      *
      * @throws IOException If any errors occur when creating the accounts
      * view.
+     * @throws NullPointerException If there's any missing data for
+     * creating the accounts view.
      */
-    private AccountView() throws IOException {
+    private AccountView() throws IOException, NullPointerException {
         initUI();
     }
 
@@ -46,8 +43,10 @@ public class AccountView extends View implements Reversible {
      * @return Instance of this account-viewer view.
      * @throws IOException If any errors occur when trying to
      * retrieve the accounts view.
+     * @throws NullPointerException If there's any missing data when
+     * trying to retrieve the accounts view.
      */
-    public static View getInstance() throws IOException {
+    public static View getInstance() throws IOException, NullPointerException {
         if (firstInstance == null) {
             firstInstance = new AccountView();
         }
@@ -61,9 +60,11 @@ public class AccountView extends View implements Reversible {
      *
      * @throws IOException If any errors occur when loading in the
      * FXML file for the accounts view.
+     * @throws NullPointerException If the FXML file or CSS files f
+     * for the accounts view cannot be found from resources.
      */
     @Override
-    protected void initUI() throws IOException {
+    protected void initUI() throws IOException, NullPointerException {
         FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountsView.fxml"));
         loader.setControllerFactory(View.CONTROLLER_FACTORY);
         this.setRoot(loader.load());

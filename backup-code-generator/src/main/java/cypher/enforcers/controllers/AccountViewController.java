@@ -286,8 +286,10 @@ public class AccountViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the home
      * page view.
+     * @throws NullPointerException If the home page view cannot be created
+     * due to missing data.
      */
-    public void handleLogout() throws IOException {
+    public void handleLogout() throws IOException, NullPointerException {
         if (userModel.logOutUser()) {
             logger.trace("Switching from the AccountView to the HomePageView.");
             View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
@@ -299,8 +301,10 @@ public class AccountViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the settings views or
      * accounts view.
+     * @throws NullPointerException If the settings view or accounts view
+     * cannot be created due to missing data.
      */
-    public void handleSettings() throws IOException {
+    public void handleSettings() throws IOException, NullPointerException {
         logger.debug("Setting the previous scene for the SettingsView to the AccountView.");
         ((Reversible) SettingsView.getInstance()).setPreviousView(AccountView.getInstance());
 
@@ -316,8 +320,10 @@ public class AccountViewController implements Initializable {
      *
      * @throws IOException if any errors occur while loading in the
      * create account view.
+     * @throws NullPointerException If the create account view cannot be
+     * created due to missing data.
      */
-    public void handleAddAccount() throws IOException {
+    public void handleAddAccount() throws IOException, NullPointerException {
         logger.trace("Engaging CreateAccountView window.");
         View.loadNewWindow(AddAccountView.getInstance());
     }

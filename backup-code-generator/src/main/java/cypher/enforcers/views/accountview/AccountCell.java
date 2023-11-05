@@ -49,8 +49,9 @@ public class AccountCell extends ListCell<Account> {
      * Create a new account cell.
      *
      * @throws IOException If any errors occur when creating this cell.
+     * @throws NullPointerException If there's missing data for this cell.
      */
-    public AccountCell() throws IOException {
+    public AccountCell() throws IOException, NullPointerException {
         loadFXML();
     }
 
@@ -58,8 +59,10 @@ public class AccountCell extends ListCell<Account> {
      * Load the FXML file for the account cell.
      *
      * @throws IOException If the file could not be loaded correctly.
+     * @throws NullPointerException If the FXML file for the account
+     * cell cannot be found from resources.
      */
-    private void loadFXML() throws IOException {
+    private void loadFXML() throws IOException, NullPointerException {
         FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountCell.fxml"));
 
         /*

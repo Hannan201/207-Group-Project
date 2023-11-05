@@ -27,6 +27,9 @@ public class SwitchToHighContrastMode implements Command {
     /**
      * Execute this command to switch the views to
      * high contrast mode.
+     *
+     * @throws NullPointerException If there's any missing data for
+     * switching the theme to high contrast mode (such as icons).
      */
     @Override
     public void execute() {

@@ -225,8 +225,11 @@ public class SignUpController implements Initializable {
      *          handle method.
      * @throws IOException if any errors occur while loading in the
      * accounts view.
+     * @throws NullPointerException If the accounts view cannot be created
+     * due to missing data or if the default theme cannot be set due to
+     * missing data.
      */
-    public void handleSignUp(ActionEvent e) throws IOException {
+    public void handleSignUp(ActionEvent e) throws IOException, NullPointerException {
         // Switching theme (sample code), should be included in the Controller class event handlers
         // This does not work for popups because those need a new stage to be created
 
