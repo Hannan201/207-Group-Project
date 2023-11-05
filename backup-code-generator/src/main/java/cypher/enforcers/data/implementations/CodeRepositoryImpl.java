@@ -66,11 +66,11 @@ public class CodeRepositoryImpl implements CodeRepository {
         List<CodeEntity> result = codeDAO.getCodes(id);
 
         if (!Objects.isNull(result)) {
-            logger.trace("Accounts retrieved for account with ID {}.", id);
+            logger.trace("Codes retrieved for account with ID {}.", id);
             return result;
         }
 
-        logger.warn("No accounts found for account with ID {}.", id);
+        logger.trace("No codes found for account with ID {}.", id);
         return Collections.emptyList();
     }
 
