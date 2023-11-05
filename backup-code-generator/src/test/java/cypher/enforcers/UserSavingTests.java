@@ -26,7 +26,7 @@ public class UserSavingTests {
     @Test
     public void saveUserTest() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_create.db");
+        dbService.connect("user_create.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
@@ -51,7 +51,7 @@ public class UserSavingTests {
     @Test
     public void saveUserThemeTest() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_create_2.db");
+        dbService.connect("user_create_2.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);

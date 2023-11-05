@@ -26,7 +26,7 @@ public class UserSavingAndLoadingTests {
         // Password: hellobro
 
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_read_r.db");
+        dbService.connect("user_read_r.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
@@ -65,7 +65,7 @@ public class UserSavingAndLoadingTests {
     @Test
     public void testUserThemeUpdate() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_update_r.db");
+        dbService.connect("user_update_r.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);

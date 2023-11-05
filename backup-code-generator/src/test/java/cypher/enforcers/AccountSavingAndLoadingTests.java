@@ -17,7 +17,7 @@ public class AccountSavingAndLoadingTests {
     @Test
     public void accountCreation() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/account_create_r.db");
+        dbService.connect("account_create_r.db");
 
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
@@ -40,7 +40,7 @@ public class AccountSavingAndLoadingTests {
         assertTrue(optionalAccount.isPresent(), "Account cannot be created.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/account_create_r.db");
+        dbService.connect("account_create_r.db");
 
         accounts = accountRepository.readAll(1);
 
@@ -62,7 +62,7 @@ public class AccountSavingAndLoadingTests {
     @Test
     public void accountDestruction() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/account_delete_r.db");
+        dbService.connect("account_delete_r.db");
 
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
@@ -82,7 +82,7 @@ public class AccountSavingAndLoadingTests {
         assertTrue(optionalAccount.isPresent(), "Unable to delete account.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/account_delete_r.db");
+        dbService.connect("account_delete_r.db");
 
         accounts = accountRepository.readAll(2);
 

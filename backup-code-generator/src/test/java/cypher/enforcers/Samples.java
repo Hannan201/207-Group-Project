@@ -23,11 +23,18 @@ public enum Samples {
     // Holds the path to the file.
     private String path;
 
-    Samples(String name) {
+    /**
+     * Create a new sample for back up codes.
+     *
+     * @param name Name of the social media platform.
+     * @throws NullPointerException If the file for the platform cannot
+     * be found.
+     */
+    Samples(String name) throws NullPointerException {
         try {
             this.path = Paths.get(
                     Utilities.loadFileByURL(
-                            "/cypher/enforcers/Sample Text Files/" + name + "_codes_sample.txt"
+                            "Sample Text Files/" + name + "_codes_sample.txt"
                     ).toURI()
             ).toString();
         } catch (URISyntaxException e) {

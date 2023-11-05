@@ -114,6 +114,9 @@ public class SearchAccountTests {
     }
  }
 
+/**
+ * This class acts as a fake account repository for testing.
+ */
  class MockRepository implements AccountRepository {
 
      @Override

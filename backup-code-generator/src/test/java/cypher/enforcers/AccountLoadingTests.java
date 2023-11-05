@@ -18,7 +18,7 @@ public class AccountLoadingTests {
     @Test
     public void loadAllAccounts() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/account_read.db");
+        dbService.connect("account_read.db");
 
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);
@@ -48,7 +48,7 @@ public class AccountLoadingTests {
     @Test
     public void loadingWithID() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/account_read.db");
+        dbService.connect("account_read.db");
 
         AccountDAO accountDAO = new AccountDAOImpl(dbService);
         AccountRepository accountRepository = new AccountRepositoryImpl(accountDAO);

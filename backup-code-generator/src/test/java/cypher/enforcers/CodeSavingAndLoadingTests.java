@@ -21,7 +21,7 @@ public class CodeSavingAndLoadingTests {
     @Test
     public void codeCreation() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/code_create_r.db");
+        dbService.connect("code_create_r.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
@@ -41,7 +41,7 @@ public class CodeSavingAndLoadingTests {
         assertTrue(optionalCode.isPresent(), "Code cannot be created.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/code_create_r.db");
+        dbService.connect("code_create_r.db");
 
         codes = codeRepository.readAll(2);
         assertEquals(codes.size(), 1, "Total number of codes doest not match.");
@@ -56,7 +56,7 @@ public class CodeSavingAndLoadingTests {
     @Test
     public void codeDestruction() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/code_delete_r.db");
+        dbService.connect("code_delete_r.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
@@ -73,7 +73,7 @@ public class CodeSavingAndLoadingTests {
         assertTrue(optionalCode.isPresent(), "Failed to delete code.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/code_delete_r.db");
+        dbService.connect("code_delete_r.db");
 
         Optional<CodeEntity> code = codeRepository.read(50);
 
@@ -85,7 +85,7 @@ public class CodeSavingAndLoadingTests {
     @Test
     public void codeAlteration() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/code_update_r.db");
+        dbService.connect("code_update_r.db");
 
         CodeDAO codeDAO = new CodeDAOImpl(dbService);
         CodeRepository codeRepository = new CodeRepositoryImpl(codeDAO);
@@ -104,7 +104,7 @@ public class CodeSavingAndLoadingTests {
         assertTrue(optionalCode.isPresent(), "Failed to update code.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/code_update_r.db");
+        dbService.connect("code_update_r.db");
 
         codeOptional = codeRepository.read(33);
         assertTrue(codeOptional.isPresent(), "Code is not present.");

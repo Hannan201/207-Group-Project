@@ -42,7 +42,7 @@ public class ApplicationIntegrationTests {
          */
 
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/interaction_1.db");
+        dbService.connect("interaction_1.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
@@ -113,7 +113,7 @@ public class ApplicationIntegrationTests {
         assertTrue(authService.logUserOut(user.getID()), "Cannot log user out.");
 
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/interaction_1.db");
+        dbService.connect("interaction_1.db");
 
         assertTrue(authService.authenticateUser("Test", "password"), "User cannot log in.");
 
@@ -184,7 +184,7 @@ public class ApplicationIntegrationTests {
          */
 
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/interaction_2.db");
+        dbService.connect("interaction_2.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
@@ -243,7 +243,7 @@ public class ApplicationIntegrationTests {
 
         assertTrue(authService.logUserOut(userDTO.id()), "User cannot log out.");
         dbService.disconnect();
-        dbService.connect("/cypher/enforcers/interaction_2.db");
+        dbService.connect("interaction_2.db");
 
         assertTrue(authService.authenticateUser("Test", "password"), "Unable to login user.");
 
@@ -285,7 +285,7 @@ public class ApplicationIntegrationTests {
         - log out
          */
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/interaction_3.db");
+        dbService.connect("interaction_3.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);

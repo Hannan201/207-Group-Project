@@ -88,9 +88,9 @@ val cleanUpTask: TaskProvider<Delete> = tasks.register<Delete>("cleanUpTestFiles
     // This is to remove files that were copied from resources.
     // These files are modified after the tests are complete, so they
     // need to be copied again to return to their original state.
-    delete(fileTree(layout.buildDirectory.dir("classes/java")) {
+    delete(fileTree(layout.projectDirectory) {
         include("*.db")
-        include("*.pfx")
+        exclude("database.db")
     })
 }
 
@@ -98,8 +98,8 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 
-    // clean up old files.
-    dependsOn(cleanUpTask)
+    // Clean up old files.
+    finalizedBy(cleanUpTask)
 
     // Show tests that failed and passed.
     testLogging {

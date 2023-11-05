@@ -22,7 +22,7 @@ public class UserLoadingTests {
     @Test
     public void loadsUsernames() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_read.db");
+        dbService.connect("user_read.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
@@ -38,7 +38,7 @@ public class UserLoadingTests {
     @Test
     public void loadLoggedInUser() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_read_2.db");
+        dbService.connect("user_read_2.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
 
@@ -70,7 +70,7 @@ public class UserLoadingTests {
     @Test
     public void loadsDataForAuthentication() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_read_3.db");
+        dbService.connect("user_read_3.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
@@ -92,7 +92,7 @@ public class UserLoadingTests {
     @Test
     public void loadsDataForAuthenticationSecond() {
         DatabaseService dbService = new SQLiteHelper();
-        dbService.connect("/cypher/enforcers/user_read_4.db");
+        dbService.connect("user_read_4.db");
 
         UserDAO userDAO = new UserDAOImpl(dbService);
         UserRepository userRepository = new UserRepositoryImpl(userDAO);
