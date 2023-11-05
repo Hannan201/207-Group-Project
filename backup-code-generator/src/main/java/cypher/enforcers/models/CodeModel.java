@@ -1,5 +1,6 @@
 package cypher.enforcers.models;
 
+import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
 import cypher.enforcers.data.entities.CodeEntity;
 import cypher.enforcers.data.security.dtos.Account;
 import cypher.enforcers.data.security.dtos.Code;
@@ -126,26 +127,29 @@ public class CodeModel {
             codes.clear();
         }
     }
-
     /**
-     * Add a new code to an account.
+     * Add a list of codes for an account based on the behavior object
+     * which determines the source.
      *
-     * @param account The account to add the code for.
-     * @param code The code as a string.
-     * @return True if code was added, false otherwise.
+     * @param account The account to add the codes for.
+     * @param source The behavior object which contains the source.
      */
-    public boolean addCode(Account account, String code) {
-        CodeEntity c = new CodeEntity();
-        c.setCode(code);
-        c.setAccountID(account.id());
+    public void addCodes(Account account, ReadCodeBehavior source) {
+        List<String> returned = source.readCodes();
+        for (String s : returned) {
+            if (!s.isEmpty()) {
+                CodeEntity c = new CodeEntity();
+                c.setCode(s);
+                c.setAccountID(account.id());
 
-        Optional<CodeEntity> optionalCode = codeRepository.create(c);
-        if (optionalCode.isPresent()) {
-            codes.add(mapper.apply(optionalCode.get()));
-            return true;
+                Optional<CodeEntity> optionalCode = codeRepository.create(c);
+                if (optionalCode.isEmpty()) {
+                    return;
+                }
+
+                codes.add(mapper.apply(optionalCode.get()));
+            }
         }
-
-        return false;
     }
 
     /**

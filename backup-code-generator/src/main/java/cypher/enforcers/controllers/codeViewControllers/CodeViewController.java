@@ -400,16 +400,7 @@ public class CodeViewController implements Initializable {
      */
     private void addCodes(ReadCodeBehavior behavior) {
         if (!Objects.isNull(accountModel.getCurrentAccount())) {
-            List<String> returned = behavior.readCodes();
-            for (String s : returned) {
-                // Don't want to add empty codes.
-                if (!s.isEmpty()) {
-                    if (!codeModel.addCode(accountModel.getCurrentAccount(), s)) {
-                        return;
-                    }
-                }
-            }
-
+            codeModel.addCodes(accountModel.getCurrentAccount(), behavior);
             addCodeInput.setText("");
         }
     }
