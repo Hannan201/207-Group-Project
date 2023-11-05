@@ -1,5 +1,8 @@
 package cypher.enforcers.utilities;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
 import cypher.enforcers.commands.Command;
 import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
@@ -16,6 +19,9 @@ import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.accountview.AccountView;
 import cypher.enforcers.views.codeview.CodeView;
 import cypher.enforcers.views.themes.Theme;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +43,16 @@ public class Utilities {
     // Logger for the utility class.
     private static final Logger logger = LoggerFactory.getLogger(Utilities.class);
 
+    // Path to the logback configuration file (relative to the resources folder).
+    private static final String PATH_TO_LOGBACK_CONFIG = "logback.xml";
+
     /**
      * Adjust the theme for this application.
      *
      * @param theme The new theme to switch to.
+     * @throws IOException if any errors occur while loading in the views.
      */
-    public static void adjustTheme(Theme theme) {
+    public static void adjustTheme(Theme theme) throws IOException {
         if (theme == null) {
             logger.debug("Cannot switch theme because it's null. Aborting request.");
             return;
@@ -59,8 +69,9 @@ public class Utilities {
      *
      * @param theme Name of the theme.
      * @return The ThemeSwitcher ready to change all the themes.
+     * @throws IOException if any errors occur while loading in the views.
      */
-    private static ThemeSwitcher getThemeSwitcher(Theme theme) {
+    private static ThemeSwitcher getThemeSwitcher(Theme theme) throws IOException {
         List<View> views = List.of(
                 HomePageView.getInstance(),
                 SignUpView.getInstance(),
@@ -87,11 +98,12 @@ public class Utilities {
      * a URL.
      *
      * @param path Path to the file relative to the resource folder.
+     * @throws NullPointerException If resource can't be found.
      */
-    public static URL loadFileByURL(String path) {
-        logger.debug("Attempting to load file from resource: " + path);
+    public static URL loadFileByURL(String path) throws NullPointerException {
+        logger.debug("Attempting to load file from resource: /cypher/enforcers/" + path);
         return Objects.requireNonNull(
-                Utilities.class.getResource(path)
+                Utilities.class.getResource("/cypher/enforcers/" + path)
         );
     }
 
@@ -100,11 +112,12 @@ public class Utilities {
      * a InputStream.
      *
      * @param path Path to the file relative to the resource folder.
+     * @throws NullPointerException If resource can't be found.
      */
-    public static InputStream loadFileByInputStream(String path) {
-        logger.debug("Attempting to load file (as input stream) from resource: " + path);
+    public static InputStream loadFileByInputStream(String path) throws NullPointerException {
+        logger.debug("Attempting to load file (as input stream) from resource: /cypher/enforcers/" + path);
         return Objects.requireNonNull(
-                Utilities.class.getResourceAsStream(path)
+                Utilities.class.getResourceAsStream("/cypher/enforcers/" + path)
         );
     }
 
@@ -230,5 +243,66 @@ public class Utilities {
         CodeRepository repository = new CodeRepositoryImpl(codeDAO);
         CodeDTOMapper mapper = new CodeDTOMapper();
         return new CodeModel(repository, mapper);
+    }
+
+    /**
+     * Prepare additional resources for this application such as
+     * any event handlers, streams, resources etc.
+     *
+     * @param stage The main window for this application.
+     */
+    public static void prepare(Stage stage) {
+        configureLogger();
+        registerExceptionHandler(stage);
+    }
+
+    /**
+     * Register an event handler for when an uncaught exception occurs
+     * in this application.
+     *
+     * @param stage The main stage for this application. Used to close
+     *              any resources such as files, streams, connections, etc.
+     */
+    private static void registerExceptionHandler(Stage stage) {
+        Thread thread = Thread.currentThread();
+
+        if (thread.getName().equals("JavaFX Application Thread")) {
+            thread.setUncaughtExceptionHandler(
+                    (t, e) -> onException(stage, e)
+            );
+        }
+    }
+
+    /**
+     * Handle method for when an uncaught exception occurs in this
+     * application.
+     *
+     * @param stage The main stage for this application.
+     * @param e The exception.
+     */
+    public static void onException(Stage stage, Throwable e) {
+        logger.error("Error occurred, shutting down. Cause: ", e);
+        stage.fireEvent(
+                new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST)
+        );
+        Platform.exit();
+    }
+
+    /**
+     * Configure logger to use configuration file.
+     */
+    private static void configureLogger() {
+        logger.trace("Configuring logger...");
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        loggerContext.reset();
+        JoranConfigurator configurator = new JoranConfigurator();
+        configurator.setContext(loggerContext);
+        try (InputStream configStream = Utilities.loadFileByInputStream(PATH_TO_LOGBACK_CONFIG)) {
+            configurator.doConfigure(configStream); // loads logback file
+        } catch (JoranException e) {
+            logger.error(String.format("Failed to configure logback file: %s. Cause: ", PATH_TO_LOGBACK_CONFIG), e);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load logback file: %s. Cause: ", PATH_TO_LOGBACK_CONFIG), ioException);
+        }
     }
 }

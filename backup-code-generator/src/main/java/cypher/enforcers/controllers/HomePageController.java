@@ -17,6 +17,8 @@ import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -82,8 +84,10 @@ public class HomePageController implements Initializable {
     /**
      * A handle method for the Sign-In button that opens a pop-up to allow the
      * user to sign-in.
+     *
+     * @throws IOException if any errors occur while loading in the views.
      */
-    public void handleSignIn() {
+    public void handleSignIn() throws IOException {
         logger.trace("Engaging SignInView window.");
         View.loadNewWindow(SignInView.getInstance());
     }
@@ -91,8 +95,10 @@ public class HomePageController implements Initializable {
     /**
      * A handle method for the Sign-Up button that opens a pop-up to allow the
      * user to sign in.
+     *
+     * @throws IOException if any errors occur while loading in the views.
      */
-    public void handleSignUp() {
+    public void handleSignUp() throws IOException {
         logger.trace("Engaging SignUpView window.");
         View.loadNewWindow(SignUpView.getInstance());
     }
@@ -105,8 +111,12 @@ public class HomePageController implements Initializable {
                 if (oldScene == null && newScene != null) {
                     newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
                         if (oldWindow == null && newWindow != null) {
-                            Utilities.adjustTheme(userModel.getCurrentUser().theme());
-                            View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+                            try {
+                                Utilities.adjustTheme(userModel.getCurrentUser().theme());
+                                View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+                            } catch (IOException e) {
+                                throw new UncheckedIOException(e);
+                            }
                         }
                     }));
                 }

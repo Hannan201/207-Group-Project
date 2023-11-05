@@ -1,5 +1,7 @@
 package cypher.enforcers.views;
 
+import java.io.IOException;
+
 /**
  * This class is responsible for displaying a home
  * page view for this application.
@@ -12,8 +14,11 @@ public class HomePageView extends View {
 
     /**
      * Create a new home page view.
+     *
+     * @throws IOException If any errors occur when creating the home page
+     * view.
      */
-    private HomePageView() {
+    private HomePageView() throws IOException {
         initUI();
     }
 
@@ -21,8 +26,10 @@ public class HomePageView extends View {
      * Return the instance of this home page view.
      *
      * @return Instance of this home page view.
+     * @throws IOException If any errors occur when trying to
+     * retrieve the sign-up view.
      */
-    public static View getInstance() {
+    public static View getInstance() throws IOException {
         if (firstInstance == null) {
             firstInstance = new HomePageView();
         }
@@ -33,9 +40,12 @@ public class HomePageView extends View {
     /**
      * Initialise the UI elements for this home page
      * view.
+     *
+     * @throws IOException If any errors occur when loading in the
+     * FXML file for the home page view.
      */
     @Override
-    protected void initUI() {
+    protected void initUI() throws IOException {
         this.loadRoot("HomePageView.fxml");
 
         this.loadStylesheets(

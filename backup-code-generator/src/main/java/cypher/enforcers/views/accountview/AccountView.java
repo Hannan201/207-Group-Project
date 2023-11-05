@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
 import cypher.enforcers.views.interfaces.Reversible;
 
+import java.io.IOException;
+
 /**
  * This class is responsible for displaying a view
  * to show all the social media accounts for a specific
@@ -30,8 +32,11 @@ public class AccountView extends View implements Reversible {
 
     /**
      * Create a new account-viewer view.
+     *
+     * @throws IOException If any errors occur when creating the accounts
+     * view.
      */
-    private AccountView() {
+    private AccountView() throws IOException {
         initUI();
     }
 
@@ -39,8 +44,10 @@ public class AccountView extends View implements Reversible {
      * Return the instance of this account-viewer view.
      *
      * @return Instance of this account-viewer view.
+     * @throws IOException If any errors occur when trying to
+     * retrieve the accounts view.
      */
-    public static View getInstance() {
+    public static View getInstance() throws IOException {
         if (firstInstance == null) {
             firstInstance = new AccountView();
         }
@@ -51,18 +58,16 @@ public class AccountView extends View implements Reversible {
     /**
      * Initialise the UI elements for this code-viewer
      * view.
+     *
+     * @throws IOException If any errors occur when loading in the
+     * FXML file for the accounts view.
      */
     @Override
-    protected void initUI() {
-        try {
-            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountsView.fxml"));
-            loader.setControllerFactory(View.CONTROLLER_FACTORY);
-            this.setRoot(loader.load());
-            this.controller = loader.getController();
-        } catch (Exception e) {
-            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/AccountsView.fxml. Cause: ", e);
-            return;
-        }
+    protected void initUI() throws IOException {
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountsView.fxml"));
+        loader.setControllerFactory(View.CONTROLLER_FACTORY);
+        this.setRoot(loader.load());
+        this.controller = loader.getController();
 
         this.loadStylesheets(
                 "AccountsView.css",

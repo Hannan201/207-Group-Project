@@ -21,6 +21,8 @@ import cypher.enforcers.views.accountview.AccountView;
 import cypher.enforcers.views.HomePageView;
 import cypher.enforcers.views.View;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -102,7 +104,13 @@ public class SignUpController implements Initializable {
                 Bindings.concat("Cannot sign up:\n", validator.createStringBinding()));
         box.getChildren().add(createAccountWrapper);
 
-        signUp.setOnAction(this::handleSignUp);
+        signUp.setOnAction(event -> {
+            try {
+                handleSignUp(event);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
 
         // checks if the username field is empty
 
@@ -215,8 +223,10 @@ public class SignUpController implements Initializable {
      *
      * @param e ActionEven that triggered this
      *          handle method.
+     * @throws IOException if any errors occur while loading in the
+     * accounts view.
      */
-    public void handleSignUp(ActionEvent e) {
+    public void handleSignUp(ActionEvent e) throws IOException {
         // Switching theme (sample code), should be included in the Controller class event handlers
         // This does not work for popups because those need a new stage to be created
 

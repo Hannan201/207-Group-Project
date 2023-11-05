@@ -19,6 +19,7 @@ import cypher.enforcers.views.codeview.CodeView;
 import cypher.enforcers.views.View;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 /**
  * Class to represent an account cell.
@@ -46,13 +47,11 @@ public class AccountCell extends ListCell<Account> {
 
     /**
      * Create a new account cell.
+     *
+     * @throws IOException If any errors occur when creating this cell.
      */
-    public AccountCell() {
-        try {
-            loadFXML();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public AccountCell() throws IOException {
+        loadFXML();
     }
 
     /**
@@ -61,7 +60,7 @@ public class AccountCell extends ListCell<Account> {
      * @throws IOException If the file could not be loaded correctly.
      */
     private void loadFXML() throws IOException {
-        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/AccountCell.fxml"));
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/AccountCell.fxml"));
 
         /*
         The previous line of:
@@ -126,8 +125,12 @@ public class AccountCell extends ListCell<Account> {
 
             setOnMouseClicked(mouseClickedEvent -> {
                 if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
-                    logger.trace("Switching from the AccountView to the CodeView.");
-                    View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
+                    try {
+                        logger.trace("Switching from the AccountView to the CodeView.");
+                        View.switchSceneTo(AccountView.getInstance(), CodeView.getInstance());
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
                 }
             });
 

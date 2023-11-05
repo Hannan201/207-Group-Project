@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
 import cypher.enforcers.views.interfaces.Reversible;
 
+import java.io.IOException;
+
 /**
  * This class is responsible for displaying a view
  * which shows all the backup codes for a specific
@@ -30,8 +32,11 @@ public class CodeView extends View implements Reversible {
 
     /**
      * Create a new code-viewer view.
+     *
+     * @throws IOException If any errors occur when creating the code
+     * view.
      */
-    private CodeView() {
+    private CodeView() throws IOException {
         initUI();
     }
 
@@ -39,8 +44,10 @@ public class CodeView extends View implements Reversible {
      * Return the instance of this code-viewer view.
      *
      * @return Instance of this code-viewer view.
+     * @throws IOException If any errors occur when trying to
+     * retrieve the code view.
      */
-    public static View getInstance() {
+    public static View getInstance() throws IOException {
         if (firstInstance == null) {
             firstInstance = new CodeView();
         }
@@ -51,18 +58,16 @@ public class CodeView extends View implements Reversible {
     /**
      * Initialise the UI elements for this code-viewer
      * view.
+     *
+     * @throws IOException If any errors occur when loading in the
+     * FXML file for the code view.
      */
     @Override
-    protected void initUI() {
-        try {
-            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/CodeViewFXML/CodeView.fxml"));
-            loader.setControllerFactory(View.CONTROLLER_FACTORY);
-            this.setRoot(loader.load());
-            this.controller = loader.getController();
-        } catch (Exception e) {
-            logger.error("Failed to load FXML file from resources: /cypher/enforcers/view/CodeViewFXML/CodeView.fxml. Cause: ", e);
-            return;
-        }
+    protected void initUI() throws IOException {
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/CodeViewFXML/CodeView.fxml"));
+        loader.setControllerFactory(View.CONTROLLER_FACTORY);
+        this.setRoot(loader.load());
+        this.controller = loader.getController();
 
         this.loadStylesheets(
                 "CodeView.css",

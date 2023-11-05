@@ -25,6 +25,7 @@ import cypher.enforcers.views.*;
 import cypher.enforcers.views.interfaces.Reversible;
 import cypher.enforcers.views.accountview.AccountCellFactory;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -259,7 +260,7 @@ public class AccountViewController implements Initializable {
                         }
 
                         if (!result.isEmpty()) {
-                            logger.info("Found {} accounts matching name {}.", amount, key);
+                            logger.info("Found {} account(s) matching name {}.", amount, key);
                         }
 
                         logger.debug("Finished search for account with name {}.", key);
@@ -282,8 +283,11 @@ public class AccountViewController implements Initializable {
     /**
      * A handle method for the logout button which saves the user data and changes the current view
      * to the HomePageView.
+     *
+     * @throws IOException if any errors occur while loading in the home
+     * page view.
      */
-    public void handleLogout() {
+    public void handleLogout() throws IOException {
         if (userModel.logOutUser()) {
             logger.trace("Switching from the AccountView to the HomePageView.");
             View.switchSceneTo(AccountView.getInstance(), HomePageView.getInstance());
@@ -292,8 +296,11 @@ public class AccountViewController implements Initializable {
 
     /**
      * A handle method for the settings button which changes the current view to the SettingsView.
+     *
+     * @throws IOException if any errors occur while loading in the settings views or
+     * accounts view.
      */
-    public void handleSettings() {
+    public void handleSettings() throws IOException {
         logger.debug("Setting the previous scene for the SettingsView to the AccountView.");
         ((Reversible) SettingsView.getInstance()).setPreviousView(AccountView.getInstance());
 
@@ -306,8 +313,11 @@ public class AccountViewController implements Initializable {
      * -
      * Generates a new AddAccount pop up where the user can
      * create an account and have it reflected in the AccountView.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * create account view.
      */
-    public void handleAddAccount() {
+    public void handleAddAccount() throws IOException {
         logger.trace("Engaging CreateAccountView window.");
         View.loadNewWindow(AddAccountView.getInstance());
     }

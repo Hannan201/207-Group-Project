@@ -17,8 +17,6 @@ import javafx.stage.Stage;
 import cypher.enforcers.data.entities.AccountEntity;
 
 import javafx.util.Callback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
@@ -30,9 +28,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 
 public abstract class View {
-
-    // Logger for the view class.
-    private static final Logger logger = LoggerFactory.getLogger(View.class);
 
     // Parent root of this view, which is
     // the layout where all the components
@@ -102,8 +97,11 @@ public abstract class View {
 
     /**
      * Initialise the UI elements for this view.
+     *
+     * @throws IOException If any errors occur for when the
+     * view is being loaded via FXML.
      */
-    protected abstract void initUI();
+    protected abstract void initUI() throws IOException;
 
     /**
      * Get the path to the CSS file (in
@@ -125,11 +123,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 AccountEntity.getIcons(),
-                "/cypher/enforcers/images/icons8-discord-100.png",
-                "/cypher/enforcers/images/icons8-github-100.png",
-                "/cypher/enforcers/images/icons8-google-100.png",
-                "/cypher/enforcers/images/icons8-shopify-100.png",
-                "/cypher/enforcers/images/icons8-app-100.png"
+                "images/icons8-discord-100.png",
+                "images/icons8-github-100.png",
+                "images/icons8-google-100.png",
+                "images/icons8-shopify-100.png",
+                "images/icons8-app-100.png"
         );
     }
 
@@ -141,11 +139,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 AccountEntity.getIcons(),
-                "/cypher/enforcers/images/discord_darkmode.png",
-                "/cypher/enforcers/images/github_darkmode.png",
-                "/cypher/enforcers/images/google_darkmode.png",
-                "/cypher/enforcers/images/shopify_darkmode.png",
-                "/cypher/enforcers/images/app_darkmode.png"
+                "images/discord_darkmode.png",
+                "images/github_darkmode.png",
+                "images/google_darkmode.png",
+                "images/shopify_darkmode.png",
+                "images/app_darkmode.png"
         );
     }
 
@@ -157,11 +155,11 @@ public abstract class View {
 
         Utilities.updateIcons(
                 AccountEntity.getIcons(),
-                "/cypher/enforcers/images/hc-discord.png",
-                "/cypher/enforcers/images/hc-github.png",
-                "/cypher/enforcers/images/hc-google.png",
-                "/cypher/enforcers/images/hc-shopify.png",
-                "/cypher/enforcers/images/hc-app.png"
+                "images/hc-discord.png",
+                "images/hc-github.png",
+                "images/hc-google.png",
+                "images/hc-shopify.png",
+                "images/hc-app.png"
         );
     }
 
@@ -196,15 +194,13 @@ public abstract class View {
      * store it.
      *
      * @param fileName The name of the FXML file.
+     * @throws IOException If any errors occur while loading the
+     * FXML file.
      */
-    protected void loadRoot(String fileName) {
-        try {
-            FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/" + fileName));
-            loader.setControllerFactory(CONTROLLER_FACTORY);
-            this.root = loader.load();
-        } catch (IOException e) {
-            logger.error(String.format("Failed to load FXML file: %s. Cause: ", fileName), e);
-        }
+    protected void loadRoot(String fileName) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/" + fileName));
+        loader.setControllerFactory(CONTROLLER_FACTORY);
+        this.root = loader.load();
     }
 
     /**
@@ -214,7 +210,7 @@ public abstract class View {
     protected void loadStylesheets(String ... files) {
         for (int i = 0; i < files.length; i++) {
             this.cssFilesPaths[i] = Utilities.loadFileByURL(
-                    "/cypher/enforcers/css/" + files[i]
+                    "css/" + files[i]
                     ).toExternalForm();
         }
 

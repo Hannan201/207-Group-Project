@@ -24,6 +24,7 @@ import cypher.enforcers.views.interfaces.Reversible;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -93,8 +94,16 @@ public class SettingsViewController implements Initializable {
         this.accountModel = model;
     }
 
+    /**
+     * @param url            The location used to resolve relative paths for the root object, or
+     *                       {@code null} if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or {@code null} if
+     *                       the root object was not localized.
+     * @throws UncheckedIOException If any errors occur while loading
+     * in all the views for the theme switcher.
+     */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle) throws UncheckedIOException {
         /*
         The copyright label for some reason would overflow when the
         screen gets to small, and the text would appear on the buttons.
@@ -113,16 +122,18 @@ public class SettingsViewController implements Initializable {
 
         copyright.setText(COPYRIGHT);
 
-        views = new ArrayList<>(
-                List.of(
-                        SignUpView.getInstance(),
-                        AccountView.getInstance(),
-                        AddAccountView.getInstance(),
-                        CodeView.getInstance(),
-                        HomePageView.getInstance(),
-                        SignInView.getInstance()
-                )
-        );
+        views = new ArrayList<>();
+
+        try {
+            views.add(SignUpView.getInstance());
+            views.add(AccountView.getInstance());
+            views.add(AddAccountView.getInstance());
+            views.add(CodeView.getInstance());
+            views.add(HomePageView.getInstance());
+            views.add(SignInView.getInstance());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
 
         lightModeCommand = new SwitchToLightMode(views);
         darkModeCommand = new SwitchToDarkMode(views);
@@ -135,9 +146,12 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Switch all the view's theme to HighContrastMode
+     *
+     * @throws IOException if any errors occur while loading in the
+     * settings view.
      */
     @FXML
-    private void switchToHighContrastMode() {
+    private void switchToHighContrastMode() throws IOException {
         if (userModel.updateTheme(Theme.HIGH_CONTRAST)) {
             logger.info("Updating application look and feel to high contrast mode.");
             updateTheme(highContrastModeCommand);
@@ -146,9 +160,12 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Switch all the view's theme to Dark Mode.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * settings view.
      */
     @FXML
-    private void switchToDarkMode() {
+    private void switchToDarkMode() throws IOException {
         if (userModel.updateTheme(Theme.DARK)) {
             logger.info("Updating application look and feel to dark mode.");
             updateTheme(darkModeCommand);
@@ -157,9 +174,12 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Switch all the view's theme to Light Mode.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * settings view.
      */
     @FXML
-    private void switchToLightMode() {
+    private void switchToLightMode() throws IOException {
         if (userModel.updateTheme(Theme.LIGHT)) {
             logger.info("Updating application look and feel to light mode.");
             updateTheme(lightModeCommand);
@@ -171,8 +191,10 @@ public class SettingsViewController implements Initializable {
      *
      * @param command The command to update
      *                to the correct theme.
+     * @throws IOException if any errors occur while loading in the
+     * settings view.
      */
-    private void updateTheme(Command command) {
+    private void updateTheme(Command command) throws IOException {
         this.switcher.setCommand(command);
         this.switcher.switchTheme();
         SettingsView.getInstance().getRoot().getScene().getStylesheets().clear();
@@ -197,8 +219,11 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Allows a user to logout and redirects them to the home page.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * home page view.
      */
-    public void handleLogout() {
+    public void handleLogout() throws IOException {
         if (userModel.logOutUser()) {
             logger.trace("Switching from the SettingsView to the HomePageView.");
             View.switchSceneTo(SettingsView.getInstance(), HomePageView.getInstance());
@@ -207,8 +232,11 @@ public class SettingsViewController implements Initializable {
 
     /**
      * Allow user to exit the Settings view.
+     *
+     * @throws IOException if any errors occur while loading the
+     * previous view.
      */
-    public void handleGoBack() {
+    public void handleGoBack() throws IOException {
         logger.trace("Switching to previous view.");
         View.switchSceneTo(SettingsView.getInstance(), ((Reversible) SettingsView.getInstance()).getPreviousView());
     }

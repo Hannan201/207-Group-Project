@@ -36,10 +36,16 @@ public class CodeCell extends ListCell<Code> {
         this.codeModel = model;
     }
 
-
+    /**
+     * Create a new code cell.
+     *
+     * @param parentListView The current list view this cell belongs to.
+     * @throws IOException If any errors occur when loading the FXML
+     * file for this cell.
+     */
     public CodeCell(ListView<Code> parentListView) throws IOException {
         // Each cell only loads the FXML file once to speed up runtime
-        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("/cypher/enforcers/view/CodeViewFXML/CodeCell.fxml"));
+        FXMLLoader loader = new FXMLLoader(Utilities.loadFileByURL("view/CodeViewFXML/CodeCell.fxml"));
 
         CodeListView = parentListView;
 

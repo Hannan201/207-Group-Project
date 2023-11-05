@@ -25,6 +25,8 @@ import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
 import cypher.enforcers.views.*;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -190,7 +192,13 @@ public class SignInController implements Initializable {
         signInButton = new Button("Sign In");
         signInButton.setPrefSize(100, 25);
         signInButton.setAlignment(Pos.CENTER);
-        signInButton.setOnAction(this::signInOnAction);
+        signInButton.setOnAction(event -> {
+            try {
+                signInOnAction(event);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
 
         TooltipWrapper<Button> createAccountWrapper = new TooltipWrapper<>(
                 signInButton,
@@ -200,11 +208,23 @@ public class SignInController implements Initializable {
 
         // Handles the event where the enter key is pressed while the
         // unameInput TextField is selected
-        unameInput.setOnKeyPressed(this::signInFromEnterKey);
+        unameInput.setOnKeyPressed(event -> {
+            try {
+                signInFromEnterKey(event);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
 
         // Handles the event where the enter key is pressed while the
         // passInput TextField is selected
-        passInput.setOnKeyPressed(this::signInFromEnterKey);
+        passInput.setOnKeyPressed(event -> {
+            try {
+                signInFromEnterKey(event);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        });
 
         // No use to send a query to the database if the username or password
         // is empty. The database does have checks to ensure the data is
@@ -259,8 +279,11 @@ public class SignInController implements Initializable {
      * Sign the user into their account. This function can be triggered through
      * either pressing the sign-in button or pressing the enter key in one of the
      * TextFields
+     *
+     * @throws IOException if any errors occur while loading in the
+     * accounts view.
      */
-    private void signInOnAction(ActionEvent actionEvent) {
+    private void signInOnAction(ActionEvent actionEvent) throws IOException {
         View.closeWindow((Node) actionEvent.getSource());
 
         Utilities.adjustTheme(userModel.getCurrentUser().theme());
@@ -275,8 +298,10 @@ public class SignInController implements Initializable {
      * sign button.
      *
      * @param e The key the user clicked.
+     * @throws IOException if any errors occur while loading in the
+     * accounts view.
      */
-    private void signInFromEnterKey(KeyEvent e) {
+    private void signInFromEnterKey(KeyEvent e) throws IOException {
         if (KeyCode.ENTER == e.getCode() && !signInButton.isDisabled()) {
             View.closeWindow((Node) e.getSource());
 

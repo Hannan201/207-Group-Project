@@ -33,6 +33,7 @@ import cypher.enforcers.views.codeview.CodeCell;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.*;
 
@@ -312,7 +313,7 @@ public class CodeViewController implements Initializable {
                 cell.setCodeModel(codeModel);
                 return cell;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new UncheckedIOException(e);
             }
         });
     }
@@ -323,7 +324,7 @@ public class CodeViewController implements Initializable {
      * This method allows the user to specify the path to the corresponding
      * .txt file that contains the codes they would like to add.
      */
-    public void importCodeOnAction() {
+    public void importCodeOnAction() throws IOException {
         // 1) Get the platform for the account
         String AccountType = accountModel.getCurrentAccount().socialMediaType().toUpperCase();
 
@@ -399,8 +400,11 @@ public class CodeViewController implements Initializable {
 
     /**
      * Allows a user to logout and redirects them to the home page.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * home page view.
      */
-    public void handleLogout() {
+    public void handleLogout() throws IOException {
         if (userModel.logOutUser()) {
             logger.trace("Switching from the CodeView to the HomePageView.");
             View.switchSceneTo(CodeView.getInstance(), HomePageView.getInstance());
@@ -409,8 +413,11 @@ public class CodeViewController implements Initializable {
 
     /**
      * Switches the scene to the SettingsView once the settings button is clicked.
+     *
+     * @throws IOException if any errors occur while loading in the code view
+     * or settings view.
      */
-    public void handleSettings() {
+    public void handleSettings() throws IOException {
         logger.debug("Setting the previous scene for the SettingsView to the CodeView.");
         ((Reversible) SettingsView.getInstance()).setPreviousView(CodeView.getInstance());
 
@@ -420,8 +427,11 @@ public class CodeViewController implements Initializable {
 
     /**
      * Switches the scene to the Account-Viewer view once the back button is clicked.
+     *
+     * @throws IOException if any errors occur while loading in the
+     * accounts view.
      */
-    public void handleGoBack() {
+    public void handleGoBack() throws IOException {
         logger.trace("Switching from CodeView to AccountView.");
         View.switchSceneTo(CodeView.getInstance(), AccountView.getInstance());
     }
