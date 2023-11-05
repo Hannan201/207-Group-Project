@@ -171,7 +171,11 @@ public class CodeModel {
      */
     public boolean updateCode(String newCode) {
         Code code = getCurrentCode();
-        if (!Objects.isNull(code) && !code.code().equals(newCode)) {
+        if (!Objects.isNull(code)) {
+            if (code.code().equals(newCode)) {
+                return true;
+            }
+
             int index = codes.indexOf(code);
             if (index == -1) {
                 return false;

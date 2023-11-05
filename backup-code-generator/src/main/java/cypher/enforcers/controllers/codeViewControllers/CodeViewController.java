@@ -5,6 +5,7 @@ import cypher.enforcers.behaviors.interfaces.ReadCodeBehavior;
 import cypher.enforcers.code.readers.CodeReader;
 import cypher.enforcers.code.readers.CodeReaderFactory;
 import cypher.enforcers.code.readers.types.ReaderType;
+import cypher.enforcers.data.security.dtos.Account;
 import cypher.enforcers.data.security.dtos.Code;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
@@ -330,13 +331,19 @@ public class CodeViewController implements Initializable {
      * due to missing data.
      */
     public void importCodeOnAction() throws IOException, NullPointerException {
+        Account account = accountModel.getCurrentAccount();
+        if (Objects.isNull(account)) {
+            logger.warn("No account selected. Aborting request.");
+            return;
+        }
+
         // 1) Get the platform for the account
-        String AccountType = accountModel.getCurrentAccount().socialMediaType().toUpperCase();
+        String AccountType = account.socialMediaType().toUpperCase();
 
         // 2) select a reader based on the corresponding account type
         CodeReader reader = CodeReaderFactory.makeCodeReader(ReaderType.valueOf(AccountType));
 
-        if (reader == null) {
+        if (Objects.isNull(reader)) {
             logger.warn("No reader of type {}. Aborting request.", AccountType);
             return;
         }
@@ -345,7 +352,7 @@ public class CodeViewController implements Initializable {
         FileChooser chooser = new FileChooser();
         File pathway = chooser.showOpenDialog(CodeView.getInstance().getRoot().getScene().getWindow());
 
-        if (pathway == null) {
+        if (Objects.isNull(pathway)) {
             logger.warn("No file was selected. Aborting request");
             return;
         }
@@ -363,7 +370,9 @@ public class CodeViewController implements Initializable {
      * This method clears the items in the listview.
      */
     public void deleteAllOnAction() {
-        codeModel.deleteAllCodes(accountModel.getCurrentAccount());
+        if (!Objects.isNull(accountModel.getCurrentAccount())) {
+            codeModel.deleteAllCodes(accountModel.getCurrentAccount());
+        }
     }
 
     /**
@@ -390,17 +399,19 @@ public class CodeViewController implements Initializable {
      * @param behavior Obtains a backup code depending on the source.
      */
     private void addCodes(ReadCodeBehavior behavior) {
-        List<String> returned = behavior.readCodes();
-        for (String s : returned) {
-            // Don't want to add empty codes.
-            if (!s.isEmpty()) {
-                if (!codeModel.addCode(accountModel.getCurrentAccount(), s)) {
-                    return;
+        if (!Objects.isNull(accountModel.getCurrentAccount())) {
+            List<String> returned = behavior.readCodes();
+            for (String s : returned) {
+                // Don't want to add empty codes.
+                if (!s.isEmpty()) {
+                    if (!codeModel.addCode(accountModel.getCurrentAccount(), s)) {
+                        return;
+                    }
                 }
             }
-        }
 
-        addCodeInput.setText("");
+            addCodeInput.setText("");
+        }
     }
 
     /**
