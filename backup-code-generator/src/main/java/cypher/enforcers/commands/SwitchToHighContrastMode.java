@@ -32,7 +32,7 @@ public class SwitchToHighContrastMode implements Command {
      * switching the theme to high contrast mode (such as icons).
      */
     @Override
-    public void execute() {
+    public void execute() throws NullPointerException {
         for (View view : this.views) {
             view.switchToHighContrastMode();
         }

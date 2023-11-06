@@ -31,7 +31,7 @@ public class ThemeSwitcher {
      * @throws NullPointerException If there's any missing data which
      * prevents the theme from being changed, such as icons.
      */
-    public void switchTheme() {
+    public void switchTheme() throws NullPointerException {
         command.execute();
     }
 

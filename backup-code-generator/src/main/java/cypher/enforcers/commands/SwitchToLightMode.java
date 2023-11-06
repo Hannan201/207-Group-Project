@@ -32,7 +32,7 @@ public class SwitchToLightMode implements Command {
      * switching the theme to light mode (such as icons).
      */
     @Override
-    public void execute() {
+    public void execute() throws NullPointerException {
         for (View view : this.views) {
             view.switchToLightMode();
         }

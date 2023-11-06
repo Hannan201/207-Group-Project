@@ -11,7 +11,7 @@ import cypher.enforcers.Launcher;
 public class UberJarLauncher {
 
     /**
-     * Launche this application.
+     * Launch this application.
      *
      * @param args Any additional arguments.
      */
