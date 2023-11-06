@@ -152,6 +152,8 @@ jlink {
     }
 }
 
+// Had some issues, so customized the default task to make a native
+// image.
 tasks.named<JPackageImageTask>("jpackageImage") {
     doLast {
         /*
@@ -170,5 +172,26 @@ tasks.named<JPackageImageTask>("jpackageImage") {
                 + jpackageData.imageName + ".exe"
             ).get().asFile.setWritable(true)
         }
+    }
+}
+
+// Task to create an uber or jar fat.
+tasks.register<Jar>("uberJar") {
+    destinationDirectory.set(layout.buildDirectory.dir("uberJars"))
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    }) {
+    }
+
+    exclude("module-info.class")
+    exclude("**/module-info.class")
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
+    manifest {
+        attributes("Main-Class" to "cypher.enforcers.uberjar.UberJarLauncher")
     }
 }
