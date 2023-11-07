@@ -98,7 +98,7 @@ This application uses Gradle as the build tool, which provided tasks to aid
 development.
 Here are a few of them you can execute from the terminal.
 
-### For Intellij users
+### For IntelliJ users
 
 For those using IntelliJ IDEA, be sure to execute:
 
@@ -204,7 +204,7 @@ dependencies), you can use:
 ./gradlew uberJar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-1.0.0.jar`.
+The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-1.0.0-uber.jar`.
 
 **Note:** Unlike the native image, to run this `jar` file, you'll need to have the correct version
 of the JDK installed since it's not bundled in the `jar` file.

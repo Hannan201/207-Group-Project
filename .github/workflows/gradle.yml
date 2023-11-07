@@ -43,13 +43,13 @@ jobs:
       with:
         arguments: uberJar
 
-    - run: ${{ hashfiles("backup-code-generator/build/libs/backup-code-generator-uber-1.0.0.jar") }} > backup-code-generator-uber-1.0.0.jar.checksum.txt
+    - run: ${{ hashfiles("backup-code-generator/build/libs/backup-code-generator-1.0.0-uber.jar") }} > backup-code-generator-1.0.0-uber.jar.checksum.txt
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v3.1.3
       with: 
         path: |
           backup-code-generator/build/libs/backup-code-generator-1.0.0.jar
-          backup-code-generator/build/uberJars/backup-code-generator-uber-1.0.0.jar
+          backup-code-generator/build/uberJars/backup-code-generator-1.0.0-uber.jar
           backup-code-generator-1.0.0.jar.checksum.txt
-          backup-code-generator-uber-1.0.0.jar.checksum.txt
+          backup-code-generator-1.0.0-uber.jar.checksum.txt

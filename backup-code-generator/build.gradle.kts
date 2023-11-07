@@ -92,6 +92,10 @@ application {
 }
 
 val cleanUpTask: TaskProvider<Delete> = tasks.register<Delete>("cleanUpTestFiles") {
+    group = "verification"
+    description = "Cleans up the files created by the" +
+            "tests."
+
     // This is to remove files copied from resources.
     // These files are modified after the tests are complete, so they
     // need to be copied again to return to their original state.
@@ -177,7 +181,11 @@ tasks.named<JPackageImageTask>("jpackageImage") {
 
 // Task to create an uber or jar fat.
 tasks.register<Jar>("uberJar") {
+    group = "build"
+    description = "Creates an uberJar."
+
     destinationDirectory.set(layout.buildDirectory.dir("uberJars"))
+    archiveClassifier.set("uber")
 
     from(sourceSets.main.get().output)
 
