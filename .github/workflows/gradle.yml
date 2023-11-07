@@ -36,14 +36,14 @@ jobs:
       with:
         arguments: build
 
-    - run: ${{ hashfiles('backup-code-generator/build/libs/backup-code-generator-1.0.0.jar') }} > backup-code-generator-1.0.0.jar.checksum.txt
-    
+    - run: echo ${{ hashfiles('backup-code-generator/build/libs/backup-code-generator-1.0.0.jar') }} > backup-code-generator-1.0.0.jar.checksum.txt
+
     - name: Build Uber Jar
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: uberJar
 
-    - run: ${{ hashfiles('backup-code-generator/build/libs/backup-code-generator-1.0.0-uber.jar') }} > backup-code-generator-1.0.0-uber.jar.checksum.txt
+    - run: echo ${{ hashfiles('backup-code-generator/build/libs/backup-code-generator-1.0.0-uber.jar') }} > backup-code-generator-1.0.0-uber.jar.checksum.txt
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v3.1.3
