@@ -57,23 +57,23 @@ jobs:
       - name: Upload regular jar
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: ${{ matrix.os jar }}
+          name: ${{ matrix.os }} jar
           path: backup-code-generator/build/libs/*.jar
 
       - name: Upload jar checksum
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: ${{ matrix.os jar }}
+          name: ${{ matrix.os }} jar
           path: ${{ format('backup-code-generator-1.0.0-{0}.jar.checksum.txt', matrix.classifier) }}
 
       - name: Upload uber jar
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: ${{ matrix.os uber jar }}
+          name: ${{ matrix.os }} uber jar
           path: backup-code-generator/build/uberJars/*.jar
 
       - name: Upload uber jar checksum
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: ${{ matrix.os uber jar }}
+          name: ${{ matrix.os }} uber jar
           path: ${{ format('backup-code-generator-1.0.0-uber-{0}.jar.checksum.txt', matrix.classifier) }}
