@@ -179,6 +179,16 @@ tasks.named<JPackageImageTask>("jpackageImage") {
     }
 }
 
+tasks.named<Jar>("jar") {
+    if (os.isWindows) {
+        archiveClassifier.set("win")
+    } else if (os.isLinux) {
+        archiveClassifier.set("linux")
+    } else if (os.isMacOsX) {
+        archiveClassifier.set("mac")
+    }
+}
+
 // Task to create an uber or jar fat.
 tasks.register<Jar>("uberJar") {
     group = "build"
@@ -186,6 +196,14 @@ tasks.register<Jar>("uberJar") {
 
     destinationDirectory.set(layout.buildDirectory.dir("uberJars"))
     archiveClassifier.set("uber")
+
+    if (os.isWindows) {
+        archiveClassifier.set("uber-win")
+    } else if (os.isLinux) {
+        archiveClassifier.set("uber-linux")
+    } else if (os.isMacOsX) {
+        archiveClassifier.set("uber-mac")
+    }
 
     from(sourceSets.main.get().output)
 
