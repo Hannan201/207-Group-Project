@@ -28,7 +28,7 @@ version = "1.0.0"
 
 // Adds the module version to the module-info.java file.
 tasks.named<JavaCompile>("compileJava") {
-    options.javaModuleVersion.set(provider { version as String })
+    options.javaModuleVersion = provider { version as String }
 }
 
 repositories {
@@ -45,7 +45,7 @@ dependencies {
         // This is because logback brings in a transitive
         // dependency to SLF4J, even though we have already
         // imported it. No need for it to be imported twice.
-        exclude(group = "org.slf4j", module = "slf4j-api")
+        exclude("org.slf4j", "slf4j-api")
     }
 
     // ValidatorFX.
@@ -78,17 +78,17 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-        vendor.set(JvmVendorSpec.ADOPTIUM) // To use OpenJDK.
+        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.ADOPTIUM // To use OpenJDK.
     }
 }
 
 application {
     // Define the main module for the application.
-    mainModule.set("backup.code.generator")
+    mainModule = "backup.code.generator"
 
     // Define the main class for the application.
-    mainClass.set("cypher.enforcers.Launcher")
+    mainClass = "cypher.enforcers.Launcher"
 }
 
 val cleanUpTask: TaskProvider<Delete> = tasks.register<Delete>("cleanUpTestFiles") {
@@ -180,13 +180,19 @@ tasks.named<JPackageImageTask>("jpackageImage") {
 }
 
 tasks.named<Jar>("jar") {
-    if (os.isWindows) {
-        archiveClassifier.set("win")
-    } else if (os.isLinux) {
-        archiveClassifier.set("linux")
-    } else if (os.isMacOsX) {
-        archiveClassifier.set("mac")
+    val isCI = providers.gradleProperty("isCI")
+    doFirst {
+        if (isCI.isPresent) {
+            if (os.isWindows) {
+                archiveClassifier = "win"
+            } else if (os.isLinux) {
+                archiveClassifier = "linux"
+            } else if (os.isWindows) {
+                archiveClassifier = "mac"
+            }
+        }
     }
+
 }
 
 // Task to create an uber or jar fat.
@@ -194,16 +200,8 @@ tasks.register<Jar>("uberJar") {
     group = "build"
     description = "Creates an uberJar."
 
-    destinationDirectory.set(layout.buildDirectory.dir("uberJars"))
-    archiveClassifier.set("uber")
-
-    if (os.isWindows) {
-        archiveClassifier.set("uber-win")
-    } else if (os.isLinux) {
-        archiveClassifier.set("uber-linux")
-    } else if (os.isMacOsX) {
-        archiveClassifier.set("uber-mac")
-    }
+    destinationDirectory = layout.buildDirectory.dir("uberJars")
+    archiveClassifier = "uber"
 
     from(sourceSets.main.get().output)
 
@@ -220,4 +218,18 @@ tasks.register<Jar>("uberJar") {
     manifest {
         attributes("Main-Class" to "cypher.enforcers.uberjar.UberJarLauncher")
     }
+
+    val isCI = providers.gradleProperty("isCI")
+    doFirst {
+        if (isCI.isPresent) {
+            if (os.isWindows) {
+                archiveClassifier = "uber-win"
+            } else if (os.isLinux) {
+                archiveClassifier = "uber-linux"
+            } else if (os.isMacOsX) {
+                archiveClassifier = "uber-mac"
+            }
+        }
+    }
+
 }

@@ -41,31 +41,12 @@ jobs:
       - name: Build Regular Jar
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         with:
-          arguments: assemble
-
-      - name: Produce hash for regular jar
-        run: echo ${{ hashfiles('backup-code-generator/build/libs/*.jar') }} > ${{ format('backup-code-generator-1.0.0-{0}.jar.checksum.txt', matrix.classifier) }}
-
-      - name: Build Uber Jar
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-        with:
-          arguments: uberJar
-
-      - name: Produce hash for uber jar
-        run: echo ${{ hashfiles('backup-code-generator/build/uberJars/*.jar') }} > ${{ format('backup-code-generator-1.0.0-uber-{0}.jar.checksum.txt', matrix.classifier) }}
+          arguments: assemble -PisCI=true
 
       - name: Upload regular jar
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: ${{ matrix.os }} jar
+          name: ${{ runner.os }} jar
           path: |
             backup-code-generator/build/libs/*.jar
             ${{ format('backup-code-generator-1.0.0-{0}.jar.checksum.txt', matrix.classifier) }}
-
-      - name: Upload uber jar
-        uses: actions/upload-artifact@v3.1.3
-        with:
-          name: ${{ matrix.os }} uber jar
-          path: |
-            backup-code-generator/build/uberJars/*.jar
-            ${{ format('backup-code-generator-1.0.0-uber-{0}.jar.checksum.txt', matrix.classifier) }}
