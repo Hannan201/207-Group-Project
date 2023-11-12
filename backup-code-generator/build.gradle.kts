@@ -150,10 +150,20 @@ jlink {
         "--strip-debug"
     ))
 
-    jpackage {
-        skipInstaller = true
-        appVersion = version as String
+    if (os.isWindows) {
+        jpackage {
+            appVersion = version.toString()
+            installerType = "msi"
+            installerOptions = listOf(
+                "--win-dir-chooser",
+                "--win-shortcut-prompt",
+                "--app-version", version.toString()
+            )
+            imageName = "Backup Code Generator"
+        }
     }
+
+
 }
 
 // Had some issues, so customized the default task to make a native
