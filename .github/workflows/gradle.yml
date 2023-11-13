@@ -49,4 +49,4 @@ jobs:
           name: ${{ runner.os }} Installer
           path: | 
             ./backup-code-generator/build/jpackage/*
-            !./backup-code-generator/build/jpackage/Backup Code Generator
+            !./backup-code-generator/build/jpackage/Backup Code Generator*
