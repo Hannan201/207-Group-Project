@@ -150,19 +150,33 @@ jlink {
         "--strip-debug"
     ))
 
-    if (os.isWindows) {
-        jpackage {
-            appVersion = version.toString()
-            installerType = "msi"
-            installerOptions = listOf(
-                "--win-dir-chooser",
-                "--win-shortcut-prompt",
+    jpackage {
+        appVersion = version.toString()
+        imageName = "Backup Code Generator"
+        installerOptions.addAll(
+            listOf(
                 "--app-version", version.toString()
             )
-            imageName = "Backup Code Generator"
-        }
+        )
     }
 
+    if (os.isWindows) {
+        jpackage {
+            installerType = "msi"
+            installerOptions.addAll(
+                listOf(
+                    "--win-dir-chooser",
+                    "--win-shortcut-prompt"
+                )
+            )
+        }
+    } else if (os.isMacOsX) {
+        jpackage {
+            installerType = "dmg"
+        }
+    } else if (os.isLinux) {
+
+    }
 
 }
 
