@@ -271,9 +271,11 @@ tasks.register<Jar>("uberJar") {
 
 tasks.register("createM1Jar") {
     val ext: JlinkPluginExtension? = project.extensions.findByType(JlinkPluginExtension::class)
-    ext?.configuration = "m1Configuration"
-    ext?.jpackage {
-        outputDir = "jpackage-m1"
+    doLast {
+        ext?.configuration = "m1Configuration"
+        ext?.jpackage {
+            outputDir = "jpackage-m1"
+        }
     }
     dependsOn(tasks.getByPath(":backup-code-generator:jpackage"))
 }
