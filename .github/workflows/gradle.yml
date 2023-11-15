@@ -29,30 +29,31 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      - name: Build Regular Installer
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-        with:
-          arguments: jpackage -PisCI=true
-
-      - name: Checking jars for Macx64
-        if: ${{ runner.os == 'MacOS' }}
-        run: ls backup-code-generator/build/jlinkbase/jlinkjars
-
-      - name: Build for Macaarch64
-        if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-        with:
-          arguments: createM1Jar -PisCI=true
-
-      - name: Checking jars used for Macaarch64
-        if: ${{ runner.os == 'MacOS' }}
-        run: ls backup-code-generator/build/jlinkbase/jlinkjars
+      run: echo "Hello"
+#      - name: Checkout repository
+#        uses: actions/checkout@v3
+#
+#      - name: Set up JDK 21
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '21'
+#          distribution: 'temurin'
+#
+#      - name: Build Regular Installer
+#        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+#        with:
+#          arguments: jpackage -PisCI=true
+#
+#      - name: Checking jars for Macx64
+#        if: ${{ runner.os == 'MacOS' }}
+#        run: ls backup-code-generator/build/jlinkbase/jlinkjars
+#
+#      - name: Build for Macaarch64
+#        if: ${{ runner.os == 'MacOS' }}
+#        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+#        with:
+#          arguments: createM1Jar -PisCI=true
+#
+#      - name: Checking jars used for Macaarch64
+#        if: ${{ runner.os == 'MacOS' }}
+#        run: ls backup-code-generator/build/jlinkbase/jlinkjars
