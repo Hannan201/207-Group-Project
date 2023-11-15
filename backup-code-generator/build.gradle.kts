@@ -1,5 +1,4 @@
 import org.beryx.jlink.JPackageImageTask
-import org.beryx.jlink.PrepareMergedJarsDirTask
 import org.beryx.jlink.data.JlinkPluginExtension
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
@@ -38,7 +37,7 @@ repositories {
     mavenCentral()
 }
 
-val m1Configuration by configurations.creating {
+val m1Configuration: Configuration by configurations.creating {
     extendsFrom(configurations.runtimeClasspath.get())
     exclude(group = "org.openjfx")
 }
@@ -271,15 +270,9 @@ tasks.register<Jar>("uberJar") {
 }
 
 tasks.register("createM1Jar") {
-    val outputFile = layout.buildDirectory.file("jpackage-m1")
-
-    doFirst {
-        val ext: JlinkPluginExtension = extensions.getByType(JlinkPluginExtension::class)
-        ext.configuration = "m1Configuration"
-        ext.jpackage {
-            imageOutputDir = outputFile.get().asFile
-        }
+    val ext: JlinkPluginExtension? = project.extensions.findByType(JlinkPluginExtension::class)
+    ext?.configuration = "m1Configuration"
+    ext?.jpackage {
+        outputDir = "jpackage-m1"
     }
-
-    dependsOn(tasks.named("jpackage"))
 }
