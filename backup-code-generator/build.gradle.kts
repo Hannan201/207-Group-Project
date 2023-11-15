@@ -188,7 +188,6 @@ jlink {
             installerType = "dmg"
         }
     } else if (os.isLinux) {
-
     }
 
 }
