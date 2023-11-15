@@ -275,4 +275,5 @@ tasks.register("createM1Jar") {
     ext?.jpackage {
         outputDir = "jpackage-m1"
     }
+    dependsOn(tasks.getByPath(":backup-code-generator:jpackage"))
 }
