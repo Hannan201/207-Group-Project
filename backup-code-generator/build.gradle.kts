@@ -1,4 +1,6 @@
 import org.beryx.jlink.JPackageImageTask
+import org.beryx.jlink.PrepareMergedJarsDirTask
+import org.beryx.jlink.data.JlinkPluginExtension
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
 
@@ -35,6 +37,13 @@ repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
+
+val m1Configuration by configurations.creating {
+    extendsFrom(configurations.runtimeClasspath.get())
+    exclude(group = "org.openjfx")
+}
+
+val os: DefaultOperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
 
 dependencies {
     // Logging API.
@@ -73,6 +82,12 @@ dependencies {
 
     // Used to extract filename from an url.
     implementation("commons-io:commons-io:2.15.0")
+
+    val isCI = providers.gradleProperty("isCI")
+    if (os.isMacOsX && isCI.isPresent) {
+        m1Configuration("org.openjfx:javafx-controls:21:mac-aarch64")
+        m1Configuration("org.openjfx:javafx-fxml:21:mac-aarch64")
+    }
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -138,8 +153,6 @@ idea {
         inheritOutputDirs = true
     }
 }
-
-val os: DefaultOperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
 
 jlink {
     options.set(listOf(
@@ -256,4 +269,18 @@ tasks.register<Jar>("uberJar") {
         }
     }
 
+}
+
+tasks.register("createM1Jar") {
+    val ext: JlinkPluginExtension = extensions.getByType(JlinkPluginExtension::class)
+    ext.configuration = "m1Configuration"
+    val outputFile = layout.buildDirectory.file("jpackage-m1")
+
+    doFirst {
+        ext.jpackage {
+            imageOutputDir = outputFile.get().asFile
+        }
+    }
+
+    dependsOn(tasks.named("jpackage"))
 }

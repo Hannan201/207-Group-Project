@@ -38,15 +38,18 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build Regular Jar
+      - name: Build Regular Installer
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         with:
           arguments: jpackage -PisCI=true
 
-      - name: Upload installer
-        uses: actions/upload-artifact@v3.1.3
+      - name: Checking jars for Macx64
+        if: ${{ runner.os == 'MacOS' }}
+        run: ls backup-code-generator/build/jlinkbase/jlinkjars
+
+      - name: Build for Macaarch64
+        if: ${{ runner.os == 'MacOS' }}
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         with:
-          name: ${{ runner.os }} Installer
-          path: | 
-            ./backup-code-generator/build/jpackage/*
-            !./backup-code-generator/build/jpackage/Backup Code Generator*
+          arguments: createM1Jar -PisCI=true
+        run: ls backup-code-generator/build/jlinkbase/jlinkjars
