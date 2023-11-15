@@ -271,11 +271,11 @@ tasks.register<Jar>("uberJar") {
 }
 
 tasks.register("createM1Jar") {
-    val ext: JlinkPluginExtension = extensions.getByType(JlinkPluginExtension::class)
-    ext.configuration = "m1Configuration"
     val outputFile = layout.buildDirectory.file("jpackage-m1")
 
     doFirst {
+        val ext: JlinkPluginExtension = extensions.getByType(JlinkPluginExtension::class)
+        ext.configuration = "m1Configuration"
         ext.jpackage {
             imageOutputDir = outputFile.get().asFile
         }

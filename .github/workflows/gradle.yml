@@ -18,12 +18,12 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [macos-latest]
         include:
-          - os: windows-latest
-            classifier: win
-          - os: ubuntu-latest
-            classifier: linux
+#          - os: windows-latest
+#            classifier: win
+#          - os: ubuntu-latest
+#            classifier: linux
           - os: macos-latest
             classifier: mac
 
