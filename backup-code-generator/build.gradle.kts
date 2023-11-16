@@ -1,5 +1,6 @@
 import org.beryx.jlink.JPackageImageTask
 import org.beryx.jlink.data.JlinkPluginExtension
+import org.gradle.crypto.checksum.Checksum
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.gradle.nativeplatform.platform.internal.DefaultOperatingSystem
 
@@ -22,6 +23,9 @@ plugins {
 
     // Plugin to create a native image.
     id("org.beryx.jlink") version "3.0.1"
+
+    // Plugin to make checksums.
+    id("org.gradle.crypto.checksum") version "1.4.0"
 }
 
 group = "cypher.enforcers"
@@ -80,6 +84,7 @@ configurations {
            }
        }
     }
+
 }
 
 dependencies {
@@ -135,6 +140,8 @@ dependencies {
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
+    withSourcesJar()
+
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
         vendor = JvmVendorSpec.ADOPTIUM // To use OpenJDK.
@@ -258,7 +265,7 @@ tasks.named<JPackageImageTask>("jpackageImage") {
     }
 }
 
-tasks.named<Jar>("jar") {
+val jarTask: TaskProvider<Jar> = tasks.named<Jar>("jar") {
     val isCI = providers.gradleProperty("isCI")
     doFirst {
         if (isCI.isPresent) {
@@ -267,15 +274,15 @@ tasks.named<Jar>("jar") {
             } else if (os.isLinux) {
                 archiveClassifier = "linux"
             } else if (os.isWindows) {
-                archiveClassifier = "mac"
+                archiveClassifier = "mac-intel"
             }
         }
     }
 
 }
 
-// Task to create an uber or jar fat.
-tasks.register<Jar>("uberJar") {
+// Task to create an uber or fat jar.
+val uberJarTask: TaskProvider<Jar> = tasks.register<Jar>("uberJar") {
     group = "build"
     description = "Creates an uberJar."
 
@@ -306,7 +313,7 @@ tasks.register<Jar>("uberJar") {
             } else if (os.isLinux) {
                 archiveClassifier = "uber-linux"
             } else if (os.isMacOsX) {
-                archiveClassifier = "uber-mac"
+                archiveClassifier = "uber-mac-intel"
             }
         }
     }
@@ -316,7 +323,10 @@ tasks.register<Jar>("uberJar") {
 // Disclaimer: This task only works on a Mac when on GitHub Actions.
 //
 // Modify the JLink extension to use the M1 data.
-tasks.register("createM1Jar") {
+val m1JPackageTask: TaskProvider<Task> = tasks.register("jpackageM1") {
+    group = "build"
+    description = "Create an installer for MacOS with the M1 Architecture."
+
     val ext: JlinkPluginExtension? = project.extensions.findByType(JlinkPluginExtension::class)
     doFirst {
         ext?.configuration = "m1Configuration"
@@ -324,5 +334,112 @@ tasks.register("createM1Jar") {
             outputDir = "jpackage-m1"
         }
     }
+
     finalizedBy(tasks.getByPath(":backup-code-generator:jpackage"))
+}
+
+// Disclaimer: This task only works on a Mac when on GitHub Actions.
+//
+// Task to create an uber or fat jar for M1.
+val m1UberJarTask: TaskProvider<Jar> = tasks.register<Jar>("uberJarM1") {
+    val isCI = providers.gradleProperty("isCI")
+
+    if (!os.isMacOsX || !isCI.isPresent) {
+        return@register
+    }
+
+    group = "build"
+    description = "Creates an uberJar for a mac using the M1 processor."
+
+    destinationDirectory = layout.buildDirectory.dir("m1UberJar")
+    archiveClassifier = "uber-mac-m1"
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+
+    val m1Configuration: NamedDomainObjectProvider<Configuration> =
+        configurations.named("m1Configuration")
+
+    dependsOn(m1Configuration)
+
+    from({
+        m1Configuration.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    }) {
+    }
+
+    exclude("module-info.class")
+    exclude("**/module-info.class")
+    duplicatesStrategy = DuplicatesStrategy.WARN
+
+    manifest {
+        attributes("Main-Class" to "cypher.enforcers.uberjar.UberJarLauncher")
+    }
+}
+
+/*
+OS dependent:
+    - Installer
+    - Uber Jar
+
+For macOS M1:
+    - Installer
+    - Uber Jar
+
+OS Independent:
+    - Regular Jar
+    - Sources Jar
+    - JavaDoc Jar
+ */
+
+// Generate checksums for jars (that don't
+// depend on the OS) that will be uploaded when
+// on release.
+tasks.register<Checksum>("generateJarsChecksums") {
+    inputFiles.from(jarTask.get().outputs.files)
+    inputFiles.from(
+        tasks.named<Jar>("sourcesJar").get()
+            .outputs.files
+    )
+
+    appendFileNameToChecksum = true
+    outputDirectory = layout.buildDirectory.dir("checksums")
+}
+
+// Generate checksums for files (that do
+// depend on the OS) that will be uploaded when
+// on release.
+tasks.register<Checksum>("generateAppChecksums") {
+    inputFiles.from(uberJarTask.get().outputs.files)
+    dependsOn(tasks.getByPath(":backup-code-generator:jpackage").path)
+    inputFiles.from(
+        layout.buildDirectory.dir("jpackage")
+            .get().asFileTree
+            .matching {
+                include("*.msi")
+                include("*.dmg")
+                include("*.deb")
+                include("*.rpm")
+            }
+    )
+
+    appendFileNameToChecksum = true
+    outputDirectory = layout.buildDirectory.dir("checksums")
+}
+
+// Generate checksums for files needed on macOS for the
+// M1 processor.
+tasks.register<Checksum>("generateM1Checksums") {
+    inputFiles.from(m1UberJarTask.get().outputs.files)
+    dependsOn(tasks.getByPath(":backup-code-generator:jpackageM1").path)
+    inputFiles.from(
+        layout.buildDirectory.dir("jpackage-m1")
+            .get().asFileTree
+            .matching {
+                include("*.dmg")
+            }
+    )
+
+    appendFileNameToChecksum = true
+    outputDirectory = layout.buildDirectory.dir("checksums")
 }
