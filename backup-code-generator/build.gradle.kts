@@ -37,21 +37,50 @@ repositories {
     mavenCentral()
 }
 
-val m1Configuration: Configuration by configurations.creating {
-    extendsFrom(configurations.runtimeClasspath.get())
-    val runtimeAttributes = configurations.runtimeClasspath.get().attributes
-    runtimeAttributes.keySet().forEach { key ->
-        if (key.name != "org.gradle.jvm.version") {
-            attributes.attribute(key as Attribute<Any>, runtimeAttributes.getAttribute(key) as Any)
-        }
-    }
-    attributes {
-        attribute(OperatingSystemFamily.OPERATING_SYSTEM_ATTRIBUTE, objects.named<OperatingSystemFamily>(OperatingSystemFamily.MACOS))
-        attribute(MachineArchitecture.ARCHITECTURE_ATTRIBUTE, objects.named<MachineArchitecture>(MachineArchitecture.ARM64))
+val os: DefaultOperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
+
+configurations {
+    /*
+     I don't have access to a mac with an M1 processor, and
+     GitHub Actions only has a mac VM with an Intel processor.
+     So when running the mac VM on GitHub Actions, I add the M1
+     JavaFX jars, along with all the other dependencies this
+     application needs into this newly created configuration.
+     Then, I create a new custom runtime image with the M1
+     JavaFX jars rather than the ones with intel.
+     From there, I just used the JLink plugin to make a new
+     installer.
+
+     This gives me an installer for both M1 and Intel.
+     Since you can't make cross-platform installers (For example,
+     can't make a linux installer while on Windows) so I just make
+     two installers when on the VM for Mac provided by GitHub Actions.
+     */
+    val isCI = providers.gradleProperty("isCI")
+    if (os.isMacOsX && isCI.isPresent) {
+       create("m1Configuration") {
+           extendsFrom(configurations.runtimeClasspath.get())
+
+           // Copy all the runtime attributes.
+           // These are used to grab the correct JavaFX jars
+           // based on the OS and architecture, along with
+           // any other attributes that might be needed.
+           val runtimeAttributes = configurations.runtimeClasspath.get().attributes
+           runtimeAttributes.keySet().forEach { key ->
+               // Got an error when using the attribute, so I avoided it by
+               // not copying it.
+               if (key.name != "org.gradle.jvm.version") {
+                   attributes.attribute(key as Attribute<Any>, runtimeAttributes.getAttribute(key) as Any)
+               }
+           }
+
+           attributes {
+               attribute(OperatingSystemFamily.OPERATING_SYSTEM_ATTRIBUTE, objects.named<OperatingSystemFamily>(OperatingSystemFamily.MACOS))
+               attribute(MachineArchitecture.ARCHITECTURE_ATTRIBUTE, objects.named<MachineArchitecture>(MachineArchitecture.ARM64))
+           }
+       }
     }
 }
-
-val os: DefaultOperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
 
 dependencies {
     // Logging API.
@@ -91,8 +120,14 @@ dependencies {
     // Used to extract filename from an url.
     implementation("commons-io:commons-io:2.15.0")
 
+    /*
+    Only want to add these jars when on GitHub Actions, since someone
+    using this project on an M1 will get more jars than they need.
+     */
     val isCI = providers.gradleProperty("isCI")
     if (os.isMacOsX && isCI.isPresent) {
+        val m1Configuration: Configuration = configurations.named("m1Configuration").get();
+
         m1Configuration("org.openjfx:javafx-controls:21")
         m1Configuration("org.openjfx:javafx-fxml:21")
     }
@@ -278,6 +313,9 @@ tasks.register<Jar>("uberJar") {
 
 }
 
+// Disclaimer: This task only works on a Mac when on GitHub Actions.
+//
+// Modify the JLink extension to use the M1 data.
 tasks.register("createM1Jar") {
     val ext: JlinkPluginExtension? = project.extensions.findByType(JlinkPluginExtension::class)
     doFirst {
