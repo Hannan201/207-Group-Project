@@ -1,11 +1,16 @@
 package cypher.enforcers.data.entities;
 
+/**
+ * This class is responsible for storing data
+ * related to a specific backup / two-factor
+ * authentication code for a social media account.
+ */
 public class CodeEntity {
 
-    // ID for this code.
+    /** ID for this code. */
     private long id;
 
-    // ID of the account this code belongs to.
+    /** ID of the account this code belongs to. */
     private long accountID;
 
     /**

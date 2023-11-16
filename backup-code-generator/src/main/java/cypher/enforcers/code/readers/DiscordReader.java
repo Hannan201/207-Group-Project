@@ -14,10 +14,9 @@ import java.util.Scanner;
  * This class is responsible for reading backup codes
  * in the structure provided by Discord.
  */
-
 public class DiscordReader extends CodeReader implements ReadCodeBehavior {
 
-    // Logger for discord reader.
+    /** Logger for discord reader. */
     private static final Logger logger = LoggerFactory.getLogger(DiscordReader.class);
 
     /**
@@ -55,7 +54,7 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
      * @return The list of backup codes.
      */
 
-   // Hannan if you are reading this, I have succeeded.
+   // Hannan, if you are reading this, I have succeeded.
 
     @Override
     public List<String> readCodes() {

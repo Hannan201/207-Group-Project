@@ -20,10 +20,10 @@ import java.util.Optional;
  */
 public class CodeModel {
 
-    // Used to interact with the codes objects.
+    /** Used to interact with the codes objects. */
     private final CodeRepository codeRepository;
 
-    // Converts entity to data transfer object.
+    /** Converts entity to a data transfer object. */
     private final CodeDTOMapper mapper;
 
     /**
@@ -39,10 +39,10 @@ public class CodeModel {
         this.mapper = mapper;
     }
 
-    // list of codes for an account.
+    /** list of codes for an account. */
     private final ObservableList<Code> codes = FXCollections.observableArrayList();
 
-    // Property to store the list of codes.
+    /** Property to store the list of codes. */
     private final ObjectProperty<ObservableList<Code>> codesProperty = new SimpleObjectProperty<>(codes);
 
     /**
@@ -72,7 +72,7 @@ public class CodeModel {
         codesProperty.set(codes);
     }
 
-    // Property to store the current code.
+    /** Property to store the current code. */
     private final ObjectProperty<Code> currentCodeProperty = new SimpleObjectProperty<>();
 
     /**
@@ -199,8 +199,9 @@ public class CodeModel {
     }
 
     /**
-     * Clear the current list of codes. usually called when no
-     * account is selected and the code view is loaded.
+     * Clear the current list of codes.
+     * Usually called when no account is
+     * selected and the code view is loaded.
      */
     public void clear() {
         codes.clear();

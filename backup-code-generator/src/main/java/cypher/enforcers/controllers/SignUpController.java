@@ -31,52 +31,55 @@ import java.util.ResourceBundle;
  */
 public class SignUpController implements Initializable {
 
-    // Logger for the sign-up controller.
+    /** Logger for the sign-up controller. */
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
-    // Used for validation based on what the user types.
+    /** Used for validation based on what the user types. */
     private final Validator validator = new Validator();
 
-    // Contains all the content to be displayed vertically
-    // in the center.
+    /**
+     * Contains all the content to be displayed vertically
+     * in the center.
+     */
     @FXML
     public VBox box;
 
-    // Button that says sign-up.
+    /** Button that says sign-up. */
     @FXML
     public Button signUp;
 
-    // Text field for the initial username.
+    /** Text field for the initial username. */
     @FXML
     public TextField initialUsername;
 
-    // Text field for the verified username.
+    /** Text field for the verified username. */
     @FXML
     public TextField verifiedUsername;
 
-    // Text field for the initial password.
+    /** Text field for the initial password. */
     @FXML
     public PasswordField initialPassword;
 
-    // Text field for the verified password.
+    /** Text field for the verified password. */
     @FXML
     public PasswordField verifiedPassword;
 
-    // To interact with the user data.
-    private UserModel userModel;
+    /** To interact with the user data. */
+    private final UserModel userModel;
 
     /**
-     * Set the user model.
+     * Create the sign-up controller for the sign-up view with the
+     * required models.
      *
-     * @param model The User Model.
+     * @param userModel The model to interact with the users.
      */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
+    public SignUpController(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Clear all the text fields when this window closes. Since
-        // we're using singleton pattern, only one view instance will be
+        // we're using the singleton pattern, only one view instance will be
         // created.
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
@@ -196,10 +199,10 @@ public class SignUpController implements Initializable {
                     // Only show this error on two conditions:
                     // 1 ) Initial username is not empty.
                     // 2 ) Initial username and verified username are not
-                    // empty and equal each other. This prevents the
-                    // database from having to do a useless search and
-                    // prevents ValidatorFX from overriding the previous
-                    // alert with this alert.
+                    // empty and equal to each other.
+                    // This prevents the database from having to do a
+                    // useless search and prevents ValidatorFX from
+                    // overriding the previous alert with this alert.
 
                     if (initialUsername.getText().isEmpty() || !initialUsername.getText().equals(verifiedUsername.getText())) {
                         return;
@@ -226,7 +229,7 @@ public class SignUpController implements Initializable {
      * @throws IOException if any errors occur while loading in the
      * accounts view.
      * @throws NullPointerException If the accounts view cannot be created
-     * due to missing data or if the default theme cannot be set due to
+     * due to missing data, or if the default theme cannot be set due to
      * missing data.
      */
     public void handleSignUp(ActionEvent e) throws IOException, NullPointerException {
@@ -238,7 +241,7 @@ public class SignUpController implements Initializable {
         if (userModel.registerUser(initialUsername.getText(), initialPassword.getText())) {
             View.closeWindow((Node) e.getSource());
 
-            // Since by default, this application is light mode.
+            // By default, the application should be light mode.
             Utilities.adjustTheme(Theme.LIGHT);
 
             logger.trace("Switching from the HomePageView to the AccountsView.");

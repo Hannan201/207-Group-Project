@@ -6,7 +6,6 @@ import cypher.enforcers.code.readers.types.ReaderType;
  * This class is responsible for returning a CodeReader
  * needed for a specific user.
  */
-
 public class CodeReaderFactory {
 
     /**
@@ -27,7 +26,7 @@ public class CodeReaderFactory {
             return null;
         }
 
-        // Give correct reader based on the type.
+        // Give the correct reader based on the type.
         return switch (readerType) {
             case DISCORD -> new DiscordReader();
             case GITHUB -> new GitHubReader();

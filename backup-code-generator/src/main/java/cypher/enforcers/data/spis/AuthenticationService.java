@@ -55,8 +55,8 @@ public interface AuthenticationService {
       *
       * @param username The username to search for.
       * @return True if the username is taken, false otherwise. Note that
-      * a blank or empty username is invalid thus this method would return
-      * false if that's the case.
+      * a blank or empty username is invalid, thus this method would return
+      * true if that's the case.
       */
      boolean checkUsername(String username);
 

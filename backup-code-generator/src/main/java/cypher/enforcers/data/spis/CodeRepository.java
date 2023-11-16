@@ -5,7 +5,7 @@ import cypher.enforcers.data.entities.CodeEntity;
 import java.util.List;
 import java.util.Optional;
 
-/*
+/**
  Interface for the code Repository. Behaves as a collection of
  accounts to help ease on making any changes.
  */

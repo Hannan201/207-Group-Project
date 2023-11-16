@@ -13,12 +13,12 @@ import java.util.List;
  * This class is responsible for getting the backup
  * codes for a specific account through keyboard input.
  */
-
 public class ManualInputReader implements ReadCodeBehavior {
 
+    /** Logger for the manual input reader. */
     private static final Logger logger = LoggerFactory.getLogger(ManualInputReader.class);
 
-    // To store what the user types in.
+    /** To store what the user types in. */
     private final TextField code;
 
     /**

@@ -8,16 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-/*
+/**
  Implementation for the code Repository. Behaves as a collection of
  accounts to help ease on making any changes.
  */
 public class CodeRepositoryImpl implements CodeRepository {
 
-    // Logger for the code repository.
+    /** Logger for the code repository. */
     private static final Logger logger = LoggerFactory.getLogger(CodeRepositoryImpl.class);
 
-    // To make updates to the database.
+    /** To make updates to the database. */
     private final CodeDAO codeDAO;
 
     /**

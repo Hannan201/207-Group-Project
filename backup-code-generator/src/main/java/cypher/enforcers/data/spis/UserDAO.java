@@ -9,7 +9,7 @@ import cypher.enforcers.data.entities.UserEntity;
 public interface UserDAO {
 
     /**
-     * Insert a new user into the database,
+     * Insert a new user into the database.
      *
      * @param user The user to insert.
      * @return A user object if the user was added, null otherwise.

@@ -7,10 +7,9 @@ import java.util.List;
  * responsible for reading backup codes from a text
  * file.
  */
-
 public abstract class CodeReader {
 
-    // File path for the text file.
+    /** File path for the text file. */
     private String filePath;
 
     /**
@@ -34,7 +33,7 @@ public abstract class CodeReader {
     /**
      * Return the file path for this reader.
      *
-     * @return File path for this reader.
+     * @return The file path for this reader.
      */
     public String getFilePath() {
         return this.filePath;

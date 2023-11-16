@@ -6,12 +6,10 @@ import cypher.enforcers.commands.Command;
  * This class is responsible for switching the theme
  * of the application.
  */
-
 public class ThemeSwitcher {
 
-    // The command to change the theme.
+    /** The command to change the theme. */
     private Command command;
-
 
     /**
      * Creates an object to switch the theme of the
@@ -28,7 +26,7 @@ public class ThemeSwitcher {
     /**
      * Switch the theme for this application.
      *
-     * @throws NullPointerException If there's any missing data which
+     * @throws NullPointerException If there's any missing data that
      * prevents the theme from being changed, such as icons.
      */
     public void switchTheme() throws NullPointerException {

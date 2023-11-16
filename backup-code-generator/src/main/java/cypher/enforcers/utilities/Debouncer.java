@@ -8,27 +8,31 @@ import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
-/*
+/**
  The purpose of this class is to prevent from making unnecessary calls by
  making sure a function only executes after a certain amount of time
- give an input, if the function executes before that time we need to only
- execute the function with the new input and remove the old version of that
- function with the old input. Useful for when searching through a data structure
- based on input given by key-presses.
+ given an input.
+ If the function executes before the time, we need to only execute the
+ function with the new input and remove the old version of that function
+ with the old input.
+ Useful for when searching through a data structure based on input given
+ by key-presses.
 
- Credits to: https://stackoverflow.com/a/58404365.
+ Credits to: <a href="https://stackoverflow.com/a/58404365"></a>.
  */
 public class Debouncer {
 
+    /** Logger for the debouncer */
     private static final Logger logger = LoggerFactory.getLogger(Debouncer.class);
 
-    // To make sure the function executes after a certain amount of time.
+    /** To make sure the function executes after a certain amount of time. */
     private final Timer timer;
 
-    // Give the ability for tasks to be registered across different
-    // threads.
+    /**
+     * Give the ability for tasks to be registered across different
+     * threads.
+     */
     private final ConcurrentHashMap<String, TimerTask> tasks;
-
 
     /**
      * Create a new debouncer.
@@ -41,7 +45,7 @@ public class Debouncer {
     /**
      * Register a function with a key and interval to this debouncer. If
      * another function is registered before the first function has executed,
-     * the first function will be removed and not execute.
+     * the first function will be removed and not be executed.
      *
      * @param key Key for the function.
      * @param function Function to execute.

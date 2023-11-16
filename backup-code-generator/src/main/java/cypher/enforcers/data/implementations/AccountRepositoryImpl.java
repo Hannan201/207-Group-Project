@@ -8,16 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-/*
+/**
  Implementation for the Account Repository. Behaves as a collection of
  accounts to help ease on making any changes.
  */
 public class AccountRepositoryImpl implements AccountRepository {
 
-    // Logger for the account repository.
+    /** Logger for the account repository. */
     private static final Logger logger = LoggerFactory.getLogger(AccountRepositoryImpl.class);
 
-    // To make updates to the database.
+    /** To make updates to the database. */
     private final AccountDAO accountDAO;
 
     /**

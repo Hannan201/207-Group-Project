@@ -37,61 +37,57 @@ import java.util.ResourceBundle;
  */
 public class SettingsViewController implements Initializable {
 
-    // Logger for the settings controller.
+    /** Logger for the settings controller. */
     private static final Logger logger = LoggerFactory.getLogger(SettingsViewController.class);
 
-    // Used to update the theme of the views.
+    /** Used to update the theme of the views. */
     private static List<View> views;
 
-    // Contains all the content for the view.
+    /** Contains all the content for the view. */
     @FXML
     private VBox mainLayout;
 
-    // Contains the label to hold the copyright text.
+    /** Contains the label to hold the copyright text. */
     @FXML
     private HyperlinkLabel copyright;
 
-    // Used to cache the commands and theme switcher to avoid
-    // creating them again.
+    /**
+     * Used to cache the commands and theme switcher to avoid
+     * creating them again.
+     */
     private ThemeSwitcher switcher;
 
-    // Command for light mode.
+    /** Command for light mode. */
     private Command lightModeCommand;
 
-    // Command for dark mode.
+    /** Command for dark mode. */
     private Command darkModeCommand;
 
-    // Command for high contrast mode.
+    /** Command for high contrast mode. */
     private Command highContrastModeCommand;
 
-    // The copyright text to display.
+    /** The copyright text to display. */
     private static final String COPYRIGHT =
             "Special thanks to [Icons8] for the following icons: " +
             "[app] icon, [Google] icon, [Discord]icon, [Shopify] icon, " +
             "[Github] icon, [Settings] icon, [Log Out] icon, [Back Arrow] icon.";
 
     // Used to interact with the users.
-    private UserModel userModel;
-
-    /**
-     * Set the user model.
-     *
-     * @param model The User Model.
-     */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
-    }
+    private final UserModel userModel;
 
     // Used to interact with the accounts.
-    private AccountModel accountModel;
+    private final AccountModel accountModel;
 
     /**
-     * Set the account model.
+     * Create the controller for the settings view with the required
+     * models.
      *
-     * @param model The Account Model.
+     * @param userModel The model to interact with the users.
+     * @param accountModel The model to interact with the accounts.
      */
-    public void setAccountModel(AccountModel model) {
-        this.accountModel = model;
+    public SettingsViewController(UserModel userModel, AccountModel accountModel) {
+        this.userModel = userModel;
+        this.accountModel = accountModel;
     }
 
     /**
@@ -101,7 +97,7 @@ public class SettingsViewController implements Initializable {
      *                       the root object was not localized.
      * @throws UncheckedIOException If any errors occur while loading
      * in all the views for the theme switcher.
-     * @throws NullPointerException If there's any missing data which
+     * @throws NullPointerException If there's any missing data that
      * prevents the theme from being set to the default, such as icons.
      */
     @Override
@@ -109,8 +105,8 @@ public class SettingsViewController implements Initializable {
         /*
         The copyright label for some reason would overflow when the
         screen gets to small, and the text would appear on the buttons.
-        After trial and error, I pretty much found a break point where
-        I increase the minimum height of the label so there's more
+        After trial and error, I found a break point where
+        I increase the minimum height of the label, so there's more
         room to prevent overflow.
          */
         mainLayout.widthProperty().addListener(((observableValue, oldWidth, newWidth) -> {
@@ -201,7 +197,7 @@ public class SettingsViewController implements Initializable {
      *                to the correct theme.
      * @throws IOException if any errors occur while loading in the
      * settings view.
-     * @throws NullPointerException If there's any missing data which
+     * @throws NullPointerException If there's any missing data that
      * prevents the theme from being changed, such as icons.
      */
     private void updateTheme(Command command) throws IOException, NullPointerException {
@@ -228,7 +224,7 @@ public class SettingsViewController implements Initializable {
     }
 
     /**
-     * Allows a user to logout and redirects them to the home page.
+     * Allows a user to log out and redirects them to the home page.
      *
      * @throws IOException if any errors occur while loading in the
      * home page view.
@@ -256,10 +252,47 @@ public class SettingsViewController implements Initializable {
     }
 
 
-    public void handleLinkClick(ActionEvent e) throws IOException {
+    /**
+     * Handle method for when a link is clicked from the copyright
+     * text.
+     *
+     * @param e The even that triggered the click.
+     */
+    public void handleLinkClick(ActionEvent e) {
+        String url = getUrl(e);
+
+        if (url.isEmpty() || url.isBlank()) {
+            logger.warn("Link to icon is empty. Aborting request");
+            return;
+        }
+
+        logger.debug("Redirecting browser to url: {}.", url);
+        try {
+            Desktop.getDesktop().browse(URI.create(url));
+        } catch (UnsupportedOperationException notSupportedException) {
+            logger.warn("The current platform does not support the browser action. Cause: ", notSupportedException);
+        } catch (IOException ioException) {
+            logger.warn("Failed to find or launch browser. Cause: ", ioException);
+        } catch (SecurityException securityException) {
+            logger.warn("Permission denied. Cause: ", securityException);
+        }
+    }
+
+    /**
+     * Mainly created this method to avoid IntelliJ warnings, otherwise
+     * everything was working just fine.
+     * <br>
+     * Extract the correct URL to open based on the HyperLink that was
+     * clicked on the copyright text.
+     *
+     * @param e The event that triggered the click.
+     * @return The URL to open.
+     */
+    private String getUrl(ActionEvent e) {
         Hyperlink link = (Hyperlink) e.getSource();
         final String str = link == null ? "" : link.getText();
         String url = "";
+
         switch (str) {
             case "Icons8" -> url = "https://icons8.com";
             case "app" -> url = "https://icons8.com/icon/4SBCvFZBi2Rc/app";
@@ -272,14 +305,9 @@ public class SettingsViewController implements Initializable {
             case "Log Out" -> url = "https://icons8.com/icon/O78uUJpfEyFx/log-out";
         }
 
-        if (url.isEmpty() || url.isBlank()) {
-            logger.warn("Link to icon is empty. Aborting request");
-            return;
-        }
-
-        logger.debug("Redirecting browser to url: {}.", url);
-        Desktop.getDesktop().browse(URI.create(url));
+        return url;
     }
+
 
     /**
      * Delete all accounts for this user.

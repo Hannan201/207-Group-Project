@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class HomePageView extends View {
 
-    // An instance for this home page view.
+    /** An instance for this home page view. */
     private static View firstInstance = null;
 
     /**

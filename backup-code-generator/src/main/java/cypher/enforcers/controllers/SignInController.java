@@ -35,10 +35,10 @@ import java.util.ResourceBundle;
  */
 public class SignInController implements Initializable {
 
-    // Logger for the sign-in controller.
+    /** Logger for the sign-in controller. */
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
-    // Used for validation based on what the user types.
+    /** Used for validation based on what the user types. */
     private final Validator validator = new Validator();
 
     /**
@@ -65,7 +65,7 @@ public class SignInController implements Initializable {
     @FXML
     private TextField passInput;
 
-    // Container to hold the sign-in button.
+    /** Container to hold the sign-in button. */
     @FXML
     private HBox box;
 
@@ -75,36 +75,39 @@ public class SignInController implements Initializable {
     @FXML
     private Button signInButton;
 
-    // Allows the spacing above the title to be controlled.
+    /** Allows the spacing above the title to be controlled. */
     @FXML
     private Region aboveTitle;
 
-    // Allows the spacing below the title to be controlled.
+    /** Allows the spacing below the title to be controlled. */
     @FXML
     private Region belowButton;
 
-    // If the window's width is less than the width of the title's,
-    // then this property is used to store the difference between the
-    // two values.
+    /**
+     * If the window's width is less than the width of the title's,
+     * then this property is used to store the difference between the
+     * two values.
+     */
     @FXML
     private final DoubleProperty delta = new SimpleDoubleProperty();
 
-    // To interact with the user data.
-    private UserModel userModel;
+    /** To interact with the user data. */
+    private final UserModel userModel;
 
     /**
-     * Set the user model.
+     * Creat the controller for the sign in controller with the required
+     * models.
      *
-     * @param model The User Model.
+     * @param userModel The model to interact with the users.
      */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
+    public SignInController(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Clear all the text fields when this window closes. Since
-        // we're using singleton pattern, only one view instance will be
+        // we're using the singleton pattern, only one view instance will be
         // created.
         aboveTitle.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
@@ -228,7 +231,7 @@ public class SignInController implements Initializable {
 
         // No use to send a query to the database if the username or password
         // is empty. The database does have checks to ensure the data is
-        // not empty, however this would then trigger a log message. Might
+        // not empty, however, this would then trigger a log message. Might
         // as well alert the user here, so they can see it.
         validator.createCheck()
                 .withMethod(c -> {
@@ -283,7 +286,7 @@ public class SignInController implements Initializable {
      * @throws IOException if any errors occur while loading in the
      * accounts view.
      * @throws NullPointerException If the accounts view cannot be created
-     * due to missing data or if the theme for the user cannot be set due
+     * due to missing data, or if the theme for the user cannot be set due
      * to missing data.
      */
     private void signInOnAction(ActionEvent actionEvent) throws IOException, NullPointerException {
@@ -304,7 +307,7 @@ public class SignInController implements Initializable {
      * @throws IOException if any errors occur while loading in the
      * accounts view.
      * @throws NullPointerException If the accounts view cannot be created
-     * due to missing data or if the theme for the user cannot be set due
+     * due to missing data, or if the theme for the user cannot be set due
      * to missing data.
      */
     private void signInFromEnterKey(KeyEvent e) throws IOException, NullPointerException {

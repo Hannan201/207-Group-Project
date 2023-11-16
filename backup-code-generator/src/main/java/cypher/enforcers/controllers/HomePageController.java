@@ -28,62 +28,67 @@ import java.util.ResourceBundle;
  */
 public class HomePageController implements Initializable {
 
-    // Logger for the home page view.
+    /** Logger for the home page view. */
     private static final Logger logger = LoggerFactory.getLogger(HomePageController.class);
 
-    // Container to hold all elements to be showed for this view.
+    /** Container to hold all elements to be showed for this view. */
     @FXML
     private BorderPane main;
 
-    // Button that says sign-up.
+    /** Button that says sign-up. */
     @FXML
     private Button signIn;
 
-    // Button that says sign-in.
+    /** Button that says sign-in. */
     @FXML
     private Button signUp;
 
-    // Container that holds the buttons horizontally.
+    /** Container that holds the buttons horizontally. */
     @FXML
     private HBox buttons;
 
-    // Title that says "Backup Code Generator".
+    /** Title that says "Backup Code Generator". */
     @FXML
     private Label title;
 
-    // Controls the spacing above the title.
+    /** Controls the spacing above the title. */
     @FXML
     private Region above;
 
-    // Controls the spacing below the sign-up and sign-in buttons.
+    /** Controls the spacing below the sign-up and sign-in buttons. */
     @FXML
     private Region below;
 
-    // This is used as a backup property to store the original
-    // spacing above and below to center the label and buttons for if
-    // the window's width becomes smaller than the title's text width.
+    /**
+     * This is used as a backup property to store the original
+     * spacing above and below to center the label and buttons for if
+     * the window's width becomes smaller than the title's text width.
+     */
     private final DoubleProperty originalSpacing = new SimpleDoubleProperty();
 
-    // If the window's width is less than the width of the title's text,
-    // then this property is used to store the difference between the
-    // two values.
+    /**
+     * If the window's width is less than the width of the title's text,
+     * then this property is used to store the difference between the
+     * two values.
+     */
     private final DoubleProperty delta = new SimpleDoubleProperty();
 
-    // Used to check if a user's already logged in.
-    private UserModel userModel;
+    /** Used to check if a user's already logged in. */
+    private final UserModel userModel;
 
     /**
-     * Set the user model.
+     * Create the controller for the home page view with the required
+     * models.
      *
-     * @param model The User Model.
+     * @param userModel The model to interact with the users.
      */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
+    public HomePageController(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     /**
      * A handle method for the Sign-In button that opens a pop-up to allow the
-     * user to sign-in.
+     * user to sign in.
      *
      * @throws IOException if any errors occur while loading in the views.
      * @throws NullPointerException If the sign-in view cannot be created
@@ -127,7 +132,7 @@ public class HomePageController implements Initializable {
             }));
         }
 
-        // To close the database connection when window closes.
+        // To close the database connection when the window closes.
         main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
                 newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
@@ -191,7 +196,7 @@ public class HomePageController implements Initializable {
 
                When the window's width is less than the width of the
                title's text, then the spacing above the title and below
-               the buttons will shrink, this gives the title more room
+               the buttons will shrink. This gives the title more room
                to expand its height and thus be able to wrap the text.
 
                The boolean is used to control if the window's width is

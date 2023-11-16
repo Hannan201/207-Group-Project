@@ -13,12 +13,12 @@ import java.io.IOException;
  * which shows all the backup codes for a specific
  * social media account.
  */
-
 public class CodeView extends View implements Reversible {
 
-    // An instance for this code-viewer view.
+    /** An instance for this code-viewer view. */
     private static View firstInstance = null;
 
+    /** The controller for this code view. */
     private CodeViewController controller = null;
 
     // The previous view for this code-viewer

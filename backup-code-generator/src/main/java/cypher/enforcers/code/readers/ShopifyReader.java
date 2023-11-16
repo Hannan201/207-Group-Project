@@ -11,10 +11,9 @@ import java.io.*;
  * This class is responsible for reading backup codes
  * in the structure provided by Shopify.
  */
-
 public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
 
-    // Logger for shopify reader.
+    /** Logger for shopify reader. */
     private static final Logger logger = LoggerFactory.getLogger(ShopifyReader.class);
 
     /**

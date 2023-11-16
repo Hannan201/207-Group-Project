@@ -9,7 +9,7 @@ module backup.code.generator {
     // Logging API.
     requires org.slf4j;
 
-    // Configure logging implementation (logback).
+    // The logging implementation (logback).
     requires ch.qos.logback.classic;
     requires ch.qos.logback.core;
 

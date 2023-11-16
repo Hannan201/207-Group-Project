@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
- * This class is used to define how different types of object should be
+ * This class is used to define how different types of objects should be
  * set when being used as placeholders in an SQL query.
  */
 public class ArgumentSetters {
 
-    // How a user should be added to the database.
+    /** How a user should be added to the database. */
     private static final BiConsumer<PreparedStatement, UserEntity> FOR_USER = (statement, user) -> {
         try {
             statement.setString(1, user.getUsername());
@@ -25,7 +25,7 @@ public class ArgumentSetters {
         }
     };
 
-    // How an account should be added to the database.
+    /** How an account should be added to the database. */
     private static final BiConsumer<PreparedStatement, AccountEntity> FOR_ACCOUNT = (statement, account) -> {
         try {
             statement.setLong(1, account.getUserId());
@@ -36,7 +36,7 @@ public class ArgumentSetters {
         }
     };
 
-    // How a code should be added to the database.
+    /** How a code should be added to the database. */
     private static final BiConsumer<PreparedStatement, CodeEntity> FOR_CODE = (statement, code) -> {
         try {
             statement.setLong(1, code.getAccountID());
@@ -46,7 +46,7 @@ public class ArgumentSetters {
         }
     };
 
-    // How an integer should be added to the database.
+    /** How an integer should be added to the database. */
     private static final TriConsumer<PreparedStatement, Integer, Object> FOR_INTEGER = (statement, index, value) -> {
         try {
             statement.setInt(index, (Integer) value);
@@ -55,7 +55,7 @@ public class ArgumentSetters {
         }
     };
 
-    // How a long should be added to the database.
+    /** How a long should be added to the database. */
     private static final TriConsumer<PreparedStatement, Integer, Object> FOR_LONG = (statement, index, value) -> {
         try {
             statement.setLong(index, (Long) value);
@@ -64,8 +64,10 @@ public class ArgumentSetters {
         }
     };
 
-    // How a long should be added to the database, if it's the only
-    // argument being passed in.
+    /**
+     * How a long should be added to the database, if it's the only
+     * argument being passed in.
+     */
     private static final BiConsumer<PreparedStatement, Long> FOR_ONE_LONG = (statement, value) -> {
         try {
             statement.setLong(1, value);
@@ -74,7 +76,7 @@ public class ArgumentSetters {
         }
     };
 
-    // How a string should be added to the database.
+    /** How a string should be added to the database. */
     private static final TriConsumer<PreparedStatement, Integer, Object> FOR_STRING = (statement, index, value) -> {
         try {
             statement.setString(index, (String) value);
@@ -83,8 +85,10 @@ public class ArgumentSetters {
         }
     };
 
-    // Maps the socialMediaType of object to how it should be set for the
-    // placeholders.
+    /**
+     * Maps the type of object to how it should be set for the
+     * placeholders.
+     */
     private static final Map<Class<?>, BiConsumer<PreparedStatement, ?>> OBJECT_TYPE_TO_SETTER =
             Map.ofEntries(
                     Map.entry(UserEntity.class, FOR_USER),
@@ -93,8 +97,10 @@ public class ArgumentSetters {
                     Map.entry(CodeEntity.class, FOR_CODE)
             );
 
-    // Maps the socialMediaType of object to which index it should be added. Since
-    // the data being added might not all belong to one class.
+    /**
+     * Maps the type of object to which index it should be added.
+     * Since the data being added might not all belong to one class.
+     */
     private static final Map<Class<?>, TriConsumer<PreparedStatement, Integer, Object>> SINGLE_TYPE_TO_SETTER =
             Map.ofEntries(
                     Map.entry(Integer.class, FOR_INTEGER),

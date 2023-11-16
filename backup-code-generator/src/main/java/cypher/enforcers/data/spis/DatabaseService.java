@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-/*
+/**
  Interface for the database service. This service acts as a way to
  send queries to the database, ensure connection reliability and
  deliver any important alerts.
@@ -60,7 +60,7 @@ public interface DatabaseService {
      * @param <T> The type of object, this will be used to determine
      *           how to set the object.
      * @throws SQLException If anything goes wrong in the update. In which
-     * case the table will be rolled back.
+     * case, the table will be rolled back.
      */
     @SuppressWarnings("unchecked")
     default <T> void executeUpdate(String query, T object) throws SQLException {
@@ -120,7 +120,7 @@ public interface DatabaseService {
      * @param type The class type of the object to retrieve.
      * @param objects The arguments that need to be set for the placeholder.
      * @param <T> The type of value that should be returned.
-     * @return The value, if any errors occur null will be returned.
+     * @return The value, if any errors occur, null will be returned.
      * @throws SQLException If anything goes wrong.
      */
     default <T> T executeSelect(String query, Class<T> type, Object ... objects) throws SQLException {

@@ -18,46 +18,54 @@ import java.util.Objects;
  */
 public class CodeCellController {
 
-    // Logger for the code cell controller.
+    /** Logger for the code cell controller. */
     private static final Logger logger = LoggerFactory.getLogger(CodeCellController.class);
 
-    // Label that displays the code.
+    /** Label that displays the code. */
     @FXML
     private Label code;
 
-    // Text field used to update the code.
+    /** Text field used to update the code. */
     @FXML
     private TextField userInput;
 
-    // Button that says Copy.
+    /** Button that says Copy. */
     @FXML
     private Button copy;
 
-    // Button that says Delete.
+    /** Button that says Delete. */
     @FXML
     private Button delete;
 
-    // Button that says Edit.
+    /** Button that says Edit. */
     @FXML
     private Button edit;
 
-    // Reference to the parent list view.
+    /** Reference to the parent list view. */
     private ListView<Code> currentListView;
 
-    // If this code is selected or not.
+    /** If this code is selected or not. */
     private boolean selected;
 
-    // Used to interact with the account's codes.
-    private CodeModel codeModel;
+    /** Used to interact with the codes for a given account. */
+    private final CodeModel codeModel;
+
+    /**
+     * Create the controller for a code cell with the required model.
+     *
+     * @param codeModel The model to interact with the codes.
+     */
+    public CodeCellController(CodeModel codeModel) {
+        this.codeModel = codeModel;
+    }
 
     /**
      * Stores the data of the current code, the code factory, and its corresponding listview.
      *
      * @param cell The current CodeCell
      * @param parent The ListView that contains this CodeCell
-     * @param model The code model
      */
-    public void setCodeCell(Code cell, ListView<Code> parent, CodeModel model) {
+    public void setCodeCell(Code cell, ListView<Code> parent) {
         currentListView = parent;
         selected = false;
 
@@ -70,8 +78,6 @@ public class CodeCellController {
         copy.setDisable(true);
 
         userInput.setVisible(false);
-
-        this.codeModel = model;
     }
 
     /**
@@ -114,7 +120,7 @@ public class CodeCellController {
      * This method will submit edit changes.
      */
     public void TextFieldOnAction(KeyEvent e) {
-        // handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
+        // Handle the event when enter is pressed. This is done so that the user submit their edit more feasibly
         // Don't let the user enter an empty code.
         if (e.getCode() == KeyCode.ENTER && !userInput.getText().isEmpty()) {
             String logText = Objects.isNull(codeModel.getCurrentCode()) ?

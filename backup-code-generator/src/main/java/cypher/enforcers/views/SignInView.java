@@ -6,10 +6,9 @@ import java.io.IOException;
  * This class is responsible for displaying a view
  * to sign in.
  */
-
 public class SignInView extends View {
 
-    // An instance for this sign-in view.
+    /** An instance for this sign-in view. */
     private static View firstInstance = null;
 
     /**

@@ -13,16 +13,18 @@ import java.io.IOException;
  * to show all the social media accounts for a specific
  * user of this application.
  */
-
 public class AccountView extends View implements Reversible {
 
-    // An instance for this account-viewer view.
+    /** An instance for this account-viewer view. */
     private static View firstInstance = null;
 
+    /** The controller for this account view. */
     private AccountViewController controller = null;
 
-    // The previous view for this account-viewer
-    // view.
+    /**
+     * The previous view for this account-viewer
+     * view.
+     */
     private View previousView;
 
     /**

@@ -19,72 +19,66 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controller for the create account view.
+ * Controller for the create-account view.
  */
-public class CreateAccountController implements Initializable{
+public class CreateAccountController implements Initializable {
 
-    // Used for validation based on what the user types.
+    /** Used for validation based on what the user types. */
     private final Validator validator = new Validator();
 
-    // Contains all content to be displayed for this application.
+    /** Contains all content to be displayed for this application. */
     @FXML
     public VBox box;
 
-    // Button that says create account.
+    /** Button that says create account. */
     public Button createAccount;
 
-    // Button for the GitHub icon.
+    /** Button for the GitHub icon. */
     @FXML
     public ToggleButton github;
 
-    // Button for the Google icon.
+    /** Button for the Google icon. */
     @FXML
     public ToggleButton google;
 
-    // Button for the Shopify icon.
+    /** Button for the Shopify icon. */
     @FXML
     public ToggleButton shopify;
 
-    // Button for the Discord icon.
+    /** Button for the Discord icon. */
     @FXML
     public ToggleButton discord;
 
-    // Text field for the Social Media type.
+    /** Text field for the Social Media type. */
     @FXML
     public TextField platform;
 
-    // Text field for the name of the account.
+    /** Text field for the name of the account. */
     @FXML
     public TextField username;
 
-    // To interact with the user's accounts.
-    private AccountModel accountModel;
+    /** To interact with the current user. */
+    private final UserModel userModel;
 
-    // To interact with the current user.
-    private UserModel userModel;
-
-    /**
-     * Set the user model.
-     *
-     * @param model The User Model.
-     */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
-    }
+    /** To interact with the user's accounts. */
+    private final AccountModel accountModel;
 
     /**
-     * Set the account model.
+     * Create the controller for the create-account view with the
+     * required models.
      *
-     * @param model The Account Model.
+     * @param userModel The model to interact with the users.
+     * @param accountModel The mode to interact with the accounts.
      */
-    public void setAccountModel(AccountModel model) {
-        this.accountModel = model;
+    public CreateAccountController(UserModel userModel, AccountModel accountModel) {
+        this.userModel = userModel;
+        this.accountModel = accountModel;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Clear all the text fields when this window closes. Since
-        // we're using singleton pattern, only one view instance will be
+        // we're using the singleton pattern, only one view instance will be
         // created.
         box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
@@ -162,11 +156,11 @@ public class CreateAccountController implements Initializable{
 
     /**
      * Toggle the platform so that:
-     * - if it's editable: make it un-editable and then attach text to it.
-     * - If it's un-editable: make it editable and then clear the text.
+     * - if it's editable: make it uneditable and then attach text to it.
+     * - If it's uneditable: make it editable and then clear the text.
      *
      * @param text Message to display if the text field is
-     *             un-editable.
+     *             uneditable.
      */
     public void toggle(String text) {
         boolean result = platform.isEditable();

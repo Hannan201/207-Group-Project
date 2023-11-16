@@ -6,27 +6,28 @@ import cypher.enforcers.views.themes.Theme;
  * This class is responsible for storing data
  * related to a user of this application.
  */
-
 public class UserEntity {
 
-    // ID of the user.
+    /** ID of the user. */
     private long id;
 
-    // The user's username.
+    /** The user's username. */
     private String username;
 
-    // The user's password.
+    /** The user's password. */
     private String password;
 
-    // Theme for this user.
+    /** Theme for this user. */
     private Theme theme = Theme.LIGHT;
 
-    // Login status for this user.
-    // 0 = false = logged out.
-    // 1 = true = logged in.
-    // By default, only time a new user object should be created is
-    // when registering, in which case the user should automatically
-    // be signed in.
+    /**
+     * Login status for this user.
+     * 0 = false = logged out.
+     * 1 = true = logged in.
+     * By default, the only time a new user object should be created is
+     * when registering, in which case the user should automatically
+     * be signed in.
+     */
     private short loggedIn = 1;
 
     /**

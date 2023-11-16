@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * This class is used to define how different types of object should be
+ * This class is used to define how different types of objects should be
  * retrieved from a result set after executing a SELECT SQL statement.
  */
 public class Retrievers {
 
-    // How to retrieve a user from a result set.
+    /** How to retrieve a user from a result set. */
     private static final Function<ResultSet, UserEntity> FOR_USER = resultSet -> {
         UserEntity user;
         try {
@@ -38,7 +38,7 @@ public class Retrievers {
         return user;
     };
 
-    // How to retrieve a theme from the result set.
+    /** How to retrieve a theme from the result set. */
     private static final Function<ResultSet, Theme> FOR_THEME = resultSet -> {
         try {
             return Theme.values()[resultSet.getInt("theme_value")];
@@ -47,7 +47,7 @@ public class Retrievers {
         }
     };
 
-    // How to retrieve an account from the result set.
+    /** How to retrieve an account from the result set. */
     private static final Function<ResultSet, AccountEntity> FOR_ACCOUNT = resultSet -> {
         try {
             if (resultSet.getRow() == 0 && !resultSet.isBeforeFirst()) {
@@ -65,7 +65,7 @@ public class Retrievers {
         }
     };
 
-    // How to retrieve a code from the result set.
+    /** How to retrieve a code from the result set. */
     private static final Function<ResultSet, CodeEntity> FOR_CODE = resultSet -> {
         try {
             if (resultSet.getRow() == 0 && !resultSet.isBeforeFirst()) {
@@ -82,7 +82,7 @@ public class Retrievers {
         }
     };
 
-    // Maps the socialMediaType of object to how it should be retrieved.
+    /** Maps the type of object to how it should be retrieved. */
     private static final Map<Class<?>, Function<ResultSet, ?>> OBJECT_TYPE_TO_RETRIEVER =
             Map.ofEntries(
                     Map.entry(UserEntity.class, FOR_USER),
@@ -92,11 +92,11 @@ public class Retrievers {
             );
 
     /**
-     * Get a retriever that can retrieve a specific socialMediaType of object from
+     * Get a retriever that can retrieve a specific type of object from
      * a result set.
      *
      * @param type The class of the object to retrieve.
-     * @param <T> The socialMediaType of data to retrieve.
+     * @param <T> The type of data to retrieve.
      * @return A retriever that knows how to retrieve the object from
      * the result set.
      */

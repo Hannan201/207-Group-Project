@@ -15,10 +15,9 @@ import java.util.List;
  * This class is responsible for reading backup codes
  * in the structure provided by GitHub.
  */
-
 public class GitHubReader extends CodeReader implements ReadCodeBehavior {
 
-    // Logger for github reader.
+    /** Logger for github reader. */
     private static final Logger logger = LoggerFactory.getLogger(GitHubReader.class);
 
     /**
@@ -42,9 +41,8 @@ public class GitHubReader extends CodeReader implements ReadCodeBehavior {
             // To store each line of the file.
             String line;
 
-            // GitHub's file structure is simple where
-            // there is one column, and each row
-            // contains a backup code.
+            // GitHub's file structure has one column,
+            // and each row contains a backup code.
             while ((line = in.readLine()) != null) {
                 // To remove the new line character
                 // and add it.

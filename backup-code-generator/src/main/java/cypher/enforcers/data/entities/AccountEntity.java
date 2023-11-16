@@ -8,29 +8,34 @@ import java.util.*;
  * This class is responsible for storing data
  * related to a specific social media account.
  */
-
 public class AccountEntity {
 
-    // List of social media platforms that allow the imports
-    // of text files.
+    /**
+     * List of social media platforms that allow the imports
+     * of text files.
+     */
     private static final Set<String> SUPPORTED_IMPORT_PLATFORMS
             = Set.copyOf(List.of("shopify", "discord", "google", "github"));
 
-    // ID for this account.
+    /** ID for this account. */
     private long id;
 
-    // ID of the user this account belongs to.
+    /** ID of the user this account belongs to. */
     private long userId;
 
-    // Name for this account (email/username/handle
-    // or some sort of identifier).
+    /**
+     * Name for this account (email/username/handle
+     * or some sort of identifier).
+     */
     private String name;
 
-    // Social media type for this account.
+    /** Social media type for this account. */
     private String socialMediaType;
 
-    // To load icons for each type of social
-    // media account in this application.
+    /**
+     * To load icons for each type of social
+     * media account in this application.
+     */
     private static final Map<String, String> icons;
 
     static {
@@ -129,7 +134,7 @@ public class AccountEntity {
      * are used when showing the accounts.
      *
      * @return A Map where the key is the
-     * name of the platform (in lowercase)
+     * name of the platform (in lowercase),
      * and the value is the path to the file.
      */
     public static Map<String, String> getIcons() {

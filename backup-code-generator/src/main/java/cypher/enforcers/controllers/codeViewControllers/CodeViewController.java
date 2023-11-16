@@ -43,125 +43,128 @@ import java.util.*;
  */
 public class CodeViewController implements Initializable {
 
-    // Logger for the code view controller.
+    /** Logger for the code view controller. */
     private static final Logger logger = LoggerFactory.getLogger(CodeViewController.class);
 
-    // Contains all content to be displayed for this view.
+    /** Contains all content to be displayed for this view. */
     @FXML
     private BorderPane background;
 
-    // Contains the account name and social media type to be
-    // displayed vertically on top of each other.
+    /**
+     * Contains the account name and social media type to be
+     * displayed vertically on top of each other.
+     */
     @FXML
     private VBox titleSection;
 
-    // Contains the list-view and text field to be displayed on top
-    // of each other.
+    /**
+     * Contains the list-view and text field to be displayed on top
+     * of each other.
+     */
     @FXML
     private VBox left;
 
-    // Contains the buttons to be displayed on top of each other.
+    /** Contains the buttons to be displayed on top of each other. */
     @FXML
     private VBox right;
 
-    // Controls the spacing above the list-view.
+    /** Controls the spacing above the list-view. */
     @FXML
     private Region aboveListView;
 
-    // Displays all the codes.
+    /** Displays all the codes. */
     @FXML
     private ListView<Code> codeListView;
 
-    // Label that says code.
+    /** Label that says code. */
     @FXML
     private Label codesTitle;
 
-    // Controls the spacing above the buttons.
-    // (This ensures the spacing is exactly the same as when the
-    // project was first submitted, didn't want to make any
-    // changes to the UI on my own).
+    /**
+     * Controls the spacing above the buttons.
+     * (This ensures the spacing is exactly the same as when the
+     * project was first submitted, didn't want to make any
+     * changes to the UI on my own).
+     */
     @FXML
     private Region aboveButtons;
 
-    // Button that says Import Codes.
+    /** Button that says Import Codes. */
     @FXML
     private Button importCodes;
 
-    // Button that says Add Code.
+    /** Button that says Add Code. */
     @FXML
     public Button addCode;
 
-    // Main title for this view.
+    /** Main title for this view. */
     @FXML
     private Label title;
 
-    // Title for the name of the account.
+    /** Title for the name of the account. */
     @FXML
     private Label usernameTitle;
 
-    // Controls the spacing on the left side of the text field, so that
-    // it's aligned with the list-view.
+    /**
+     * Controls the spacing on the left side of the text field, so that
+     * it's aligned with the list-view.
+     */
     @FXML
     private Region beforeCodeInput;
 
-    // Text field to add a code.
+    /** Text field to add a code. */
     @FXML
     private TextField addCodeInput;
 
-    // Controls the spacing between the text field and Add Code button
-    // so that they have enough gap which makes the button and text field
-    // stay inline with the list-view.
+    /**
+     * Controls the spacing between the text field and Add Code button
+     * so that they have enough space which makes the button and text field
+     * stay inline with the list-view.
+     */
     @FXML
     private Region spaceBetween;
 
-    // This property is used to control the padding on the left side
-    // of the list view so that the content can fit when the screen
-    // gets too small.
+    /**
+     * This property is used to control the padding on the left side
+     * of the list view so that the content can fit when the screen
+     * gets too small.
+     */
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
 
-    // This property controls the padding on the right and left side
-    // of the buttons so the content can fit when the screen gets too
-    // small.
+    /**
+     * This property controls the padding on the right and left side
+     * of the buttons, so the content can fit when the screen gets too
+     * small.
+     */
     private final ObjectProperty<Insets> rightSidePadding = new SimpleObjectProperty<>(new Insets(0, 12, 0, 10));
 
-    // This property is used to control the padding of the main container
-    // so that the contents can fit when the screen gets to small.
+    /**
+     * This property is used to control the padding of the main container
+     * so that the contents can fit when the screen gets to small.
+     */
     private final ObjectProperty<Insets> windowPadding = new SimpleObjectProperty<>(new Insets(5, 5, 5, 5));
 
-    // To log out the current user.
-    private UserModel userModel;
+    /** To log out the current user. */
+    private final UserModel userModel;
+
+    /** To interact with the current account. */
+    private final AccountModel accountModel;
+
+    /** To interact with the account's codes. */
+    private final CodeModel codeModel;
 
     /**
-     * Set the user model.
+     * Create the controller for the code view with the required
+     * models.
      *
-     * @param model The User Model.
+     * @param userModel The model to interact with the users.
+     * @param accountModel The model to interact with the accounts.
+     * @param codeModel The model to interact with the codes.
      */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
-    }
-
-    // To interact with the current account.
-    private AccountModel accountModel;
-
-    /**
-     * Set the account model.
-     *
-     * @param model The Account Model.
-     */
-    public void setAccountModel(AccountModel model) {
-        this.accountModel = model;
-    }
-
-    // To interact with the account's codes.
-    private CodeModel codeModel;
-
-    /**
-     * Set the code model.
-     *
-     * @param model The Code Model.
-     */
-    public void setCodeModel(CodeModel model) {
-        this.codeModel = model;
+    public CodeViewController(UserModel userModel, AccountModel accountModel, CodeModel codeModel) {
+        this.userModel = userModel;
+        this.accountModel = accountModel;
+        this.codeModel = codeModel;
     }
 
     @Override
@@ -216,19 +219,20 @@ public class CodeViewController implements Initializable {
         This view would break down if the screen went too large or
         small. I'm not good at UI thus I didn't know how to make it look,
         so for now I just made it look "functional" when the screen
-        sizes change. if screen size is the default width and height, then
-        I did my best to maintain the spacings that were there when
+        sizes change. If the screen size is the default width and height,
+        then I did my best to maintain the spacings that were there when
         this project was submitted, since I didn't want to tamper the UI.
         You are fully free to change these bindings.
          */
 
         /*
         The text field, add code button, and the space between them
-        each get a certain amount of width. By trial and error I
-        figured out the values so that each element gets a certain
-        percentage of the total width, and the total space is based on the
-        width of the list-view. This allows for the proportions to be
-        maintained even when the screen size is changed.
+        each gets a certain amount of width.
+        By trial and error, I figured out the values so that each element
+        gets a certain percentage of the total width, and the total space
+        is based on the width of the list-view.
+        This allows for the proportions to be maintained even when the screen size is
+        changed.
          */
         addCodeInput.prefWidthProperty().bind(
                 codeListView.widthProperty()
@@ -255,9 +259,9 @@ public class CodeViewController implements Initializable {
         );
 
         /*
-        There are multiple breakpoints I found from trial and error
+        There are multiple breakpoints I found from trial and error,
         and if the width gets smaller than those breakpoints, then
-        paddings will adjust so there's more room for the content.
+        paddings will adjust, so there's more room for the content.
          */
 
         background.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
@@ -310,9 +314,7 @@ public class CodeViewController implements Initializable {
 
         codeListView.setCellFactory(test -> {
             try {
-                CodeCell cell = new CodeCell(codeListView);
-                cell.setCodeModel(codeModel);
-                return cell;
+                return new CodeCell(codeListView);
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
@@ -394,7 +396,7 @@ public class CodeViewController implements Initializable {
     }
 
     /**
-     * Add list of codes based on the behavior.
+     * Add a list of codes based on the behavior.
      *
      * @param behavior Obtains a backup code depending on the source.
      */
@@ -406,7 +408,7 @@ public class CodeViewController implements Initializable {
     }
 
     /**
-     * Allows a user to logout and redirects them to the home page.
+     * Allows a user to log out and redirects them to the home page.
      *
      * @throws IOException if any errors occur while loading in the
      * home page view.

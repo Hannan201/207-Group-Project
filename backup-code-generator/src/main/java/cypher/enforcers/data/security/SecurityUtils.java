@@ -12,27 +12,31 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Objects;
 
+/**
+ * This class is responsible for ensuring passwords are stored in
+ * a safe format.
+ */
 public class SecurityUtils {
 
-    // Logger for the security utilities.
+    /** Logger for the security utilities. */
     private static final Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
 
-    // Algorithm being used to hash passwords.
+    /** Algorithm being used to hash passwords. */
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 
-    // Number of iterations to apply for this algorithm.
+    /** Number of iterations to apply for this algorithm. */
     private static final int NUMBER_OF_ITERATIONS = 1000;
 
-    // Length of the key being used to hash passwords.
+    /** Length of the key being used to hash passwords. */
     private static final int KEY_LENGTH = 128;
 
-    // Length of the salt.
+    /** Length of the salt. */
     public static final int SALT_LENGTH = 24;
 
-    // Object to generate a new salt.
+    /** Object to generate a new salt. */
     private static final SecureRandom saltGenerator = new SecureRandom();
 
-    // Factory to generate secure keys for a specific algorithm.
+    /** Factory to generate secure keys for a specific algorithm. */
     private static SecretKeyFactory keyFactory;
 
     /**

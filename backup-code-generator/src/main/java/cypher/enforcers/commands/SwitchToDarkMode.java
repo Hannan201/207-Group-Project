@@ -8,12 +8,10 @@ import java.util.List;
  * This class is responsible for switching the application
  * to dark mode.
  */
-
 public class SwitchToDarkMode implements Command {
 
-    // List to store all the different views in the application.
+    /** List to store all the different views in the application. */
     private final List<View> views;
-
 
     /**
      * Make a command to switch the theme of all the views

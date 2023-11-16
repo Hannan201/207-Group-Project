@@ -4,7 +4,7 @@ import cypher.enforcers.data.entities.AccountEntity;
 
 import java.util.List;
 
-/*
+/**
  Interface for the Account Data Access Object (DAO) to communicate to the
  database and make changes to any information related to the accounts.
  */

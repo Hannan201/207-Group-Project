@@ -4,7 +4,7 @@ import cypher.enforcers.data.entities.CodeEntity;
 
 import java.util.List;
 
-/*
+/**
  Interface for the Code Data Access Object (DAO) to communicate to the
  database and make changes to any information related to the accounts.
  */
@@ -54,7 +54,7 @@ public interface CodeDAO {
      * Remove all codes for an account.
      *
      * @param id ID of the account to delete the codes for.
-     * @return Codes that were deleted, null otherwise.
+     * @return The codes deleted, null otherwise.
      */
     List<CodeEntity> clearAllCodes(long id);
 

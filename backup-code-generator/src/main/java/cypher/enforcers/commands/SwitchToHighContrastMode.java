@@ -8,10 +8,9 @@ import java.util.List;
  * This class is responsible for switching the application
  * to high contrast mode.
  */
-
 public class SwitchToHighContrastMode implements Command {
 
-    // List to store all the different views in the application.
+    /** List to store all the different views in the application. */
     private final List<View> views;
 
     /**

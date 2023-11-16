@@ -15,10 +15,9 @@ import java.io.IOException;
  * This class is responsible for launching the backup
  * code manager application.
  */
-
 public class Launcher extends Application {
 
-    // Logger used for logging.
+    /** Logger used for logging. */
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
     /**

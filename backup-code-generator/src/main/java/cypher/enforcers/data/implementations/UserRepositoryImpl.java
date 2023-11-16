@@ -15,10 +15,10 @@ import java.util.Optional;
  */
 public class UserRepositoryImpl implements UserRepository {
 
-    // Logger for the user repository.
+    /** Logger for the user repository. */
     private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
-    // To make updates to the database.
+    /** To make updates to the database. */
     private final UserDAO userDAO;
 
     /**

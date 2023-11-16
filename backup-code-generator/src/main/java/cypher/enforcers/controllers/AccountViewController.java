@@ -37,104 +37,112 @@ import java.util.ResourceBundle;
  */
 public class AccountViewController implements Initializable {
 
-    // Logger for the account view.
+    /** Logger for the account view. */
     private static final Logger logger = LoggerFactory.getLogger(AccountViewController.class);
 
-    // Container for all the elements in this view.
+    /** Container for all the elements in this view. */
     @FXML
     private BorderPane box;
 
-    // Title for this view.
+    /** Title for this view. */
     @FXML
     public Label title;
 
-    // Contains the search text field and the list-view to be displayed
-    // on top of each other.
+    /**
+     * Contains the search text field and the list-view to be displayed
+     * on top of each other.
+     */
     @FXML
     private VBox left;
 
-    // Text field to search for accounts.
+    /** Text field to search for accounts. */
     @FXML
     private TextField search;
 
-    // Controls the spacing between the text field and
-    // list-view.
+    /**
+     * Controls the spacing between the text field and
+     * list-view.
+     */
     @FXML
     private Region space;
 
-    // Displays all the accounts.
+    /** Displays all the accounts. */
     @FXML
     public ListView<Account> accounts;
 
-    // Controls the spacing above the add button. So that it's inline
-    // with the accounts view.
+    /**
+     * Controls the spacing above the button that says add.
+     * So that it's inline with the accounts view.
+     */
     @FXML
     private Region top;
 
-    // Button that says Add Account.
+    /** Button that says Add Account. */
     @FXML
     public Button add;
 
-    // Button that says Pin Account.
+    /** Button that says Pin Account. */
     @FXML
     public Button pin;
 
-    // Contains the three buttons at the bottom to be displayed
-    // horizontally.
+    /**
+     * Contains the three buttons at the bottom to be displayed
+     * horizontally.
+     */
     @FXML
     private HBox bottomButtons;
 
-    // Button to go back to the previous view.
+    /** Button to go back to the previous view. */
     @FXML
     public Button back;
 
-    // Button to logout.
+    /** Button to logout. */
     @FXML
     public Button logout;
 
-    // Button to go to the settings.
+    /** Button to go to the settings. */
     @FXML
     public Button settings;
 
-    // This property is used to control the padding of the main
-    // container so that the contents can fit if the screen gets too
-    // small.
+    /**
+     * This property is used to control the padding of the main
+     * container so that the contents can fit if the screen gets too
+     * small.
+     */
     private final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(40, 5, 0 ,5));
 
-    // This property is used to control the padding on the right side
-    // of the list-view so that the content can fit when the screen
-    /// gets too small.
+    /**
+     * This property is used to control the padding on the right side
+     * of the list-view so that the content can fit when the screen
+     * gets too small.
+     */
     private final ObjectProperty<Insets> leftBoxPadding = new SimpleObjectProperty<>(new Insets(0, 0, 0, 30));
 
-    // This property controls the spacing below the list-view so that
-    // the content can fit when the screen gets too small.
+    /**
+     * This property controls the spacing below the list-view so that
+     * the content can fit when the screen gets too small.
+     */
     private final ObjectProperty<Insets> belowPadding = new SimpleObjectProperty<>(new Insets(38, 0, 0, 0));
 
-    // To make searching accounts more efficient.
+    /** To make searching accounts more efficient. */
     private Debouncer debounce;
 
-    // To interact with the current user.
-    private UserModel userModel;
+    /** To interact with the current user. */
+    private final UserModel userModel;
 
-    // To interact with the user's accounts.
-    private AccountModel accountModel;
-
-    /**
-     * Set the user model.
-     *
-     * @param model The User Model.
-     */
-    public void setUserModel(UserModel model) {
-        this.userModel = model;
-    }
+    /** To interact with the user's accounts. */
+    private final AccountModel accountModel;
 
     /**
-     * Set the account model.
+     * Create the controller for the account view with the required
+     * models.
      *
-     * @param model The Account Model.
+     * @param userModel The model to interact with the users.
+     * @param accountModel The model to interact with the accounts.
      */
-    public void setAccountModel(AccountModel model) {
-        this.accountModel = model;
+    public AccountViewController(UserModel userModel, AccountModel accountModel) {
+        this.userModel = userModel;
+        this.accountModel = accountModel;
     }
 
     @Override
@@ -169,7 +177,7 @@ public class AccountViewController implements Initializable {
         This view would break down if the screen went too large or
         small. I'm not good at UI thus I didn't know how to make it look,
         so for now I just made it look "functional" when the screen
-        sizes change. if screen size is the default width and height, then
+        sizes change. If screen size is the default width and height, then
         I did my best to maintain the spacings that were there when
         this project was submitted, since I didn't want to tamper the UI.
         You are fully free to change these bindings.
@@ -205,9 +213,9 @@ public class AccountViewController implements Initializable {
 
         box.heightProperty().addListener(((observableValue, oldHeight, newHeight) -> {
             /*
-            There are multiple breakpoints I found from trial and error
+            There are multiple breakpoints I found from trial and error,
             and if the width gets smaller than those breakpoints, then
-            paddings will adjust so there's more room for the content.
+            paddings will adjust, so there's more room for the content.
              */
             if (newHeight.doubleValue() < 594) {
                 padding.set(new Insets(Math.max(0, 40 - 594 + newHeight.doubleValue()), 5, 0, 5));
@@ -248,23 +256,23 @@ public class AccountViewController implements Initializable {
         debounce.registerFunction(
                 key,
                 () -> {
-                    Platform.runLater(() -> {
-                        int amount = 0;
-                        if (!result.isEmpty()) {
+                    int amount = 0;
+                    if (!result.isEmpty()) {
+                        List<Account> results = accountModel.searchAccounts(key);
+                        amount = results.size();
+                        Platform.runLater(() -> {
                             accounts.itemsProperty().unbind();
-                            List<Account> results = accountModel.searchAccounts(key);
-                            amount = results.size();
                             accounts.setItems(FXCollections.observableList(results));
-                        } else {
-                            accounts.itemsProperty().bind(accountModel.accountsProperty());
-                        }
+                        });
+                    } else {
+                        Platform.runLater(() -> accounts.itemsProperty().bind(accountModel.accountsProperty()));
+                    }
 
-                        if (!result.isEmpty()) {
-                            logger.info("Found {} account(s) matching name {}.", amount, key);
-                        }
+                    if (!result.isEmpty()) {
+                        logger.info("Found {} account(s) matching name {}.", amount, key);
+                    }
 
-                        logger.debug("Finished search for account with name {}.", key);
-                    });
+                    logger.debug("Finished search for account with name {}.", key);
 
                     return null;
                 },
@@ -314,7 +322,7 @@ public class AccountViewController implements Initializable {
 
     /**
      * A handle method for the add button.
-     * -
+     * <br>
      * Generates a new AddAccount pop up where the user can
      * create an account and have it reflected in the AccountView.
      *

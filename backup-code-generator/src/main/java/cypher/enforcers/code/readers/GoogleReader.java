@@ -14,10 +14,9 @@ import java.util.Scanner;
  * This class is responsible for reading backup codes
  * in the structure provided by Google.
  */
-
 public class GoogleReader extends CodeReader implements ReadCodeBehavior {
 
-    // Logger for google reader.
+    /** Logger for google reader. */
     private static final Logger logger = LoggerFactory.getLogger(GoogleReader.class);
 
     /**

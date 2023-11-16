@@ -19,13 +19,13 @@ import java.util.Optional;
  */
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    // Logger for the authentication repository.
+    /** Logger for the authentication service. */
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
-    // Used to store information related to the current logged-in user.
+    /** Used to store information related to the current logged-in user. */
     private final UserRepository userRepository;
 
-    // Used to hide sensitive information.
+    /** Used to hide sensitive information. */
     private final UserDTOMapper mapper;
 
     /**
@@ -186,7 +186,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      *
      * @param username The username to search for.
      * @return True if the username is taken, false otherwise. Note that
-     * a blank or empty username is invalid thus this method would return
+     * a blank or empty username is invalid, thus this method would return
      * true if that's the case.
      */
     @Override

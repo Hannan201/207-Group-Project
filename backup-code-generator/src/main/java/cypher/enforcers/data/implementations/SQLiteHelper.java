@@ -10,20 +10,20 @@ import org.sqlite.SQLiteConfig;
 import java.io.File;
 import java.sql.*;
 
-/*
+/**
  Implementation for the database service. This service acts as a way to
  send queries to the database, ensure connection reliability and
  deliver any important alerts.
  */
 public class SQLiteHelper implements DatabaseService {
 
-    // Logger for the SQLite helper.
+    /** Logger for the SQLite helper. */
     private static final Logger logger = LoggerFactory.getLogger(SQLiteHelper.class);
 
-    // Default name of the database.
+    /** Default name of the database. */
     private static final String DEFAULT_NAME = "database/database.db";
 
-    // Connection to the database.
+    /** Connection to the database. */
     private Connection connection;
 
     /**

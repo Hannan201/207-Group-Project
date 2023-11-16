@@ -1,6 +1,7 @@
 package cypher.enforcers.views;
 
 import cypher.enforcers.controllers.*;
+import cypher.enforcers.controllers.codeViewControllers.CodeCellController;
 import cypher.enforcers.controllers.codeViewControllers.CodeViewController;
 import cypher.enforcers.data.implementations.SQLiteHelper;
 import cypher.enforcers.data.spis.DatabaseService;
@@ -20,78 +21,77 @@ import javafx.util.Callback;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * This class is responsible for displaying a specific
  * view in this application
  */
-
 public abstract class View {
 
-    // Parent root of this view, which is
-    // the layout where all the components
-    // are placed in.
+    /**
+     * Parent root of this view, which is
+     * the layout where all the components
+     * are placed in.
+     */
     private Parent root;
 
-    // Stores the path to the CSS (in
-    // external form) which contains
-    // the stylesheet for the current
-    // theme of this application.
+    /**
+     * Stores the path to the CSS (in
+     * external form) which contains
+     * the stylesheet for the current
+     * theme of this application.
+     */
     protected String currentThemePath;
 
-    // Stores the paths to the CSS files
-    // (in external form) in the following order:
-    // Index 0: Path to the CSS file for light mode.
-    // Index 1: Path to the CSS file for dark mode.
-    // Index 2: Path to the CSS file for high contrast mode.
+    /**
+     * Stores the paths to the CSS files
+     * (in external form) in the following order:
+     * Index 0: Path to the CSS file for light mode.
+     * Index 1: Path to the CSS file for dark mode.
+     * Index 2: Path to the CSS file for high contrast mode.
+     */
     protected String[] cssFilesPaths = new String[Theme.values().length];
 
+    /** Used to pass the models into the controllers. */
     public static final Callback<Class<?>, Object> CONTROLLER_FACTORY = new Callback<>() {
+
+        /** Service to communicate to the database. */
         private static final DatabaseService dbService = new SQLiteHelper();
 
         static {
             dbService.connect();
         }
 
+        /** To interact with the current user. */
         private final UserModel userModel = Utilities.prepareUserModel(dbService);
 
+        /** To interact with the user's accounts. */
         private final AccountModel accountModel = Utilities.prepareAccountModel(dbService);
 
+        /** To interact with the account's codes. */
         private final CodeModel codeModel = Utilities.prepareCodeModel(dbService);
 
         @Override
         public Object call(Class<?> param) {
-            Object o;
-            try {
-                o = param.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
-                     IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-
-            if (param == SignInController.class) {
-                ((SignInController) o).setUserModel(userModel);
+            if (param == HomePageController.class) {
+                return new HomePageController(userModel);
+            } else if (param == SignInController.class) {
+                return new SignInController(userModel);
             } else if (param == SignUpController.class) {
-                ((SignUpController) o).setUserModel(userModel);
-            } else if (param == HomePageController.class) {
-                ((HomePageController) o).setUserModel(userModel);
+                return new SignUpController(userModel);
             } else if (param == AccountViewController.class) {
-                ((AccountViewController) o).setUserModel(userModel);
-                ((AccountViewController) o).setAccountModel(accountModel);
+                return new AccountViewController(userModel, accountModel);
             } else if (param == CreateAccountController.class) {
-                ((CreateAccountController) o).setUserModel(userModel);
-                ((CreateAccountController) o).setAccountModel(accountModel);
+                return new CreateAccountController(userModel, accountModel);
             } else if (param == CodeViewController.class) {
-                ((CodeViewController) o).setUserModel(userModel);
-                ((CodeViewController) o).setAccountModel(accountModel);
-                ((CodeViewController) o).setCodeModel(codeModel);
+                return new CodeViewController(userModel, accountModel, codeModel);
+            } else if (param == CodeCellController.class) {
+                return new CodeCellController(codeModel);
             } else if (param == SettingsViewController.class) {
-                ((SettingsViewController) o).setUserModel(userModel);
-                ((SettingsViewController) o).setAccountModel(accountModel);
+               return new SettingsViewController(userModel, accountModel);
             }
 
-            return o;
+            throw new RuntimeException("Controller class does not exist.");
         }
     };
 
@@ -253,8 +253,8 @@ public abstract class View {
 
 
     /**
-     * A utility method to make a new window
-     * appear to display contents for a specific
+     * A utility method that creates a new pop-up
+     * window to display contents for a specific
      * view.
      *
      * @param view view containing the contents

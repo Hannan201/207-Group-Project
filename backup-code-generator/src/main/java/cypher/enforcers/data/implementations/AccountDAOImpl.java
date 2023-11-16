@@ -9,28 +9,37 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.List;
 
-/*
+/**
  Implementation for the Account Data Access Object (DAO) to communicate to
  the database and make changes to any information related to the accounts.
  */
 public class AccountDAOImpl implements AccountDAO {
 
+    /** SQLite query to insert an account into the database. */
     private static final String ADD_ACCOUNT = "INSERT INTO accounts (user_id, name, type) VALUES (?, ?, ?)";
 
+    /**
+     * SQLite query to select the most recent account that was inserted
+     * into the database.
+     */
     private static final String GET_ACCOUNT_AFTER_ADDING = "SELECT * FROM accounts WHERE id = last_insert_rowid()";
 
+    /** SQLite query to delete all accounts from the database. */
     private static final String DELETE_ACCOUNTS = "DELETE FROM accounts WHERE user_id = ?";
 
+    /** SQLite query to delete an account by ID from the database. */
     private static final String DELETE_ACCOUNT = "DELETE FROM accounts WHERE id = ?";
 
+    /** SQLite query to select all accounts by ID from the database. */
     private static final String GET_ACCOUNTS = "SELECT * FROM accounts WHERE user_id = ?";
 
+    /** SQLite query to select an account by ID from the database. */
     private static final String GET_ACCOUNT = "SELECT * FROM accounts WHERE id = ?";
 
-    // Logger for the account data access object.
+    /** Logger for the account data access object. */
     private static final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
 
-    // Service to communicate to the database.
+    /** Service to communicate to the database. */
     private final DatabaseService databaseService;
 
     /**
@@ -93,8 +102,9 @@ public class AccountDAOImpl implements AccountDAO {
             return databaseService.executeSelect(GET_ACCOUNT_AFTER_ADDING, AccountEntity.class);
         } catch (SQLException e) {
             logger.debug("Failed update query. Cause: ", e);
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -116,8 +126,9 @@ public class AccountDAOImpl implements AccountDAO {
             return account;
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -139,7 +150,8 @@ public class AccountDAOImpl implements AccountDAO {
             return accounts;
         } catch (SQLException e) {
             logger.debug("Failed delete query. Cause: ", e);
-            return null;
         }
+
+        return null;
     }
 }

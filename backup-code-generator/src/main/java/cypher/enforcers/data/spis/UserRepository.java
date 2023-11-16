@@ -4,7 +4,7 @@ import cypher.enforcers.data.entities.UserEntity;
 
 import java.util.Optional;
 
-/*
+/**
  Interface for the User Repository. Behaves as a collection of
  accounts to help ease on making any changes.
  */

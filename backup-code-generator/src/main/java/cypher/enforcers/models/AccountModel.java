@@ -17,10 +17,10 @@ import java.util.Optional;
  */
 public class AccountModel {
 
-    // Used to interact with account objects.
+    /** Used to interact with account objects. */
     private final AccountRepository accountRepository;
 
-    // Converts entity to data transfer object.
+    /**  Converts entity to a data transfer object. */
     private final AccountDTOMapper mapper;
 
     /**
@@ -37,7 +37,7 @@ public class AccountModel {
         setAccounts(FXCollections.observableArrayList());
     }
 
-    // Property to store the list of accounts.
+    /** Property to store the list of accounts. */
     private final ObjectProperty<ObservableList<Account>> accountsProperty = new SimpleObjectProperty<>();
 
     /**
@@ -68,7 +68,7 @@ public class AccountModel {
         accountsProperty.set(accounts);
     }
 
-    // Property to store the current account being selected.
+    /** Property to store the current account being selected. */
     private final ObjectProperty<Account> currentAccountProperty = new SimpleObjectProperty<>();
 
     /**
@@ -139,7 +139,7 @@ public class AccountModel {
     }
 
     /**
-     * Check if an account with specific name and platform already
+     * Check if an account with a specific name and platform already
      * exists. The search is case-insensitive.
      *
      * @param name     The name of the account.
@@ -206,8 +206,9 @@ public class AccountModel {
     }
 
     /**
-     * Clear the current list of accounts. usually called when no
-     * user is logged in and the account view is loaded.
+     * Clear the current list of accounts.
+     * Usually called when no user is
+     * logged in and the account view is loaded.
      */
     public void clear() {
         setAccounts(FXCollections.observableArrayList());

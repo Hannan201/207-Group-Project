@@ -14,10 +14,10 @@ import java.util.Optional;
  */
 public class UserModel {
 
-    // Used to log-in users.
+    /** Used to log-in users. */
     private final AuthenticationService authService;
 
-    // Run this when the model is being shut down.
+    /** Run this when the model is being shut down. */
     private final Runnable onShutDown;
 
     /**
@@ -34,7 +34,7 @@ public class UserModel {
         setCurrentUser(authService.getLoggedInUser().orElse(null));
     }
 
-    // Property to store the current logged-in user.
+    /** Property to store the current logged-in user. */
     private final ObjectProperty<User> currentUserProperty = new SimpleObjectProperty<>();
 
     /**

@@ -35,15 +35,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/*
+/**
  This class contains utility methods used amongst the controllers.
  */
 public class Utilities {
 
-    // Logger for the utility class.
+    /** Logger for the utility class. */
     private static final Logger logger = LoggerFactory.getLogger(Utilities.class);
 
-    // Path to the logback configuration file (relative to the resources folder).
+    /**
+     * Path to the logback configuration file (relative to the
+     * resources folder).
+     */
     private static final String PATH_TO_LOGBACK_CONFIG = "logback.xml";
 
     /**
@@ -51,7 +54,7 @@ public class Utilities {
      *
      * @param theme The new theme to switch to.
      * @throws IOException if any errors occur while loading in the views.
-     * @throws NullPointerException If there's any missing data which
+     * @throws NullPointerException If there's any missing data that
      * prevents the theme from being changed, such as icons.
      */
     public static void adjustTheme(Theme theme) throws IOException, NullPointerException {
@@ -72,7 +75,7 @@ public class Utilities {
      * @param theme Name of the theme.
      * @return The ThemeSwitcher ready to change all the themes.
      * @throws IOException if any errors occur while loading in the views.
-     * @throws NullPointerException If there's any missing data which
+     * @throws NullPointerException If there's any missing data that
      * prevents any of the views from being created.
      */
     private static ThemeSwitcher getThemeSwitcher(Theme theme) throws IOException, NullPointerException {
@@ -126,7 +129,7 @@ public class Utilities {
     }
 
     /**
-     * Get absolute path to parent directory that this application
+     * Get the absolute path to the parent directory that this application
      * is being executed in.
      *
      * @return The path as a string.
@@ -255,7 +258,7 @@ public class Utilities {
 
     /**
      * Prepare additional resources for this application such as
-     * any event handlers, streams, resources etc.
+     * any event handlers, streams, resources, etc.
      *
      * @param stage The main window for this application.
      * @throws NullPointerException If the configuration file can't

@@ -14,22 +14,34 @@ import java.sql.SQLException;
  */
 public class UserDAOImpl implements UserDAO {
 
+    /** SQLite query to insert a user into the database. */
     private static final String ADD_USER = "INSERT INTO users (username, password) VALUES (?, ?)";
 
+    /**
+     * SQLite query to select the most recent user that was added
+     * into the database.
+     */
     private static final String GET_USER_AFTER_ADDING = "SELECT * FROM users WHERE id = last_insert_rowid()";
 
+    /** SQLite query to update a user in the database. */
     private static final String UPDATE_USER = "UPDATE users SET theme_value = ?, logged_in = ? WHERE id = ?";
 
+    /** SQLite query to select a user by ID from the database. */
     private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
 
+    /** SQLite query to select a user by their username in this database. */
     private static final String GET_USER_BY_NAME = "SELECT * FROM users WHERE username = ?";
 
+    /**
+     * SQLite query to select the user that's currently logged in, in this
+     * database.
+     */
     private static final String GET_LOGGED_IN_USER = "SELECT * FROM users WHERE logged_in = 1";
 
-    // Logger for the user data access object.
+    /** Logger for the user data access object. */
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
-    // Service to communicate to the database.
+    /** Service to communicate to the database. */
     private final DatabaseService databaseService;
 
     /**
@@ -44,7 +56,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
-     * Insert a new user into the database,
+     * Insert a new user into the database.
      *
      * @param user The user to insert.
      * @return A user object if the user was added, null otherwise.

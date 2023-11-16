@@ -5,7 +5,7 @@ import cypher.enforcers.data.entities.AccountEntity;
 import java.util.List;
 import java.util.Optional;
 
-/*
+/**
  Interface for the Account Repository. Behaves as a collection of
  accounts to help ease on making any changes.
  */

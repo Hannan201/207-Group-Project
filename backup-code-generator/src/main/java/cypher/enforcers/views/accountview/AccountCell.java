@@ -26,22 +26,22 @@ import java.io.UncheckedIOException;
  */
 public class AccountCell extends ListCell<Account> {
 
-    // Logger for the account cell.
+    /** Logger for the account cell. */
     private static final Logger logger = LoggerFactory.getLogger(AccountCell.class);
 
-    // Contains the contents of this cell.
+    /** Contains the contents of this cell. */
     @FXML
     private HBox cell;
 
-    // Holds the image for the social media type.
+    /** Holds the image for the social media type. */
     @FXML
     private ImageView logo;
 
-    // Label for the social media type.
+    /** Label for the social media type. */
     @FXML
     private Label platformName;
 
-    // Label for the name of the account.
+    /** Label for the name of the account. */
     @FXML
     private Label username;
 
