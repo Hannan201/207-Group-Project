@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import cypher.enforcers.data.entities.AccountEntity;
 
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
@@ -24,6 +23,8 @@ import javafx.util.Callback;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -55,6 +56,24 @@ public abstract class View {
      * Index 2: Path to the CSS file for high contrast mode.
      */
     protected String[] cssFilesPaths = new String[Theme.values().length];
+
+    /**
+     * Map that contains the icon for the social media type given
+     * the name of the platform.
+     */
+    public static final Map<String, String> socialMediaIcons;
+
+    static {
+        socialMediaIcons = new HashMap<>();
+        Utilities.updateIcons(
+                socialMediaIcons,
+                "images/icons8-discord-100.png",
+                "images/icons8-github-100.png",
+                "images/icons8-google-100.png",
+                "images/icons8-shopify-100.png",
+                "images/icons8-app-100.png"
+        );
+    }
 
     /** Used to pass the models into the controllers. */
     public static final Callback<Class<?>, Object> CONTROLLER_FACTORY = new Callback<>() {
@@ -138,7 +157,7 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[0];
 
         Utilities.updateIcons(
-                AccountEntity.getIcons(),
+                socialMediaIcons,
                 "images/icons8-discord-100.png",
                 "images/icons8-github-100.png",
                 "images/icons8-google-100.png",
@@ -157,7 +176,7 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[1];
 
         Utilities.updateIcons(
-                AccountEntity.getIcons(),
+                socialMediaIcons,
                 "images/discord_darkmode.png",
                 "images/github_darkmode.png",
                 "images/google_darkmode.png",
@@ -176,7 +195,7 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[2];
 
         Utilities.updateIcons(
-                AccountEntity.getIcons(),
+                socialMediaIcons,
                 "images/hc-discord.png",
                 "images/hc-github.png",
                 "images/hc-google.png",
@@ -244,6 +263,18 @@ public abstract class View {
 
         // Set the default theme to light mode.
         this.currentThemePath = this.cssFilesPaths[0];
+    }
+
+    /**
+     * Get the icons for this application which
+     * are used when showing the accounts.
+     *
+     * @return A Map where the key is the
+     * name of the platform (in lowercase),
+     * and the value is the path to the file.
+     */
+    public static Map<String, String> getSocialMediaIcons() {
+        return socialMediaIcons;
     }
 
     /*

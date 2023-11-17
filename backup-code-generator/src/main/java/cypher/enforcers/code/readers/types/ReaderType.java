@@ -1,7 +1,8 @@
 package cypher.enforcers.code.readers.types;
 
 /**
- The different platforms that support text import.
+ The different social media platforms that support their backup codes
+ being imported through a text file.
  */
 public enum ReaderType {
 

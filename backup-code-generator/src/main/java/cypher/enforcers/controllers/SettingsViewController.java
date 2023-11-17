@@ -137,9 +137,6 @@ public class SettingsViewController implements Initializable {
         darkModeCommand = new SwitchToDarkMode(views);
         highContrastModeCommand = new SwitchToHighContrastMode(views);
         switcher = new ThemeSwitcher(lightModeCommand);
-
-        // switch to light mode as default
-        this.switcher.switchTheme();
     }
 
     /**

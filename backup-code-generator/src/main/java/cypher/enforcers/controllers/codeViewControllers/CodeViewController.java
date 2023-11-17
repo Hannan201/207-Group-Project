@@ -10,6 +10,7 @@ import cypher.enforcers.data.security.dtos.Code;
 import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
 import cypher.enforcers.models.UserModel;
+import cypher.enforcers.utilities.Utilities;
 import cypher.enforcers.views.accountview.AccountView;
 import cypher.enforcers.views.codeview.CodeView;
 import javafx.beans.binding.Bindings;
@@ -210,7 +211,8 @@ public class CodeViewController implements Initializable {
         Only make import button visible if account supports it.
          */
         BooleanBinding bindingForImports = Bindings.createBooleanBinding(
-                () -> Objects.isNull(accountModel.getCurrentAccount()) || !AccountEntity.supportsImport(accountModel.getCurrentAccount().socialMediaType().toLowerCase()),
+                () -> Objects.isNull(accountModel.getCurrentAccount())
+                      || !Utilities.supportsImports(accountModel.getCurrentAccount()),
                 accountModel.currentAccountProperty()
         );
         importCodes.disableProperty().bind(bindingForImports);

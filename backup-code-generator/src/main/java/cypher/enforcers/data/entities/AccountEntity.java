@@ -1,21 +1,10 @@
 package cypher.enforcers.data.entities;
 
-import cypher.enforcers.utilities.Utilities;
-
-import java.util.*;
-
 /**
  * This class is responsible for storing data
  * related to a specific social media account.
  */
 public class AccountEntity {
-
-    /**
-     * List of social media platforms that allow the imports
-     * of text files.
-     */
-    private static final Set<String> SUPPORTED_IMPORT_PLATFORMS
-            = Set.copyOf(List.of("shopify", "discord", "google", "github"));
 
     /** ID for this account. */
     private long id;
@@ -31,24 +20,6 @@ public class AccountEntity {
 
     /** Social media type for this account. */
     private String socialMediaType;
-
-    /**
-     * To load icons for each type of social
-     * media account in this application.
-     */
-    private static final Map<String, String> icons;
-
-    static {
-        icons = new HashMap<>();
-        Utilities.updateIcons(
-                icons,
-                "images/icons8-discord-100.png",
-                "images/icons8-github-100.png",
-                "images/icons8-google-100.png",
-                "images/icons8-shopify-100.png",
-                "images/icons8-app-100.png"
-        );
-    }
 
     /**
      * Create an account.
@@ -130,18 +101,6 @@ public class AccountEntity {
     }
 
     /**
-     * Get the icons for this application which
-     * are used when showing the accounts.
-     *
-     * @return A Map where the key is the
-     * name of the platform (in lowercase),
-     * and the value is the path to the file.
-     */
-    public static Map<String, String> getIcons() {
-        return icons;
-    }
-
-    /**
      * Check if this account is equal to
      * another account. Two accounts are equal
      * if they have the same name and social
@@ -171,16 +130,5 @@ public class AccountEntity {
         int result = socialMediaType.hashCode();
         result = 31 * result + name.hashCode();
         return result;
-    }
-
-    /**
-     * Check if a given social media platform is supported by this
-     * application to import codes by using a text file.
-     *
-     * @param socialMediaType Social media type.
-     * @return True if supported, false otherwise.
-     */
-    public static boolean supportsImport(String socialMediaType) {
-        return SUPPORTED_IMPORT_PLATFORMS.contains(socialMediaType.toLowerCase());
     }
 }

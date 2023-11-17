@@ -3,12 +3,14 @@ package cypher.enforcers.utilities;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
+import cypher.enforcers.code.readers.types.ReaderType;
 import cypher.enforcers.commands.Command;
 import cypher.enforcers.commands.SwitchToDarkMode;
 import cypher.enforcers.commands.SwitchToHighContrastMode;
 import cypher.enforcers.commands.SwitchToLightMode;
 import cypher.enforcers.commands.managers.ThemeSwitcher;
 import cypher.enforcers.data.implementations.*;
+import cypher.enforcers.data.security.dtos.Account;
 import cypher.enforcers.data.security.mappers.AccountDTOMapper;
 import cypher.enforcers.data.security.mappers.CodeDTOMapper;
 import cypher.enforcers.data.security.mappers.UserDTOMapper;
@@ -32,8 +34,10 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  This class contains utility methods used amongst the controllers.
@@ -59,6 +63,21 @@ public class Utilities {
      * resources folder).
      */
     private static final String PATH_TO_LOGBACK_CONFIG = "logback.xml";
+
+    /**
+     * Check if a given account supports imports based on the social
+     * media type.
+     * See {@link ReaderType } for platforms that support imports.
+     *
+     * @param account The account.
+     * @return True if the account supports imports, false otherwise.
+     */
+    public static boolean supportsImports(Account account) {
+        return Stream.of(ReaderType.values()).anyMatch(readerType ->
+            readerType.name()
+                    .equals(account.socialMediaType().toUpperCase(Locale.ROOT))
+        );
+    }
 
     /**
      * Adjust the theme for this application.

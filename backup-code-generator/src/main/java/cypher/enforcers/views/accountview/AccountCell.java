@@ -102,12 +102,12 @@ public class AccountCell extends ListCell<Account> {
             // checks if the account's platform is either Google, Discord, Shopify, or GitHub
             // and if so, adds a custom icon to the account
             String path;
-            if (AccountEntity.supportsImport(item.socialMediaType().toLowerCase())) {
-                path = AccountEntity.getIcons().get(item.socialMediaType().toLowerCase());
+            if (Utilities.supportsImports(item)) {
+                path = View.getSocialMediaIcons().get(item.socialMediaType().toLowerCase());
             } else {
                 // Adds a default logo for the account if it is not Discord, Google,
                 // GitHub, or Shopify
-                path = AccountEntity.getIcons().get("default");
+                path = View.getSocialMediaIcons().get("default");
             }
 
             // There were some configurations here that I moved into
