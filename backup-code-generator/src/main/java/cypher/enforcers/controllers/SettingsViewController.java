@@ -125,7 +125,7 @@ public class SettingsViewController implements Initializable {
         try {
             views.add(SignUpView.getInstance());
             views.add(AccountView.getInstance());
-            views.add(AddAccountView.getInstance());
+            views.add(CreateAccountView.getInstance());
             views.add(CodeView.getInstance());
             views.add(HomePageView.getInstance());
             views.add(SignInView.getInstance());

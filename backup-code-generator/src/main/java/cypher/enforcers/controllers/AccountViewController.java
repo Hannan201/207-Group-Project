@@ -340,7 +340,7 @@ public class AccountViewController implements Initializable {
      */
     public void handleAddAccount() throws IOException, NullPointerException {
         logger.trace("Engaging CreateAccountView window.");
-        View.loadNewWindow(AddAccountView.getInstance());
+        View.loadNewWindow(CreateAccountView.getInstance());
     }
 
     /**

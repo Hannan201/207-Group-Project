@@ -6,20 +6,20 @@ import java.io.IOException;
  * This class is responsible for displaying a view
  * to add a new social media account.
  */
-public class AddAccountView extends View {
+public class CreateAccountView extends View {
 
-    /** An instance for this add-new-account view. */
+    /** An instance for this create-account view. */
     private static View firstInstance = null;
 
     /**
-     * Create a new add-new-account view.
+     * Create a new create-account view.
      *
      * @throws IOException If any errors occur when creating the
      * create-account view.
      * @throws NullPointerException If there's any missing data for
      * creating the create-account view.
      */
-    private AddAccountView() throws IOException, NullPointerException {
+    private CreateAccountView() throws IOException, NullPointerException {
         initUI();
     }
 
@@ -34,7 +34,7 @@ public class AddAccountView extends View {
      */
     public static View getInstance() throws IOException, NullPointerException {
         if (firstInstance == null) {
-            firstInstance = new AddAccountView();
+            firstInstance = new CreateAccountView();
         }
 
         return firstInstance;

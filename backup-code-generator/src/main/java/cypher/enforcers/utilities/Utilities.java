@@ -95,7 +95,7 @@ public class Utilities {
                 SignUpView.getInstance(),
                 SignInView.getInstance(),
                 AccountView.getInstance(),
-                AddAccountView.getInstance(),
+                CreateAccountView.getInstance(),
                 CodeView.getInstance(),
                 SettingsView.getInstance()
         );
