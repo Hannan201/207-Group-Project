@@ -243,16 +243,14 @@ jlink {
 
 }
 
-// Had some issues, so customized the default task to make a native
-// image.
 tasks.named<JPackageImageTask>("jpackageImage") {
     doLast {
         /*
         On Windows, JPackage for some reason makes the native image file
         (.exe on Windows) read only, so Gradle can't delete it when using
         the clean task.
-        The code below modifies the permission of the
-        produced file, so it can be deleted on Windows.
+        The code below modifies the permission of the produced file,
+        so it can be deleted on Windows.
          */
         if (os.isWindows) {
             layout.buildDirectory.file(
@@ -361,21 +359,6 @@ val m1UberJarTask: TaskProvider<Jar> = tasks.register<Jar>("uberJarM1") {
         attributes("Main-Class" to "cypher.enforcers.uberjar.UberJarLauncher")
     }
 }
-
-/*
-OS dependent:
-    - Installer
-    - Uber Jar
-
-For macOS M1:
-    - Installer
-    - Uber Jar
-
-OS Independent:
-    - Regular Jar
-    - Sources Jar
-    - JavaDoc Jar
- */
 
 // Generate checksums for jars (that don't
 // depend on the OS) that will be uploaded when
