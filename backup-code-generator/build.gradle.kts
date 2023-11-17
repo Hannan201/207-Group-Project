@@ -224,14 +224,8 @@ jlink {
         )
 
         val isCI = providers.gradleProperty("isCI")
-        if (isCI.isPresent) {
-            if (os.isWindows) {
-                installerName = project.name + " windows"
-            } else if (os.isLinux) {
-                installerName = project.name + " linux"
-            } else if (os.isMacOsX) {
-                installerName = project.name + " mac-intel"
-            }
+        if (os.isMacOsX && isCI.isPresent) {
+            installerName = project.name + "-intel"
         }
     }
 
@@ -326,7 +320,7 @@ val m1JPackageTask: TaskProvider<Task> = tasks.register("jpackageM1") {
         ext?.configuration = "m1Configuration"
         ext?.jpackage {
             outputDir = "jpackage-m1"
-            installerName = project.name + " mac-m1"
+            installerName = project.name + "-m1"
         }
     }
 
