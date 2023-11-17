@@ -27,6 +27,15 @@ public class SQLiteHelper implements DatabaseService {
     private Connection connection;
 
     /**
+     * Create a new SQLite helper to interact with an SQLite database.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    public SQLiteHelper() {
+
+    }
+
+    /**
      * Create a connection to the database by providing the name.
      *
      * @param name name of the database to connect to.

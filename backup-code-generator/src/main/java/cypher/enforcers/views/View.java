@@ -96,6 +96,15 @@ public abstract class View {
     };
 
     /**
+     * Create a new view.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    protected View() {
+
+    }
+
+    /**
      * Initialise the UI elements for this view.
      *
      * @throws IOException If any errors occur for when the
@@ -218,6 +227,7 @@ public abstract class View {
      * Load the stylesheets (CSS files) for this
      * view.
      *
+     * @param files The name of the CSS files.
      * @throws NullPointerException If any of the CSS files cannot
      * be found from resources.
      */

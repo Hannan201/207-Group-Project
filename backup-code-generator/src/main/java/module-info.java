@@ -1,3 +1,7 @@
+/**
+ * This module contains all files and required modules in order
+ * for this application to function.
+ */
 module backup.code.generator {
     // Java Desktop (Used for launching the web browser).
     requires java.desktop;

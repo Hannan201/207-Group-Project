@@ -103,6 +103,11 @@ public class CodeView extends View implements Reversible {
         this.previousView = newPreviousView;
     }
 
+    /**
+     * Returns the controller for the CodeView class.
+     *
+     * @return Controller for the CodeView class.
+     */
     public CodeViewController getCodeViewController() {
         return this.controller;
     }

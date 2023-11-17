@@ -21,6 +21,15 @@ public class GitHubReader extends CodeReader implements ReadCodeBehavior {
     private static final Logger logger = LoggerFactory.getLogger(GitHubReader.class);
 
     /**
+     * Create a new code reader for the format provided by GitHub.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    public GitHubReader() {
+        super();
+    }
+
+    /**
      * Extract the backup codes from a text file in the
      * structure given by GitHub.
      *

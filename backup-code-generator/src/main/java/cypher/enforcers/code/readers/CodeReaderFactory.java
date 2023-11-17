@@ -9,6 +9,17 @@ import cypher.enforcers.code.readers.types.ReaderType;
 public class CodeReaderFactory {
 
     /**
+     * Private constructor for the factory to create code readers.
+     * No reason to make an instance of this object, instead use the static
+     * method provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    private CodeReaderFactory() {
+
+    }
+
+    /**
      * Return a CodeReader for a specific structure of a
      * text file based on the social media platform. So
      * far, this supports Google, GitHub, Discord and Shopify.

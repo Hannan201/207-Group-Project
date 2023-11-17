@@ -20,6 +20,15 @@ public class DiscordReader extends CodeReader implements ReadCodeBehavior {
     private static final Logger logger = LoggerFactory.getLogger(DiscordReader.class);
 
     /**
+     * Create a new code reader for the format provided by Discord.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    public DiscordReader() {
+        super();
+    }
+
+    /**
      * Extract the backup codes from a text file in the
      * structure given by Discord.
      *

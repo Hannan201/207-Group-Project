@@ -39,10 +39,10 @@ public class CodeModel {
         this.mapper = mapper;
     }
 
-    /** list of codes for an account. */
+    // list of codes for an account.
     private final ObservableList<Code> codes = FXCollections.observableArrayList();
 
-    /** Property to store the list of codes. */
+    // Property to store the list of codes.
     private final ObjectProperty<ObservableList<Code>> codesProperty = new SimpleObjectProperty<>(codes);
 
     /**

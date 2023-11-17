@@ -11,6 +11,17 @@ import cypher.enforcers.Launcher;
 public class UberJarLauncher {
 
     /**
+     * Private constructor for the UberJarLauncher.
+     * No reason to make an instance of this object, instead use the static
+     * method provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    private UberJarLauncher() {
+
+    }
+
+    /**
      * Launch this application.
      *
      * @param args Any additional arguments.

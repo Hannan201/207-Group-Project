@@ -118,6 +118,8 @@ public class CodeCellController {
     /**
      * Handles when the enter button is clicked while the TextField is selected
      * This method will submit edit changes.
+     *
+     * @param e The key event triggered on the text field.
      */
     public void TextFieldOnAction(KeyEvent e) {
         // Handle the event when enter is pressed. This is done so that the user submit their edit more feasibly

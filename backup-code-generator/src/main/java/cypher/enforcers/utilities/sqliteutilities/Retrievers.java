@@ -16,6 +16,18 @@ import java.util.function.Function;
  */
 public class Retrievers {
 
+    /**
+     * Private constructor for the retrievers to obtain certain types of
+     * objects from a result set of an executed SQL statement.
+     * No reason to make an instance of this object, instead use the static
+     * method provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    private Retrievers() {
+
+    }
+
     /** How to retrieve a user from a result set. */
     private static final Function<ResultSet, UserEntity> FOR_USER = resultSet -> {
         UserEntity user;

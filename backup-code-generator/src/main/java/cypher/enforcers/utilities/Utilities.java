@@ -40,6 +40,17 @@ import java.util.Objects;
  */
 public class Utilities {
 
+    /**
+     * Private constructor to create utilities.
+     * No reason to make an instance of this object, instead use the static
+     * methods provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    private Utilities() {
+
+    }
+
     /** Logger for the utility class. */
     private static final Logger logger = LoggerFactory.getLogger(Utilities.class);
 
@@ -105,6 +116,8 @@ public class Utilities {
      * a URL.
      *
      * @param path Path to the file relative to the resource folder.
+     * @return The URL to the file relative to the resource's folder.
+     * Never null or empty.
      * @throws NullPointerException If the resource can't be found.
      */
     public static URL loadFileByURL(String path) throws NullPointerException {
@@ -119,6 +132,9 @@ public class Utilities {
      * a InputStream.
      *
      * @param path Path to the file relative to the resource folder.
+     * @return The input stream to the file relative to the resource's
+     *         folder.
+     *         Never null or pointing to a file that doesn't exist.
      * @throws NullPointerException If the resource can't be found.
      */
     public static InputStream loadFileByInputStream(String path) throws NullPointerException {

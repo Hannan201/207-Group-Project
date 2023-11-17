@@ -337,14 +337,14 @@ public class AccountViewController implements Initializable {
     }
 
     /**
-     * A handle method for the <pin accounts> button.
+     * A handle method for the pin accounts button.
      */
     public void handlePinAccount() {
 
     }
 
     /**
-     * A handle method for the <delete accounts> button which deletes all selected accounts in the accounts ListView.
+     * A handle method for the delete accounts button which deletes all selected accounts in the accounts ListView.
      *
      */
     public void handleDeleteAccount() {

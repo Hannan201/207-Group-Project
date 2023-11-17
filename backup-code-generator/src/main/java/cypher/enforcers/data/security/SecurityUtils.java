@@ -18,6 +18,17 @@ import java.util.Objects;
  */
 public class SecurityUtils {
 
+    /**
+     * Private constructor to create new security utilities.
+     * No reason to make an instance of this object, instead use the static
+     * methods provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    private SecurityUtils() {
+
+    }
+
     /** Logger for the security utilities. */
     private static final Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
 

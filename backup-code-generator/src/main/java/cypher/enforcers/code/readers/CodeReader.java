@@ -9,6 +9,16 @@ import java.util.List;
  */
 public abstract class CodeReader {
 
+    /**
+     * Create a new code reader.
+     *
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    protected CodeReader() {
+
+    }
+
     /** File path for the text file. */
     private String filePath;
 

@@ -14,6 +14,15 @@ import java.io.UncheckedIOException;
 public class AccountCellFactory implements Callback<ListView<Account>, ListCell<Account>> {
 
     /**
+     * Create a new factory for the account cells.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    public AccountCellFactory() {
+
+    }
+
+    /**
      * Returns a new AccountCell when the user creates an account.
      *
      * @return a new AccountCell.

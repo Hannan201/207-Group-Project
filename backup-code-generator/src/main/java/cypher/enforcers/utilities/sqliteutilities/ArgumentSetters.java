@@ -15,6 +15,18 @@ import java.util.function.BiConsumer;
  */
 public class ArgumentSetters {
 
+    /**
+     * Private constructor for the argument setters to set certain types
+     * of arguments for a prepared SQL statement.
+     * No reason to make an instance of this object, instead use the static
+     * methods provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    private ArgumentSetters() {
+
+    }
+
     /** How a user should be added to the database. */
     private static final BiConsumer<PreparedStatement, UserEntity> FOR_USER = (statement, user) -> {
         try {

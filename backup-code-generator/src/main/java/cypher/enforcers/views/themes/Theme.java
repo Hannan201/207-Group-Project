@@ -5,8 +5,13 @@ package cypher.enforcers.views.themes;
  */
 public enum Theme {
 
+    /** The light mode theme. */
     LIGHT,
+
+    /** The dark mode theme. */
     DARK,
+
+    /** The high contrast mode theme. */
     HIGH_CONTRAST
 
 }

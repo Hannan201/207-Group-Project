@@ -45,6 +45,7 @@ public interface UserRepository {
     /**
      * Update a user.
      *
+     * @param user The user to update.
      * @return An Optional containing the user if updated, null otherwise.
      */
     Optional<UserEntity> update(UserEntity user);

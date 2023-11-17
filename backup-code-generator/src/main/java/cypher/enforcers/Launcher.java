@@ -17,6 +17,17 @@ import java.io.IOException;
  */
 public class Launcher extends Application {
 
+    /**
+     * Constructor for the Launcher.
+     * No reason to create an instance of this object, instead use the static
+     * method provided.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    public Launcher() {
+
+    }
+
     /** Logger used for logging. */
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 

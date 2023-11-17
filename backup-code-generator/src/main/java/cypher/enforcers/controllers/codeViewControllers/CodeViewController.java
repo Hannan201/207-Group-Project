@@ -388,6 +388,8 @@ public class CodeViewController implements Initializable {
     /**
      * Handles the event where the "Add Code" button is clicked.
      * This method allows the user to add a specified code using the enter button.
+     *
+     * @param event The key event triggered on the text field.
      */
     public void addCodeOnEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {

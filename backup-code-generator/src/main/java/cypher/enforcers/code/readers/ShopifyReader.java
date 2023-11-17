@@ -17,6 +17,15 @@ public class ShopifyReader extends CodeReader implements ReadCodeBehavior {
     private static final Logger logger = LoggerFactory.getLogger(ShopifyReader.class);
 
     /**
+     * Create a new code reader for the format provided by Shopify.
+     * <br>
+     * Mainly here to avoid warnings.
+     */
+    public ShopifyReader() {
+        super();
+    }
+
+    /**
      * Extract the backup codes from a text file in the
      * structure given by Shopify.
      *
