@@ -266,22 +266,6 @@ tasks.named<JPackageImageTask>("jpackageImage") {
     }
 }
 
-val jarTask: TaskProvider<Jar> = tasks.named<Jar>("jar") {
-    val isCI = providers.gradleProperty("isCI")
-    doFirst {
-        if (isCI.isPresent) {
-            if (os.isWindows) {
-                archiveClassifier = "win"
-            } else if (os.isLinux) {
-                archiveClassifier = "linux"
-            } else if (os.isWindows) {
-                archiveClassifier = "mac-intel"
-            }
-        }
-    }
-
-}
-
 // Task to create an uber or fat jar.
 val uberJarTask: TaskProvider<Jar> = tasks.register<Jar>("uberJar") {
     group = "build"
@@ -397,11 +381,11 @@ OS Independent:
 // depend on the OS) that will be uploaded when
 // on release.
 tasks.register<Checksum>("generateJarsChecksums") {
-    inputFiles.from(jarTask.get().outputs.files)
-    inputFiles.from(
-        tasks.named<Jar>("sourcesJar").get()
-            .outputs.files
-    )
+    val jarTasks: List<String> = listOf("jar", "sourcesJar", "javadocJar")
+
+    jarTasks.forEach {
+        inputFiles.from(tasks.getByName(it).outputs.files)
+    }
 
     appendFileNameToChecksum = true
     outputDirectory = layout.buildDirectory.dir("checksums")
