@@ -411,7 +411,6 @@ tasks.register<Checksum>("generateAppChecksums") {
 // M1 processor.
 tasks.register<Checksum>("generateM1Checksums") {
     inputFiles.from(m1UberJarTask.get().outputs.files)
-    dependsOn(tasks.getByPath(":backup-code-generator:jpackageM1").path)
     inputFiles.from(
         layout.buildDirectory.dir("jpackage-m1")
             .get().asFileTree
