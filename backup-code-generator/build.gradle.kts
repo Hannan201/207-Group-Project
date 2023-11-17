@@ -219,7 +219,10 @@ jlink {
         imageName = "Backup Code Generator"
         installerOptions.addAll(
             listOf(
-                "--app-version", version.toString()
+                "--app-version", version.toString(),
+                "--description", "A way to manage two factor authentication codes for all your social media accounts.",
+                "--vendor", "Cypher Enforcers",
+                "--about-url", "https://github.com/Hannan201/Cypher-Enforcers/tree/feature/internal-changes",
             )
         )
 
@@ -235,15 +238,34 @@ jlink {
             installerOptions.addAll(
                 listOf(
                     "--win-dir-chooser",
-                    "--win-shortcut-prompt"
+                    "--win-help-url", "https://github.com/Hannan201/Cypher-Enforcers/tree/feature/internal-changes",
+                    "--win-menu",
+                    "--win-menu-group", "Cypher Enforcers",
+                    "--win-shortcut-prompt",
+                    "--win-about-url", "https://github.com/Hannan201/Cypher-Enforcers/tree/feature/internal-changes"
                 )
             )
         }
     } else if (os.isMacOsX) {
         jpackage {
             installerType = "dmg"
+            installerOptions.addAll(
+                listOf(
+                    "--mac-package-identifier", "cypher.enforcers.backup.code.generator",
+                    "--mac-package-name", "Code Generator",
+                    "--mac-app-category", "public.app-category.utilities"
+                )
+            )
         }
     } else if (os.isLinux) {
+        jpackage {
+            installerOptions.addAll(
+                listOf(
+                    "--linux-package-name", "backup-code-generator-cypher-enforcers",
+                    "--linux-shortcut"
+                )
+            )
+        }
     }
 
 }
