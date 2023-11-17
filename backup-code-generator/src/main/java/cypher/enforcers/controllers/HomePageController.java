@@ -115,34 +115,23 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (!Objects.isNull(userModel.getCurrentUser())) {
-            // Switch to account view if user's still logged in.
-            main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
-                if (oldScene == null && newScene != null) {
-                    newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
-                        if (oldWindow == null && newWindow != null) {
-                            try {
-                                Utilities.adjustTheme(userModel.getCurrentUser().theme());
-                                View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
-                            } catch (IOException e) {
-                                throw new UncheckedIOException(e);
-                            }
-                        }
-                    }));
+            View.onWindowLoaded(main, window -> {
+                try {
+                    Utilities.adjustTheme(userModel.getCurrentUser().theme());
+                    View.switchSceneTo(HomePageView.getInstance(), AccountView.getInstance());
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
                 }
-            }));
+            });
         }
 
         // To close the database connection when the window closes.
-        main.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
-            if (oldScene == null && newScene != null) {
-                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
-                    if (oldWindow == null && newWindow != null) {
-                        newScene.getWindow()
-                                .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> userModel.shutDown());
-                    }
-                }));
-            }
-        }));
+        View.onWindowLoaded(main, window ->
+            window.addEventFilter(
+                    WindowEvent.WINDOW_CLOSE_REQUEST,
+                    windowEvent -> userModel.shutDown()
+            )
+        );
 
         // The spacings above the title and below the buttons were not
         // equal when this project was first submitted. Since I wasn't

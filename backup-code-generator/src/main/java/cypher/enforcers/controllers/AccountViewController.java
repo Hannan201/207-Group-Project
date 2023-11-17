@@ -147,12 +147,19 @@ public class AccountViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
+        // The home page view and account view share the same window, so by
+        // the time the code gets to this point, the window has already
+        // been loaded.
+        // This is why we only need to wait for the scene to be loaded and
+        // not the window.
+        box.sceneProperty().addListener((observableValue, oldScene, newScene) -> {
             if (oldScene == null && newScene != null) {
-                newScene.getWindow()
-                        .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> debounce.tearDown());
+                newScene.getWindow().addEventFilter(
+                        WindowEvent.WINDOW_CLOSE_REQUEST,
+                        windowEvent -> debounce.tearDown()
+                );
             }
-        }));
+        });
 
         accounts.setCellFactory(new AccountCellFactory());
         accounts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
