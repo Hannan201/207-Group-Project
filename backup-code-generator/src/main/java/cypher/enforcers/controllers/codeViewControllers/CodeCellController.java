@@ -108,8 +108,6 @@ public class CodeCellController {
         delete.setDisable(true);
         copy.setDisable(true);
 
-        userInput.setText(code.getText());
-
         // swap the visibility of the label and the TextField so that the user can edit the code name.
         userInput.setVisible(true);
         code.setVisible(false);
@@ -130,7 +128,6 @@ public class CodeCellController {
             logger.debug("Switching code from {} to {}.", logText, userInput.getText());
 
             if (codeModel.updateCode(userInput.getText())) {
-                code.setText((userInput.getText()));
                 logger.info("Updated code from {} to {} successfully.", logText, userInput.getText());
             }
 
