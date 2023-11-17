@@ -47,7 +47,7 @@ jobs:
       - name: Upload build files
         uses: actions/upload-artifact@v3
         with:
-          name: $${{ runner.os }} files
+          name: ${{ runner.os }} files
           path: |
             ./backup-code-generator/build/uberJars/
             ./backup-code-generator/build/jpackage/
@@ -79,7 +79,7 @@ jobs:
         if: ${{ runner.os == 'MacOS' }}
         uses: actions/upload-artifact@v3
         with:
-          name: $${{ runner.os }} files
+          name: ${{ runner.os }} files
           path: |
             ./backup-code-generator/build/uberJars/
             ./backup-code-generator/build/jpackage-m1/
