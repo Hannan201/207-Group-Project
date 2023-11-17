@@ -9,6 +9,7 @@ import cypher.enforcers.models.AccountModel;
 import cypher.enforcers.models.CodeModel;
 import cypher.enforcers.models.UserModel;
 import cypher.enforcers.views.themes.Theme;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,10 +18,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import cypher.enforcers.data.entities.AccountEntity;
 
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 /**
  * This class is responsible for displaying a specific
@@ -242,6 +246,12 @@ public abstract class View {
         this.currentThemePath = this.cssFilesPaths[0];
     }
 
+    /*
+    ===================================================================
+                            UTILITY METHODS
+    ===================================================================
+     */
+
     /**
      * A utility method to switch
      * the scene for one view to another
@@ -284,6 +294,46 @@ public abstract class View {
             stage.setScene(view.getRoot().getScene());
         }
         stage.show();
+    }
+
+    /**
+     * Utility method for when a window is loaded.
+     * This method is here because in the {@code initialize}
+     * method of the controller classes, the window is not yet loaded.
+     * So trying to obtain it via a node might result in a null-value.
+     *
+     * @param node    Any node within the window, used to retrieve
+     *                the window.
+     * @param handler The handle method which performs the action
+     *                for when this window is loaded.
+     */
+    public static void onWindowLoaded(Node node, Consumer<Window> handler) {
+        node.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
+            if (oldScene == null && newScene != null) {
+                newScene.windowProperty().addListener((observableWindow, oldWindow, newWindow) -> {
+                    if (oldWindow == null && newWindow != null) {
+                        handler.accept(newWindow);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Utility method to perform an action when a pop-up window is closed.
+     * The {@code setOnCloseRequest } method only works if the last window
+     * is closed whereas a pop-up window is not the last window being closed.
+     * In this case, the {@code setOnHidden } methods needs to be used.
+     *
+     * @param node    Any node within the window, used to retrieve
+     *                the window.
+     * @param handler The handle method which performs the action
+     *                for when the pop-up window is closed.
+     */
+    public static void onPopUpWindowClose(Node node, EventHandler<WindowEvent> handler) {
+        onWindowLoaded(node, window ->
+            window.setOnHidden(handler)
+        );
     }
 
     /**

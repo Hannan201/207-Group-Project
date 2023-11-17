@@ -81,21 +81,13 @@ public class SignUpController implements Initializable {
         // Clear all the text fields when this window closes. Since
         // we're using the singleton pattern, only one view instance will be
         // created.
-        box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
-            if (oldScene == null && newScene != null) {
-                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
-                    if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnHidden((windowEvent -> {
-                            logger.trace("Clearing all text fields.");
-                            initialUsername.clear();
-                            initialPassword.clear();
-                            verifiedUsername.clear();
-                            verifiedPassword.clear();
-                        }));
-                    }
-                }));
-            }
-        }));
+        View.onPopUpWindowClose(box, windowEvent -> {
+            logger.trace("Clearing all text fields.");
+            initialUsername.clear();
+            initialPassword.clear();
+            verifiedUsername.clear();
+            verifiedPassword.clear();
+        });
 
         signUp = new Button("Sign Up");
         signUp.setPrefSize(130, 25);

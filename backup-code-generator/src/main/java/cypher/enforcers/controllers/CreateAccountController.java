@@ -14,6 +14,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import net.synedra.validatorfx.TooltipWrapper;
 import net.synedra.validatorfx.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +24,9 @@ import java.util.ResourceBundle;
  * Controller for the create-account view.
  */
 public class CreateAccountController implements Initializable {
+
+    /** Logger for the create account view. */
+    private static final Logger logger = LoggerFactory.getLogger(CreateAccountController.class);
 
     /** Used for validation based on what the user types. */
     private final Validator validator = new Validator();
@@ -80,18 +85,12 @@ public class CreateAccountController implements Initializable {
         // Clear all the text fields when this window closes. Since
         // we're using the singleton pattern, only one view instance will be
         // created.
-        box.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
-            if (oldScene == null && newScene != null) {
-                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
-                    if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnHidden((windowEvent -> {
-                            platform.clear();
-                            username.clear();
-                        }));
-                    }
-                }));
-            }
-        }));
+        View.onPopUpWindowClose(box, windowEvent -> {
+            logger.trace("Clearing all text fields and allowing for text field to be edited.");
+            platform.clear();
+            username.clear();
+            platform.setEditable(true);
+        });
 
         createAccount = new Button("Create Account");
         createAccount.setPrefSize(155, 32);

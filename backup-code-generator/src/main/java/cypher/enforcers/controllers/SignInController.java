@@ -109,19 +109,11 @@ public class SignInController implements Initializable {
         // Clear all the text fields when this window closes. Since
         // we're using the singleton pattern, only one view instance will be
         // created.
-        aboveTitle.sceneProperty().addListener(((observableValue, oldScene, newScene) -> {
-            if (oldScene == null && newScene != null) {
-                newScene.windowProperty().addListener(((observableValue1, oldWindow, newWindow) -> {
-                    if (oldWindow == null && newWindow != null) {
-                        newWindow.setOnHidden(windowEvent -> {
-                            logger.trace("Clearing fields.");
-                            unameInput.clear();
-                            passInput.clear();
-                        });
-                    }
-                }));
-            }
-        }));
+        View.onPopUpWindowClose(aboveTitle, windowEvent -> {
+            logger.trace("Clearing all text fields.");
+            unameInput.clear();
+            passInput.clear();
+        });
 
         // The spacings above and below the title were not equal when
         // this project was first submitted. Since I wasn't
