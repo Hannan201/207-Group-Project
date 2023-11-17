@@ -104,7 +104,7 @@ public class CodeDAOImpl implements CodeDAO {
 
             return databaseService.executeSelect(GET_CODE_AFTER_ADDING, CodeEntity.class);
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed insert query. Cause: ", e);
         }
 
         return null;
@@ -145,7 +145,7 @@ public class CodeDAOImpl implements CodeDAO {
 
             return result;
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed delete query. Cause: ", e);
         }
 
         return null;
@@ -168,7 +168,7 @@ public class CodeDAOImpl implements CodeDAO {
 
             return codes;
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed delete query. Cause: ", e);
         }
 
         return null;

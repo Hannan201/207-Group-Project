@@ -70,7 +70,7 @@ public class UserDAOImpl implements UserDAO {
 
             return databaseService.executeSelect(GET_USER_AFTER_ADDING, UserEntity.class);
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed insert query. Cause: ", e);
             return null;
         }
     }
@@ -88,7 +88,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             return databaseService.executeSelect(GET_USER_BY_ID, UserEntity.class, id);
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed select query. Cause: ", e);
         }
 
         return null;
@@ -107,7 +107,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             return databaseService.executeSelect(GET_USER_BY_NAME, UserEntity.class, username);
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed select query. Cause: ", e);
         }
 
         return null;

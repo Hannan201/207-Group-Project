@@ -101,7 +101,7 @@ public class AccountDAOImpl implements AccountDAO {
 
             return databaseService.executeSelect(GET_ACCOUNT_AFTER_ADDING, AccountEntity.class);
         } catch (SQLException e) {
-            logger.debug("Failed update query. Cause: ", e);
+            logger.debug("Failed insert query. Cause: ", e);
         }
 
         return null;
