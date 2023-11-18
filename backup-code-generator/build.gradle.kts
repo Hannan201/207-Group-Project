@@ -262,6 +262,7 @@ jlink {
             installerOptions.addAll(
                 listOf(
                     "--linux-package-name", "backup-code-generator-cypher-enforcers",
+                    "--linux-menu-group", "Utility",
                     "--linux-shortcut"
                 )
             )
