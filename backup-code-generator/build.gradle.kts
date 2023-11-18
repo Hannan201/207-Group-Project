@@ -106,7 +106,12 @@ dependencies {
     implementation("org.controlsfx:controlsfx:11.1.2")
 
     // SQLite support.
-    implementation("org.xerial:sqlite-jdbc:3.43.2.2")
+    implementation("org.xerial:sqlite-jdbc:3.43.2.2") {
+        // This is because SQLite JDBC brings in a transitive
+        // dependency to SLF4J, even though we have already
+        // imported it. No need for it to be imported twice.
+        exclude("org.slf4j", "slf4j-api")
+    }
 
     // Junit5 in our case needs two modules.
     // Junit jupiter -> This is for the @Test annotations and the assertions
@@ -138,11 +143,11 @@ dependencies {
     }
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
 java {
     withSourcesJar()
     withJavadocJar()
 
+    // Apply a specific Java toolchain to ease working on different environments.
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
         vendor = JvmVendorSpec.ADOPTIUM // To use OpenJDK.
@@ -157,14 +162,14 @@ application {
     mainClass = "cypher.enforcers.Launcher"
 }
 
+// This is to remove files copied from resources.
+// These files are modified after the tests are complete, so they
+// need to be copied again to return to their original state.
 val cleanUpTask: TaskProvider<Delete> = tasks.register<Delete>("cleanUpTestFiles") {
     group = "verification"
     description = "Cleans up the files created by the" +
             "tests."
 
-    // This is to remove files copied from resources.
-    // These files are modified after the tests are complete, so they
-    // need to be copied again to return to their original state.
     delete(fileTree(layout.projectDirectory) {
         include("*.db")
         exclude("database.db")
@@ -193,8 +198,8 @@ javafx {
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
+// This is to remove the log file.
 tasks.named<Delete>("clean") {
-    // This is to remove the log file.
     delete(layout.projectDirectory.file("logs.log"))
 }
 

@@ -296,12 +296,12 @@ public class Utilities {
      * any event handlers, streams, resources, etc.
      *
      * @param stage The main window for this application.
-     * @throws NullPointerException If the configuration file can't
+     * @throws NullPointerException If any configuration file can't
      * be found from resources.
      * @throws IOException If any errors occur when loading the resource
-     * file.
+     * files.
      * @throws JoranException If any errors occur during the configuration
-     * process after the file has been loaded (such as unknown xml tags).
+     * process for the log file (such as unknown xml tags).
      */
     public static void prepare(Stage stage) throws NullPointerException,
             JoranException, IOException {
