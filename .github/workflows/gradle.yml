@@ -5,11 +5,12 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Upload builds from Gradle to release assets (CD)
 
 on:
-  push:
-    branches: [ "feature/internal-changes" ]
+  release:
+    types:
+      - created
 
 permissions:
   contents: read
@@ -19,17 +20,9 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        include:
-          - os: windows-latest
-            classifier: win
-          - os: ubuntu-latest
-            classifier: linux
-          - os: macos-latest
-            classifier: mac
 
     runs-on: ${{ matrix.os }}
     steps:
-      - run: echo "Hello"
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -44,15 +37,11 @@ jobs:
         with:
           arguments: generateAppChecksums -PisCI=true
 
-      - name: Upload build files
-        uses: actions/upload-artifact@v3
+      - name: Upload build files and checksums to release
+        uses: AButler/upload-release-assets@v2.0.2
         with:
-          name: ${{ runner.os }} files
-          path: |
-            ./backup-code-generator/build/uberJars/
-            ./backup-code-generator/build/jpackage/
-            !./backup-code-generator/build/jpackage/Backup Code Generator*
-            ./backup-code-generator/build/checksums/
+          files: './backup-code-generator/build/uberJars/*;./backup-code-generator/build/jpackage/*;!./backup-code-generator/build/jpackage/Backup Code Generator*;./backup-code-generator/build/checksums/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build independent jars
         if: ${{ runner.os == 'MacOS' }}
@@ -60,14 +49,12 @@ jobs:
         with:
           arguments: generateJarsChecksums -PisCI=true
 
-      - name: Upload independent jars
+      - name: Upload independent jars and checksums to release
         if: ${{ runner.os == 'MacOS' }}
-        uses: actions/upload-artifact@v3
+        uses: AButler/upload-release-assets@v2.0.2
         with:
-          name: Independent jars
-          path: |
-            ./backup-code-generator/build/libs/
-            ./backup-code-generator/build/checksums/
+          files: './backup-code-generator/build/libs/*;./backup-code-generator/build/checksums/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build M1 files
         if: ${{ runner.os == 'MacOS' }}
@@ -75,14 +62,9 @@ jobs:
         with:
           arguments: generateM1Checksums -PisCI=true
 
-      - name: Upload M1 files
+      - name: Upload M1 files and checksums to release
         if: ${{ runner.os == 'MacOS' }}
-        uses: actions/upload-artifact@v3
+        uses: AButler/upload-release-assets@v2.0.2
         with:
-          name: ${{ runner.os }} files
-          path: |
-            ./backup-code-generator/build/m1UberJar/
-            ./backup-code-generator/build/jpackage-m1/
-            !./backup-code-generator/build/jpackage-m1/Backup Code Generator*
-            ./backup-code-generator/build/checksums/
-            
+          files: './backup-code-generator/build/m1UberJar/*;./backup-code-generator/build/jpackage-m1/*;!./backup-code-generator/build/jpackage-m1/Backup Code Generator*;./backup-code-generator/build/checksums/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
