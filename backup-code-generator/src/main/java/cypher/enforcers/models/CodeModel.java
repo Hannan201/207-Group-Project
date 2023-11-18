@@ -122,6 +122,10 @@ public class CodeModel {
      * @param account The account to delete the codes for.
      */
     public void deleteAllCodes(Account account) {
+        if (getCodes().isEmpty()) {
+            return;
+        }
+
         List<CodeEntity> results = codeRepository.deleteAll(account.id());
         if (results.size() == codes.size()) {
             codes.clear();

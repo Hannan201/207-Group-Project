@@ -118,6 +118,10 @@ public class AccountModel {
      * @param accountsToDelete Accounts to delete.
      */
     public void deleteAccounts(long id, List<Account> accountsToDelete) {
+        if (getAccounts().isEmpty()) {
+            return;
+        }
+
         if (accountsToDelete.size() == getAccounts().size()) {
             List<AccountEntity> results = accountRepository.deleteAll(id);
 
@@ -199,6 +203,10 @@ public class AccountModel {
      * @param id The ID of the user.
      */
     public void clearAllAccounts(long id) {
+        if (getAccounts().isEmpty()) {
+            return;
+        }
+
         List<AccountEntity> results = accountRepository.deleteAll(id);
         if (results.size() == getAccounts().size()) {
             getAccounts().clear();
