@@ -1,0 +1,70 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Upload builds from Gradle to release assets (CD)
+
+on:
+  release:
+    types:
+      - created
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build files
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        with:
+          arguments: generateAppChecksums -PisCI=true
+
+      - name: Upload build files and checksums to release
+        uses: AButler/upload-release-assets@v2.0.2
+        with:
+          files: './backup-code-generator/build/uberJars/*;./backup-code-generator/build/jpackage/*;!./backup-code-generator/build/jpackage/Backup Code Generator*;./backup-code-generator/build/checksums/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build independent jars
+        if: ${{ runner.os == 'MacOS' }}
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
+        with:
+          arguments: generateJarsChecksums -PisCI=true
+
+      - name: Upload independent jars and checksums to release
+        if: ${{ runner.os == 'MacOS' }}
+        uses: AButler/upload-release-assets@v2.0.2
+        with:
+          files: './backup-code-generator/build/libs/*;./backup-code-generator/build/checksums/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build M1 files
+        if: ${{ runner.os == 'MacOS' }}
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
+        with:
+          arguments: generateM1Checksums -PisCI=true
+
+      - name: Upload M1 files and checksums to release
+        if: ${{ runner.os == 'MacOS' }}
+        uses: AButler/upload-release-assets@v2.0.2
+        with:
+          files: './backup-code-generator/build/m1UberJar/*;./backup-code-generator/build/jpackage-m1/*;!./backup-code-generator/build/jpackage-m1/Backup Code Generator*;./backup-code-generator/build/checksums/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
