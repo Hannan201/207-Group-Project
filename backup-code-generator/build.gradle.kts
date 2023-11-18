@@ -359,14 +359,14 @@ val m1JPackageTask: TaskProvider<Task> = tasks.register("jpackageM1") {
 //
 // Task to create an uber or fat jar for M1.
 val m1UberJarTask: TaskProvider<Jar> = tasks.register<Jar>("uberJarM1") {
+    group = "build"
+    description = "Creates an uberJar for a mac using the M1 processor."
+
     val isCI = providers.gradleProperty("isCI")
 
     if (!os.isMacOsX || !isCI.isPresent) {
         return@register
     }
-
-    group = "build"
-    description = "Creates an uberJar for a mac using the M1 processor."
 
     destinationDirectory = layout.buildDirectory.dir("m1UberJar")
     archiveClassifier = "uber-mac-m1"
@@ -398,6 +398,9 @@ val m1UberJarTask: TaskProvider<Jar> = tasks.register<Jar>("uberJarM1") {
 // depend on the OS) that will be uploaded when
 // on release.
 tasks.register<Checksum>("generateJarsChecksums") {
+    description = "Generate checksums for the regular Jar (without " +
+            "dependencies), sources Jar, and JavaDoc Jar."
+
     val jarTasks: List<String> = listOf("jar", "sourcesJar", "javadocJar")
 
     jarTasks.forEach {
@@ -412,6 +415,9 @@ tasks.register<Checksum>("generateJarsChecksums") {
 // depend on the OS) that will be uploaded when
 // on release.
 tasks.register<Checksum>("generateAppChecksums") {
+    description = "Generate checksums for the JPackage installer and the " +
+            "Uber/Fat Jar."
+
     inputFiles.from(uberJarTask.get().outputs.files)
     dependsOn(tasks.getByPath(":backup-code-generator:jpackage").path)
     inputFiles.from(
@@ -432,6 +438,9 @@ tasks.register<Checksum>("generateAppChecksums") {
 // Generate checksums for files needed on macOS for the
 // M1 processor.
 tasks.register<Checksum>("generateM1Checksums") {
+    description = "Generate checksums for the JPackage installer and the " +
+            "Uber/Fat Jar that run on the M1 architecture."
+
     inputFiles.from(m1UberJarTask.get().outputs.files)
     dependsOn(tasks.getByPath(":backup-code-generator:jpackageM1").path)
     dependsOn(tasks.getByPath(":backup-code-generator:jpackage").path)
