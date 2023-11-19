@@ -118,7 +118,7 @@ dependencies {
     // such as asserTrue, assertEquals, etc.
     // Junit platform -> This is what launches the testing framework on the
     // JVM.
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:5.10.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     // Using runtime only because this dependency is only needed
