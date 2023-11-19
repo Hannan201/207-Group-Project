@@ -85,13 +85,13 @@ Below, you'll find examples of Gradle commands. There are two things to note:
 * SLF4J version 2.0.9 or greater: <https://www.slf4j.org/>.
 * Logback version 1.4.11 or greater: <https://logback.qos.ch/>.
 * JavaFX version 21.0 or greater: <https://openjfx.io/>.
-* ControlsFX version 11.1.2 or greater: <https://controlsfx.github.io/>.
+* ControlsFX version 11.2.0 or greater: <https://controlsfx.github.io/>.
 * ValidatorFX version 0.4.2 or greater: <https://github.com/effad/ValidatorFX>.
-* SQLite JDBC Driver version 3.43.2.2 or greater: <https://www.sqlitetutorial.net/sqlite-java/>.
+* SQLite JDBC Driver version 3.44.0.0 or greater: <https://www.sqlitetutorial.net/sqlite-java/>.
 * Apache Commons IO version 2.15.0 or greater: <https://commons.apache.org/proper/commons-io/>.
 
 ## Testing Dependencies
-* Junit-5 version 5.10.0 or greater: <https://junit.org/junit5/>.
+* Junit-5 version 5.10.1 or greater: <https://junit.org/junit5/>.
 
 ## Getting started
 This application uses Gradle as the build tool, which provided tasks to aid 

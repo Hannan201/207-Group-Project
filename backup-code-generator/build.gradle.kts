@@ -138,8 +138,8 @@ dependencies {
     if (os.isMacOsX && isCI.isPresent) {
         val m1Configuration: Configuration = configurations.named("m1Configuration").get()
 
-        m1Configuration("org.openjfx:javafx-controls:21.0.1")
-        m1Configuration("org.openjfx:javafx-fxml:21.0.1")
+        m1Configuration("org.openjfx:javafx-controls:21")
+        m1Configuration("org.openjfx:javafx-fxml:21")
     }
 }
 
