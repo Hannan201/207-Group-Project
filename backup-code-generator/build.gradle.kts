@@ -221,7 +221,7 @@ jlink {
 
     jpackage {
         appVersion = version.toString()
-        imageName = "Backup-Code-Generator"
+        imageName = "Backup Code Generator"
         installerOptions.addAll(
             listOf(
                 "--app-version", version.toString(),
@@ -247,7 +247,7 @@ jlink {
                     "--win-menu",
                     "--win-menu-group", "Cypher Enforcers",
                     "--win-shortcut-prompt",
-                    "--win-about-url", "https://github.com/Hannan201/Cypher-Enforcers/tree/feature/internal-changes"
+                    "--win-update-url", "https://github.com/Hannan201/Cypher-Enforcers/tree/feature/internal-changes"
                 )
             )
         }
