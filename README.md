@@ -64,7 +64,7 @@ Java JDK version 21.0 or greater.
     and computer architecture. 
 
 ## Details
-Entry point to application is `cypher.enforcers.Launcher.java`.
+Entry point to application is `cypher.enforcers.Launcher`.
 
 Main module of this application is `backup.code.generator`.
 
