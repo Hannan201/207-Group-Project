@@ -11,8 +11,6 @@ on:
   release:
     types:
       - created
-  push:
-    branches: [ "master" ]
 
 permissions:
   contents: write
@@ -44,6 +42,7 @@ jobs:
         with:
           files: './backup-code-generator/build/uberJars/*;./backup-code-generator/build/jpackage/*;!./backup-code-generator/build/jpackage/Backup Code Generator*;./backup-code-generator/build/checksums/*'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{  github.ref_name }}
 
       - name: Build independent jars
         if: ${{ runner.os == 'MacOS' }}
@@ -57,6 +56,7 @@ jobs:
         with:
           files: './backup-code-generator/build/libs/*;./backup-code-generator/build/checksums/*'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{  github.ref_name }}
 
       - name: Build M1 files
         if: ${{ runner.os == 'MacOS' }}
@@ -70,3 +70,4 @@ jobs:
         with:
           files: './backup-code-generator/build/m1UberJar/*;./backup-code-generator/build/jpackage-m1/*;!./backup-code-generator/build/jpackage-m1/Backup Code Generator*;./backup-code-generator/build/checksums/*'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{  github.ref_name }}
