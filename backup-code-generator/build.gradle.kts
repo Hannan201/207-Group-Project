@@ -221,7 +221,7 @@ jlink {
 
     jpackage {
         appVersion = version.toString()
-        imageName = "Backup Code Generator"
+        imageName = "Backup-Code-Generator"
         installerOptions.addAll(
             listOf(
                 "--app-version", version.toString(),
