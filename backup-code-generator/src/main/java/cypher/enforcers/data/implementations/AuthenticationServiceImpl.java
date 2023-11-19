@@ -10,6 +10,7 @@ import cypher.enforcers.views.themes.Theme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -33,8 +34,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * and a mapper to convert the User object to a transfer object.
      *
      * @param repository The Repository containing the users.
-     * @param mapper The mapper that converts a user object to be
-     *               transferred.
+     * @param mapper     The mapper that converts a user object to be
+     *                   transferred.
      */
     public AuthenticationServiceImpl(UserRepository repository, UserDTOMapper mapper) {
         this.userRepository = repository;
@@ -58,11 +59,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         String salt = SecurityUtils.createSalt();
-        String hashedPassword = salt + SecurityUtils.hashPassword(password + salt, salt.getBytes());
+
+        String hashedPassword = SecurityUtils.hashPassword(password + salt, salt.getBytes());
+
+        if (Objects.isNull(hashedPassword)) {
+            logger.warn("Unable to create user.");
+            return false;
+        }
+
+        String fullHashedPassword = salt + hashedPassword;
 
         UserEntity user = new UserEntity();
         user.setUsername(username.toLowerCase());
-        user.setPassword(hashedPassword);
+        user.setPassword(fullHashedPassword);
 
         Optional<UserEntity> createdUser = userRepository.create(user);
 
@@ -224,7 +233,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * one in the database.
      *
      * @param expected The password present in the database.
-     * @param actual The password provided by the user.
+     * @param actual   The password provided by the user.
      * @return True if the passwords match, false otherwise.
      */
     private boolean verifyPassword(String expected, String actual) {

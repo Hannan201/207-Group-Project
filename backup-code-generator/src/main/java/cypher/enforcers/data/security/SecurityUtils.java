@@ -33,13 +33,13 @@ public class SecurityUtils {
     private static final Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
 
     /** Algorithm being used to hash passwords. */
-    private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 
     /** Number of iterations to apply for this algorithm. */
     private static final int NUMBER_OF_ITERATIONS = 1000;
 
     /** Length of the key being used to hash passwords. */
-    private static final int KEY_LENGTH = 128;
+    private static final int KEY_LENGTH = 512;
 
     /** Length of the salt. */
     public static final int SALT_LENGTH = 24;
