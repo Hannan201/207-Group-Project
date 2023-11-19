@@ -18,7 +18,7 @@ Special thanks to [Icons8](https://icons8.com/) for the following icons:
 [app](https://icons8.com/) icon, [Google](https://icons8.com/icon/60984/google/) icon, [Discord](https://icons8.com/icon/30888/discord/) icon, [Shopify](https://icons8.com/icon/SZ0VDlOvY5zB/shopify/) icon,
 [GitHub](https://icons8.com/icon/62856/github/) icon, [Settings](https://icons8.com/icon/H6C79JoP90DH/settings/) icon, [Log Out](https://icons8.com/icon/26194/back-arrow/) icon, [Back Arrow](https://icons8.com/icon/O78uUJpfEyFx/log-out/) icon.
 
-Special credits to @Hansunkekes and @Kedi24 for designing the the UIs of
+Special credits to @Hansunkekes and @Kedi24 for designing the UIs of
 this application.
 
 ## Features

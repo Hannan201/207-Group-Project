@@ -23,8 +23,10 @@ import javafx.util.Callback;
 import cypher.enforcers.utilities.Utilities;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 /**
@@ -324,12 +326,13 @@ public abstract class View {
             scene.getStylesheets().add(view.getCurrentThemePath());
             stage.setScene(view.getRoot().getScene());
         }
-        stage.show();
+        stage.showAndWait();
     }
 
     /**
      * Utility method for when a window is loaded.
-     * This method is here because in the {@code initialize}
+     * This method is here because in the
+     * {@link javafx.fxml.Initializable#initialize(URL, ResourceBundle)}
      * method of the controller classes, the window is not yet loaded.
      * So trying to obtain it via a node might result in a null-value.
      *
@@ -352,9 +355,11 @@ public abstract class View {
 
     /**
      * Utility method to perform an action when a pop-up window is closed.
-     * The {@code setOnCloseRequest } method only works if the last window
-     * is closed whereas a pop-up window is not the last window being closed.
-     * In this case, the {@code setOnHidden } methods needs to be used.
+     * The {@link javafx.stage.Stage#setOnCloseRequest(EventHandler)} method
+     * only works if the last window is closed whereas a pop-up window is not
+     * the last window being closed.
+     * In this case, the {@link javafx.stage.Stage#setOnHidden(EventHandler)}
+     * method needs to be used.
      *
      * @param node    Any node within the window, used to retrieve
      *                the window.
