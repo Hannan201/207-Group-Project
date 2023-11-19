@@ -26,10 +26,13 @@ plugins {
 
     // Plugin to make checksums.
     id("org.gradle.crypto.checksum") version "1.4.0"
+
+    // To publish packages to GitHub packages.
+    `maven-publish`
 }
 
 group = "cypher.enforcers"
-version = "2.0.0"
+version = "2.0.1"
 
 // Adds the module version to the module-info.java file.
 tasks.named<JavaCompile>("compileJava") {
@@ -160,6 +163,25 @@ application {
 
     // Define the main class for the application.
     mainClass = "cypher.enforcers.Launcher"
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("GitHubPackages") {
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Hannan201/Cypher-Enforcers")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
 
 // This is to remove files copied from resources.
