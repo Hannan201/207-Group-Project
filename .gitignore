@@ -1,4 +1,5 @@
 .*/
+!.github/
 lib/
 .idea/
 out/
