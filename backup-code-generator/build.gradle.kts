@@ -185,7 +185,7 @@ tasks.named<Test>("test") {
 
     // Show tests that failed and passed.
     testLogging {
-        events("passed", "failed")
+        events("failed")
     }
 }
 
