@@ -42,7 +42,7 @@ jobs:
       - name: Upload build files and checksums to release
         uses: AButler/upload-release-assets@v2.0.2
         with:
-          files: './backup-code-generator/build/uberJars/*;./backup-code-generator/build/jpackage/*;!./backup-code-generator/build/jpackage/Backup Code Generator*;./backup-code-generator/build/checksums/*'
+          files: './backup-code-generator/build/uberJars/*;./backup-code-generator/build/jpackage/*;!./backup-code-generator/build/jpackage/Backup-Code-Generator*;./backup-code-generator/build/checksums/*'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build independent jars
@@ -68,5 +68,5 @@ jobs:
         if: ${{ runner.os == 'MacOS' }}
         uses: AButler/upload-release-assets@v2.0.2
         with:
-          files: './backup-code-generator/build/m1UberJar/*;./backup-code-generator/build/jpackage-m1/*;!./backup-code-generator/build/jpackage-m1/Backup Code Generator*;./backup-code-generator/build/checksums/*'
+          files: './backup-code-generator/build/m1UberJar/*;./backup-code-generator/build/jpackage-m1/*;!./backup-code-generator/build/jpackage-m1/Backup-Code-Generator*;./backup-code-generator/build/checksums/*'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
