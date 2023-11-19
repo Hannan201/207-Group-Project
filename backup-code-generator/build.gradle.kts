@@ -103,7 +103,7 @@ dependencies {
     implementation("net.synedra:validatorfx:0.4.2")
 
     // ControlsFX.
-    implementation("org.controlsfx:controlsfx:11.1.2")
+    implementation("org.controlsfx:controlsfx:11.2.0")
 
     // SQLite support.
     implementation("org.xerial:sqlite-jdbc:3.43.2.2") {
