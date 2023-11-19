@@ -33,7 +33,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build files
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2.9.0
         with:
           arguments: generateAppChecksums -PisCI=true
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Build independent jars
         if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
         with:
           arguments: generateJarsChecksums -PisCI=true
 
@@ -58,7 +58,7 @@ jobs:
 
       - name: Build M1 files
         if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
+        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
         with:
           arguments: generateM1Checksums -PisCI=true
 
