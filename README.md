@@ -18,7 +18,7 @@ Special thanks to [Icons8](https://icons8.com/) for the following icons:
 [app](https://icons8.com/) icon, [Google](https://icons8.com/icon/60984/google/) icon, [Discord](https://icons8.com/icon/30888/discord/) icon, [Shopify](https://icons8.com/icon/SZ0VDlOvY5zB/shopify/) icon,
 [GitHub](https://icons8.com/icon/62856/github/) icon, [Settings](https://icons8.com/icon/H6C79JoP90DH/settings/) icon, [Log Out](https://icons8.com/icon/26194/back-arrow/) icon, [Back Arrow](https://icons8.com/icon/O78uUJpfEyFx/log-out/) icon.
 
-Special credits to @Hansunkekes and @Kedi24 for the development of the UIs for
+Special credits to @Hansunkekes and @Kedi24 for designing the the UIs of
 this application.
 
 ## Features
@@ -93,6 +93,11 @@ Below, you'll find examples of Gradle commands. There are two things to note:
 ## Testing Dependencies
 * Junit-5 version 5.10.1 or greater: <https://junit.org/junit5/>.
 
+## Installation
+Check out the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.0)
+for installers depending on your Operating System
+as well as other assets / binaries.
+
 ## Getting started
 This application uses Gradle as the build tool, which provided tasks to aid 
 development.
@@ -135,16 +140,16 @@ To build a native image (such as an .exe for Windows), you can use this:
 **Note:** To launch the native image, you don't need to have the JDK installed,
 it comes with a bundled JDK that takes less space than an uber jar or fat jar.
 
-The image file will be made here: `./backup-code-generator/build/jpackage/backup-code-generator/`. 
+The image file will be made here: `./backup-code-generator/build/jpackage/Backup Code Generator/`. 
 You can then run the application as any other regular application depending on your OS.
 
-**Note:** In the `./backup-code-generator/build/jpackage/backup-code-generator` folder
+**Note:** In the `./backup-code-generator/build/jpackage/Backup Code Generator` folder
 there should be two directories and one file present:
 
 ```
 app
 runtime
-backup-code-generator.exe
+Backup Code Generator.exe
 ```
 
 Once the `.exe` file is launched, there will also be a `database.db` file created in the same folder.
@@ -159,43 +164,10 @@ it depends on the `app` and `runtime` folders which won't be created.
 To just build the jar file, use this:
 
 ```
-./gradlew assemble
+./gradlew jar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/libs/backup-code-generator-1.0.0.jar`.
-
-Additionally, you'll see a folder called `./backup-code-generator/build/lib/distributions` which
-will have two compressed folders:
-
-```
-backup-code-generator-1.0.0.tar
-backup-code-generator-1.0.0.zip
-```
-
-After extracting anyone of them, you'll see they have the following structure:
-
-```
-backup-code-generator-1.0.0
-  |-- bin
-  |-- libs
-```
-
-The `bin` folder contains two start scripts which launch the application.
-The one ending with `.bat` is for Windows, while the other is for those using a Unix-based
-Operating System.
-The `database.db` file needed for this application to work will
-also be created in this folder.
-
-The `libs` folder contains all the `jar` files (main application as well as the 
-dependencies) that are required for this application to function.
-
-If you move any of the start scripts, `jar` files, or the `database.db` the application
-will either not work or not load the correct data since a new `database.db` file will be created
-instead.
-If you decide to move anything, be sure to move everything else with it while maintaining
-the same directory structure.
-The recommendation would be to just move the root folder `backup-code-generator-1.0.0` to ensure
-everything works.
+The jar file will appear at: `./backup-code-generator/build/libs/backup-code-generator-2.0.0.jar`.
 
 To build an uber jar or fat jar file (which includes the main application as well as the
 dependencies), you can use:
@@ -204,7 +176,7 @@ dependencies), you can use:
 ./gradlew uberJar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-1.0.0-uber.jar`.
+The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-2.0.0-uber.jar`.
 
 **Note:** Unlike the native image, to run this `jar` file, you'll need to have the correct version
 of the JDK installed since it's not bundled in the `jar` file.
@@ -234,14 +206,6 @@ Gradle will call this task automatically when running tests by
 If you're using Gradle to run the tests, everything should work.
 Otherwise, you'll need to delete the generated files from the tests manually 
 to ensure they work.
-
-### Tests and jar
-
-To build the jar file and run the tests, you can use:
-
-```
-./gradlew build
-```
 
 ### Clean up
 
