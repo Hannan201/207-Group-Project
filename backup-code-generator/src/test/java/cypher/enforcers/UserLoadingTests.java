@@ -84,7 +84,7 @@ public class UserLoadingTests {
 
         UserEntity user = optionalUser.get();
         assertEquals(user.getID(), 1, "Id for first user not equal.");
-        assertTrue(user.getPassword().contains("RoQRUJ"), "Password does not match.");
+        assertTrue(user.getPassword().contains("WtlWQL"), "Password does not match.");
 
         dbService.disconnect();
     }
@@ -106,7 +106,7 @@ public class UserLoadingTests {
 
         UserEntity user = optionalUser.get();
         assertEquals(user.getID(), 2, "Id for first user not equal.");
-        assertTrue(user.getPassword().contains("Oy+eiw"), "Password does not match.");
+        assertTrue(user.getPassword().contains("tTRgbJ"), "Password does not match.");
         dbService.disconnect();
     }
 
