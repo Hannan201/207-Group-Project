@@ -131,7 +131,7 @@ dependencies {
     }
 
     // Used to extract filename from an url.
-    implementation("commons-io:commons-io:2.15.0")
+    implementation("commons-io:commons-io:2.15.1")
 
     /*
     Only want to add these jars when on GitHub Actions, since someone
