@@ -95,7 +95,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
 
     // Logging implementation.
-    implementation("ch.qos.logback:logback-classic:1.4.11") {
+    implementation("ch.qos.logback:logback-classic:1.4.14") {
         // This is because logback brings in a transitive
         // dependency to SLF4J, even though we have already
         // imported it. No need for it to be imported twice.
