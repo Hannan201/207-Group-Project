@@ -34,7 +34,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build files
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2.9.0
+        uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27 # v2.11.0
         with:
           arguments: generateAppChecksums -PisCI=true
 
@@ -47,7 +47,7 @@ jobs:
 
       - name: Build independent jars
         if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
+        uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27
         with:
           arguments: generateJarsChecksums -PisCI=true
 
@@ -61,7 +61,7 @@ jobs:
 
       - name: Build M1 files
         if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
+        uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27
         with:
           arguments: generateM1Checksums -PisCI=true
 
@@ -77,6 +77,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a
+        uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27
         with:
           arguments: publishAllPublicationsToGitHubPackagesRepository -PisCI=true
