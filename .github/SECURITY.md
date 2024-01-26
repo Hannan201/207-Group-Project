@@ -5,10 +5,10 @@
 Only the latest version of this application will be supported for
 security updates.
 
-| Version   | Supported          |
-| ----------| ------------------ |
-| 2.x.x     | :white_check_mark: |
-| < 2.0.2   | :x:                |
+| Version | Supported          |
+|---------| ------------------ |
+| 2.x.x   | :white_check_mark: |
+| < 2.0.1 | :x:                |
 
 ## Reporting a Vulnerability
 
