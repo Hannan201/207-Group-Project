@@ -32,8 +32,6 @@ public class SwitchToDarkMode implements Command {
      */
     @Override
     public void execute() throws NullPointerException {
-        for (View view : this.views) {
-            view.switchToDarkMode();
-        }
+        views.forEach(View::switchToDarkMode);
     }
 }
