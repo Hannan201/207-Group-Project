@@ -109,7 +109,7 @@ dependencies {
     implementation("org.controlsfx:controlsfx:11.2.0")
 
     // SQLite support.
-    implementation("org.xerial:sqlite-jdbc:3.44.0.0") {
+    implementation("org.xerial:sqlite-jdbc:3.45.0.0") {
         // This is because SQLite JDBC brings in a transitive
         // dependency to SLF4J, even though we have already
         // imported it. No need for it to be imported twice.
