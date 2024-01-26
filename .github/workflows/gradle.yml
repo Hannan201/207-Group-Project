@@ -72,11 +72,3 @@ jobs:
           files: './backup-code-generator/build/m1UberJar/*;./backup-code-generator/build/jpackage-m1/*;!./backup-code-generator/build/jpackage-m1/Backup Code Generator*;./backup-code-generator/build/checksums/*'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: ${{  github.ref_name }}
-
-      - name: Publish packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ runner.os == 'MacOS' }}
-        uses: gradle/gradle-build-action@982da8e78c05368c70dac0351bb82647a9e9a5d2
-        with:
-          arguments: publishAllPublicationsToGitHubPackagesRepository -PisCI=true
