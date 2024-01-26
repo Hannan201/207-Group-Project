@@ -32,7 +32,7 @@ plugins {
 }
 
 group = "cypher.enforcers"
-version = "2.0.1"
+version = "2.0.2"
 
 // Adds the module version to the module-info.java file.
 tasks.named<JavaCompile>("compileJava") {

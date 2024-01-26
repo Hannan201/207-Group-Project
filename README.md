@@ -53,11 +53,11 @@ if they didn't log out.
 * A **dark mode** theme for those who prefer a darker colour scheme.
 
 ## Prerequisites
-Java JDK version 21.0 or greater.
-* The specific vendor this application uses is OpenJDK 
-    * OpenJDK's source: <https://openjdk.org/>.
-    * OpenJDK's prebuilt binaries can be found at Adoptium: <https://adoptium.net/>.
-    * Gradle will automatically download the required JDK with the correct vendor 
+Java OpenJDK version 21.0.2.
+* The specific vendor this application uses for OpenJDK is Adoptium.
+    * Adoptium OpenJDK's 21.0.2 source: <https://github.com/adoptium/jdk21u>.
+    * Adoptium OpenJDK's prebuilt binaries can be found at: <https://adoptium.net/temurin/releases/>.
+    * Gradle will automatically download the required OpenJDK with the correct vendor 
     automatically if you don't already have it. If you don't have it, Gradle will download it
     at: `<home directory of the current user>/.gradle/jdks/`. There should be a folder
     which contains `eclipse_adoptium-21`, the ending of the folder name might vary depending on your OS 
@@ -82,19 +82,19 @@ Below, you'll find examples of Gradle commands. There are two things to note:
   and if you're on Windows, you'll need to start the Gradle command with `.\gradlew`.
 
 ## Dependencies
-* SLF4J version 2.0.9 or greater: <https://www.slf4j.org/>.
-* Logback version 1.4.11 or greater: <https://logback.qos.ch/>.
-* JavaFX version 21.0 or greater: <https://openjfx.io/>.
-* ControlsFX version 11.2.0 or greater: <https://controlsfx.github.io/>.
-* ValidatorFX version 0.4.2 or greater: <https://github.com/effad/ValidatorFX>.
-* SQLite JDBC Driver version 3.44.0.0 or greater: <https://www.sqlitetutorial.net/sqlite-java/>.
-* Apache Commons IO version 2.15.0 or greater: <https://commons.apache.org/proper/commons-io/>.
+* SLF4J version 2.0.9: <https://www.slf4j.org/>.
+* Logback version 1.4.14: <https://logback.qos.ch/>.
+* JavaFX version 21.0.2: <https://openjfx.io/>.
+* ControlsFX version 11.2.0: <https://controlsfx.github.io/>.
+* ValidatorFX version 0.4.2: <https://github.com/effad/ValidatorFX>.
+* SQLite JDBC Driver version 3.45.0.0: <https://www.sqlitetutorial.net/sqlite-java/>.
+* Apache Commons IO version 2.15.1: <https://commons.apache.org/proper/commons-io/>.
 
 ## Testing Dependencies
 * Junit-5 version 5.10.1 or greater: <https://junit.org/junit5/>.
 
 ## Installation
-Check out the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.1)
+Check out the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.2)
 for installers depending on your Operating System
 as well as other assets / binaries.
 
@@ -167,7 +167,7 @@ To just build the jar file, use this:
 ./gradlew jar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/libs/backup-code-generator-2.0.1.jar`.
+The jar file will appear at: `./backup-code-generator/build/libs/backup-code-generator-2.0.2.jar`.
 
 To build an uber jar or fat jar file (which includes the main application as well as the
 dependencies), you can use:
@@ -176,7 +176,7 @@ dependencies), you can use:
 ./gradlew uberJar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-2.0.1-uber.jar`.
+The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-2.0.2-uber.jar`.
 
 **Note:** Unlike the native image, to run this `jar` file, you'll need to have the correct version
 of the JDK installed since it's not bundled in the `jar` file.
@@ -216,10 +216,10 @@ To clean the build output then use the following:
 ```
 
 ## Documentation
-There are Javadocs for all
+There are JavaDocs for all
 methods created in this project.
 You can download the JavaDoc jar from
-the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.1).
+the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.2).
 
 ## Usage
 Check out the [wiki](https://github.com/Hannan201/Cypher-Enforcers/wiki) on how to use our application.
