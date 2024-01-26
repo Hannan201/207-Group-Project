@@ -32,9 +32,7 @@ public class SwitchToLightMode implements Command {
      */
     @Override
     public void execute() throws NullPointerException {
-        for (View view : this.views) {
-            view.switchToLightMode();
-        }
+        views.forEach(View::switchToLightMode);
     }
 
 }

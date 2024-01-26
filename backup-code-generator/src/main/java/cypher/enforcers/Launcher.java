@@ -37,8 +37,12 @@ public class Launcher extends Application {
      * @param args Any additional arguments.
      */
     public static void main(String[] args) {
-        logger.info("Launching application...");
-        launch(args);
+        try {
+            logger.info("Launching application...");
+            launch(args);
+        } catch (Exception e) {
+            logger.error("Error occurred, shutting down. Cause: ", e);
+        }
     }
 
     /**
@@ -57,7 +61,7 @@ public class Launcher extends Application {
             stage.setScene(scene);
             stage.show();
             logger.info("Displaying application window.");
-        } catch (IOException | NullPointerException | JoranException e) {
+        } catch (Exception e) {
             Utilities.onException(stage, e);
         }
     }
