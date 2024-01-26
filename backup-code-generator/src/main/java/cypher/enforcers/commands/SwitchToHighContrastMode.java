@@ -32,8 +32,6 @@ public class SwitchToHighContrastMode implements Command {
      */
     @Override
     public void execute() throws NullPointerException {
-        for (View view : this.views) {
-            view.switchToHighContrastMode();
-        }
+        views.forEach(View::switchToHighContrastMode);
     }
 }
