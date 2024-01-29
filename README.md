@@ -94,7 +94,7 @@ Below, you'll find examples of Gradle commands. There are two things to note:
 * Junit-5 version 5.10.1 or greater: <https://junit.org/junit5/>.
 
 ## Installation
-Check out the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.2)
+Check out the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.3)
 for installers depending on your Operating System
 as well as other assets / binaries.
 
@@ -167,7 +167,7 @@ To just build the jar file, use this:
 ./gradlew jar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/libs/backup-code-generator-2.0.2.jar`.
+The jar file will appear at: `./backup-code-generator/build/libs/backup-code-generator-2.0.3.jar`.
 
 To build an uber jar or fat jar file (which includes the main application as well as the
 dependencies), you can use:
@@ -176,7 +176,7 @@ dependencies), you can use:
 ./gradlew uberJar
 ```
 
-The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-2.0.2-uber.jar`.
+The jar file will appear at: `./backup-code-generator/build/uberJars/backup-code-genarator-2.0.3-uber.jar`.
 
 **Note:** Unlike the native image, to run this `jar` file, you'll need to have the correct version
 of the JDK installed since it's not bundled in the `jar` file.
@@ -219,7 +219,7 @@ To clean the build output then use the following:
 There are JavaDocs for all
 methods created in this project.
 You can download the JavaDoc jar from
-the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.2).
+the [release page](https://github.com/Hannan201/Cypher-Enforcers/releases/tag/v2.0.3).
 
 ## Usage
 Check out the [wiki](https://github.com/Hannan201/Cypher-Enforcers/wiki) on how to use our application.
